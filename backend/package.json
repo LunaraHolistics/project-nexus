@@ -4,12 +4,17 @@
   "description": "PROJECT NEXUS - Backend API",
   "main": "backend/src/server.js",
   "scripts": {
-    "start": "node backend/src/server.js",
-    "dev": "nodemon backend/src/server.js",
-    "test": "jest",
-    "build": "echo 'No build step required'"
+    "scripts": {
+      "start": "node src/server.js",
+      "dev": "nodemon src/server.js",
+      "test": "jest"
+    }
   },
-  "keywords": ["game", "api", "investigation"],
+  "keywords": [
+    "game",
+    "api",
+    "investigation"
+  ],
   "author": "PROJECT NEXUS Team",
   "license": "MIT",
   "dependencies": {
