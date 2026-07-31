@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ARCHIVE OS — Globo Interativo</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../api.js"></script>
+<style>
+:root{
+  --surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;
+  --gold:#C5A059;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+
+/* CINEMATIC INTRO COM IMAGENS */
+.cinematic{position:fixed;inset:0;z-index:9500;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.cinematic.hidden{display:none;}
+.cinematic-slide{position:absolute;inset:0;opacity:0;transition:opacity 2s ease;display:flex;align-items:center;justify-content:center;}
+.cinematic-slide.active{opacity:1;}
+.cinematic-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.4);}
+.cinematic-content{position:relative;z-index:2;max-width:900px;text-align:center;padding:60px;}
+.cinematic-title{font-family:'Libre Caslon Text',serif;font-size:48px;color:var(--gold);margin-bottom:30px;letter-spacing:.1em;text-shadow:0 0 30px rgba(197,160,89,.5);}
+.cinematic-text{font-family:'Manrope',sans-serif;font-size:18px;line-height:32px;color:var(--onv);margin-bottom:40px;background:rgba(0,0,0,.7);padding:30px;border-left:3px solid var(--gold);}
+.cinematic-progress{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);width:60%;height:2px;background:rgba(197,160,89,.2);}
+.cinematic-progress-bar{height:100%;background:var(--gold);transition:width .5s ease;}
+.cinematic-skip{position:absolute;top:40px;right:40px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);border:1px solid var(--gold);padding:10px 20px;cursor:pointer;transition:.3s;z-index:10;}
+.cinematic-skip:hover{background:var(--gold);color:var(--surface);}
+
+/* GLOBO */
+.globe{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
+#gc{position:absolute;inset:0;z-index:1;}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+
+.side{position:absolute;left:32px;top:96px;width:320px;z-index:30;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:22px;}
+.side h2{font-family:'Libre Caslon Text',serif;font-size:22px;color:var(--gold);margin-bottom:2px;}
+.side .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.1em;margin-bottom:18px;}
+.btnp{width:100%;padding:13px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;margin-bottom:20px;}
+.btnp:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.tlabel{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;}
+.tgt{padding:13px;background:rgba(14,14,14,.55);border:.5px solid var(--gold);margin-bottom:10px;cursor:pointer;transition:all .3s;}
+.tgt:hover{border-color:var(--amber);box-shadow:0 0 14px rgba(255,191,0,.25);}
+.tgt .tn{font-family:'Libre Caslon Text',serif;font-size:16px;color:var(--on);margin-bottom:3px;}
+.tgt .to{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.08em;margin-bottom:6px;}
+.tgt .td{font-family:'Manrope',sans-serif;font-size:11px;line-height:16px;color:var(--onv);margin-bottom:8px;}
+.tgt .threat{display:inline-block;padding:2px 8px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;margin-right:6px;}
+.tgt .threat.BAIXO{background:rgba(143,214,160,.15);color:#8fd6a0;}
+.tgt .threat.MÉDIO{background:rgba(255,191,0,.15);color:var(--amber);}
+.tgt .threat.ELEVADO{background:rgba(205,127,50,.15);color:var(--bronze);}
+.tgt .threat.CRÍTICO{background:rgba(255,100,100,.15);color:#ff6464;}
+.tgt button{width:100%;padding:7px;background:transparent;border:1px solid var(--bronze);color:var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;cursor:pointer;transition:all .3s;}
+.tgt button:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.tgt button:disabled{opacity:.4;cursor:not-allowed;}
+
+.panel{position:absolute;right:32px;top:96px;width:300px;z-index:30;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:22px;}
+.panel .ph{display:flex;align-items:center;gap:8px;margin-bottom:18px;}
+.panel .ph .d{width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 8px rgba(255,191,0,0)}}
+.panel .pt{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+.panel .row{margin-bottom:14px;}
+.panel .rl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.panel .rv{font-family:'Manrope',sans-serif;font-size:15px;color:var(--on);}
+.panel .rv.al{color:var(--amber);font-family:'JetBrains Mono',monospace;font-weight:500;}
+.panel .mission-detail{display:none;margin-top:8px;padding-top:14px;border-top:.5px solid rgba(197,160,89,.25);}
+.panel .mission-detail.show{display:block;}
+.panel .mission-detail .rv.desc{font-size:12px;line-height:18px;color:var(--onv);}
+.panel .mission-detail .threat{display:inline-block;padding:2px 8px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;margin-top:6px;}
+.panel .mission-detail .threat.BAIXO{background:rgba(143,214,160,.15);color:#8fd6a0;}
+.panel .mission-detail .threat.MÉDIO{background:rgba(255,191,0,.15);color:var(--amber);}
+.panel .mission-detail .threat.ELEVADO{background:rgba(205,127,50,.15);color:var(--bronze);}
+.panel .mission-detail .threat.CRÍTICO{background:rgba(255,100,100,.15);color:#ff6464;}
+#gc{cursor:default;}
+
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+</style>
+</head>
+<body>
+
+<!-- CINEMATIC INTRO -->
+<div class="cinematic" id="cinematic">
+  <button class="cinematic-skip" onclick="skipCinematic()">PULAR INTRODUÇÃO ›</button>
+  
+  <!-- Slide 1 -->
+  <div class="cinematic-slide active" data-slide="0">
+    <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%23111%22 width=%221920%22 height=%221080%22/><circle cx=%22960%22 cy=%22540%22 r=%22200%22 fill=%22none%22 stroke=%22%23C5A059%22 stroke-width=%222%22 opacity=%220.3%22/></svg>');"></div>
+    <div class="cinematic-content">
+      <h1 class="cinematic-title">O ARQUITETO</h1>
+      <p class="cinematic-text">
+        Por décadas, ele operou nas sombras. Um colecionador obcecado, 
+        um estrategista genial, um ladrão sem igual.<br><br>
+        Seu nome verdadeiro? Desconhecido. Suas ambições? Claras como cristal.
+      </p>
+    </div>
+  </div>
+  
+  <!-- Slide 2 -->
+  <div class="cinematic-slide" data-slide="1">
+    <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%230a0a0a%22 width=%221920%22 height=%221080%22/><path d=%22M0,540 Q480,480 960,540 T1920,540%22 stroke=%22%23FFBF00%22 stroke-width=%223%22 fill=%22none%22 opacity=%220.4%22/></svg>');"></div>
+    <div class="cinematic-content">
+      <h1 class="cinematic-title">A REDE INVISÍVEL</h1>
+      <p class="cinematic-text">
+        Ele não age sozinho. Uma rede de agentes, hackers, historiadores 
+        corruptos e mercenários trabalha para ele em todos os continentes.<br><br>
+        Cada roubo é meticulosamente planejado.
+      </p>
+    </div>
+  </div>
+  
+  <!-- Slide 3 -->
+  <div class="cinematic-slide" data-slide="2">
+    <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%231a1510%22 width=%221920%22 height=%221080%22/><rect x=%22760%22 y=%22340%22 width=%22400%22 height=%22400%22 fill=%22none%22 stroke=%22%23CD7F32%22 stroke-width=%223%22 opacity=%220.5%22/></svg>');"></div>
+    <div class="cinematic-content">
+      <h1 class="cinematic-title">OS ARTEFATOS</h1>
+      <p class="cinematic-text">
+        O Cálice de Antioquia desapareceu de Viena.<br>
+        A Máscara Inca foi roubada em Cusco.<br>
+        Manuscritos milenares sumiram de bibliotecas protegidas.<br><br>
+        Não é apenas roubo. É uma reescrita da história.
+      </p>
+    </div>
+  </div>
+  
+  <!-- Slide 4 -->
+  <div class="cinematic-slide" data-slide="3">
+    <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%230d121b%22 width=%221920%22 height=%221080%22/><polygon points=%22960,440 1060,640 860,640%22 fill=%22%23C5A059%22 opacity=%220.4%22/></svg>');"></div>
+    <div class="cinematic-content">
+      <h1 class="cinematic-title">A ARCHIVE</h1>
+      <p class="cinematic-text">
+        Somos a última linha de defesa. Uma organização secreta dedicada 
+        a proteger o patrimônio da humanidade.<br><br>
+        Agora, você é parte dela.
+      </p>
+    </div>
+  </div>
+  
+  <!-- Slide 5 -->
+  <div class="cinematic-slide" data-slide="4">
+    <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%23000%22 width=%221920%22 height=%221080%22/><circle cx=%22960%22 cy=%22540%22 r=%22300%22 fill=%22none%22 stroke=%22%23FFBF00%22 stroke-width=%221%22 opacity=%220.6%22/><circle cx=%22960%22 cy=%22540%22 r=%22250%22 fill=%22none%22 stroke=%22%23FFBF00%22 stroke-width=%221%22 opacity=%220.4%22/></svg>');"></div>
+    <div class="cinematic-content">
+      <h1 class="cinematic-title">A CAÇADA COMEÇA</h1>
+      <p class="cinematic-text">
+        Os pontos luminosos no globo representam atividades suspeitas.<br>
+        Cada um é uma pista. Cada pista, uma oportunidade.<br><br>
+        <strong>Bem-vindo à Archive, Diretor.</strong><br>
+        O tempo está correndo.
+      </p>
+    </div>
+  </div>
+  
+  <div class="cinematic-progress">
+    <div class="cinematic-progress-bar" id="cinematicBar" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="globe">
+  <canvas id="gc"></canvas>
+  <header>
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav">
+      <a href="#" class="on">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a>
+    </nav>
+  </header>
+
+  <aside class="side">
+    <h2>PROJECT NEXUS</h2>
+    <div class="sub" id="dirName">Field Operative</div>
+    <button class="btnp" id="btnNewMission" onclick="generateNewMission()">+ Gerar Nova Missão</button>
+    <div class="tlabel">ALVOS ATIVOS <span id="missionCount">0</span></div>
+    <div id="targetsList">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);text-align:center;padding:20px;">SINCRONIZANDO...</div>
+    </div>
+  </aside>
+
+  <aside class="panel">
+    <div class="ph"><span class="d"></span><span class="pt">Interseção Global</span></div>
+    <div class="row"><div class="rl">Status do Sistema</div><div class="rv" id="panelStatus">Aguardando Seleção</div></div>
+    <div class="row"><div class="rl">Missões Disponíveis</div><div class="rv" id="panelMissions">0</div></div>
+    <div class="row"><div class="rl">Nível de Ameaça</div><div class="rv al" id="panelThreat">—</div></div>
+    <div class="mission-detail" id="missionDetail">
+      <div class="row"><div class="rl">Localização</div><div class="rv" id="detailLocation">—</div></div>
+      <div class="row"><div class="rl">Alvo</div><div class="rv" id="detailTarget">—</div></div>
+      <div class="row"><div class="rl">Objetivo</div><div class="rv desc" id="detailObjective">—</div></div>
+      <div class="row"><div class="rl">Recompensa</div><div class="rv al" id="detailReward">—</div></div>
+      <span class="threat" id="detailThreat">—</span>
+    </div>
+  </aside>
+
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ftc"><span style="width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;"></span> FORTE</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// ESTADO E DADOS
+// ============================================================
+let missions = [];
+let selectedMission = null;
+let currentSlide = 0;
+let cinematicInterval = null;
+
+// Coordenadas das cidades
+const CITY_COORDS = {
+  'Londres': {lat: 51.5074, lon: -0.1278},
+  'Tóquio': {lat: 35.6762, lon: 139.6503},
+  'Cairo': {lat: 30.0444, lon: 31.2357},
+  'Berlim': {lat: 52.5200, lon: 13.4050},
+  'Viena': {lat: 48.2082, lon: 16.3738},
+  'Istambul': {lat: 41.0082, lon: 28.9784},
+  'Moscou': {lat: 55.7558, lon: 37.6173},
+  'Pequim': {lat: 39.9042, lon: 116.4074},
+  'Nova York': {lat: 40.7128, lon: -74.0060},
+  'Rio de Janeiro': {lat: -22.9068, lon: -43.1729}
+};
+
+// ============================================================
+// CINEMATIC INTRO
+// ============================================================
+function startCinematic() {
+  currentSlide = 0;
+  updateCinematicSlide();
+  cinematicInterval = setInterval(() => {
+    currentSlide = (currentSlide + 1) % 5;
+    updateCinematicSlide();
+  }, 6000);
+}
+
+function updateCinematicSlide() {
+  document.querySelectorAll('.cinematic-slide').forEach((slide, idx) => {
+    slide.classList.toggle('active', idx === currentSlide);
+  });
+  const progress = ((currentSlide + 1) / 5) * 100;
+  document.getElementById('cinematicBar').style.width = progress + '%';
+}
+
+function skipCinematic() {
+  clearInterval(cinematicInterval);
+  document.getElementById('cinematic').classList.add('hidden');
+}
+
+// Auto-start cinematic
+window.addEventListener('load', () => {
+  startCinematic();
+  setTimeout(() => skipCinematic(), 30000);
+});
+
+// ============================================================
+// THREE.JS GLOBO
+// ============================================================
+const cv = document.getElementById('gc');
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
+const ren = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+ren.setSize(innerWidth, innerHeight);
+ren.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+function createContinentTexture() {
+  const w = 1024;
+  const h = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+
+  const ocean = ctx.createLinearGradient(0, 0, 0, h);
+  ocean.addColorStop(0, '#0b1a2e');
+  ocean.addColorStop(0.5, '#0a1628');
+  ocean.addColorStop(1, '#081220');
+  ctx.fillStyle = ocean;
+  ctx.fillRect(0, 0, w, h);
+
+  function land(lat, lon, rw, rh, rot) {
+    const x = ((lon + 180) / 360) * w;
+    const y = ((90 - lat) / 180) * h;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot || 0);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.max(rw, rh));
+    g.addColorStop(0, '#3d6b4f');
+    g.addColorStop(0.6, '#2a5238');
+    g.addColorStop(1, 'rgba(26,58,42,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rw, rh, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Massas de terra simplificadas (projeção equirectangular)
+  land(45, -100, 90, 55, -0.2);   // América do Norte
+  land(-15, -60, 55, 70, 0.15);   // América do Sul
+  land(50, 10, 55, 40, 0.1);      // Europa
+  land(5, 20, 70, 80, 0);         // África
+  land(35, 95, 110, 55, 0.1);     // Ásia
+  land(-25, 135, 35, 25, 0);      // Austrália
+  land(75, -45, 40, 30, 0);       // Groenlândia
+  land(65, -150, 30, 20, 0);      // Alaska
+
+  // Grão fino de relevo
+  for (let i = 0; i < 800; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    ctx.fillStyle = `rgba(61,107,79,${Math.random() * 0.08})`;
+    ctx.fillRect(x, y, 2, 2);
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+const continentTexture = createContinentTexture();
+
+const globeGeometry = new THREE.SphereGeometry(5, 64, 64);
+const globeMaterial = new THREE.MeshPhongMaterial({
+  map: continentTexture,
+  color: 0xffffff,
+  emissive: 0x0a1420,
+  specular: 0x445566,
+  shininess: 20,
+  transparent: true,
+  opacity: 0.95
+});
+const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+scene.add(globe);
+
+const wireGeometry = new THREE.SphereGeometry(5.05, 32, 32);
+const wireMaterial = new THREE.MeshBasicMaterial({
+  color: 0xC5A059,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.4
+});
+const wireframe = new THREE.Mesh(wireGeometry, wireMaterial);
+globe.add(wireframe);
+
+const atmoGeometry = new THREE.SphereGeometry(5.3, 64, 64);
+const atmoMaterial = new THREE.MeshBasicMaterial({
+  color: 0xC5A059,
+  transparent: true,
+  opacity: 0.12,
+  side: THREE.BackSide
+});
+const atmosphere = new THREE.Mesh(atmoGeometry, atmoMaterial);
+scene.add(atmosphere);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const dirLight = new THREE.DirectionalLight(0xfff2d0, 1.6);
+dirLight.position.set(8, 5, 6);
+scene.add(dirLight);
+const fillLight = new THREE.DirectionalLight(0x6688aa, 0.35);
+fillLight.position.set(-6, -2, -4);
+scene.add(fillLight);
+
+cam.position.z = 14;
+
+const markers = [];
+const MARKER_RADIUS = 0.12;
+const GLOW_RADIUS = 0.25;
+const GLOW_OPACITY = 0.4;
+
+function latLonToVector3(lat, lon, radius) {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+  return new THREE.Vector3(
+    -(radius * Math.sin(phi) * Math.cos(theta)),
+    radius * Math.cos(phi),
+    radius * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+function getThreatLevel(mission) {
+  if (mission.threat_level) return mission.threat_level;
+  const p = (mission.priority || '').toUpperCase();
+  if (p === 'ALTA') return 'ELEVADO';
+  if (p === 'MEDIA' || p === 'MÉDIA') return 'MÉDIO';
+  return 'BAIXO';
+}
+
+function getCityFromMission(mission) {
+  const raw = mission.location?.split(',')[0]?.trim() || 'Londres';
+  return CITY_COORDS[raw] ? raw : Object.keys(CITY_COORDS).find(c => mission.location?.includes(c)) || 'Londres';
+}
+
+function disposeMarker(m) {
+  globe.remove(m.mesh);
+  globe.remove(m.glow);
+  m.mesh.geometry.dispose();
+  m.mesh.material.dispose();
+  m.glow.geometry.dispose();
+  m.glow.material.dispose();
+}
+
+function updateGlobeMarkers() {
+  markers.forEach(disposeMarker);
+  markers.length = 0;
+
+  missions.forEach((mission, idx) => {
+    const city = getCityFromMission(mission);
+    const coords = CITY_COORDS[city];
+    if (!coords) return;
+
+    const pos = latLonToVector3(coords.lat, coords.lon, 5.08);
+    const threat = getThreatLevel(mission);
+    const color = threat === 'CRÍTICO' ? 0xff4444 :
+                  threat === 'ELEVADO' ? 0xCD7F32 :
+                  threat === 'MÉDIO' ? 0xFFBF00 : 0x8fd6a0;
+
+    const marker = new THREE.Mesh(
+      new THREE.SphereGeometry(MARKER_RADIUS, 16, 16),
+      new THREE.MeshBasicMaterial({ color })
+    );
+    marker.position.copy(pos);
+    marker.userData = { mission, id: idx };
+
+    const glow = new THREE.Mesh(
+      new THREE.SphereGeometry(GLOW_RADIUS, 16, 16),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: GLOW_OPACITY })
+    );
+    glow.position.copy(pos);
+    glow.userData = { isGlow: true, mission };
+
+    globe.add(marker);
+    globe.add(glow);
+    markers.push({ mesh: marker, glow, basePos: pos, mission });
+  });
+}
+
+// Interação
+let isDragging = false;
+let dragStartX = 0, dragStartY = 0;
+let px = 0, py = 0;
+let rx = 0, ry = 0;
+let trx = 0, try_ = 0;
+let focusRotation = false;
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoveredMarker = null;
+
+function updateMouseNDC(e) {
+  const rect = cv.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+}
+
+function getMarkerIntersections() {
+  globe.updateMatrixWorld(true);
+  raycaster.setFromCamera(mouse, cam);
+  const targets = markers.flatMap(m => [m.mesh, m.glow]);
+  return raycaster.intersectObjects(targets, false);
+}
+
+function updateHover(e) {
+  updateMouseNDC(e);
+  const hits = getMarkerIntersections();
+  const hit = hits.length > 0 ? hits[0].object : null;
+
+  if (hit !== hoveredMarker) {
+    if (hoveredMarker && hoveredMarker.userData.mission) {
+      hoveredMarker.scale.set(1, 1, 1);
+    }
+    hoveredMarker = hit;
+  }
+
+  if (hoveredMarker && !isDragging) {
+    cv.style.cursor = 'pointer';
+  } else {
+    cv.style.cursor = isDragging ? 'grabbing' : 'default';
+  }
+}
+
+cv.addEventListener('pointerdown', e => {
+  isDragging = false;
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+  px = e.clientX;
+  py = e.clientY;
+  cv.setPointerCapture(e.pointerId);
+});
+
+cv.addEventListener('pointermove', e => {
+  const dx = e.clientX - dragStartX;
+  const dy = e.clientY - dragStartY;
+
+  if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+    isDragging = true;
+    focusRotation = false;
+  }
+
+  if (isDragging) {
+    try_ += (e.clientX - px) * 0.005;
+    trx += (e.clientY - py) * 0.005;
+    px = e.clientX;
+    py = e.clientY;
+  }
+
+  updateHover(e);
+});
+
+cv.addEventListener('pointerup', e => {
+  cv.releasePointerCapture(e.pointerId);
+  updateMouseNDC(e);
+
+  if (!isDragging) {
+    const hits = getMarkerIntersections();
+    if (hits.length > 0) {
+      const mission = hits[0].object.userData.mission;
+      if (mission) selectMission(mission);
+    }
+  }
+
+  isDragging = false;
+  updateHover(e);
+});
+
+cv.addEventListener('pointerleave', () => {
+  hoveredMarker = null;
+  cv.style.cursor = 'default';
+});
+
+function animateGlobe() {
+  requestAnimationFrame(animateGlobe);
+
+  if (!isDragging && !focusRotation) try_ += 0.0008;
+
+  ry += (try_ - ry) * 0.08;
+  rx += (trx - rx) * 0.08;
+  trx = Math.max(-1.2, Math.min(1.2, trx));
+
+  globe.rotation.y = ry;
+  globe.rotation.x = rx;
+
+  const time = performance.now() * 0.003;
+  markers.forEach((m, i) => {
+    const pulse = Math.sin(time + i * 1.4);
+    const scale = 1 + pulse * 0.3;
+    m.mesh.scale.set(scale, scale, scale);
+    if (m.glow) {
+      m.glow.scale.set(scale, scale, scale);
+      m.glow.material.opacity = GLOW_OPACITY + pulse * 0.15;
+    }
+  });
+
+  ren.render(scene, cam);
+}
+
+animateGlobe();
+
+addEventListener('resize', () => {
+  cam.aspect = innerWidth / innerHeight;
+  cam.updateProjectionMatrix();
+  ren.setSize(innerWidth, innerHeight);
+});
+
+// ============================================================
+// INTEGRAÇÃO COM API - CORRIGIDA
+// ============================================================
+function hasDirector(state) {
+  return state && state.director && (state.director.code || state.director.codename);
+}
+
+async function loadMissions() {
+  // Verifica se diretor está cadastrado
+  const state = ArchiveAPI.getState();
+  if(!hasDirector(state)) {
+    // Usa dados mock mesmo assim
+    console.warn('Diretor não cadastrado, usando dados locais');
+  } else {
+    document.getElementById('dirName').textContent = state.director.code || state.director.codename;
+  }
+  
+  await ArchiveAPI.init();
+  missions = await ArchiveAPI.getMissions();
+  
+  if(missions.length === 0) {
+    // Gera missões mock
+    missions = [
+      {id:1,title:'Operação Typhon',location:'Istambul, Turquia',target:'O Arquiteto',threat_level:'MÉDIO',objective:'Investigar documentos falsificados',reward:{credits:800}},
+      {id:2,title:'Operação Meridian',location:'Cairo, Egito',target:'Agente V',threat_level:'ELEVADO',objective:'Rastrear artefato roubado',reward:{credits:1200}},
+      {id:3,title:'Operação Signal',location:'Londres, Reino Unido',target:'Desconhecido',threat_level:'BAIXO',objective:'Monitorar comunicações',reward:{credits:500}}
+    ];
+  }
+  
+  renderMissions();
+  updateGlobeMarkers();
+}
+
+function renderMissions() {
+  const list = document.getElementById('targetsList');
+  document.getElementById('missionCount').textContent = missions.length;
+  document.getElementById('panelMissions').textContent = missions.length;
+  
+  if(missions.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--onv);">NENHUMA MISSÃO</div>';
+    return;
+  }
+  
+  const threats = missions.map(m => getThreatLevel(m));
+  const maxThreat = threats.includes('CRÍTICO') ? 'CRÍTICO' : 
+                    threats.includes('ELEVADO') ? 'ELEVADO' : 
+                    threats.includes('MÉDIO') ? 'MÉDIO' : 'BAIXO';
+  document.getElementById('panelThreat').textContent = '⚠ ' + maxThreat;
+  
+  list.innerHTML = missions.map((m, idx) => `
+    <div class="tgt" data-idx="${idx}" onclick="selectMissionByIndex(${idx})">
+      <div class="tn">${m.title || 'Operação Desconhecida'}</div>
+      <div class="to">${m.location || 'Local Desconhecido'}</div>
+      <div class="td">${m.objective || m.description || 'Sem descrição'}</div>
+      <div style="margin-bottom:8px;">
+        <span class="threat ${getThreatLevel(m)}">${getThreatLevel(m)}</span>
+        <span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:9px;">+${m.reward?.credits || m.reward_credits || 0} CR</span>
+      </div>
+      <button onclick="acceptMission(${m.id || idx}, event)">ENGATAR</button>
+    </div>
+  `).join('');
+}
+
+function selectMissionByIndex(idx) {
+  if(missions[idx]) selectMission(missions[idx]);
+}
+
+function selectMission(mission) {
+  selectedMission = mission;
+  focusRotation = true;
+
+  document.getElementById('panelStatus').textContent = mission.title || 'Operação Desconhecida';
+
+  const detail = document.getElementById('missionDetail');
+  detail.classList.add('show');
+  document.getElementById('detailLocation').textContent = mission.location || 'Desconhecido';
+  document.getElementById('detailTarget').textContent = mission.target || '—';
+  document.getElementById('detailObjective').textContent = mission.objective || mission.description || 'Sem descrição';
+  const credits = mission.reward?.credits || mission.reward_credits || 0;
+  document.getElementById('detailReward').textContent = '+' + credits + ' CR';
+  const threat = getThreatLevel(mission);
+  const threatEl = document.getElementById('detailThreat');
+  threatEl.textContent = threat;
+  threatEl.className = 'threat ' + threat;
+  document.getElementById('panelThreat').textContent = '⚠ ' + threat;
+
+  const city = getCityFromMission(mission);
+  const coords = CITY_COORDS[city];
+  if (coords) {
+    try_ = (-coords.lon * Math.PI / 180) - Math.PI / 2;
+    trx = Math.max(-1.2, Math.min(1.2, (-coords.lat * Math.PI / 180) * 0.6));
+  }
+
+  document.querySelectorAll('.tgt').forEach(el => el.style.borderColor = '');
+  const idx = missions.indexOf(mission);
+  if (idx >= 0) {
+    const tgt = document.querySelector(`.tgt[data-idx="${idx}"]`);
+    if (tgt) tgt.style.borderColor = 'var(--amber)';
+  }
+}
+
+async function acceptMission(missionId, event) {
+  if(event) event.stopPropagation();
+  
+  const state = ArchiveAPI.getState();
+  if(!hasDirector(state)) {
+    alert('⚠️ Diretor não cadastrado. Faça login pelo index.html primeiro.');
+    return;
+  }
+  
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'PROCESSANDO...';
+  
+  try {
+    await ArchiveAPI.init();
+    if(!ArchiveAPI.playerId) {
+      await ArchiveAPI.createPlayer(
+        state.director.name,
+        state.director.code || state.director.codename,
+        state.director.specialty || 'Investigação'
+      );
+    }
+    
+    const result = await ArchiveAPI.acceptMission(missionId);
+    if(result && result.success) {
+      btn.textContent = '✓ ACEITA';
+      btn.style.background = 'var(--gold)';
+      btn.style.color = 'var(--surface)';
+      setTimeout(() => loadMissions(), 1500);
+    } else {
+      throw new Error('Falha ao aceitar');
+    }
+  } catch(err) {
+    console.error('Erro:', err);
+    btn.disabled = false;
+    btn.textContent = 'TENTAR NOVAMENTE';
+  }
+}
+
+async function generateNewMission() {
+  const btn = document.getElementById('btnNewMission');
+  btn.textContent = 'GERANDO...';
+  btn.disabled = true;
+  
+  const newMission = {
+    id: Date.now(),
+    title: 'Operação ' + Math.random().toString(36).substring(7).toUpperCase(),
+    location: Object.keys(CITY_COORDS)[Math.floor(Math.random() * Object.keys(CITY_COORDS).length)],
+    target: 'Desconhecido',
+    threat_level: ['BAIXO','MÉDIO','ELEVADO'][Math.floor(Math.random()*3)],
+    objective: 'Investigar atividade suspeita',
+    reward: {credits: Math.floor(Math.random() * 1000) + 500}
+  };
+  
+  missions.push(newMission);
+  renderMissions();
+  updateGlobeMarkers();
+  
+  btn.textContent = '+ Gerar Nova Missão';
+  btn.disabled = false;
+}
+
+// Navegação
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+    a.classList.add('on');
+  });
+});
+
+// Relógio
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+}, 1000);
+
+// Inicialização
+window.addEventListener('load', () => {
+  loadMissions();
+});
+</script>
+</body>
+</html>

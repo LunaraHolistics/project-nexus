@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Sistema de Áudio Adaptativo</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<style>
+:root{
+  --surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;
+  --gold:#C5A059;--bronze:#CD7F32;--amber:#FFBF00;
+  --petrol:#003344;--ivory:#F5F5DC;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--surface);color:var(--on);
+  font-family:'Manrope',sans-serif;
+  min-height:100vh;overflow-x:hidden;
+}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  animation:gr .42s steps(3) infinite;}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-1.5%,-1%)}66%{transform:translate(1%,1.5%)}100%{transform:translate(0,0)}}
+
+.container{max-width:1200px;margin:0 auto;padding:40px 48px;}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;padding-bottom:24px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.logo{font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.status{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.1em;display:flex;align-items:center;gap:10px;}
+.status .dot{width:8px;height:8px;border-radius:50%;background:var(--onv);transition:.3s;}
+.status.active .dot{background:var(--amber);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{box-shadow:0 0 0 8px rgba(255,191,0,0)}}
+
+/* VISUALIZER */
+.visualizer{position:relative;height:200px;background:rgba(10,13,18,.6);border:.5px solid rgba(197,160,89,.3);border-radius:4px;margin-bottom:32px;overflow:hidden;}
+#vizCanvas{width:100%;height:100%;}
+.viz-label{position:absolute;top:12px;left:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+.viz-status{position:absolute;bottom:12px;right:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;}
+
+/* SECTIONS */
+.section{margin-bottom:40px;}
+.section-title{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-title::before{content:'';width:20px;height:1px;background:var(--gold);}
+
+/* LAYERS */
+.layers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.layer{position:relative;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);border-radius:4px;padding:20px;transition:.3s;}
+.layer:hover{box-shadow:0 0 20px rgba(197,160,89,.15);}
+.layer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.layer-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--on);letter-spacing:.05em;}
+.layer-toggle{width:40px;height:20px;background:rgba(197,160,89,.2);border-radius:10px;position:relative;cursor:pointer;transition:.3s;}
+.layer-toggle.active{background:var(--gold);}
+.layer-toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--on);border-radius:50%;transition:.3s;}
+.layer-toggle.active::after{left:22px;background:var(--surface);}
+.layer-desc{font-family:'Manrope',sans-serif;font-size:12px;color:var(--onv);line-height:16px;margin-bottom:12px;}
+.layer-volume{display:flex;align-items:center;gap:10px;}
+.volume-slider{flex:1;height:4px;background:rgba(197,160,89,.2);border-radius:2px;position:relative;cursor:pointer;}
+.volume-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--amber));border-radius:2px;transition:width .2s;}
+.volume-value{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);min-width:35px;text-align:right;}
+
+/* STATES */
+.states{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.state-btn{padding:16px;background:transparent;border:1px solid rgba(197,160,89,.3);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.3s;text-align:center;}
+.state-btn:hover{border-color:var(--gold);color:var(--gold);}
+.state-btn.active{background:var(--gold);border-color:var(--gold);color:var(--surface);}
+
+/* SFX */
+.sfx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sfx-btn{padding:14px;background:rgba(10,13,18,.5);border:.5px solid rgba(197,160,89,.2);color:var(--on);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;cursor:pointer;transition:.3s;text-align:center;}
+.sfx-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--surface);transform:translateY(-2px);}
+.sfx-btn:active{transform:translateY(0);}
+
+/* FOOTER */
+footer{margin-top:60px;padding-top:24px;border-top:.5px solid rgba(197,160,89,.3);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="container">
+  <header>
+    <div class="logo">ARCHIVE</div>
+    <div class="status" id="audioStatus">
+      <span class="dot"></span>
+      <span>Áudio: INATIVO — Clique para ativar</span>
+    </div>
+  </header>
+
+  <!-- VISUALIZER -->
+  <div class="visualizer">
+    <canvas id="vizCanvas"></canvas>
+    <div class="viz-label">Frequency Domain</div>
+    <div class="viz-status" id="vizStatus">INACTIVE</div>
+  </div>
+
+  <!-- LAYERS -->
+  <div class="section">
+    <div class="section-title">Camadas de Áudio</div>
+    <div class="layers">
+      <div class="layer" data-layer="drone">
+        <div class="layer-header">
+          <div class="layer-name">Drone Ambiente</div>
+          <div class="layer-toggle active" data-active="true"></div>
+        </div>
+        <div class="layer-desc">Frequência grave contínua (40-80Hz)</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="60">
+            <div class="volume-fill" style="width:60%"></div>
+          </div>
+          <div class="volume-value">60%</div>
+        </div>
+      </div>
+
+      <div class="layer" data-layer="pulse">
+        <div class="layer-header">
+          <div class="layer-name">Pulsação Eletrônica</div>
+          <div class="layer-toggle" data-active="false"></div>
+        </div>
+        <div class="layer-desc">Ritmo de urgência (120 BPM)</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="40">
+            <div class="volume-fill" style="width:40%"></div>
+          </div>
+          <div class="volume-value">40%</div>
+        </div>
+      </div>
+
+      <div class="layer" data-layer="tension">
+        <div class="layer-header">
+          <div class="layer-name">Silêncio Tenso</div>
+          <div class="layer-toggle" data-active="false"></div>
+        </div>
+        <div class="layer-desc">Pausas dramáticas para dedução</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="30">
+            <div class="volume-fill" style="width:30%"></div>
+          </div>
+          <div class="volume-value">30%</div>
+        </div>
+      </div>
+
+      <div class="layer" data-layer="sfx">
+        <div class="layer-header">
+          <div class="layer-name">Efeitos Sonoros</div>
+          <div class="layer-toggle active" data-active="true"></div>
+        </div>
+        <div class="layer-desc">UI, transições, interações</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="70">
+            <div class="volume-fill" style="width:70%"></div>
+          </div>
+          <div class="volume-value">70%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATES -->
+  <div class="section">
+    <div class="section-title">Estados de Gameplay</div>
+    <div class="states">
+      <button class="state-btn active" data-state="exploration">Exploração</button>
+      <button class="state-btn" data-state="investigation">Investigação</button>
+      <button class="state-btn" data-state="tension">Tensão</button>
+      <button class="state-btn" data-state="discovery">Descoberta</button>
+      <button class="state-btn" data-state="conclusion">Conclusão</button>
+      <button class="state-btn" data-state="silence">Silêncio</button>
+    </div>
+  </div>
+
+  <!-- SFX -->
+  <div class="section">
+    <div class="section-title">Efeitos Sonoros (SFX)</div>
+    <div class="sfx-grid">
+      <button class="sfx-btn" data-sfx="click">Click</button>
+      <button class="sfx-btn" data-sfx="hover">Hover</button>
+      <button class="sfx-btn" data-sfx="scan">Scan</button>
+      <button class="sfx-btn" data-sfx="decrypt">Decrypt</button>
+      <button class="sfx-btn" data-sfx="alert">Alert</button>
+      <button class="sfx-btn" data-sfx="success">Success</button>
+      <button class="sfx-btn" data-sfx="typewriter">Typewriter</button>
+      <button class="sfx-btn" data-sfx="transition">Transition</button>
+      <button class="sfx-btn" data-sfx="pulse">Pulse</button>
+      <button class="sfx-btn" data-sfx="artifact">Artifact Found</button>
+      <button class="sfx-btn" data-sfx="mission">Mission Complete</button>
+      <button class="sfx-btn" data-sfx="error">Error</button>
+    </div>
+  </div>
+
+  <footer>
+    <div>© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div id="footerStatus">Áudio: INATIVO — Clique para ativar</div>
+  </footer>
+</div>
+
+<script>
+/**
+ * ARCHIVE Audio System — Project Nexus v2.0
+ * Sistema de áudio procedural usando Web Audio API.
+ * Gera música ambiente e SFX sem arquivos externos.
+ */
+(function() {
+  'use strict';
+
+  var ctx = null;
+  var analyser = null;
+  var masterGain = null;
+  var _muted = false;
+  var _volume = 0.5;
+  var _activeState = 'exploration';
+  var _layers = {
+    drone: { active: true, volume: 0.6, osc: null, gain: null },
+    pulse: { active: false, volume: 0.4, osc: null, gain: null, lfo: null },
+    tension: { active: false, volume: 0.3, osc: null, gain: null }
+  };
+
+  /* ===========================================
+     INICIALIZAÇÃO
+     =========================================== */
+  function init() {
+    if (ctx) return;
+    try {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      masterGain = ctx.createGain();
+      masterGain.gain.value = _volume;
+      masterGain.connect(analyser);
+      analyser.connect(ctx.destination);
+      
+      console.log('[ARCHIVE Audio] Sistema inicializado');
+      startVisualizer();
+      updateStatus(true);
+    } catch(e) {
+      console.warn('[ARCHIVE Audio] Web Audio API não suportada');
+    }
+  }
+
+  function resume() {
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+  }
+
+  /* ===========================================
+     CONTROLES GLOBAIS
+     =========================================== */
+  function setVolume(v) {
+    _volume = Math.max(0, Math.min(1, v));
+    if (masterGain) masterGain.gain.value = _volume;
+  }
+
+  function toggleMute() {
+    _muted = !_muted;
+    if (masterGain) masterGain.gain.value = _muted ? 0 : _volume;
+    updateStatus(!_muted);
+    return _muted;
+  }
+
+  /* ===========================================
+     CAMADAS DE ÁUDIO
+     =========================================== */
+  function startDrone() {
+    if (!_layers.drone.active || _layers.drone.osc) return;
+    resume();
+    
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    var filter = ctx.createBiquadFilter();
+    
+    osc.type = 'sine';
+    osc.frequency.value = 55; // A1
+    
+    filter.type = 'lowpass';
+    filter.frequency.value = 200;
+    filter.Q.value = 1;
+    
+    gain.gain.value = _layers.drone.volume * 0.1;
+    
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGain);
+    
+    osc.start(ctx.currentTime);
+    _layers.drone.osc = osc;
+    _layers.drone.gain = gain;
+  }
+
+  function stopDrone() {
+    if (_layers.drone.osc) {
+      _layers.drone.osc.stop(ctx.currentTime);
+      _layers.drone.osc = null;
+      _layers.drone.gain = null;
+    }
+  }
+
+  function startPulse() {
+    if (!_layers.pulse.active || _layers.pulse.osc) return;
+    resume();
+    
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    var lfo = ctx.createOscillator();
+    var lfoGain = ctx.createGain();
+    
+    osc.type = 'sawtooth';
+    osc.frequency.value = 110; // A2
+    
+    lfo.type = 'sine';
+    lfo.frequency.value = 2; // 120 BPM = 2Hz
+    
+    lfoGain.gain.value = 0.3;
+    gain.gain.value = _layers.pulse.volume * 0.08;
+    
+    lfo.connect(lfoGain);
+    lfoGain.connect(gain.gain);
+    osc.connect(gain);
+    gain.connect(masterGain);
+    
+    osc.start(ctx.currentTime);
+    lfo.start(ctx.currentTime);
+    
+    _layers.pulse.osc = osc;
+    _layers.pulse.gain = gain;
+    _layers.pulse.lfo = lfo;
+  }
+
+  function stopPulse() {
+    if (_layers.pulse.osc) {
+      _layers.pulse.osc.stop(ctx.currentTime);
+      _layers.pulse.lfo.stop(ctx.currentTime);
+      _layers.pulse.osc = null;
+      _layers.pulse.gain = null;
+      _layers.pulse.lfo = null;
+    }
+  }
+
+  function startTension() {
+    if (!_layers.tension.active || _layers.tension.osc) return;
+    resume();
+    
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    var filter = ctx.createBiquadFilter();
+    
+    osc.type = 'triangle';
+    osc.frequency.value = 220; // A3
+    
+    filter.type = 'bandpass';
+    filter.frequency.value = 400;
+    filter.Q.value = 5;
+    
+    gain.gain.value = _layers.tension.volume * 0.05;
+    
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGain);
+    
+    osc.start(ctx.currentTime);
+    _layers.tension.osc = osc;
+    _layers.tension.gain = gain;
+  }
+
+  function stopTension() {
+    if (_layers.tension.osc) {
+      _layers.tension.osc.stop(ctx.currentTime);
+      _layers.tension.osc = null;
+      _layers.tension.gain = null;
+    }
+  }
+
+  function updateLayers() {
+    // Drone
+    if (_layers.drone.active && !_layers.drone.osc) startDrone();
+    else if (!_layers.drone.active && _layers.drone.osc) stopDrone();
+    
+    // Pulse
+    if (_layers.pulse.active && !_layers.pulse.osc) startPulse();
+    else if (!_layers.pulse.active && _layers.pulse.osc) stopPulse();
+    
+    // Tension
+    if (_layers.tension.active && !_layers.tension.osc) startTension();
+    else if (!_layers.tension.active && _layers.tension.osc) stopTension();
+  }
+
+  /* ===========================================
+     ESTADOS DE GAMEPLAY
+     =========================================== */
+  function setState(state) {
+    _activeState = state;
+    
+    // Configurações por estado
+    var configs = {
+      exploration: { drone: true, pulse: false, tension: false },
+      investigation: { drone: true, pulse: true, tension: false },
+      tension: { drone: true, pulse: true, tension: true },
+      discovery: { drone: false, pulse: false, tension: false },
+      conclusion: { drone: true, pulse: false, tension: false },
+      silence: { drone: false, pulse: false, tension: false }
+    };
+    
+    var config = configs[state] || configs.exploration;
+    _layers.drone.active = config.drone;
+    _layers.pulse.active = config.pulse;
+    _layers.tension.active = config.tension;
+    
+    updateLayers();
+    updateStateButtons();
+  }
+
+  /* ===========================================
+     SFX
+     =========================================== */
+  function playHover() {
+    if (!ctx || _muted) return;
+    resume();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 800;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.05, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.08);
+  }
+
+  function playClick() {
+    if (!ctx || _muted) return;
+    resume();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(600, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.1);
+  }
+
+  function playSuccess() {
+    if (!ctx || _muted) return;
+    resume();
+    var notes = [523.25, 659.25, 783.99];
+    notes.forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      var t = ctx.currentTime + (i * 0.08);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.1, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 0.3);
+    });
+  }
+
+  function playError() {
+    if (!ctx || _muted) return;
+    resume();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  }
+
+  function playDecrypt() {
+    if (!ctx || _muted) return;
+    resume();
+    var bufferSize = ctx.sampleRate * 0.5;
+    var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/bufferSize, 2);
+    }
+    var source = ctx.createBufferSource();
+    source.buffer = buffer;
+    var filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 2000;
+    filter.Q.value = 5;
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGain);
+    source.start(ctx.currentTime);
+  }
+
+  function playArtifact() {
+    if (!ctx || _muted) return;
+    resume();
+    var freqs = [880, 1108.73, 1318.51, 1760];
+    freqs.forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      var t = ctx.currentTime + (i * 0.1);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.08, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 0.8);
+    });
+  }
+
+  function playMission() {
+    if (!ctx || _muted) return;
+    resume();
+    var notes = [
+      {f: 523.25, t: 0},
+      {f: 659.25, t: 0.15},
+      {f: 783.99, t: 0.3},
+      {f: 1046.5, t: 0.45}
+    ];
+    notes.forEach(function(n) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = n.f;
+      var t = ctx.currentTime + n.t;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 0.5);
+    });
+  }
+
+  function playTransition() {
+    if (!ctx || _muted) return;
+    resume();
+    var bufferSize = ctx.sampleRate * 0.4;
+    var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / bufferSize);
+    }
+    var source = ctx.createBufferSource();
+    source.buffer = buffer;
+    var filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(500, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(3000, ctx.currentTime + 0.2);
+    filter.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.4);
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGain);
+    source.start(ctx.currentTime);
+  }
+
+  /* ===========================================
+     VISUALIZADOR
+     =========================================== */
+  function startVisualizer() {
+    var canvas = document.getElementById('vizCanvas');
+    var ctx2d = canvas.getContext('2d');
+    var bufferLength = analyser.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
+    
+    function draw() {
+      requestAnimationFrame(draw);
+      
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      analyser.getByteFrequencyData(dataArray);
+      
+      ctx2d.fillStyle = 'rgba(10, 13, 18, 0.2)';
+      ctx2d.fillRect(0, 0, canvas.width, canvas.height);
+      
+      var barWidth = (canvas.width / bufferLength) * 2.5;
+      var x = 0;
+      
+      for (var i = 0; i < bufferLength; i++) {
+        var barHeight = (dataArray[i] / 255) * canvas.height;
+        var gradient = ctx2d.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
+        gradient.addColorStop(0, '#FFBF00');
+        gradient.addColorStop(1, '#C5A059');
+        ctx2d.fillStyle = gradient;
+        ctx2d.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth + 1;
+      }
+    }
+    
+    draw();
+    document.getElementById('vizStatus').textContent = 'ACTIVE';
+  }
+
+  /* ===========================================
+     UI UPDATES
+     =========================================== */
+  function updateStatus(active) {
+    var statusEl = document.getElementById('audioStatus');
+    var footerEl = document.getElementById('footerStatus');
+    var text = active ? 'Áudio: ATIVO' : 'Áudio: INATIVO';
+    
+    if (active) {
+      statusEl.classList.add('active');
+      statusEl.querySelector('span:last-child').textContent = text;
+    } else {
+      statusEl.classList.remove('active');
+      statusEl.querySelector('span:last-child').textContent = text + ' — Clique para ativar';
+    }
+    
+    footerEl.textContent = text;
+  }
+
+  function updateStateButtons() {
+    document.querySelectorAll('.state-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.state === _activeState);
+    });
+  }
+
+  /* ===========================================
+     EVENT LISTENERS
+     =========================================== */
+  document.addEventListener('click', function initAudio() {
+    init();
+    updateLayers();
+    document.removeEventListener('click', initAudio);
+  }, { once: true });
+
+  // Layer toggles
+  document.querySelectorAll('.layer-toggle').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      var layer = this.closest('.layer').dataset.layer;
+      var active = this.dataset.active === 'true';
+      this.dataset.active = !active;
+      this.classList.toggle('active', !active);
+      _layers[layer].active = !active;
+      updateLayers();
+    });
+  });
+
+  // Volume sliders
+  document.querySelectorAll('.volume-slider').forEach(function(slider) {
+    slider.addEventListener('click', function(e) {
+      var rect = this.getBoundingClientRect();
+      var percent = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      var layer = this.closest('.layer').dataset.layer;
+      _layers[layer].volume = percent / 100;
+      this.querySelector('.volume-fill').style.width = percent + '%';
+      this.nextElementSibling.textContent = Math.round(percent) + '%';
+      
+      if (_layers[layer].gain) {
+        _layers[layer].gain.gain.value = _layers[layer].volume * 0.1;
+      }
+    });
+  });
+
+  // State buttons
+  document.querySelectorAll('.state-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setState(this.dataset.state);
+    });
+  });
+
+  // SFX buttons
+  var sfxMap = {
+    click: playClick,
+    hover: playHover,
+    scan: playDecrypt,
+    decrypt: playDecrypt,
+    alert: playError,
+    success: playSuccess,
+    typewriter: playClick,
+    transition: playTransition,
+    pulse: playHover,
+    artifact: playArtifact,
+    mission: playMission,
+    error: playError
+  };
+
+  document.querySelectorAll('.sfx-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var sfx = this.dataset.sfx;
+      if (sfxMap[sfx]) sfxMap[sfx]();
+    });
+  });
+
+  /* ===========================================
+     EXPOSIÇÃO PÚBLICA
+     =========================================== */
+  window.ArchiveAudio = {
+    init: init,
+    resume: resume,
+    setVolume: setVolume,
+    toggleMute: toggleMute,
+    setState: setState,
+    get muted() { return _muted; },
+    playHover: playHover,
+    playClick: playClick,
+    playSuccess: playSuccess,
+    playError: playError,
+    playDecrypt: playDecrypt,
+    playArtifact: playArtifact,
+    playMission: playMission,
+    playTransition: playTransition
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Terminal Alpha</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+.home{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 20% 50%,rgba(0,51,68,.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(197,160,89,.07) 0%,transparent 50%),var(--surface);}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+.body{flex:1;display:flex;padding:40px 48px;gap:40px;overflow:hidden;}
+.left{width:280px;display:flex;flex-direction:column;gap:24px;}
+.prof{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.av{width:52px;height:52px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av svg{width:28px;height:28px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.prof h3{font-family:'Libre Caslon Text',serif;font-size:17px;color:var(--on);margin-bottom:2px;}
+.prof p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;}
+.btnp{width:100%;padding:14px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btnp:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.btnp .ar{transition:transform .3s;}
+.btnp:hover .ar{transform:translateX(4px);}
+.snav{display:flex;flex-direction:column;gap:6px;}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
+.si.on{background:rgba(197,160,89,.1);border-left-color:var(--gold);color:var(--gold);}
+.si svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.center{flex:1;display:flex;flex-direction:column;gap:28px;overflow-y:auto;}
+.wel{position:relative;padding:40px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);}
+.wel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.wl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:14px;display:flex;align-items:center;gap:10px;position:relative;}
+.wl::before{content:'';width:22px;height:1px;background:var(--gold);}
+.wt{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:var(--on);letter-spacing:-.02em;line-height:54px;margin-bottom:18px;position:relative;}
+.wt .hl{color:var(--gold);font-style:italic;}
+.wd{font-family:'Manrope',sans-serif;font-size:17px;line-height:26px;color:var(--onv);max-width:620px;position:relative;}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+.ac{position:relative;padding:28px;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);cursor:pointer;transition:all .4s;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+.ac::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+.ac:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
+.ach{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.aci{width:40px;height:40px;background:var(--petrol);display:flex;align-items:center;justify-content:center;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+.aci svg{width:22px;height:22px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.act{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;}
+.acd{font-family:'Manrope',sans-serif;font-size:14px;line-height:20px;color:#6b6560;}
+.right{width:260px;display:flex;flex-direction:column;gap:20px;}
+.sc{position:relative;padding:20px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);}
+.sc::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.sch{display:flex;align-items:center;gap:8px;margin-bottom:14px;position:relative;}
+.sch .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+.sct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;}
+.sr{margin-bottom:10px;position:relative;}
+.sr:last-child{margin-bottom:0;}
+.srl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+.srv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);letter-spacing:.05em;}
+.srv.al{color:var(--amber);}
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.ft .q{font-family:'Libre Caslon Text',serif;font-style:italic;color:var(--gold);}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fi{opacity:0;animation:fi .7s ease-out forwards;}
+.d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="home">
+  <header class="fi">
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+  <div class="body">
+    <aside class="left fi d1">
+      <div class="prof">
+        <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><h3>PROJECT NEXUS</h3><p>Field Operative</p></div>
+      </div>
+      <button class="btnp">Acessar Intel <span class="ar">→</span></button>
+      <nav class="snav">
+        <button class="si on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</button>
+        <button class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
+        <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
+        <button class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</button>
+      </nav>
+    </aside>
+    <main class="center">
+      <div class="wel fi d2">
+        <div class="wl">TERMINAL ALPHA</div>
+        <h1 class="wt">Aguardando Instruções,<br><span class="hl">Operativo.</span></h1>
+        <p class="wd">O relicário digital foi sincronizado. Todas as conexões históricas estão online. Proceda com cautela ao iniciar nova investigação.</p>
+      </div>
+      <div class="cards">
+        <div class="ac fi d3">
+          <div class="ach"><div class="aci"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="act">Iniciar Nova Missão</div></div>
+          <div class="acd">Estabelecer novo ponto de entrada na linha do tempo.</div>
+        </div>
+        <div class="ac fi d3">
+          <div class="ach"><div class="aci"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="act">Museu da Archive</div></div>
+          <div class="acd">Acessar artefatos recuperados e relatórios passados.</div>
+        </div>
+      </div>
+    </main>
+    <aside class="right fi d2">
+      <div class="sc">
+        <div class="sch"><span class="d"></span><span class="sct">Global Feed: Ativo</span></div>
+        <div class="sr"><div class="srl">Sync Rate</div><div class="srv">99.8% // SEGURO</div></div>
+      </div>
+      <div class="sc">
+        <div class="sch"><span class="sct">Inteligência Ativa</span></div>
+        <div class="sr"><div class="srl">Operações em Andamento</div><div class="srv">03</div></div>
+        <div class="sr"><div class="srl">Nível de Ameaça</div><div class="srv al">⚠ ELEVADO</div></div>
+      </div>
+    </aside>
+  </div>
+  <footer class="fi d3">
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc"><div class="ft q">"Protetores da História Humana"</div></div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+document.querySelectorAll('.ac').forEach(c=>c.addEventListener('click',()=>{const t=c.querySelector('.act').textContent;console.log('Ação:',t);}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

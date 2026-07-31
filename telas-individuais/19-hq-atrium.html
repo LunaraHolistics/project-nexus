@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Sede da Archive · HQ Atrium</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.04;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.vig{position:fixed;inset:0;pointer-events:none;z-index:8998;background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,.72) 100%);}
+.atrium{position:relative;width:100vw;height:100vh;overflow:hidden;background:linear-gradient(180deg,#0a0d14 0%,#11151f 45%,#0a0d14 100%);}
+/* arquitetura */
+.arch{position:absolute;inset:0;}
+.ceiling{position:absolute;top:0;left:0;right:0;height:34%;background:radial-gradient(ellipse at 50% 0%,rgba(197,160,89,.1) 0%,transparent 55%),linear-gradient(180deg,#0c1018,#0a0d14);}
+.ceiling::after{content:'';position:absolute;bottom:0;left:0;right:0;height:18px;background:linear-gradient(90deg,transparent,rgba(197,160,89,.18),transparent);}
+.colonnade{position:absolute;top:14%;left:0;right:0;bottom:30%;display:flex;justify-content:space-around;align-items:stretch;padding:0 4%;}
+.col{width:48px;position:relative;background:linear-gradient(90deg,#0e121b 0%,#222a38 45%,#2c3545 50%,#222a38 55%,#0e121b 100%);box-shadow:0 0 30px rgba(0,0,0,.5);}
+.col::before{content:'';position:absolute;top:-14px;left:-9px;right:-9px;height:16px;background:linear-gradient(90deg,#0e121b,#2c3545,#0e121b);}
+.col::after{content:'';position:absolute;bottom:-12px;left:-9px;right:-9px;height:14px;background:linear-gradient(90deg,#0e121b,#2c3545,#0e121b);}
+.balcony{position:absolute;top:30%;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,#1a212e 10%,#1a212e 90%,transparent);box-shadow:0 4px 12px rgba(0,0,0,.6);}
+.balcony::before{content:'';position:absolute;top:-26px;left:8%;right:8%;height:26px;background:repeating-linear-gradient(90deg,transparent 0,transparent 14px,rgba(40,50,66,.6) 14px,rgba(40,50,66,.6) 16px);}
+/* escadaria */
+.stairs{position:absolute;bottom:30%;left:50%;transform:translateX(-50%);width:38%;height:24%;background:linear-gradient(180deg,#161c28,#0c1018);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%);}
+.stairs::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 13px,rgba(197,160,89,.06) 13px,rgba(197,160,89,.06) 15px);}
+/* piso reflexivo */
+.floor{position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(180deg,#10141d 0%,#070a10 100%);}
+.floor::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(197,160,89,.1) 0%,transparent 60%);}
+.floor::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 90px,rgba(197,160,89,.03) 90px,rgba(197,160,89,.03) 91px);}
+/* agentes caminhando */
+.agent{position:absolute;bottom:14%;width:26px;height:64px;background:linear-gradient(180deg,#05070b,#0a0d14);border-radius:13px 13px 0 0;opacity:.7;}
+.agent::before{content:'';position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:14px;height:14px;background:#05070b;border-radius:50%;}
+.agent.a1{animation:walk1 26s linear infinite;}
+.agent.a2{bottom:18%;width:22px;height:54px;opacity:.5;animation:walk2 34s linear infinite;}
+.agent.a3{bottom:11%;width:30px;height:72px;opacity:.8;animation:walk3 22s linear infinite;}
+@keyframes walk1{0%{left:-5%}100%{left:105%}}
+@keyframes walk2{0%{left:105%}100%{left:-5%}}
+@keyframes walk3{0%{left:30%}50%{left:70%}100%{left:30%}}
+/* monitores holo */
+.holo{position:absolute;width:120px;height:78px;background:rgba(0,51,68,.28);border:.5px solid rgba(197,160,89,.4);backdrop-filter:blur(6px);box-shadow:0 0 24px rgba(0,51,68,.4);overflow:hidden;animation:float 7s ease-in-out infinite;}
+.holo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.05),rgba(0,0,0,.05) 1px,transparent 1px,transparent 3px);}
+.holo .bars{position:absolute;bottom:8px;left:8px;right:8px;height:34px;display:flex;align-items:flex-end;gap:3px;}
+.holo .bars i{flex:1;background:linear-gradient(180deg,var(--amber),var(--gold));opacity:.7;animation:bar 1.4s ease-in-out infinite;}
+@keyframes bar{0%,100%{height:20%}50%{height:90%}}
+.holo .lab{position:absolute;top:6px;left:8px;font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--gold);letter-spacing:.1em;}
+.holo.h1{top:34%;left:14%;animation-delay:0s;}
+.holo.h2{top:42%;right:13%;animation-delay:2.3s;}
+.holo.h3{top:52%;left:62%;width:96px;height:62px;animation-delay:4.1s;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+/* header */
+.hdr{position:absolute;top:0;left:0;right:0;height:60px;z-index:40;background:linear-gradient(180deg,rgba(7,10,16,.92) 0%,transparent 100%);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+/* sidebar */
+.side{position:absolute;left:32px;top:96px;width:262px;z-index:30;background:rgba(0,51,68,.2);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
+.side::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.prof{display:flex;align-items:center;gap:13px;margin-bottom:16px;padding-bottom:14px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
+.av{width:44px;height:44px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av svg{width:24px;height:24px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.prof h3{font-family:'Libre Caslon Text',serif;font-size:15px;color:var(--on);margin-bottom:2px;}
+.prof p{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
+.btni{width:100%;padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;margin-bottom:16px;position:relative;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btni:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.snav{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;position:relative;}
+.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
+.si.on{background:rgba(197,160,89,.12);border-left-color:var(--gold);color:var(--gold);}
+.si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.logout{width:100%;padding:10px;background:transparent;border:.5px solid rgba(197,160,89,.3);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+.logout:hover{border-color:var(--amber);color:var(--amber);}
+.logout svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.5;fill:none;}
+/* monitor HQ */
+.mon{position:absolute;right:32px;top:96px;width:300px;z-index:30;background:rgba(0,51,68,.22);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.mon::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.6;}
+.mt{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;padding-bottom:12px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
+.mr{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;position:relative;}
+.mr .l{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.08em;}
+.mr .v{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);letter-spacing:.04em;font-weight:500;}
+.mbar{height:4px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-top:6px;position:relative;}
+.mbar .f{height:100%;width:68%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);animation:mp 3s ease-in-out infinite;}
+@keyframes mp{0%,100%{width:62%}50%{width:78%}}
+/* cards de destino */
+.dest{position:absolute;bottom:120px;left:50%;transform:translateX(-50%);display:flex;gap:24px;z-index:30;}
+.dc{width:248px;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:26px 22px;text-align:center;cursor:pointer;transition:all .4s;box-shadow:0 14px 34px rgba(0,0,0,.45);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);position:relative;}
+.dc::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.dc:hover{transform:translateY(-7px);box-shadow:0 20px 46px rgba(0,0,0,.55),0 0 26px rgba(255,191,0,.25);}
+.dc.sel{box-shadow:0 20px 46px rgba(0,0,0,.55),0 0 0 1.5px var(--amber),0 0 30px rgba(255,191,0,.35);}
+.dic{width:54px;height:54px;margin:0 auto 16px;background:rgba(197,160,89,.15);border:.5px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.dic svg{width:26px;height:26px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.dt{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;margin-bottom:9px;}
+.dd{font-family:'Manrope',sans-serif;font-size:12px;line-height:17px;color:#6b6560;}
+/* terminal central */
+.cterm{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);width:600px;max-width:80%;z-index:35;background:rgba(7,10,16,.78);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:15px 22px;display:flex;align-items:center;gap:10px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+.cterm::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.6;}
+.cterm .pr{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);position:relative;}
+.cterm .tx{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);letter-spacing:.04em;position:relative;}
+.cterm .cur{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:middle;animation:bk 1s steps(2) infinite;}
+@keyframes bk{0%,50%{opacity:1}51%,100%{opacity:0}}
+footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;background:rgba(7,10,16,.94);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div><div class="vig"></div>
+<div class="atrium">
+  <div class="arch">
+    <div class="ceiling"></div>
+    <div class="colonnade"><div class="col"></div><div class="col"></div><div class="col"></div><div class="col"></div><div class="col"></div></div>
+    <div class="balcony"></div>
+    <div class="stairs"></div>
+    <div class="floor"></div>
+    <div class="agent a1"></div>
+    <div class="agent a2"></div>
+    <div class="agent a3"></div>
+    <div class="holo h1"><div class="lab">SECTOR_EUR</div><div class="bars"><i style="animation-delay:0s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.5s"></i><i style="animation-delay:.3s"></i></div></div>
+    <div class="holo h2"><div class="lab">SECTOR_ASI</div><div class="bars"><i style="animation-delay:.3s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.5s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.4s"></i></div></div>
+    <div class="holo h3"><div class="lab">NET</div><div class="bars"><i style="animation-delay:.1s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.5s"></i></div></div>
+  </div>
+
+  <div class="hdr">
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#" class="on">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>
+    </div>
+  </div>
+
+  <aside class="side">
+    <div class="prof">
+      <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div><h3>Diretor</h3><p>CLEARANCE LEVEL 5</p></div>
+    </div>
+    <div style="margin-bottom:14px;position:relative;">
+      <div style="font-family:'Libre Caslon Text',serif;font-size:17px;font-weight:600;color:var(--on);margin-bottom:2px;">PROJECT NEXUS</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;">Field Operative</div>
+    </div>
+    <button class="btni">Acessar Intel</button>
+    <nav class="snav">
+      <button class="si on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</button>
+      <button class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
+      <button class="si"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Missões</button>
+    </nav>
+    <button class="logout"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair do Sistema</button>
+  </aside>
+
+  <div class="mon">
+    <div class="mt">HQ Atrium Monitor</div>
+    <div class="mr"><span class="l">STATUS:</span><span class="v">SEGURO</span></div>
+    <div class="mr"><span class="l">AGENTES ATIVOS:</span><span class="v" id="agents">42</span></div>
+    <div class="mr"><span class="l">HORA LOCAL:</span><span class="v">14:03 GMT</span></div>
+    <div class="mbar"><div class="f"></div></div>
+  </div>
+
+  <div class="dest">
+    <div class="dc" data-dest="director" data-msg="Acessando Sala do Diretor. Terminal pessoal liberado.">
+      <div class="dic"><svg viewBox="0 0 24 24"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0z"/><path d="M4 18v2M20 18v2M12 4v9"/></svg></div>
+      <div class="dt">Sala do Diretor</div>
+      <div class="dd">Acessar o terminal pessoal e revisar dossiês classificados.</div>
+    </div>
+    <div class="dc" data-dest="library" data-msg="Conectando à Biblioteca Central. Índice de 14.892 arquivos carregado.">
+      <div class="dic"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <div class="dt">Biblioteca Central</div>
+      <div class="dd">Consultar documentos históricos e relatórios de campo.</div>
+    </div>
+    <div class="dc" data-dest="museum" data-msg="Entrando no Museu da Archive. 47 de 120 artefatos recuperados disponíveis.">
+      <div class="dic"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg></div>
+      <div class="dt">Museu da Archive</div>
+      <div class="dd">Explorar artefatos recuperados e acervo cultural.</div>
+    </div>
+  </div>
+
+  <div class="cterm"><span class="pr">$ &gt;</span><span class="tx" id="ctx">Selecione o destino para prosseguir</span><span class="cur"></span></div>
+
+  <footer>
+    <div class="ft">© 1984 ARCHIVE CORP // SIG: OPTIMAL</div>
+    <div class="ftc">
+      <div class="ft">LOCAL: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">STATUS: CRIPTOGRAFADO</div>
+      <div class="ft sig">SINAL: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+const ctx=document.getElementById('ctx');let typing=false,ambient=true;
+const amb=['Selecione o destino para prosseguir','Sincronizando sensores do átrio...','42 operativos em campo monitorados.','Nenhum alerta de perímetro ativo.','Aguardando seleção do Diretor...'];let ai=0;
+function typeTo(txt,cb){typing=true;ctx.textContent='';let k=0;const iv=setInterval(()=>{if(k<txt.length){ctx.textContent=txt.substring(0,k+1);k++;}else{clearInterval(iv);typing=false;if(cb)cb();}},24);}
+function runAmbient(){if(!ambient||typing)return;typeTo(amb[ai],()=>{ai=(ai+1)%amb.length;setTimeout(runAmbient,3200);});}
+setTimeout(runAmbient,1500);
+document.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',function(){ambient=false;document.querySelectorAll('.dc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');typeTo(this.dataset.msg,()=>{setTimeout(()=>{ambient=true;runAmbient();},4000);});}));
+let ag=42;const agEl=document.getElementById('agents');
+setInterval(()=>{if(Math.random()>.55){ag+=Math.floor(Math.random()*3)-1;ag=Math.max(38,Math.min(46,ag));agEl.textContent=ag;}},2600);
+document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Biblioteca Central</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+.bi{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
+.top{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ttl{font-family:'Libre Caslon Text',serif;font-size:30px;font-weight:700;color:var(--gold);letter-spacing:.02em;line-height:1;}
+.tsub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;margin-top:4px;}
+.tsrch{position:relative;width:340px;}
+.tsrch input{width:100%;padding:10px 38px 10px 38px;background:transparent;border:none;border-bottom:1px solid var(--bronze);color:var(--on);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;outline:none;transition:all .3s;}
+.tsrch input::placeholder{color:var(--onv);opacity:.5;}
+.tsrch input:focus{border-bottom-color:var(--amber);}
+.tsrch svg{position:absolute;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.tsrch .si{left:12px}.tsrch .sc{right:12px;cursor:pointer;}
+.tic{display:flex;gap:12px;}
+.tic button{width:38px;height:38px;background:rgba(197,160,89,.08);border:.5px solid var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
+.tic button:hover{background:var(--gold);}
+.tic button:hover svg{stroke:var(--surface);}
+.tic svg{width:18px;height:18px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.body{flex:1;display:flex;overflow:hidden;}
+.side{width:248px;flex-shrink:0;background:rgba(14,14,14,.6);backdrop-filter:blur(20px);border-right:.5px solid rgba(197,160,89,.3);padding:26px 20px;display:flex;flex-direction:column;gap:18px;z-index:20;}
+.stl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;padding-bottom:10px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.snav{display:flex;flex-direction:column;gap:5px;}
+.si2{display:flex;align-items:center;gap:11px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;cursor:pointer;transition:all .3s;text-align:left;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
+.si2:hover{background:rgba(197,160,89,.05);color:var(--gold);}
+.si2.on{background:rgba(197,160,89,.12);border-left-color:var(--gold);color:var(--gold);}
+.si2 svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0;}
+.sft{margin-top:auto;display:flex;flex-direction:column;gap:11px;}
+.btnu{padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+.btnu:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.btnu svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.tact{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.08em;display:flex;align-items:center;gap:7px;opacity:.7;}
+.tact::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(197,160,89,.4)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(197,160,89,0)}}
+.content{flex:1;overflow-y:auto;padding:32px 44px;position:relative;}
+.bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.bc .cur{color:var(--gold);}
+.crow{display:flex;justify-content:flex-end;gap:10px;margin-bottom:24px;}
+.cb{padding:8px 16px;background:transparent;border:1px solid rgba(197,160,89,.4);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:7px;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
+.cb:hover{border-color:var(--gold);color:var(--gold);}
+.cb svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:30px;}
+.dc{position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:20px;cursor:pointer;transition:all .4s;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.dc::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.dc:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
+.dc.clas{overflow:hidden;}
+.dc.clas::before{content:'CLASSIFICADO';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:rgba(197,160,89,.13);letter-spacing:.2em;pointer-events:none;z-index:1;}
+.dch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.dci{width:24px;height:24px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.badge{padding:3px 8px;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 4px,100% calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,0 calc(100% - 4px),0 4px);}
+.badge.un{color:var(--amber);border:.5px solid var(--amber);background:rgba(255,191,0,.1);}
+.badge.rd{color:#6b6560;border:.5px solid #8a8580;background:rgba(138,133,128,.12);}
+.dct{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;line-height:22px;margin-bottom:8px;}
+.dcd{font-family:'Manrope',sans-serif;font-size:12px;line-height:17px;color:#6b6560;margin-bottom:14px;min-height:34px;}
+.prh{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.prl{font-family:'JetBrains Mono',monospace;font-size:8px;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;}
+.prv{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);}
+.prb{height:3px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-bottom:12px;}
+.prf{height:100%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 6px var(--amber);}
+.dcm{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:.5px solid rgba(197,160,89,.3);font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.06em;}
+.dcm .ref{color:var(--gold);font-weight:500;}
+.dcm .al{color:var(--amber);font-weight:500;}
+.sync{position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:28px;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+.sync::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+.synch{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.synct{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;}
+.synci{width:44px;height:44px;stroke:var(--gold);stroke-width:1.2;fill:none;opacity:.6;animation:rot 12s linear infinite;}
+@keyframes rot{to{transform:rotate(360deg)}}
+.syngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+.syni{display:flex;flex-direction:column;gap:5px;}
+.synl{font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;}
+.synv{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500;color:#1a1a1a;letter-spacing:.02em;}
+.synv.hl{color:var(--gold);}
+.term{position:fixed;bottom:74px;right:48px;width:270px;background:rgba(0,51,68,.2);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:15px;z-index:30;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.term::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.6;}
+.th2{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;margin-bottom:9px;opacity:.7;position:relative;}
+.tl2{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--on);letter-spacing:.05em;line-height:17px;margin-bottom:5px;position:relative;}
+.tl2 .l{color:var(--gold);}
+.tst{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:9px;border-top:.5px solid rgba(197,160,89,.3);position:relative;}
+.tst .d{width:6px;height:6px;background:var(--amber);border-radius:50%;animation:pu 1.5s ease-in-out infinite;}
+.tst .t{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="bi">
+  <div class="top">
+    <div><div class="ttl">BIBLIOTECA CENTRAL</div><div class="tsub">Base de Conhecimento Classificada</div></div>
+    <div class="tsrch"><svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="q" placeholder="Buscar documentos, perfis, relatórios..."></div>
+    <div class="tic">
+      <button title="Histórico"><svg viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg></button>
+      <button title="Criptografia"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+      <button title="Configurações"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg></button>
+    </div>
+  </div>
+  <div class="body">
+    <aside class="side">
+      <div class="stl">Diretório Principal</div>
+      <nav class="snav">
+        <button class="si2 on" data-c="hist"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Documentos Históricos</button>
+        <button class="si2" data-c="rep"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Relatórios de Campo</button>
+        <button class="si2" data-c="sus"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfis de Suspeitos</button>
+        <button class="si2" data-c="map"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>Mapas e Coordenadas</button>
+        <button class="si2" data-c="aud"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>Transcrições de Áudio</button>
+      </nav>
+      <div class="sft">
+        <button class="btnu"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Upload Seguro</button>
+        <div class="tact">TERMINAL_ATIVO: NODE_04</div>
+      </div>
+    </aside>
+    <main class="content">
+      <div class="bc"><span>NEXUS</span><span>›</span><span>ARCHIVE</span><span>›</span><span class="cur">BIBLIOTECA</span></div>
+      <div class="crow">
+        <button class="cb"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>Filtrar</button>
+        <button class="cb"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>Ordenar</button>
+      </div>
+      <div class="dgrid" id="grid">
+        <div class="dc" data-c="hist" data-n="dossiê nightfall">
+          <div class="dch"><svg class="dci" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><div class="badge un">Não Lido</div></div>
+          <h3 class="dct">Dossiê Nightfall</h3><p class="dcd">Análise detalhada sobre as operações clandestinas realizadas durante o eclipse solar total de 1991.</p>
+          <div class="prh"><div class="prl">Progresso de Leitura</div><div class="prv">0%</div></div><div class="prb"><div class="prf" style="width:0%"></div></div>
+          <div class="dcm"><span>DATA: 14.OUT.1991</span><span class="ref">REF: N-442</span></div>
+        </div>
+        <div class="dc clas" data-c="hist" data-n="protocolo reliquary">
+          <div class="dch"><svg class="dci" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="badge rd">Lido</div></div>
+          <h3 class="dct">Protocolo Reliquary</h3><p class="dcd">Documentação técnica sobre a contenção de artefatos de origem não identificada em locais arqueológicos.</p>
+          <div class="prh"><div class="prl">Progresso de Leitura</div><div class="prv">100%</div></div><div class="prb"><div class="prf" style="width:100%"></div></div>
+          <div class="dcm"><span>DATA: 03.JAN.2023</span><span class="al">NÍVEL 4 EXCLUSIVO</span></div>
+        </div>
+        <div class="dc" data-c="map" data-n="relatório de berlim 1983">
+          <div class="dch"><svg class="dci" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg><div class="badge un">Não Lido</div></div>
+          <h3 class="dct">Relatório de Berlim — 1983</h3><p class="dcd">Mapas de vigilância e registros de movimentos diplomáticos suspeitos no Setor Leste durante a crise de inverno.</p>
+          <div class="prh"><div class="prl">Progresso de Leitura</div><div class="prv">12%</div></div><div class="prb"><div class="prf" style="width:12%"></div></div>
+          <div class="dcm"><span>DATA: 11.DEZ.1983</span><span class="ref">REF: B-08</span></div>
+        </div>
+        <div class="dc" data-c="aud" data-n="transcrições operação echo">
+          <div class="dch"><svg class="dci" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
+          <h3 class="dct">Transcrições — Operação Echo</h3><p class="dcd">Áudios descriptografados de comunicações via rádio interceptadas no Triângulo do Pacífico.</p>
+          <div class="dcm" style="border-top:none;padding-top:0;margin-top:14px;"><span>STATUS: PROCESSANDO</span><span>DURAÇÃO: 45:12</span></div>
+          <div class="dcm"><span></span><span class="ref">REF: AUD-99</span></div>
+        </div>
+        <div class="dc" data-c="sus" data-n="perfil agente v">
+          <div class="dch"><svg class="dci" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <h3 class="dct">Perfil: Agente "V"</h3><p class="dcd">Ex-operador de inteligência russa, visto pela última vez em Genebra. Especialista em contra-espionagem.</p>
+          <div class="dcm" style="border-top:none;padding-top:0;margin-top:14px;"><span>STATUS: DESAPARECIDO</span><span class="al">PERIGO: ALTO</span></div>
+        </div>
+        <div class="dc" data-c="rep" data-n="relatórios de campo sibéria">
+          <div class="dch"><svg class="dci" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><div class="badge un">Não Lido</div></div>
+          <h3 class="dct">Relatórios de Campo: Sibéria</h3><p class="dcd">Observações meteorológicas anômalas e leituras de radiação não catalogadas perto de instalações abandonadas.</p>
+          <div class="prh"><div class="prl">Progresso de Leitura</div><div class="prv">0%</div></div><div class="prb"><div class="prf" style="width:0%"></div></div>
+          <div class="dcm"><span>DATA: ATUALIZAÇÃO RECENTE</span><span class="ref">REF: S-505</span></div>
+        </div>
+      </div>
+      <div class="sync">
+        <div class="synch"><div class="synct">Sincronização da Rede Archive</div><svg class="synci" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/></svg></div>
+        <div class="syngrid">
+          <div class="syni"><div class="synl">Arquivos Totais</div><div class="synv">14.892</div></div>
+          <div class="syni"><div class="synl">Classificados</div><div class="synv hl">1.024</div></div>
+          <div class="syni"><div class="synl">Usuários Online</div><div class="synv">04</div></div>
+          <div class="syni"><div class="synl">Integridade</div><div class="synv hl">99.8%</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="term">
+    <div class="th2" id="th">Aguardando comando...</div>
+    <div class="tl2"><span class="l">SECURE CONNECTION:</span> ESTABLISHED</div>
+    <div class="tl2"><span class="l">PROXY:</span> RED_CELL_7</div>
+    <div class="tst"><span class="d"></span><span class="t" id="tt">TERMINAL</span></div>
+  </div>
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+document.querySelectorAll('.si2').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si2').forEach(x=>x.classList.remove('on'));i.classList.add('on');const c=i.dataset.c;document.querySelectorAll('.dc').forEach(d=>{d.style.display=(d.dataset.c===c)?'':'none';});}));
+document.getElementById('q').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.dc').forEach(d=>{d.style.display=d.dataset.n.includes(q)?'':'none';});});
+document.querySelectorAll('.dc').forEach(d=>d.addEventListener('click',function(){document.querySelectorAll('.dc').forEach(x=>x.style.outline='');this.style.outline='1.5px solid var(--amber)';this.style.outlineOffset='-2px';setTimeout(()=>this.style.outline='',600);}));
+const msgs=['TERMINAL','NODE_04','ONLINE','ARCHIVE_OS'];let mi=0;
+setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('tt').textContent=msgs[mi];},3000);
+const cmds=['Aguardando comando...','Varredura de índice...','Nó sincronizado.','Cache validado.'];let ci=0;const th=document.getElementById('th');
+function typeCmd(){const m=cmds[ci];th.textContent='';let k=0;const iv=setInterval(()=>{if(k<m.length){th.textContent=m.substring(0,k+1);k++;}else{clearInterval(iv);ci=(ci+1)%cmds.length;setTimeout(typeCmd,2200);}},45);}
+typeCmd();
+document.querySelectorAll('.nav a,.top a').forEach(a=>a&&a.addEventListener('click',e=>e.preventDefault()));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

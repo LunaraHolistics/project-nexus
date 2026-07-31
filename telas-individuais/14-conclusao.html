@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Missão Concluída</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+.vig{position:fixed;inset:0;pointer-events:none;z-index:8998;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.6) 100%);}
+.cc{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+.body{flex:1;overflow-y:auto;padding:40px 64px;position:relative;}
+.hd{text-align:center;margin-bottom:40px;position:relative;}
+.seal{position:absolute;top:-6px;right:14%;width:84px;height:84px;animation:sp 3s ease-in-out infinite;}
+@keyframes sp{0%,100%{filter:drop-shadow(0 0 8px rgba(205,127,50,.4));transform:rotate(-12deg) scale(1)}50%{filter:drop-shadow(0 0 18px rgba(205,127,50,.7));transform:rotate(-12deg) scale(1.06)}}
+.seal svg{width:100%;height:100%;}
+.seal .ck{stroke-dasharray:60;stroke-dashoffset:60;animation:dr 1s ease-out .8s forwards;}
+@keyframes dr{to{stroke-dashoffset:0}}
+.tt{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:52px;margin-bottom:10px;}
+.st{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:44px;}
+.sc{position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:26px 20px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(18px);animation:ri .6s ease-out forwards;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.sc::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.sc:nth-child(1){animation-delay:.1s}.sc:nth-child(2){animation-delay:.22s}.sc:nth-child(3){animation-delay:.34s}.sc:nth-child(4){animation-delay:.46s}
+@keyframes ri{to{opacity:1;transform:translateY(0)}}
+.scl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.scv{font-family:'Libre Caslon Text',serif;font-size:30px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;display:flex;align-items:center;justify-content:center;gap:8px;}
+.scv svg{width:20px;height:20px;stroke:var(--gold);stroke-width:2;fill:none;}
+.scv svg path{stroke-dasharray:30;stroke-dashoffset:30;animation:dr .6s ease-out 1s forwards;}
+.div{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.div::before,.div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(197,160,89,.3),transparent);}
+.dvt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:44px;}
+.rc{position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(18px);animation:ri .6s ease-out forwards;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.rc::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.rc:nth-child(1){animation-delay:.6s}.rc:nth-child(2){animation-delay:.72s}.rc:nth-child(3){animation-delay:.84s}.rc:nth-child(4){animation-delay:.96s}
+.ric{width:42px;height:42px;background:rgba(197,160,89,.15);border:.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:14px;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+.ric svg{width:22px;height:22px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.rt{font-family:'Libre Caslon Text',serif;font-size:17px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;margin-bottom:7px;}
+.rd{font-family:'Manrope',sans-serif;font-size:12px;line-height:17px;color:#6b6560;}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px;}
+.apnl{position:relative;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:26px;overflow:hidden;}
+.apnl::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.ah{display:flex;align-items:center;gap:9px;margin-bottom:22px;position:relative;}
+.ah svg{width:19px;height:19px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.aht{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+.mr{margin-bottom:18px;position:relative;}
+.mr:last-child{margin-bottom:0;}
+.mrh{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.mrl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;}
+.mrv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);letter-spacing:.05em;}
+.mrb{height:4px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;}
+.mrf{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);transition:width 1.4s cubic-bezier(.2,.8,.2,1);}
+.dn{background:rgba(14,14,14,.5);border-left:3px solid var(--gold);padding:18px 22px;margin-top:18px;position:relative;}
+.dn::before{content:'"';position:absolute;top:-12px;left:14px;font-family:'Libre Caslon Text',serif;font-size:46px;color:var(--gold);opacity:.3;}
+.dn p{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:14px;line-height:22px;color:var(--on);padding-left:6px;}
+.act{display:flex;gap:14px;justify-content:center;}
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+.btnp{padding:15px 30px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:10px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+.btnp:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 24px rgba(255,191,0,.4);}
+.btnp .ar{transition:transform .3s;}
+.btnp:hover .ar{transform:translateX(4px);}
+.btns{padding:15px 30px;background:transparent;border:1px solid var(--bronze);color:var(--bronze);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:10px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+.btns:hover{background:var(--bronze);color:var(--surface);}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div><div class="vig"></div>
+<div class="cc">
+  <header>
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+  <div class="body">
+    <div class="hd">
+      <div class="seal"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#CD7F32" stroke-width="1.5"/><circle cx="40" cy="40" r="30" fill="none" stroke="#CD7F32" stroke-width=".5" stroke-dasharray="2 2"/><path class="ck" d="M28 42 L36 50 L54 30" stroke="#CD7F32" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1 class="tt">Missão Concluída</h1>
+      <div class="st">Operação: Nightfall — Status: Finalizada</div>
+    </div>
+    <div class="sgrid">
+      <div class="sc"><div class="scl">Objetivos</div><div class="scv"><span data-count="3" data-suf="/3">0/3</span><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg></div></div>
+      <div class="sc"><div class="scl">Tempo de Operação</div><div class="scv">00:42:15</div></div>
+      <div class="sc"><div class="scl">Precisão Tática</div><div class="scv"><span data-count="94" data-suf="%">0%</span></div></div>
+      <div class="sc"><div class="scl">Evidências Coletadas</div><div class="scv"><span data-count="7" data-pad="2">0</span></div></div>
+    </div>
+    <div class="div"><div class="dvt">Recuperação de Ativos</div></div>
+    <div class="rgrid">
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="rt">Artefato Recuperado</div><div class="rd">Relicário da Era Tudor contendo microchips criptografados.</div></div>
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div class="rt">Documento Classificado</div><div class="rd">Dossiê 'Nightfall' descriptografado com sucesso em campo.</div></div>
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8M8 14h8"/></svg></div><div class="rt">Créditos Archive</div><div class="rd">12.500 unidades de crédito depositadas em sua conta offshore.</div></div>
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rt">Influência de Campo</div><div class="rd">Acesso concedido aos terminais de segurança de Nível 4.</div></div>
+    </div>
+    <div class="agrid">
+      <div class="apnl">
+        <div class="ah"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg><div class="aht">Análise Tática de Desempenho</div></div>
+        <div class="mr"><div class="mrh"><div class="mrl">Conexões na Teia</div><div class="mrv">82%</div></div><div class="mrb"><div class="mrf" data-w="82"></div></div></div>
+        <div class="mr"><div class="mrh"><div class="mrl">Pistas Analisadas</div><div class="mrv">95%</div></div><div class="mrb"><div class="mrf" data-w="95"></div></div></div>
+        <div class="mr"><div class="mrh"><div class="mrl">Decisões Críticas</div><div class="mrv">64%</div></div><div class="mrb"><div class="mrf" data-w="64"></div></div></div>
+      </div>
+      <div class="apnl">
+        <div class="ah"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="aht">Nota do Diretor</div></div>
+        <div class="dn"><p>Seu desempenho na Operação Nightfall superou nossas expectativas analíticas. Os dados recuperados em Londres já estão sendo processados pela IA Central. Prepare-se para o briefing de Istambul.</p></div>
+      </div>
+    </div>
+    <div class="act">
+      <button class="btns"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retornar ao Globo</button>
+      <button class="btnp">Próxima Missão <span class="ar">→</span></button>
+    </div>
+  </div>
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+function countUp(el){const target=+el.dataset.count,suf=el.dataset.suf||'',pad=el.dataset.pad?+el.dataset.pad:0;let cur=0;const step=Math.max(1,Math.round(target/40));const iv=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(iv);}let v=String(cur);if(pad)v=v.padStart(pad,'0');el.textContent=v+suf;},28);}
+setTimeout(()=>document.querySelectorAll('[data-count]').forEach(countUp),700);
+setTimeout(()=>document.querySelectorAll('.mrf').forEach(b=>b.style.width=b.dataset.w+'%'),900);
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

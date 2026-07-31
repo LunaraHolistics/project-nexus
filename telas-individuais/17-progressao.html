@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Progressão da Agência</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<!-- Integração com API e Áudio -->
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
+<style>
+:root{
+  --surface:#131313;--dim:#0e0e0e;--bright:#393939;
+  --on:#e5e2e1;--onv:#c1c7cc;
+  --gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;
+  --petrol:#003344;--ivory:#F5F5DC;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+
+/* OVERLAYS */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gr .42s steps(3) infinite;}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-1.5%,-1%)}66%{transform:translate(1%,1.5%)}100%{transform:translate(0,0)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px 3px);opacity:.5;}
+
+/* LAYOUT */
+.pg{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 50%,rgba(0,51,68,.1) 0%,transparent 60%),var(--surface);}
+
+/* HEADER */
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+
+/* BODY */
+.body{flex:1;display:flex;overflow:hidden;}
+.content{flex:1;overflow-y:auto;padding:34px 44px;position:relative;}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;gap:24px;flex-wrap:wrap;}
+.pt{font-family:'Libre Caslon Text',serif;font-size:40px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:46px;margin-bottom:5px;}
+.ps{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
+
+/* RESOURCES */
+.res{display:flex;gap:0;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:16px 24px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.ri{padding:0 22px;border-right:.5px solid rgba(197,160,89,.3);}
+.ri:last-child{border-right:none;}
+.ri:first-child{padding-left:0;}
+.rl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;}
+.rv{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:500;color:var(--gold);letter-spacing:.04em;}
+
+/* TREE */
+.tree{position:relative;height:480px;margin-top:8px;background:rgba(10,13,18,.3);border:.5px solid rgba(197,160,89,.15);overflow:hidden;}
+.tree .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(197,160,89,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(197,160,89,.035) 1px,transparent 1px);background-size:44px 44px;}
+.tree .tag{position:absolute;top:14px;left:16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;line-height:1.6;z-index:2;opacity:.7;}
+.tree .tag b{color:var(--gold);font-weight:500;}
+#lines{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;}
+.ll{stroke:var(--bronze);stroke-width:1.5;stroke-dasharray:7 6;fill:none;opacity:.45;}
+.ll.flow{stroke:var(--gold);opacity:.85;stroke-dasharray:9 7;animation:lf 1.3s linear infinite;}
+@keyframes lf{to{stroke-dashoffset:-32;}}
+
+/* NODES */
+.node{position:absolute;transform:translate(-50%,-50%);z-index:5;cursor:pointer;text-align:center;opacity:0;animation:ni .6s ease-out forwards;}
+@keyframes ni{from{opacity:0;transform:translate(-50%,-50%) scale(.6)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.nc{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative;transition:transform .25s,box-shadow .25s;}
+.nc svg{width:28px;height:28px;stroke-width:1.6;fill:none;}
+.nc::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1.5px solid transparent;transition:border-color .3s;}
+.node:hover .nc{transform:scale(1.12);}
+.node.locked .nc{background:rgba(205,127,50,.1);border:2px solid var(--bronze);}
+.node.locked .nc svg{stroke:var(--bronze);opacity:.5;}
+.node.avail .nc{background:rgba(197,160,89,.15);border:2px solid var(--gold);animation:np 2.6s ease-in-out infinite;}
+.node.avail .nc svg{stroke:var(--gold);}
+.node.avail .nc::after{border-color:rgba(197,160,89,.35);}
+@keyframes np{0%,100%{box-shadow:0 0 0 0 rgba(197,160,89,.4)}50%{box-shadow:0 0 0 13px rgba(197,160,89,0)}}
+.node.unlocked .nc{background:rgba(255,191,0,.18);border:2px solid var(--amber);}
+.node.unlocked .nc svg{stroke:var(--amber);}
+.node.unlocked .nc::after{border-color:rgba(255,191,0,.4);}
+.node.sel .nc{box-shadow:0 0 0 2px var(--amber),0 0 26px rgba(255,191,0,.5);}
+.nl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-top:9px;color:var(--onv);}
+.node.avail .nl{color:var(--gold);}
+.node.unlocked .nl{color:var(--amber);}
+.node.center .nc{width:84px;height:84px;}
+.node.center .nc svg{width:38px;height:38px;}
+
+/* DETAIL PANEL */
+.detail{width:372px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border-left:.5px solid var(--gold);padding:30px 26px;overflow-y:auto;position:relative;display:flex;flex-direction:column;}
+.detail::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px 3px);opacity:.5;}
+.dl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;position:relative;}
+.dt{font-family:'Libre Caslon Text',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:30px;margin-bottom:18px;position:relative;}
+.dd{font-family:'Manrope',sans-serif;font-size:14px;line-height:22px;color:var(--on);margin-bottom:22px;position:relative;}
+.dmeta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;position:relative;}
+.mc{background:rgba(14,14,14,.45);border:.5px solid rgba(197,160,89,.25);padding:14px;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+.mcl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.mcv{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--gold);letter-spacing:.04em;font-weight:500;}
+.mcv.req{color:var(--on);font-size:13px;}
+
+/* BUTTONS */
+.btnu{margin-top:auto;padding:16px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .3s;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);position:relative;}
+.btnu:hover:not(:disabled){background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 24px rgba(255,191,0,.4);}
+.btnu:disabled{opacity:.5;cursor:not-allowed;}
+.btnu.done{background:rgba(197,160,89,.12);border-color:var(--gold);color:var(--gold);}
+.btnu.error{background:rgba(255,100,100,.15);border-color:#ff6464;color:#ff6464;}
+
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;opacity:.7;}
+.empty svg{width:50px;height:50px;stroke:var(--onv);stroke-width:1;fill:none;opacity:.5;}
+.empty h3{font-family:'Libre Caslon Text',serif;font-size:20px;color:var(--on);}
+.empty p{font-family:'Manrope',sans-serif;font-size:13px;line-height:20px;color:var(--onv);max-width:240px;}
+.filled{display:none;flex-direction:column;flex:1;}
+.filled.show{display:flex;animation:fu .4s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* FOOTER */
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="pg">
+  <header>
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav">
+      <a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a>
+    </nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+  
+  <div class="body">
+    <main class="content">
+      <div class="ph">
+        <div><h1 class="pt">Progressão da Agência</h1><div class="ps">Status Operacional: Nível <span id="statusLevel">1</span> Liberado</div></div>
+        <div class="res">
+          <div class="ri"><div class="rl">Recursos Operacionais</div><div class="rv">Créditos: <span id="cred">1.000</span></div></div>
+          <div class="ri"><div class="rl">Nível de Agência</div><div class="rv">Influência: Nível <span id="infLevel">1</span></div></div>
+        </div>
+      </div>
+      
+      <div class="tree" id="tree">
+        <div class="grid"></div>
+        <div class="tag">[ SYSTEM_MAP_v0.84 ]<br><b>READY FOR DATA INPUT</b></div>
+        <svg id="lines"></svg>
+        
+        <div class="node center unlocked" data-u="nexus" style="left:50%;top:50%;animation-delay:.1s">
+          <div class="nc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/></svg></div>
+          <div class="nl">Nexus Core</div>
+        </div>
+        <div class="node unlocked" data-u="tech" style="left:22%;top:26%;animation-delay:.25s">
+          <div class="nc"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></div>
+          <div class="nl">Tecnologia</div>
+        </div>
+        <div class="node avail" data-u="informants" style="left:78%;top:26%;animation-delay:.4s">
+          <div class="nc"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="nl">Informantes</div>
+        </div>
+        <div class="node locked" data-u="analysis" style="left:22%;top:74%;animation-delay:.55s">
+          <div class="nc"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+          <div class="nl">Análise</div>
+        </div>
+        <div class="node locked" data-u="resources" style="left:78%;top:74%;animation-delay:.7s">
+          <div class="nc"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+          <div class="nl">Recursos</div>
+        </div>
+      </div>
+    </main>
+
+    <aside class="detail">
+      <div class="empty" id="empty">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>
+        <h3>Upgrade Selecionado</h3>
+        <p>Toque em um nó da árvore de progressão para visualizar o dossiê técnico, o custo e os requisitos de desbloqueio.</p>
+      </div>
+      <div class="filled" id="filled">
+        <div class="dl">Upgrade Selecionado</div>
+        <h2 class="dt" id="fTitle">—</h2>
+        <div class="dl">Dossiê Técnico</div>
+        <div class="dd" id="fDesc">—</div>
+        <div class="dmeta">
+          <div class="mc"><div class="mcl">Custo</div><div class="mcv" id="fCost">—</div></div>
+          <div class="mc"><div class="mcl">Requisito</div><div class="mcv req" id="fReq">—</div></div>
+        </div>
+        <button class="btnu" id="btnu">Desbloquear</button>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// DADOS E ESTADO
+// ============================================================
+const UPGRADES = {
+  nexus: {id:1, t:'Nexus Core', d:'Sistema central de processamento e coordenação de todas as operações da ARCHIVE. Permite acesso a missões de alto nível e integração de dados globais em tempo real.', cost:'—', req:'Base', st:'unlocked', price:0},
+  tech: {id:2, t:'Criptografia Quântica', d:'Melhora drasticamente a segurança de todas as comunicações de campo, reduzindo o tempo de interceptação inimiga em 45%. Transmissão de dados classificados sem risco de comprometimento.', cost:'4.500 CR', req:'Rede II', st:'unlocked', price:4500},
+  informants: {id:3, t:'Rede de Informantes', d:'Expande a rede de inteligência global, permitindo acesso a missões de infiltração na Eurásia. Aumenta a cobertura de vigilância em 30% e revela contatos locais ocultos.', cost:'3.200 CR', req:'Agência Nível 2', st:'avail', price:3200},
+  analysis: {id:4, t:'Análise Preditiva', d:'Sistema de IA avançado que prevê movimentos de alvos com 78% de precisão. Requer infraestrutura de processamento de alto nível e acesso ao Nexus Core expandido.', cost:'6.800 CR', req:'Tecnologia III', st:'locked', price:6800},
+  resources: {id:5, t:'Logística Global', d:'Estabelece rotas de suprimento seguras em 12 países. Reduz o tempo de deslocamento de agentes em 40% e habilita operações simultâneas em múltiplos teatros.', cost:'5.500 CR', req:'Informantes III', st:'locked', price:5500}
+};
+
+let credits = 1000;
+let influenceLevel = 1;
+let xp = 0;
+let purchasedUpgrades = new Set([1, 2]); // nexus e tech já comprados por padrão no mock
+let sel = null;
+
+const tree = document.getElementById('tree');
+const svg = document.getElementById('lines');
+const links = [['nexus','tech'],['nexus','informants'],['nexus','analysis'],['nexus','resources']];
+
+// ============================================================
+// FUNÇÕES DE RENDERIZAÇÃO
+// ============================================================
+function ctr(u){
+  const n = tree.querySelector(`[data-u="${u}"]`), c = n.querySelector('.nc');
+  const tr = tree.getBoundingClientRect(), r = c.getBoundingClientRect();
+  return {x:r.left-tr.left+r.width/2, y:r.top-tr.top+r.height/2};
+}
+
+function draw(){
+  svg.innerHTML = '';
+  links.forEach(([a,b]) => {
+    const p1 = ctr(a), p2 = ctr(b);
+    const un = UPGRADES[a].st === 'unlocked' && UPGRADES[b].st === 'unlocked';
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1', p1.x); ln.setAttribute('y1', p1.y);
+    ln.setAttribute('x2', p2.x); ln.setAttribute('y2', p2.y);
+    ln.setAttribute('class', 'll' + (un ? ' flow' : ''));
+    svg.appendChild(ln);
+  });
+}
+
+function updatePlayerDisplay(){
+  document.getElementById('cred').textContent = credits.toLocaleString('pt-BR');
+  document.getElementById('infLevel').textContent = influenceLevel;
+  const statusLevel = document.getElementById('statusLevel');
+  if(statusLevel) statusLevel.textContent = influenceLevel;
+}
+
+function hasDirector(state){
+  return state && state.director && (state.director.code || state.director.codename);
+}
+
+// ============================================================
+// LÓGICA DE SELEÇÃO E COMPRA (CORRIGIDA)
+// ============================================================
+function select(u){
+  sel = u;
+  const d = UPGRADES[u];
+  document.getElementById('empty').style.display = 'none';
+  const f = document.getElementById('filled');
+  f.classList.add('show');
+  
+  document.getElementById('fTitle').textContent = d.t;
+  document.getElementById('fDesc').textContent = d.d;
+  document.getElementById('fCost').textContent = d.cost;
+  document.getElementById('fReq').textContent = d.req;
+  
+  const btn = document.getElementById('btnu');
+  btn.className = 'btnu';
+  btn.disabled = false;
+  btn.onclick = null; // Limpa listeners anteriores
+  
+  // Lógica de estado do botão
+  if(d.st === 'unlocked' || purchasedUpgrades.has(d.id)){
+    btn.textContent = 'Já Adquirido ✓';
+    btn.classList.add('done');
+    btn.disabled = true;
+  } else if(d.st === 'locked'){
+    btn.textContent = 'Requisito não atendido';
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'Desbloquear';
+    btn.onclick = () => purchaseUpgrade(u);
+  }
+  
+  document.querySelectorAll('.node').forEach(n => n.classList.toggle('sel', n.dataset.u === u));
+}
+
+async function purchaseUpgrade(u){
+  const d = UPGRADES[u];
+  const btn = document.getElementById('btnu');
+  
+  // Verificação de Diretor via ArchiveAPI
+  const state = ArchiveAPI.getState();
+  if (!hasDirector(state)) {
+    if(window.ArchiveAudio) ArchiveAudio.playError();
+    btn.textContent = 'DIRETOR NÃO CADASTRADO';
+    btn.classList.add('error');
+    setTimeout(() => select(u), 2500);
+    return;
+  }
+
+  // Inicializa API e garante playerId
+  await ArchiveAPI.init();
+  if (!ArchiveAPI.playerId) {
+    await ArchiveAPI.createPlayer(state.director.name, state.director.code || state.director.codename, state.director.specialty || 'Investigação');
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'PROCESSANDO...';
+  
+  try {
+    const result = await ArchiveAPI.buyUpgrade(d.id);
+    if(result && result.success){
+      if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+      purchasedUpgrades.add(d.id);
+      credits -= d.price;
+      d.st = 'unlocked';
+      
+      const node = tree.querySelector(`[data-u="${u}"]`);
+      node.classList.remove('avail', 'locked');
+      node.classList.add('unlocked');
+      
+      updatePlayerDisplay();
+      draw();
+      
+      btn.textContent = '✓ Desbloqueado';
+      btn.classList.add('done');
+      setTimeout(() => select(u), 1500);
+    } else {
+      throw new Error(result?.error || 'Créditos insuficientes ou erro no servidor');
+    }
+  } catch(err){
+    if(window.ArchiveAudio) ArchiveAudio.playError();
+    console.error('Erro ao comprar upgrade:', err);
+    btn.textContent = '⚠ ' + (err.message || 'Falha na transação');
+    btn.classList.add('error');
+    setTimeout(() => select(u), 2500);
+  }
+}
+
+// ============================================================
+// INICIALIZAÇÃO E EVENTOS
+// ============================================================
+async function loadPlayerData(){
+  const state = ArchiveAPI.getState();
+  if(state && state.stats){
+    credits = state.stats.credits ?? 1000;
+    influenceLevel = state.stats.level ?? 1;
+    xp = state.stats.xp ?? 0;
+  }
+
+  await ArchiveAPI.init();
+  if (ArchiveAPI.playerId) {
+    const player = await ArchiveAPI.getPlayer();
+    if (player) {
+      credits = player.credits ?? credits;
+      influenceLevel = player.influence_level ?? player.level ?? influenceLevel;
+    }
+  }
+  updatePlayerDisplay();
+}
+
+// Event Listeners com Áudio
+document.querySelectorAll('.node').forEach(n => {
+  n.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+  n.addEventListener('click', () => { 
+    if(window.ArchiveAudio) ArchiveAudio.playClick(); 
+    select(n.dataset.u); 
+  });
+});
+
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+    a.classList.add('on');
+  });
+});
+
+document.getElementById('btnu').addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+
+// Inicialização
+draw();
+addEventListener('resize', draw);
+setTimeout(draw, 800); // Garante desenho após renderização inicial
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+}, 1000);
+
+// Carrega dados (áudio só após interação do usuário)
+loadPlayerData();
+</script>
+</body>
+</html>

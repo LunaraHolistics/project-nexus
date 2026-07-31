@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Status da Sede</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+.hq{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 20% 30%,rgba(0,51,68,.12) 0%,transparent 55%),radial-gradient(ellipse at 80% 70%,rgba(197,160,89,.06) 0%,transparent 55%),var(--surface);}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+.body{flex:1;display:flex;overflow:hidden;}
+.side{width:248px;flex-shrink:0;background:rgba(14,14,14,.6);backdrop-filter:blur(20px);border-right:.5px solid rgba(197,160,89,.3);padding:26px 20px;display:flex;flex-direction:column;gap:20px;z-index:20;}
+.prof{display:flex;align-items:center;gap:13px;padding-bottom:16px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.av{width:44px;height:44px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av svg{width:24px;height:24px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.prof h3{font-family:'Libre Caslon Text',serif;font-size:15px;color:var(--on);margin-bottom:2px;}
+.prof p{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
+.snav{display:flex;flex-direction:column;gap:5px;}
+.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
+.si.on{background:rgba(197,160,89,.1);border-left-color:var(--gold);color:var(--gold);}
+.si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.btni{margin-top:auto;padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .3s;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btni:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.content{flex:1;overflow-y:auto;padding:36px 48px;}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:34px;}
+.pt{font-family:'Libre Caslon Text',serif;font-size:44px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:50px;margin-bottom:6px;}
+.ps{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
+.live{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+.live .d{width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 8px rgba(255,191,0,0)}}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+.pnl{position:relative;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:24px;overflow:hidden;transition:box-shadow .3s;}
+.pnl::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.pnl:hover{box-shadow:0 0 22px rgba(197,160,89,.15);}
+.pnlh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:13px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
+.pnlt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;display:flex;align-items:center;gap:9px;}
+.pnlt svg{width:17px;height:17px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:.5px solid rgba(197,160,89,.15);position:relative;}
+.mrow:last-child{border-bottom:none;}
+.ml2{font-family:'Manrope',sans-serif;font-size:13px;color:var(--onv);}
+.mv2{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--on);letter-spacing:.05em;}
+.mv2.hl{color:var(--gold);}
+.mv2.al{color:var(--amber);font-weight:600;animation:fl 3s infinite;}
+@keyframes fl{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.55}94%{opacity:1}96%{opacity:.8}97%{opacity:1}}
+.map{position:relative;height:200px;background:rgba(14,14,14,.4);border:.5px solid rgba(197,160,89,.2);overflow:hidden;}
+.map .g{position:absolute;inset:0;background-image:linear-gradient(rgba(197,160,89,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(197,160,89,.08) 1px,transparent 1px);background-size:40px 40px;}
+.mk{position:absolute;transform:translate(-50%,-50%);cursor:pointer;}
+.mk .dt{width:11px;height:11px;background:var(--amber);border-radius:50%;box-shadow:0 0 12px var(--amber);animation:pu 2s ease-in-out infinite;}
+.mk .lb{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.08em;white-space:nowrap;}
+.mk:nth-child(3) .dt{background:var(--gold);box-shadow:0 0 12px var(--gold);}
+.mk .ring{position:absolute;top:50%;left:50%;width:11px;height:11px;border:1px solid var(--amber);border-radius:50%;transform:translate(-50%,-50%);animation:rg 2s ease-out infinite;}
+@keyframes rg{0%{width:11px;height:11px;opacity:.8}100%{width:42px;height:42px;opacity:0}}
+.orow{display:flex;align-items:center;gap:13px;padding:11px;background:rgba(14,14,14,.3);border:.5px solid rgba(197,160,89,.15);margin-bottom:9px;transition:all .3s;cursor:pointer;}
+.orow:hover{border-color:rgba(197,160,89,.4);}
+.orow.al{border-left:3px solid var(--amber);background:rgba(255,191,0,.05);}
+.oav{width:38px;height:38px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
+.oinfo{flex:1;}
+.onm{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--on);letter-spacing:.05em;margin-bottom:2px;}
+.osc{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.08em;}
+.ost{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.08em;text-align:right;}
+.ost.tr{color:var(--gold);}
+.ost.st{color:var(--onv);}
+.ost.lo{color:var(--amber);animation:fl 2s infinite;}
+.opg{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.05em;margin-top:2px;text-align:right;}
+.logs{display:flex;flex-direction:column;gap:13px;max-height:300px;overflow-y:auto;}
+.le{padding-left:13px;border-left:2px solid var(--gold);position:relative;opacity:0;transform:translateX(-8px);animation:li .5s ease-out forwards;}
+@keyframes li{to{opacity:1;transform:translateX(0)}}
+.le::before{content:'';position:absolute;left:-4px;top:5px;width:6px;height:6px;background:var(--gold);border-radius:50%;}
+.le.al{border-left-color:var(--amber);}
+.le.al::before{background:var(--amber);}
+.lt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.08em;margin-bottom:3px;}
+.ltx{font-family:'Manrope',sans-serif;font-size:12px;line-height:17px;color:var(--onv);}
+.ltx strong{color:var(--on);font-weight:600;}
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fi{opacity:0;animation:fi .7s ease-out forwards;}
+.d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="hq">
+  <header class="fi">
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+  <div class="body">
+    <aside class="side fi d1">
+      <div class="prof">
+        <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><h3>PROJECT NEXUS</h3><p>Field Operative</p></div>
+      </div>
+      <nav class="snav">
+        <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</button>
+        <button class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
+        <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
+        <button class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</button>
+        <button class="si on"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Status da Sede</button>
+        <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>Configurações</button>
+      </nav>
+      <button class="btni">Acessar Intel</button>
+    </aside>
+    <main class="content">
+      <div class="ph fi d1">
+        <div><h1 class="pt">SYSTEM.STATUS</h1><div class="ps">Painel de Operações Globais // Feed em Tempo Real</div></div>
+        <div class="live"><span class="d"></span>LIVE.LINK_ESTABLISHED</div>
+      </div>
+      <div class="grid">
+        <div class="pnl fi d2">
+          <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde da Rede</div></div>
+          <div class="mrow"><div class="ml2">Criptografia</div><div class="mv2 hl">AES-256</div></div>
+          <div class="mrow"><div class="ml2">Força do Sinal</div><div class="mv2" id="sig">94.2%</div></div>
+          <div class="mrow"><div class="ml2">Nós Ativos</div><div class="mv2" id="nodes">1.402</div></div>
+          <div class="mrow"><div class="ml2">Nível de Ameaça</div><div class="mv2 al">ELEVADO</div></div>
+        </div>
+        <div class="pnl fi d2">
+          <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Setores Ativos</div></div>
+          <div class="map">
+            <div class="g"></div>
+            <div class="mk" style="top:35%;left:42%"><div class="ring"></div><div class="dt"></div><div class="lb">LND_01</div></div>
+            <div class="mk" style="top:58%;left:74%"><div class="ring"></div><div class="dt"></div><div class="lb">TKO_44</div></div>
+          </div>
+        </div>
+        <div class="pnl fi d3">
+          <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Operativos em Campo</div></div>
+          <div class="orow"><div class="oav">AG</div><div class="oinfo"><div class="onm">Agente_Garrison</div><div class="osc">SETOR: EUR_W</div></div><div><div class="ost tr">EM_TRANSITO</div><div class="opg">Ping: 24ms</div></div></div>
+          <div class="orow"><div class="oav">CL</div><div class="oinfo"><div class="onm">Agente_Calloway</div><div class="osc">SETOR: ASI_E</div></div><div><div class="ost st">ESTACIONÁRIO</div><div class="opg">Ping: 102ms</div></div></div>
+          <div class="orow al"><div class="oav">XV</div><div class="oinfo"><div class="onm">Agente_Voss</div><div class="osc">SETOR: DESCONHECIDO</div></div><div><div class="ost lo">COMMS_LOST</div><div class="opg">T-minus 4h</div></div></div>
+        </div>
+        <div class="pnl fi d3">
+          <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>Feed de Inteligência</div></div>
+          <div class="logs" id="logs"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="fi d3">
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+const FEED=[
+ {t:'14:22:09',x:'DECRYPT_SUCCESS',m:'Fragmento de registro recuperado do Setor 7. Aguardando análise.',al:false},
+ {t:'13:45:11',x:'SYSTEM_LOG',m:'Varredura de rotina concluída. 0 anomalias detectadas.',al:false},
+ {t:'12:10:00',x:'ASSET_UPDATE',m:'Safehouse \'Bravo\' reabastecida e protegida.',al:false},
+ {t:'11:05:44',x:'ALERTA',m:'Tentativa de acesso não autorizado no Nó_44. Contramedidas acionadas. Rastreamento iniciado.',al:true},
+ {t:'09:30:00',x:'SYSTEM_LOG',m:'Troca de turno registrada. Comando transferido.',al:false}
+];
+const box=document.getElementById('logs');
+FEED.forEach((f,i)=>{const e=document.createElement('div');e.className='le'+(f.al?' al':'');e.style.animationDelay=(i*.45)+'s';e.innerHTML=`<div class="lt">[${f.t}]</div><div class="ltx"><strong>${f.x}:</strong> ${f.m}</div>`;box.appendChild(e);});
+let sig=94.2,nodes=1402;
+setInterval(()=>{sig=Math.max(88,Math.min(99,sig+(Math.random()-.5)*1.4));document.getElementById('sig').textContent=sig.toFixed(1)+'%';},2200);
+setInterval(()=>{if(Math.random()>.6){nodes+=Math.floor(Math.random()*5)-2;document.getElementById('nodes').textContent=nodes.toLocaleString('pt-BR');}},3000);
+document.querySelectorAll('.orow').forEach(r=>r.addEventListener('click',function(){this.style.borderColor='var(--amber)';setTimeout(()=>this.style.borderColor='',500);}));
+document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

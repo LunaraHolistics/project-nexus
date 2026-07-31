@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECT NEXUS — Preview Completo</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root{
+    --surface:#131313;--surface-dim:#0e0e0e;--surface-bright:#393939;
+    --on-surface:#e5e2e1;--on-surface-variant:#c1c7cc;
+    --aged-gold:#C5A059;--aged-gold-light:#e9c176;--bronze:#CD7F32;
+    --amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);
+    font-family:'Manrope',sans-serif;color:var(--on-surface);}
+
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation:grainShift .5s steps(4) infinite;}
+  @keyframes grainShift{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+  .scanlines{position:fixed;inset:0;pointer-events:none;z-index:9998;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+
+  .view{position:fixed;inset:0;display:none;flex-direction:column;
+    background:radial-gradient(ellipse at 30% 40%,rgba(0,51,68,.12) 0%,transparent 55%),
+              radial-gradient(ellipse at 70% 70%,rgba(197,160,89,.06) 0%,transparent 55%),
+              var(--surface);
+    animation:viewIn .6s ease-out;}
+  .view.active{display:flex;}
+  @keyframes viewIn{from{opacity:0}to{opacity:1}}
+
+  /* ============ SPLASH ============ */
+  #splash{align-items:center;justify-content:center;}
+  .splash-emblem{width:200px;height:200px;animation:emblemIn 1.5s ease-out;}
+  @keyframes emblemIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+  .splash-emblem svg{width:100%;height:100%;filter:drop-shadow(0 0 20px rgba(197,160,89,.4));}
+  .splash-title{font-family:'Libre Caslon Text',serif;font-size:64px;font-weight:700;
+    color:var(--aged-gold);letter-spacing:.18em;margin-top:32px;
+    text-shadow:0 0 30px rgba(197,160,89,.3);animation:titleIn 1.5s ease-out .5s both;}
+  @keyframes titleIn{from{opacity:0;letter-spacing:.3em}to{opacity:1;letter-spacing:.18em}}
+  .splash-status{font-family:'JetBrains Mono',monospace;font-size:12px;
+    color:var(--aged-gold);letter-spacing:.15em;margin-top:24px;
+    display:flex;align-items:center;gap:12px;animation:fadeIn 1s ease-out 1s both;}
+  .splash-cursor{display:inline-block;width:8px;height:14px;background:var(--amber);animation:blink 1s steps(2) infinite;}
+  @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  .splash-progress{position:absolute;bottom:120px;left:50%;transform:translateX(-50%);
+    width:400px;height:1px;background:rgba(197,160,89,.2);overflow:hidden;animation:fadeIn 1s ease-out 1.5s both;}
+  .splash-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--aged-gold),var(--amber));
+    box-shadow:0 0 10px var(--amber);animation:fillBar 4s ease-out 1.8s forwards;}
+  @keyframes fillBar{to{width:100%}}
+
+  .splash-skip{position:absolute;top:48px;right:64px;padding:12px 24px;background:transparent;
+    border:none;border-bottom:1px solid var(--bronze);color:var(--on-surface);
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.1em;
+    cursor:pointer;transition:all .3s ease;animation:fadeIn 1s ease-out 1s both;}
+  .splash-skip:hover{border-bottom-color:var(--amber);color:var(--amber);}
+
+  /* ============ INTRO ============ */
+  #intro{align-items:center;justify-content:center;}
+  .intro-content{max-width:700px;text-align:center;padding:0 64px;}
+  .intro-title{font-family:'Libre Caslon Text',serif;font-size:48px;font-weight:700;
+    color:var(--aged-gold);letter-spacing:-.02em;line-height:56px;margin-bottom:24px;
+    text-shadow:0 0 30px rgba(197,160,89,.2);}
+  .intro-text{font-family:'Manrope',sans-serif;font-size:18px;line-height:28px;
+    color:var(--on-surface);opacity:.9;min-height:84px;}
+  .intro-text .cursor{display:inline-block;width:2px;height:20px;background:var(--amber);
+    margin-left:2px;animation:blink 1s steps(2) infinite;vertical-align:middle;}
+  .intro-progress{position:absolute;bottom:80px;left:64px;right:64px;
+    display:flex;align-items:center;gap:32px;animation:fadeIn 1s ease-out 2s both;}
+  .intro-seq{font-family:'JetBrains Mono',monospace;font-size:12px;
+    color:var(--on-surface-variant);letter-spacing:.1em;}
+  .intro-line{flex:1;height:1px;background:rgba(197,160,89,.2);position:relative;overflow:hidden;}
+  .intro-line-fill{position:absolute;left:0;top:0;height:100%;width:0%;
+    background:linear-gradient(90deg,var(--aged-gold),var(--amber));
+    box-shadow:0 0 10px var(--amber);animation:fillBar 60s linear forwards;}
+  .intro-time{font-family:'JetBrains Mono',monospace;font-size:14px;
+    color:var(--on-surface-variant);letter-spacing:.05em;}
+
+  /* ============ CADASTRO ============ */
+  #cadastro{align-items:center;justify-content:center;}
+  .cadastro-card{width:100%;max-width:640px;
+    background:var(--ivory);
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg,#f5f5dc 0%,#ede9c8 100%);
+    border-radius:4px;padding:56px 48px;position:relative;
+    box-shadow:0 30px 60px rgba(0,0,0,.5);
+    clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),
+      calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);
+    animation:cardIn 1s ease-out;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .cadastro-card::after{content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 .5pt var(--aged-gold);
+    clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),
+      calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);}
+
+  .cadastro-seal{position:absolute;top:-40px;left:50%;transform:translateX(-50%);
+    width:80px;height:80px;animation:sealPulse 3s ease-in-out infinite;}
+  @keyframes sealPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(205,127,50,.4))}
+    50%{filter:drop-shadow(0 0 16px rgba(205,127,50,.7))}}
+  .cadastro-seal svg{width:100%;height:100%;}
+
+  .cadastro-title{font-family:'Libre Caslon Text',serif;font-size:40px;font-weight:700;
+    color:#1a1a1a;letter-spacing:-.02em;text-align:center;text-transform:uppercase;
+    line-height:48px;margin-bottom:8px;}
+  .cadastro-subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:#6b6560;letter-spacing:.15em;text-align:center;text-transform:uppercase;margin-bottom:32px;}
+  .cadastro-divider{width:60px;height:1px;background:var(--aged-gold);margin:0 auto 32px;opacity:.6;}
+
+  .cadastro-form{display:flex;flex-direction:column;gap:24px;margin-bottom:32px;}
+  .cadastro-field{display:flex;flex-direction:column;gap:8px;}
+  .cadastro-label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+    color:#1a1a1a;letter-spacing:.1em;text-transform:uppercase;}
+  .cadastro-input{width:100%;padding:12px 4px;background:transparent;
+    border:none;border-bottom:1px solid var(--bronze);
+    font-family:'Libre Caslon Text',serif;font-size:18px;color:#1a1a1a;
+    outline:none;transition:all .3s ease;}
+  .cadastro-input::placeholder{color:#8a8580;font-style:italic;}
+  .cadastro-input:focus{border-bottom-color:var(--amber);box-shadow:0 2px 8px rgba(255,191,0,.3);padding-left:8px;}
+
+  .cadastro-btn{width:120px;height:120px;margin:0 auto;
+    background:var(--petrol);border:1px solid var(--aged-gold);border-radius:4px;
+    cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+    transition:all .4s ease;
+    clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),
+      calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+  .cadastro-btn:hover{background:var(--amber);border-color:var(--amber);
+    transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,191,0,.4);}
+  .cadastro-btn:hover .cadastro-btn-icon{stroke:#1a1a1a;}
+  .cadastro-btn:hover .cadastro-btn-label{color:#1a1a1a;}
+  .cadastro-btn-icon{width:32px;height:32px;stroke:var(--aged-gold);stroke-width:1.5;fill:none;transition:all .4s ease;}
+  .cadastro-btn-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;
+    color:var(--aged-gold-light);letter-spacing:.2em;text-transform:uppercase;transition:color .4s ease;}
+
+  .cadastro-footer{font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#8a8580;letter-spacing:.08em;text-align:center;
+    padding-top:24px;border-top:.5px solid rgba(197,160,89,.3);}
+
+  /* ============ HUB ============ */
+  #hub{padding:0;}
+  .hub-header{height:64px;background:rgba(14,14,14,.95);backdrop-filter:blur(20px);
+    border-bottom:.5px solid var(--aged-gold);display:flex;align-items:center;
+    justify-content:space-between;padding:0 64px;flex-shrink:0;}
+  .hub-logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;
+    color:var(--aged-gold);letter-spacing:.15em;}
+  .hub-user{display:flex;align-items:center;gap:12px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--on-surface-variant);letter-spacing:.1em;}
+  .hub-user strong{color:var(--aged-gold);}
+
+  .hub-body{flex:1;overflow-y:auto;padding:48px 64px;}
+  .hub-welcome{margin-bottom:48px;}
+  .hub-label{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    color:var(--aged-gold);letter-spacing:.15em;margin-bottom:16px;
+    display:flex;align-items:center;gap:12px;}
+  .hub-label::before{content:'';width:24px;height:1px;background:var(--aged-gold);}
+  .hub-title{font-family:'Libre Caslon Text',serif;font-size:48px;font-weight:700;
+    color:var(--on-surface);letter-spacing:-.02em;line-height:56px;margin-bottom:16px;}
+  .hub-title .hl{color:var(--aged-gold);font-style:italic;}
+  .hub-desc{font-family:'Manrope',sans-serif;font-size:18px;line-height:28px;
+    color:var(--on-surface-variant);max-width:700px;}
+
+  .hub-section-title{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+    color:var(--on-surface-variant);letter-spacing:.15em;text-transform:uppercase;
+    margin-bottom:20px;padding-bottom:12px;border-bottom:.5px solid rgba(197,160,89,.3);}
+
+  .hub-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:48px;}
+  .hub-card{background:var(--ivory);
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+    border-radius:4px;padding:24px;cursor:pointer;position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);transition:all .4s ease;
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);
+    text-decoration:none;color:inherit;}
+  .hub-card::after{content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 .5pt var(--aged-gold);
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+  .hub-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
+  .hub-card-icon{width:40px;height:40px;background:var(--petrol);border-radius:4px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+    clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),
+      calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+  .hub-card-icon svg{width:22px;height:22px;stroke:var(--aged-gold);stroke-width:1.5;fill:none;}
+  .hub-card-title{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:600;
+    color:#1a1a1a;letter-spacing:-.01em;margin-bottom:6px;}
+  .hub-card-desc{font-family:'Manrope',sans-serif;font-size:12px;line-height:16px;color:#6b6560;}
+  .hub-card-tag{position:absolute;top:12px;right:12px;padding:3px 8px;
+    background:rgba(205,127,50,.15);border:.5px solid var(--bronze);border-radius:4px;
+    font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;
+    color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;}
+
+  .hub-footer{height:44px;background:rgba(14,14,14,.95);backdrop-filter:blur(20px);
+    border-top:.5px solid var(--aged-gold);display:flex;align-items:center;
+    justify-content:space-between;padding:0 64px;flex-shrink:0;}
+  .hub-footer-text{font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:var(--on-surface-variant);letter-spacing:.05em;}
+  .hub-footer-center{display:flex;gap:28px;align-items:center;}
+  .hub-signal{display:flex;align-items:center;gap:8px;}
+  .hub-signal-dot{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}
+    50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+
+  /* ============ VIEW GENÉRICA COM BACK ============ */
+  .view-with-back{padding:0;}
+  .view-back-header{height:64px;background:rgba(14,14,14,.95);backdrop-filter:blur(20px);
+    border-bottom:.5px solid var(--aged-gold);display:flex;align-items:center;
+    padding:0 64px;gap:24px;flex-shrink:0;}
+  .view-back-btn{background:transparent;border:none;color:var(--on-surface);
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    letter-spacing:.1em;cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .3s ease;}
+  .view-back-btn:hover{color:var(--amber);}
+  .view-back-btn svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none;}
+  .view-back-title{font-family:'Libre Caslon Text',serif;font-size:20px;font-weight:600;
+    color:var(--aged-gold);letter-spacing:-.01em;}
+
+  /* ============ GLOBO ============ */
+  #globo{padding:0;}
+  .globe-container{flex:1;position:relative;}
+  #globe-canvas{width:100%;height:100%;}
+
+  /* ============ BRIEFING ============ */
+  #briefing .briefing-body{flex:1;display:flex;padding:48px 64px;gap:48px;overflow-y:auto;}
+  .dossier-panel{flex:1;
+    background:var(--ivory);
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+    border-radius:4px;padding:64px 56px;position:relative;
+    box-shadow:0 30px 60px rgba(0,0,0,.5);
+    clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),
+      calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);}
+  .dossier-panel::after{content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 .5pt var(--aged-gold);
+    clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),
+      calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);}
+
+  .confidential-stamp{position:absolute;top:80px;right:80px;width:180px;height:60px;
+    border:3px solid var(--bronze);transform:rotate(-15deg);
+    display:flex;align-items:center;justify-content:center;opacity:.7;}
+  .confidential-stamp::before{content:'';position:absolute;inset:4px;border:1px solid var(--bronze);}
+  .confidential-text{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;
+    color:var(--bronze);letter-spacing:.2em;text-transform:uppercase;}
+
+  .dossier-number{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    color:#6b6560;letter-spacing:.1em;margin-bottom:16px;}
+  .dossier-title{font-family:'Libre Caslon Text',serif;font-size:48px;font-weight:700;
+    color:#1a1a1a;letter-spacing:-.02em;line-height:56px;margin-bottom:24px;}
+  .dossier-divider{width:100%;height:1px;background:var(--aged-gold);opacity:.4;margin-bottom:32px;}
+  .dossier-text{font-family:'Manrope',sans-serif;font-size:16px;line-height:24px;
+    color:#3a3530;margin-bottom:24px;}
+
+  .tactical-panel{width:480px;display:flex;flex-direction:column;gap:24px;}
+  .tactical-header{display:flex;align-items:center;gap:12px;padding-bottom:16px;
+    border-bottom:.5px solid rgba(197,160,89,.3);}
+  .tactical-title{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    color:var(--aged-gold);letter-spacing:.15em;text-transform:uppercase;}
+  .tactical-subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:var(--on-surface-variant);letter-spacing:.1em;}
+
+  .analysis-card{padding:24px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);
+    border:.5px solid var(--aged-gold);border-radius:4px;position:relative;overflow:hidden;}
+  .analysis-card::before{content:'';position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 2px);}
+  .analysis-card-title{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    color:var(--aged-gold);letter-spacing:.1em;margin-bottom:16px;
+    display:flex;align-items:center;gap:8px;}
+  .analysis-card-title::before{content:'';width:3px;height:16px;background:var(--amber);}
+  .coordinates{font-family:'JetBrains Mono',monospace;font-size:18px;
+    color:var(--on-surface);letter-spacing:.05em;margin-bottom:8px;}
+  .location-text{font-family:'Manrope',sans-serif;font-size:14px;
+    color:var(--on-surface-variant);line-height:20px;}
+
+  .accept-btn{margin-top:auto;padding:20px 48px;background:var(--petrol);border:1px solid var(--petrol);
+    color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;
+    letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s ease;
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),
+      calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+  .accept-btn:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);
+    box-shadow:0 0 24px rgba(255,191,0,.4);}
+
+  /* ============ MISSÃO ATIVA ============ */
+  #missao{padding:0;}
+  .mission-scene{flex:1;position:relative;
+    background:linear-gradient(180deg,#0a0d12 0%,#151a22 30%,#1e2530 55%,#0f1318 100%);}
+  .mission-hud-top{position:absolute;top:0;left:0;right:0;height:80px;z-index:40;
+    background:linear-gradient(180deg,rgba(10,13,18,.95) 0%,transparent 100%);
+    display:flex;align-items:flex-start;justify-content:space-between;padding:20px 48px;}
+  .mission-name{font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;
+    color:var(--aged-gold);letter-spacing:.08em;text-shadow:0 0 20px rgba(197,160,89,.3);}
+  .mission-sub{font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:var(--on-surface-variant);letter-spacing:.15em;margin-top:4px;}
+  .mission-timer{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;
+    color:var(--on-surface);letter-spacing:.05em;text-shadow:0 0 10px rgba(229,226,225,.2);}
+  .mission-objective{font-family:'JetBrains Mono',monospace;font-size:12px;
+    color:var(--amber);letter-spacing:.1em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;}
+  .mission-objective::before{content:'';width:8px;height:8px;background:var(--amber);
+    border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+
+  .intel-panel{position:absolute;left:48px;top:180px;width:320px;z-index:30;
+    background:rgba(0,51,68,.18);backdrop-filter:blur(22px);border:.5px solid var(--aged-gold);
+    border-radius:4px;padding:24px;
+    clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),
+      calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
+  .intel-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;
+    padding-bottom:16px;border-bottom:.5px solid rgba(197,160,89,.3);}
+  .intel-title{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    color:var(--aged-gold);letter-spacing:.15em;text-transform:uppercase;}
+  .intel-item{margin-bottom:20px;}
+  .intel-label{font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:var(--on-surface-variant);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+  .intel-value{font-family:'JetBrains Mono',monospace;font-size:16px;
+    color:var(--on-surface);letter-spacing:.05em;display:flex;align-items:center;gap:8px;}
+  .intel-value .live{color:var(--amber);font-size:10px;letter-spacing:.1em;}
+  .intel-value .live::before{content:'';width:6px;height:6px;background:var(--amber);
+    border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
+
+  .analyze-btn{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);z-index:35;
+    padding:18px 48px;background:var(--petrol);border:1px solid var(--petrol);
+    color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;
+    letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .3s ease;
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+  .analyze-btn:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);
+    box-shadow:0 0 30px rgba(255,191,0,.5);}
+
+  /* ============ TEIA ============ */
+  #teia{padding:0;}
+  .teia-body{flex:1;display:flex;overflow:hidden;}
+  .teia-canvas{flex:1;position:relative;
+    background-image:linear-gradient(rgba(197,160,89,.04) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(197,160,89,.04) 1px,transparent 1px);
+    background-size:48px 48px;}
+  #linkLayer{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;}
+  .link-line{stroke:var(--bronze);stroke-width:1.4;stroke-dasharray:6 6;fill:none;opacity:.7;
+    animation:dashFlow 1.4s linear infinite;}
+  @keyframes dashFlow{to{stroke-dashoffset:-24;}}
+
+  .ev-card{position:absolute;width:236px;background:var(--ivory);
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+    box-shadow:0 14px 34px rgba(0,0,0,.45);cursor:grab;z-index:10;
+    transition:box-shadow .3s ease,transform .12s ease;
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+  .ev-card::after{content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 .5pt var(--aged-gold);
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+  .ev-card:hover{box-shadow:0 18px 42px rgba(0,0,0,.55),0 0 22px rgba(255,191,0,.22);}
+  .ev-card.dragging{cursor:grabbing;z-index:35;}
+  .ev-card.selected{box-shadow:0 18px 42px rgba(0,0,0,.55),0 0 0 1.5px var(--amber),0 0 28px rgba(255,191,0,.45);}
+
+  .ev-tag{position:absolute;top:10px;right:10px;padding:3px 8px;
+    font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;
+    text-transform:uppercase;z-index:3;border:.5px solid;}
+  .ev-tag.suspect{color:var(--bronze);border-color:var(--bronze);background:rgba(205,127,50,.12);}
+  .ev-tag.place{color:#7a6326;border-color:var(--aged-gold);background:rgba(197,160,89,.14);}
+
+  .ev-visual{height:128px;position:relative;overflow:hidden;background:#1a1510;}
+  .ev-body{padding:14px 16px 16px;}
+  .ev-title{font-family:'Libre Caslon Text',serif;font-size:17px;font-weight:600;
+    color:#1a1a1a;letter-spacing:-.01em;line-height:21px;margin-bottom:8px;}
+  .ev-ref{font-family:'JetBrains Mono',monospace;font-size:10px;color:#7a6f5a;letter-spacing:.06em;}
+
+  .teia-detail{width:380px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);
+    border-left:.5px solid var(--aged-gold);padding:32px 28px;overflow-y:auto;position:relative;}
+  .teia-detail::before{content:'';position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);}
+
+  /* ============ BANCO DE DADOS ============ */
+  #banco{padding:0;}
+  .banco-body{flex:1;overflow-y:auto;padding:48px 64px;}
+  .banco-header{display:flex;justify-content:space-between;align-items:flex-start;
+    margin-bottom:48px;padding-bottom:24px;border-bottom:.5px solid rgba(197,160,89,.3);}
+  .banco-index{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    color:var(--aged-gold);letter-spacing:.15em;margin-bottom:8px;}
+  .banco-title{font-family:'Libre Caslon Text',serif;font-size:48px;font-weight:700;
+    color:var(--aged-gold);letter-spacing:-.02em;line-height:56px;margin-bottom:16px;}
+  .banco-desc{font-family:'Manrope',sans-serif;font-size:16px;line-height:24px;
+    color:var(--on-surface-variant);max-width:600px;}
+
+  .search-container{position:relative;width:320px;}
+  .search-input{width:100%;padding:12px 40px 12px 16px;background:transparent;
+    border:none;border-bottom:1px solid var(--bronze);color:var(--on-surface);
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;
+    outline:none;transition:all .3s ease;}
+  .search-input::placeholder{color:var(--on-surface-variant);opacity:.5;}
+  .search-input:focus{border-bottom-color:var(--amber);box-shadow:0 2px 8px rgba(255,191,0,.2);}
+  .search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    width:18px;height:18px;stroke:var(--aged-gold);stroke-width:1.5;fill:none;pointer-events:none;}
+
+  .db-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+  .db-card{background:var(--ivory);
+    background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+    border-radius:4px;overflow:hidden;cursor:pointer;position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);transition:all .4s ease;
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+  .db-card::after{content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 .5pt var(--aged-gold);
+    clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),
+      calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+  .db-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
+
+  .db-image{width:100%;height:200px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;}
+  .db-status{position:absolute;top:12px;right:12px;padding:6px 12px;
+    background:rgba(14,14,14,.9);border:1px solid var(--bronze);border-radius:4px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;
+    color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;}
+  .db-content{padding:20px;}
+  .db-id{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+    color:var(--aged-gold);letter-spacing:.1em;margin-bottom:8px;}
+  .db-title{font-family:'Libre Caslon Text',serif;font-size:20px;font-weight:600;
+    color:#1a1a1a;letter-spacing:-.02em;line-height:24px;margin-bottom:8px;}
+  .db-origin{font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;letter-spacing:.05em;}
+
+  /* ============ RESPONSIVO ============ */
+  @media(max-width:1200px){
+    .hub-grid{grid-template-columns:repeat(2,1fr);}
+    .hub-body{padding:32px 48px;}
+    .hub-header{padding:0 48px;}
+    .hub-footer{padding:0 48px;}
+    .db-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:900px){
+    .hub-grid{grid-template-columns:1fr;}
+    .hub-title{font-size:36px;line-height:44px;}
+    .hub-body{padding:24px 32px;}
+    .hub-header{padding:0 32px;}
+    .hub-footer{padding:0 32px;}
+    .db-grid{grid-template-columns:1fr;}
+    .splash-title{font-size:42px;}
+    .intro-title{font-size:32px;line-height:40px;}
+    .cadastro-title{font-size:32px;line-height:40px;}
+    .cadastro-card{padding:40px 28px;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<!-- SPLASH -->
+<div class="view active" id="splash">
+  <button class="splash-skip" onclick="router.go('intro')">PULAR INTRO →</button>
+  <div class="splash-emblem">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="#C5A059" stroke-width="1"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#C5A059" stroke-width=".5" stroke-dasharray="2 2"/>
+      <path d="M50 20 C55 20, 60 22, 62 26" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M40 26 C44 22, 56 22, 60 26" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M36 35 C40 30, 60 30, 64 35" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M34 45 C38 40, 62 40, 66 45" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M34 55 C38 50, 62 50, 66 55" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M38 65 C42 60, 58 60, 62 65" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M43 75 C46 70, 54 70, 57 75" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+      <path d="M46 80 C48 76, 52 76, 54 80" stroke="#C5A059" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
+  <div class="splash-title">ARCHIVE</div>
+  <div class="splash-status">
+    <span id="splashStatusText">INICIANDO PROTOCOLO DE CONEXÃO</span>
+    <span class="splash-cursor"></span>
+  </div>
+  <div class="splash-progress"><div class="splash-progress-fill"></div></div>
+</div>
+
+<!-- INTRO -->
+<div class="view" id="intro">
+  <button class="splash-skip" onclick="router.go('cadastro')">PULAR INTRO →</button>
+  <div class="intro-content">
+    <h1 class="intro-title">A Crônica da Gênese</h1>
+    <p class="intro-text" id="introText"></p>
+  </div>
+  <div class="intro-progress">
+    <span class="intro-seq">SEQ 01 / INICIAÇÃO</span>
+    <div class="intro-line"><div class="intro-line-fill"></div></div>
+    <span class="intro-time" id="introTime">00:00</span>
+  </div>
+</div>
+
+<!-- CADASTRO -->
+<div class="view" id="cadastro">
+  <div class="cadastro-card">
+    <div class="cadastro-seal">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="36" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+        <circle cx="40" cy="40" r="30" fill="none" stroke="#CD7F32" stroke-width=".5" stroke-dasharray="2 2"/>
+        <path d="M30 42 L37 49 L52 32" stroke="#CD7F32" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1 class="cadastro-title">Dossier de<br>Admissão</h1>
+    <div class="cadastro-subtitle">Registro Confidencial // Nível de Acesso: Diretor</div>
+    <div class="cadastro-divider"></div>
+    <form class="cadastro-form" id="cadastroForm">
+      <div class="cadastro-field">
+        <label class="cadastro-label" for="dirName">Nome do Diretor</label>
+        <input type="text" id="dirName" class="cadastro-input" placeholder="[Insira o nome completo]" required>
+      </div>
+      <div class="cadastro-field">
+        <label class="cadastro-label" for="dirCode">Codinome</label>
+        <input type="text" id="dirCode" class="cadastro-input" placeholder="[Insira a designação operacional]" required>
+      </div>
+      <div class="cadastro-field">
+        <label class="cadastro-label" for="dirSpec">Especialidade</label>
+        <input type="text" id="dirSpec" class="cadastro-input" placeholder="[Área de atuação primária]" required>
+      </div>
+      <button type="submit" class="cadastro-btn">
+        <svg class="cadastro-btn-icon" viewBox="0 0 24 24">
+          <rect x="5" y="11" width="14" height="10" rx="1"/>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+          <circle cx="12" cy="16" r="1.5" fill="#C5A059"/>
+        </svg>
+        <span class="cadastro-btn-label">Autenticar</span>
+      </button>
+    </form>
+    <div class="cadastro-footer">Ao autenticar, o signatário concorda com os termos da Inquisição Digital.</div>
+  </div>
+</div>
+
+<!-- HUB -->
+<div class="view" id="hub">
+  <header class="hub-header">
+    <div class="hub-logo">ARCHIVE</div>
+    <div class="hub-user">Operativo: <strong id="hubUserName">—</strong> <span style="opacity:.4">//</span> <span id="hubUserCode">—</span></div>
+  </header>
+  <main class="hub-body">
+    <div class="hub-welcome">
+      <div class="hub-label">TERMINAL ALPHA</div>
+      <h1 class="hub-title">Bem-vindo de volta,<br><span class="hl" id="hubWelcomeName">Operativo</span>.</h1>
+      <p class="hub-desc">O relicário digital está sincronizado. Todas as conexões históricas estão online. Selecione um módulo para prosseguir com a investigação.</p>
+    </div>
+    <div class="hub-section-title">Módulos Operacionais</div>
+    <div class="hub-grid">
+      <a class="hub-card" onclick="router.go('globo')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="hub-card-title">Globo Interativo</div>
+        <div class="hub-card-desc">Selecionar missão e navegar pelo mapa geopolítico.</div>
+        <div class="hub-card-tag">Hub</div>
+      </a>
+      <a class="hub-card" onclick="router.go('banco')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+        <div class="hub-card-title">Banco de Dados</div>
+        <div class="hub-card-desc">Consultar artefatos catalogados e ativos protegidos.</div>
+      </a>
+      <a class="hub-card" onclick="router.go('teia')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 7l4 4M17 7l-4 4M7 17l4-4M17 17l-4-4"/></svg></div>
+        <div class="hub-card-title">Teia de Evidências</div>
+        <div class="hub-card-desc">Conectar pistas e deduzir padrões da investigação.</div>
+        <div class="hub-card-tag">Core</div>
+      </a>
+      <a class="hub-card" onclick="router.go('briefing')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="hub-card-title">Briefing</div>
+        <div class="hub-card-desc">Dossiê operacional de missão selecionada.</div>
+      </a>
+      <a class="hub-card" onclick="router.go('missao')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="hub-card-title">Missão Ativa</div>
+        <div class="hub-card-desc">Interface de campo durante investigação.</div>
+      </a>
+      <a class="hub-card" onclick="router.go('passaporte')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="hub-card-title">Passaporte</div>
+        <div class="hub-card-desc">Identidade do agente e progresso.</div>
+      </a>
+      <a class="hub-card" onclick="router.go('diario')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div class="hub-card-title">Diário de Bordo</div>
+        <div class="hub-card-desc">Registro cronológico de atividades.</div>
+      </a>
+      <a class="hub-card" onclick="router.go('conclusao')">
+        <div class="hub-card-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="hub-card-title">Conclusão</div>
+        <div class="hub-card-desc">Resumo e recompensas de missão.</div>
+      </a>
+    </div>
+  </main>
+  <footer class="hub-footer">
+    <div class="hub-footer-text">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="hub-footer-center">
+      <div class="hub-footer-text">Local: LONDRES <span id="hubClock">23:45</span></div>
+      <div class="hub-footer-text">Status: CRIPTOGRAFADO</div>
+      <div class="hub-footer-text hub-signal">Sinal: FORTE <span class="hub-signal-dot"></span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- GLOBO -->
+<div class="view" id="globo">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Globo Interativo</div>
+  </header>
+  <div class="globe-container"><canvas id="globe-canvas"></canvas></div>
+</div>
+
+<!-- BRIEFING -->
+<div class="view" id="briefing">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Briefing da Missão</div>
+  </header>
+  <div class="briefing-body">
+    <div class="dossier-panel">
+      <div class="confidential-stamp"><span class="confidential-text">Confidencial</span></div>
+      <div class="dossier-number">DOSSIÊ #89-X</div>
+      <h1 class="dossier-title">O Cálice de Antioquia</h1>
+      <div class="dossier-divider"></div>
+      <p class="dossier-text">Relatórios de inteligência indicam o deslocamento do artefato histórico Classe-4 do cofre seguro em Viena. A operação requer implantação imediata. O artefato possui propriedades metalúrgicas únicas atualmente não documentadas na literatura científica pública.</p>
+      <p class="dossier-text">A recuperação física é o objetivo primário. O objetivo secundário envolve neutralizar a rede de couriers envolvida na extração. A discrição é primordial. As autoridades locais desconhecem a verdadeira origem ou valor do artefato.</p>
+    </div>
+    <div class="tactical-panel">
+      <div class="tactical-header">
+        <div><div class="tactical-title">Análise Tática</div><div class="tactical-subtitle">SYS.SYNC: ON_LINE</div></div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-title">Último Avistamento</div>
+        <div class="coordinates">48°12'30"N 16°22'23"E</div>
+        <div class="location-text">Estação Central, Viena. Captação térmica 03:45 AM.</div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-title">Suspeitos Conhecidos</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--on-surface);padding-left:16px;position:relative;">
+          <span style="position:absolute;left:0;color:var(--amber);">•</span> Operativo 'SILVER'
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--on-surface-variant);opacity:.7;padding-left:16px;position:relative;margin-top:12px;">
+          <span style="position:absolute;left:0;color:var(--amber);">•</span> Identidade Desconhecida (Driver)
+        </div>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-card-title">Pistas Iniciais</div>
+        <p style="font-family:'Manrope',sans-serif;font-size:14px;line-height:20px;color:var(--on-surface-variant);">Resíduos de fuligem industrial detectados no local da extração sugerem rota de fuga via rede de túneis abandonados do setor oeste.</p>
+      </div>
+      <button class="accept-btn" onclick="router.go('missao')">Aceitar Investigação <span>→</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- MISSÃO ATIVA -->
+<div class="view" id="missao">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Missão Ativa: Nightfall</div>
+  </header>
+  <div class="mission-scene">
+    <div class="mission-hud-top">
+      <div><div class="mission-name">OP: NIGHTFALL</div><div class="mission-sub">SECTOR_7_G // ARCHIVE_OS</div></div>
+      <div style="text-align:center;"><div class="mission-objective">Objetivo: Localizar o Contato nas Docas</div><div class="mission-timer" id="missionTimer">00:42:15</div></div>
+      <div></div>
+    </div>
+    <div class="intel-panel">
+      <div class="intel-header"><div class="intel-title">Inteligência Coletada</div></div>
+      <div class="intel-item"><div class="intel-label">Frequência de Rádio</div><div class="intel-value">142.5 MHz <span class="live">LIVE</span></div></div>
+      <div class="intel-item"><div class="intel-label">Documento ID</div><div class="intel-value">VX-99: CLASSIFICADO</div></div>
+    </div>
+    <button class="analyze-btn" onclick="router.go('conclusao')">Analisar</button>
+  </div>
+</div>
+
+<!-- TEIA -->
+<div class="view" id="teia">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Teia de Evidências</div>
+  </header>
+  <div class="teia-body">
+    <div class="teia-canvas" id="teiaCanvas">
+      <svg id="linkLayer"></svg>
+    </div>
+    <div class="teia-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--on-surface-variant);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Detalhes da Evidência</div>
+      <h2 style="font-family:'Libre Caslon Text',serif;font-size:28px;font-weight:700;color:var(--aged-gold);letter-spacing:-.02em;line-height:32px;margin-bottom:16px;">Selecione uma Evidência</h2>
+      <p style="font-family:'Manrope',sans-serif;font-size:14px;line-height:22px;color:var(--on-surface-variant);">Clique em um card na teia para visualizar o identificador, análise técnica e nível de acesso.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BANCO DE DADOS -->
+<div class="view" id="banco">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Banco de Dados ARCHIVE</div>
+  </header>
+  <div class="banco-body">
+    <div class="banco-header">
+      <div>
+        <div class="banco-index">ÍNDICE // ALPHA-7</div>
+        <h1 class="banco-title">Relicário Global</h1>
+        <p class="banco-desc">Artefatos catalogados, discrepâncias históricas e ativos protegidos aguardando processamento ou recuperação em campo.</p>
+      </div>
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Busca criptografada...">
+        <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </div>
+    </div>
+    <div class="db-grid">
+      <div class="db-card">
+        <div class="db-image"><div class="db-status">Não Verificado</div></div>
+        <div class="db-content"><div class="db-id">#ART-892A</div><h3 class="db-title">Cálice Bizantino</h3><div class="db-origin">Origem: Constantinopla (Estimado séc. XI)</div></div>
+      </div>
+      <div class="db-card">
+        <div class="db-image"><div class="db-status">Verificado</div></div>
+        <div class="db-content"><div class="db-id">#ART-1156</div><h3 class="db-title">A Tela Florentina</h3><div class="db-origin">Origem: Florença (1966)</div></div>
+      </div>
+      <div class="db-card">
+        <div class="db-image"><div class="db-status">Rastreamento</div></div>
+        <div class="db-content"><div class="db-id">#CRY-004X</div><h3 class="db-title">Fragmento de Ressonância</h3><div class="db-origin">Sinal Atual: FRACO (Setor 4)</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSAPORTE -->
+<div class="view" id="passaporte">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Passaporte do Agente</div>
+  </header>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:48px;">
+    <div style="max-width:800px;width:100%;background:var(--ivory);
+      background-image:url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'p\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'matrix\' values=\'0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23p)\'/></svg>'),
+      linear-gradient(180deg,#f5f5dc 0%,#ede9c8 100%);
+      border-radius:4px;padding:48px;box-shadow:0 30px 60px rgba(0,0,0,.5);
+      clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);">
+      <h2 style="font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;margin-bottom:8px;">Emissão Oficial</h2>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;letter-spacing:.15em;text-transform:uppercase;margin-bottom:32px;">Inteligência Arquivística</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Designação</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:#1a1a1a;letter-spacing:.05em;margin-bottom:24px;">OPERATIVO DE CAMPO</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Número de ID</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:#1a1a1a;letter-spacing:.05em;margin-bottom:24px;">NEXUS-8942-X</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Clearance</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:#1a1a1a;letter-spacing:.05em;">NÍVEL 5 / ÔMEGA</div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--aged-gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">Progresso de Exploração</div>
+          <div style="height:4px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-bottom:12px;">
+            <div style="height:100%;width:74%;background:linear-gradient(90deg,var(--aged-gold),var(--amber));box-shadow:0 0 8px var(--amber);"></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--aged-gold);letter-spacing:.05em;margin-bottom:24px;">74%</div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;letter-spacing:.08em;">
+            <span>REGIÕES: <span style="color:var(--aged-gold);font-weight:500;">12/18</span></span>
+            <span>VISTOS: <span style="color:var(--aged-gold);font-weight:500;">24</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIÁRIO -->
+<div class="view" id="diario">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Diário de Bordo</div>
+  </header>
+  <div style="flex:1;overflow-y:auto;padding:48px 64px;">
+    <h1 style="font-family:'Libre Caslon Text',serif;font-size:48px;font-weight:700;color:var(--aged-gold);letter-spacing:-.02em;line-height:56px;margin-bottom:48px;">Diário de Bordo</h1>
+    <div style="position:relative;padding-left:40px;">
+      <div style="position:absolute;left:14px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--aged-gold) 0%,rgba(197,160,89,.2) 100%);"></div>
+      <div style="position:relative;margin-bottom:48px;">
+        <div style="position:absolute;left:-33px;top:20px;width:13px;height:13px;background:var(--aged-gold);border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 12px rgba(197,160,89,.5);"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--aged-gold);letter-spacing:.1em;margin-bottom:16px;">14.10.1984 — 23:45</div>
+        <div style="background:var(--ivory);
+          background-image:url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'p\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'matrix\' values=\'0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23p)\'/></svg>'),
+          linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+          border-radius:4px;padding:28px;box-shadow:0 14px 34px rgba(0,0,0,.4);
+          clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+            <h3 style="font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;line-height:28px;">Registro Recuperado</h3>
+            <div style="padding:5px 10px;background:rgba(205,127,50,.15);border:.5px solid var(--bronze);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;">Evidência #402</div>
+          </div>
+          <p style="font-family:'Manrope',sans-serif;font-size:15px;line-height:22px;color:#3a3530;">Encontrado oculto no fundo falso de um umidor de mogno. A cifra corresponde ao intercepto de Berlim. Várias páginas faltando.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSÃO -->
+<div class="view" id="conclusao">
+  <header class="view-back-header">
+    <button class="view-back-btn" onclick="router.back()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao Hub</button>
+    <div class="view-back-title">Missão Concluída</div>
+  </header>
+  <div style="flex:1;overflow-y:auto;padding:48px 64px;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <h1 style="font-family:'Libre Caslon Text',serif;font-size:48px;font-weight:700;color:var(--aged-gold);letter-spacing:-.02em;line-height:56px;margin-bottom:12px;">Missão Concluída</h1>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--on-surface-variant);letter-spacing:.15em;text-transform:uppercase;">Operação: Nightfall — Status: Finalizada</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:48px;">
+      <div style="background:var(--ivory);
+        background-image:url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'p\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'matrix\' values=\'0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23p)\'/></svg>'),
+        linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+        border-radius:4px;padding:28px 24px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);
+        clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Objetivos</div>
+        <div style="font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;">3/3 ✓</div>
+      </div>
+      <div style="background:var(--ivory);
+        background-image:url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'p\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'matrix\' values=\'0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23p)\'/></svg>'),
+        linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+        border-radius:4px;padding:28px 24px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);
+        clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Tempo</div>
+        <div style="font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;">00:42:15</div>
+      </div>
+      <div style="background:var(--ivory);
+        background-image:url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'p\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'matrix\' values=\'0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23p)\'/></svg>'),
+        linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+        border-radius:4px;padding:28px 24px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);
+        clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Precisão</div>
+        <div style="font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;">94%</div>
+      </div>
+      <div style="background:var(--ivory);
+        background-image:url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'p\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'matrix\' values=\'0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0\'/></filter><rect width=\'100%25\' height=\'100%25\' filter=\'url(%23p)\'/></svg>'),
+        linear-gradient(180deg,#f5f5dc 0%,#ece7c6 100%);
+        border-radius:4px;padding:28px 24px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);
+        clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Evidências</div>
+        <div style="font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;">07</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:16px;justify-content:center;">
+      <button onclick="router.go('hub')" style="padding:16px 32px;background:transparent;border:1px solid var(--bronze);color:var(--bronze);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s ease;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);">Retornar ao Globo</button>
+      <button onclick="router.go('globo')" style="padding:16px 32px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s ease;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);">Próxima Missão →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const state={director:{name:'',code:'',specialty:''},stats:{missions:0,evidence:0,credits:12450,level:5},current:'splash'};
+const STORAGE_KEY='project_nexus_state_v1';
+function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}}
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s){Object.assign(state,JSON.parse(s));return true;}}catch(e){}return false;}
+
+const router={
+  history:[],
+  go(viewId,pushHistory=true){
+    if(pushHistory&&state.current!==viewId)this.history.push(state.current);
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    const target=document.getElementById(viewId);
+    if(target){target.classList.add('active');state.current=viewId;this.onEnter(viewId);}
+  },
+  back(){if(this.history.length>0){const prev=this.history.pop();this.go(prev,false);}else{this.go('hub',false);}},
+  onEnter(viewId){
+    if(viewId==='hub')this.updateHub();
+    if(viewId==='intro')this.startIntro();
+    if(viewId==='globo')setTimeout(initGlobe,100);
+    if(viewId==='teia')setTimeout(initTeia,100);
+  },
+  updateHub(){
+    document.getElementById('hubUserName').textContent=state.director.name||'—';
+    document.getElementById('hubUserCode').textContent=state.director.code||'—';
+    document.getElementById('hubWelcomeName').textContent=state.director.name?state.director.name.split(' ')[0]:'Operativo';
+  },
+  startIntro(){
+    const text="Muito antes da era digital, a história era escrita em tinta e sombra. Curamos as narrativas silenciosas de milênios, preservando a verdade que outros buscaram enterrar.";
+    const el=document.getElementById('introText');el.innerHTML='';let i=0;
+    const type=()=>{if(i<text.length){el.innerHTML=text.substring(0,i+1)+'<span class="cursor"></span>';i++;setTimeout(type,35);}else{el.innerHTML=text;}};
+    setTimeout(type,500);
+  }
+};
+
+const splashMessages=['INICIANDO PROTOCOLO DE CONEXÃO','VERIFICANDO CREDENCIAIS','ESTABELECENDO CANAL SEGURO','SINCRONIZANDO ARQUIVOS','ACESSO AUTORIZADO'];
+let splashMsgIdx=0;
+function runSplashSequence(){
+  const el=document.getElementById('splashStatusText');if(!el)return;
+  let charIdx=0;const msg=splashMessages[splashMsgIdx];
+  const type=()=>{if(charIdx<msg.length){el.textContent=msg.substring(0,charIdx+1);charIdx++;setTimeout(type,30);}else{splashMsgIdx++;if(splashMsgIdx<splashMessages.length){setTimeout(runSplashSequence,500);}else{setTimeout(()=>router.go('intro'),800);}}};
+  setTimeout(type,400);
+}
+
+document.getElementById('cadastroForm').addEventListener('submit',(e)=>{
+  e.preventDefault();
+  state.director.name=document.getElementById('dirName').value.trim();
+  state.director.code=document.getElementById('dirCode').value.trim();
+  state.director.specialty=document.getElementById('dirSpec').value.trim();
+  if(!state.director.name||!state.director.code||!state.director.specialty)return;
+  saveState();router.go('hub');
+});
+
+setInterval(()=>{const n=new Date();const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  const hc=document.getElementById('hubClock');if(hc)hc.textContent=t;
+  const it=document.getElementById('introTime');if(it)it.textContent=t;
+},1000);
+
+// Timer da missão
+let missionSeconds=2535;
+setInterval(()=>{missionSeconds++;const h=Math.floor(missionSeconds/3600);const m=Math.floor((missionSeconds%3600)/60);const s=missionSeconds%60;
+  const el=document.getElementById('missionTimer');if(el)el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+},1000);
+
+// Globo Three.js
+function initGlobe(){
+  const canvas=document.getElementById('globe-canvas');if(!canvas)return;
+  const container=canvas.parentElement;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(45,container.clientWidth/container.clientHeight,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(container.clientWidth,container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  const globeGeometry=new THREE.SphereGeometry(5,64,64);
+  const globeMaterial=new THREE.MeshPhongMaterial({color:0x003344,emissive:0x001122,specular:0x333333,shininess:15});
+  const globe=new THREE.Mesh(globeGeometry,globeMaterial);scene.add(globe);
+  const atmosphereGeometry=new THREE.SphereGeometry(5.2,64,64);
+  const atmosphereMaterial=new THREE.MeshBasicMaterial({color:0xC5A059,transparent:true,opacity:0.1,side:THREE.BackSide});
+  const atmosphere=new THREE.Mesh(atmosphereGeometry,atmosphereMaterial);scene.add(atmosphere);
+  const ambientLight=new THREE.AmbientLight(0xffffff,0.3);scene.add(ambientLight);
+  const directionalLight=new THREE.DirectionalLight(0xffffff,1);directionalLight.position.set(5,3,5);scene.add(directionalLight);
+  camera.position.z=15;
+  const cities=[{name:'Londres',lat:51.5074,lon:-0.1278},{name:'Tóquio',lat:35.6762,lon:139.6503},{name:'Cairo',lat:30.0444,lon:31.2357}];
+  function latLonToVector3(lat,lon,radius){const phi=(90-lat)*(Math.PI/180);const theta=(lon+180)*(Math.PI/180);
+    const x=-(radius*Math.sin(phi)*Math.cos(theta));const z=(radius*Math.sin(phi)*Math.sin(theta));const y=(radius*Math.cos(phi));
+    return new THREE.Vector3(x,y,z);}
+  cities.forEach(city=>{const position=latLonToVector3(city.lat,city.lon,5.1);
+    const markerGeometry=new THREE.SphereGeometry(0.08,16,16);
+    const markerMaterial=new THREE.MeshBasicMaterial({color:0xFFBF00,emissive:0xFFBF00,emissiveIntensity:0.5});
+    const marker=new THREE.Mesh(markerGeometry,markerMaterial);marker.position.copy(position);globe.add(marker);});
+  function animate(){requestAnimationFrame(animate);globe.rotation.y+=0.001;renderer.render(scene,camera);}
+  animate();
+  window.addEventListener('resize',()=>{camera.aspect=container.clientWidth/container.clientHeight;camera.updateProjectionMatrix();renderer.setSize(container.clientWidth,container.clientHeight);});
+}
+
+// Teia de Evidências
+function initTeia(){
+  const canvas=document.getElementById('teiaCanvas');if(!canvas)return;
+  const evidences=[
+    {id:'vx',title:'Suspeito: Victor Volkov',ref:'REF: #VX-992-01',x:100,y:100,type:'suspect'},
+    {id:'dk',title:'Local: Docas de Londres',ref:'COORD: 51.5033° N',x:400,y:200,type:'place'},
+    {id:'rl',title:'Item: Fragmento da Relíquia',ref:'NOTA: origem anômala',x:700,y:150,type:'place'}
+  ];
+  const links=[['vx','dk'],['dk','rl']];
+  evidences.forEach(e=>{
+    const el=document.createElement('div');el.className='ev-card';el.dataset.id=e.id;
+    el.style.left=e.x+'px';el.style.top=e.y+'px';
+    el.innerHTML=`<span class="ev-tag ${e.type}">${e.type==='suspect'?'Suspeito':'Local'}</span>
+      <div class="ev-visual"></div>
+      <div class="ev-body"><div class="ev-title">${e.title}</div><div class="ev-ref">${e.ref}</div></div>`;
+    canvas.appendChild(el);
+    el.addEventListener('click',()=>{document.querySelectorAll('.ev-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');});
+  });
+  const svg=document.getElementById('linkLayer');svg.innerHTML='';
+  links.forEach(([a,b])=>{
+    const ea=evidences.find(e=>e.id===a);const eb=evidences.find(e=>e.id===b);
+    if(!ea||!eb)return;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',ea.x+118);line.setAttribute('y1',ea.y+100);
+    line.setAttribute('x2',eb.x+118);line.setAttribute('y2',eb.y+100);
+    line.setAttribute('class','link-line');svg.appendChild(line);
+  });
+}
+
+(function init(){
+  const hasState=loadState();
+  if(hasState&&state.director.name){router.go('hub',false);}
+  else{router.go('splash',false);setTimeout(runSplashSequence,1500);}
+})();
+
+window.nexus={state,router,saveState};
+</script>
+</body>
+</html>

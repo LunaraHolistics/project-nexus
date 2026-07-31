@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE — Dossier de Admissão</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+  :root {
+    --surface: #131313;
+    --surface-dim: #0e0e0e;
+    --surface-bright: #393939;
+    --on-surface: #e5e2e1;
+    --on-surface-variant: #c1c7cc;
+    --aged-gold: #C5A059;
+    --aged-gold-light: #e9c176;
+    --bronze: #CD7F32;
+    --amber: #FFBF00;
+    --petrol: #003344;
+    --ivory: #F5F5DC;
+    --ivory-dark: #e8e4c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--surface);
+    font-family: 'Manrope', sans-serif;
+    color: var(--on-surface);
+  }
+
+  /* ============ CONTAINER PRINCIPAL ============ */
+  .admission {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: 
+      radial-gradient(ellipse at center, #1a1a1a 0%, #0e0e0e 70%, #000000 100%);
+    padding: 40px;
+  }
+
+  /* ============ FILM GRAIN ============ */
+  .grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation: grainShift 0.5s steps(4) infinite;
+  }
+
+  @keyframes grainShift {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-2%, -1%); }
+    50% { transform: translate(1%, 2%); }
+    75% { transform: translate(-1%, 1%); }
+  }
+
+  /* ============ SCANLINES ============ */
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.02),
+      rgba(0, 0, 0, 0.02) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    opacity: 0.4;
+  }
+
+  /* ============ CARD DO DOSSIER ============ */
+  .dossier-card {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    background: var(--ivory);
+    background-image: 
+      url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg, #f5f5dc 0%, #ede9c8 100%);
+    border-radius: 4px;
+    padding: 64px 56px;
+    z-index: 10;
+    box-shadow: 
+      0 30px 60px rgba(0, 0, 0, 0.5),
+      0 0 0 0.5px var(--aged-gold),
+      inset 0 0 0 0.5pt rgba(197, 160, 89, 0.3);
+    animation: cardReveal 1.2s ease-out;
+    clip-path: polygon(
+      16px 0, calc(100% - 16px) 0,
+      100% 16px, 100% calc(100% - 16px),
+      calc(100% - 16px) 100%, 16px 100%,
+      0 calc(100% - 16px), 0 16px
+    );
+  }
+
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Cantos decorativos chanfrados */
+  .corner-mark {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 11;
+  }
+
+  .corner-mark::before, .corner-mark::after {
+    content: '';
+    position: absolute;
+    background: var(--aged-gold);
+  }
+
+  .corner-tl { top: 16px; left: 16px; }
+  .corner-tl::before { top: 0; left: 0; width: 20px; height: 1px; }
+  .corner-tl::after { top: 0; left: 0; width: 1px; height: 20px; }
+
+  .corner-tr { top: 16px; right: 16px; }
+  .corner-tr::before { top: 0; right: 0; width: 20px; height: 1px; }
+  .corner-tr::after { top: 0; right: 0; width: 1px; height: 20px; }
+
+  .corner-bl { bottom: 16px; left: 16px; }
+  .corner-bl::before { bottom: 0; left: 0; width: 20px; height: 1px; }
+  .corner-bl::after { bottom: 0; left: 0; width: 1px; height: 20px; }
+
+  .corner-br { bottom: 16px; right: 16px; }
+  .corner-br::before { bottom: 0; right: 0; width: 20px; height: 1px; }
+  .corner-br::after { bottom: 0; right: 0; width: 1px; height: 20px; }
+
+  /* ============ SELO CIRCULAR (THE SEAL) ============ */
+  .seal {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    z-index: 12;
+    animation: sealPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes sealPulse {
+    0%, 100% { 
+      filter: drop-shadow(0 0 8px rgba(205, 127, 50, 0.4));
+      transform: translateX(-50%) scale(1);
+    }
+    50% { 
+      filter: drop-shadow(0 0 16px rgba(205, 127, 50, 0.7));
+      transform: translateX(-50%) scale(1.03);
+    }
+  }
+
+  .seal svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ============ CABEÇALHO ============ */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    margin-top: 16px;
+  }
+
+  .title {
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+    line-height: 56px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b6560;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: var(--aged-gold);
+    margin: 24px auto 0;
+    opacity: 0.6;
+  }
+
+  /* ============ FORMULÁRIO ============ */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 14px 4px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--bronze);
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 20px;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .field-input::placeholder {
+    color: #8a8580;
+    font-style: italic;
+    font-family: 'Libre Caslon Text', serif;
+  }
+
+  .field-input:focus {
+    border-bottom-color: var(--amber);
+    box-shadow: 0 2px 8px rgba(255, 191, 0, 0.3);
+    padding-left: 8px;
+  }
+
+  .field-line {
+    position: relative;
+    height: 1px;
+    background: rgba(205, 127, 50, 0.3);
+    margin-top: -1px;
+  }
+
+  .field-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--amber);
+    transition: width 0.4s ease;
+  }
+
+  .field-input:focus ~ .field-line::after {
+    width: 100%;
+  }
+
+  /* ============ BOTÃO AUTENTICAR ============ */
+  .authenticate-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .authenticate-btn {
+    width: 140px;
+    height: 140px;
+    background: var(--petrol);
+    border: 1px solid var(--aged-gold);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(
+      8px 0, calc(100% - 8px) 0,
+      100% 8px, 100% calc(100% - 8px),
+      calc(100% - 8px) 100%, 8px 100%,
+      0 calc(100% - 8px), 0 8px
+    );
+  }
+
+  .authenticate-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 191, 0, 0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .authenticate-btn:hover {
+    background: var(--amber);
+    border-color: var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 191, 0, 0.4);
+  }
+
+  .authenticate-btn:hover::before {
+    opacity: 1;
+  }
+
+  .authenticate-btn:hover .lock-icon {
+    stroke: #1a1a1a;
+    animation: lockTurn 0.6s ease;
+  }
+
+  .authenticate-btn:hover .btn-label {
+    color: #1a1a1a;
+  }
+
+  @keyframes lockTurn {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(-15deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  .lock-icon {
+    width: 32px;
+    height: 32px;
+    stroke: var(--aged-gold);
+    stroke-width: 1.5;
+    fill: none;
+    transition: all 0.4s ease;
+    z-index: 2;
+  }
+
+  .btn-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--aged-gold-light);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.4s ease;
+    z-index: 2;
+  }
+
+  /* ============ RODAPÉ ============ */
+  .footer-note {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #8a8580;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 0.5px solid rgba(197, 160, 89, 0.3);
+  }
+
+  /* ============ ESTADO DE SUCESSO ============ */
+  .success-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--ivory);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    clip-path: polygon(
+      16px 0, calc(100% - 16px) 0,
+      100% 16px, 100% calc(100% - 16px),
+      calc(100% - 16px) 100%, 16px 100%,
+      0 calc(100% - 16px), 0 16px
+    );
+  }
+
+  .success-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    stroke: var(--bronze);
+    stroke-width: 1.5;
+    fill: none;
+    margin-bottom: 24px;
+    animation: successPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes successPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .success-title {
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .success-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #6b6560;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ============ RESPONSIVO ============ */
+  @media (max-width: 768px) {
+    .admission { padding: 20px; }
+    .dossier-card { padding: 48px 32px; }
+    .title { font-size: 36px; line-height: 44px; }
+    .authenticate-btn { width: 120px; height: 120px; }
+    .lock-icon { width: 28px; height: 28px; }
+  }
+
+  @media (max-width: 480px) {
+    .title { font-size: 28px; line-height: 36px; }
+    .field-input { font-size: 18px; }
+    .dossier-card { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="admission">
+    <div class="grain"></div>
+    <div class="scanlines"></div>
+
+    <!-- Card do Dossier -->
+    <div class="dossier-card" id="dossierCard">
+      <!-- Cantos decorativos -->
+      <div class="corner-mark corner-tl"></div>
+      <div class="corner-mark corner-tr"></div>
+      <div class="corner-mark corner-bl"></div>
+      <div class="corner-mark corner-br"></div>
+
+      <!-- Selo Circular (The Seal) -->
+      <div class="seal">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="36" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#CD7F32" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <path d="M40 25 L40 55 M25 40 L55 40" stroke="#CD7F32" stroke-width="1" opacity="0.3"/>
+          <path d="M30 42 L37 49 L52 32" stroke="#CD7F32" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Cabeçalho -->
+      <div class="header">
+        <h1 class="title">Dossier de<br>Admissão</h1>
+        <p class="subtitle">Registro Confidencial // Nível de Acesso: Diretor</p>
+        <div class="divider"></div>
+      </div>
+
+      <!-- Formulário -->
+      <form class="form" id="admissionForm">
+        <div class="field">
+          <label class="field-label" for="directorName">Nome do Diretor</label>
+          <input 
+            type="text" 
+            id="directorName" 
+            class="field-input" 
+            placeholder="[Insira o nome completo]"
+            autocomplete="off"
+          >
+          <div class="field-line"></div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="codename">Codinome</label>
+          <input 
+            type="text" 
+            id="codename" 
+            class="field-input" 
+            placeholder="[Insira a designação operacional]"
+            autocomplete="off"
+          >
+          <div class="field-line"></div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="specialty">Especialidade</label>
+          <input 
+            type="text" 
+            id="specialty" 
+            class="field-input" 
+            placeholder="[Área de atuação primária]"
+            autocomplete="off"
+          >
+          <div class="field-line"></div>
+        </div>
+
+        <!-- Botão Autenticar -->
+        <div class="authenticate-wrapper">
+          <button type="submit" class="authenticate-btn" id="authBtn">
+            <svg class="lock-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="5" y="11" width="14" height="10" rx="1"/>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+              <circle cx="12" cy="16" r="1.5" fill="#C5A059"/>
+            </svg>
+            <span class="btn-label">Autenticar</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Rodapé -->
+      <p class="footer-note">
+        Ao autenticar, o signatário concorda com os termos da Inquisição Digital.
+      </p>
+
+      <!-- Overlay de Sucesso -->
+      <div class="success-overlay" id="successOverlay">
+        <svg class="success-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="36" stroke-width="1.5"/>
+          <path d="M25 42 L36 53 L56 28" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 class="success-title">Aprovado</h2>
+        <p class="success-subtitle">ARCHIVE OS // Acesso Concedido</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('admissionForm');
+    const authBtn = document.getElementById('authBtn');
+    const successOverlay = document.getElementById('successOverlay');
+    const inputs = document.querySelectorAll('.field-input');
+
+    // Validação visual dos campos
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        if (input.value.trim().length > 0) {
+          input.style.borderBottomColor = '#C5A059';
+        } else {
+          input.style.borderBottomColor = '';
+        }
+      });
+    });
+
+    // Submissão do formulário
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const directorName = document.getElementById('directorName').value.trim();
+      const codename = document.getElementById('codename').value.trim();
+      const specialty = document.getElementById('specialty').value.trim();
+
+      // Validação básica
+      if (!directorName || !codename || !specialty) {
+        // Shake animation no botão
+        authBtn.style.animation = 'shake 0.4s ease';
+        setTimeout(() => {
+          authBtn.style.animation = '';
+        }, 400);
+        return;
+      }
+
+      // Simular processamento
+      authBtn.style.pointerEvents = 'none';
+      const btnLabel = authBtn.querySelector('.btn-label');
+      const originalLabel = btnLabel.textContent;
+      btnLabel.textContent = '...';
+
+      // Efeito de "processando"
+      let dots = 0;
+      const processingInterval = setInterval(() => {
+        dots = (dots + 1) % 4;
+        btnLabel.textContent = '.'.repeat(dots);
+      }, 300);
+
+      // Após 1.5s, mostrar sucesso
+      setTimeout(() => {
+        clearInterval(processingInterval);
+        btnLabel.textContent = originalLabel;
+        authBtn.style.pointerEvents = 'all';
+
+        // Mostrar overlay de sucesso
+        successOverlay.classList.add('active');
+
+        // Salvar dados (simulação)
+        console.log('Diretor cadastrado:', {
+          nome: directorName,
+          codinome: codename,
+          especialidade: specialty
+        });
+
+        // Redirecionar após 2s
+        setTimeout(() => {
+          console.log('Prosseguir para Introdução Cinemática ou Tela Inicial');
+          // window.location.href = 'intro.html';
+        }, 2000);
+      }, 1500);
+    });
+
+    // Adicionar animação de shake
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-8px); }
+        75% { transform: translateX(8px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Efeito de digitação nos placeholders (typewriter sutil)
+    const placeholders = [
+      '[Insira o nome completo]',
+      '[Insira a designação operacional]',
+      '[Área de atuação primária]'
+    ];
+
+    inputs.forEach((input, index) => {
+      const originalPlaceholder = placeholders[index];
+      input.setAttribute('data-placeholder', originalPlaceholder);
+    });
+  </script>
+</body>
+</html>

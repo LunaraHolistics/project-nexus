@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Sala do Diretor</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.04;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.vig{position:fixed;inset:0;pointer-events:none;z-index:8998;background:radial-gradient(ellipse at center,transparent 38%,rgba(0,0,0,.78) 100%);}
+.room{position:relative;width:100vw;height:100vh;overflow:hidden;background:linear-gradient(180deg,#070a10 0%,#0d121b 50%,#0a0d14 100%);}
+/* cena de fundo: janela gótica + cidade */
+.scene{position:absolute;inset:0;}
+.wall{position:absolute;inset:0;background:linear-gradient(180deg,#10141d 0%,#0a0d14 100%);}
+.window{position:absolute;top:0;left:50%;transform:translateX(-50%);width:62%;height:74%;display:flex;gap:1.4%;}
+.pane{flex:1;position:relative;background:linear-gradient(180deg,#1a2436 0%,#243247 35%,#1a2436 70%,#0e1420 100%);clip-path:polygon(50% 0,100% 22%,100% 100%,0 100%,0 22%);overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,.7);}
+.pane::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(120,150,200,.18) 0%,transparent 60%);}
+.mullion{position:absolute;top:0;bottom:0;width:14px;background:linear-gradient(90deg,#0a0d14,#1a1f2b,#0a0d14);z-index:3;}
+/* silhueta da cidade dentro dos panes */
+.skyline{position:absolute;bottom:18%;left:0;right:0;height:30%;display:flex;align-items:flex-end;gap:3px;opacity:.55;}
+.skyline i{flex:1;background:#0a0e16;display:block;}
+.skyline i:nth-child(odd){height:60%}.skyline i:nth-child(3n){height:90%}.skyline i:nth-child(4n){height:45%}
+/* Big Ben no pane central */
+.bigben{position:absolute;bottom:18%;left:50%;transform:translateX(-50%);width:46px;height:62%;background:linear-gradient(180deg,#0c1018,#070a10);z-index:2;clip-path:polygon(35% 0,65% 0,65% 8%,78% 8%,78% 16%,62% 16%,62% 100%,38% 100%,38% 16%,22% 16%,22% 8%,35% 8%);}
+.bigben .face{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,rgba(255,210,120,.85) 0%,rgba(255,191,0,.3) 55%,transparent 80%);box-shadow:0 0 26px rgba(255,191,0,.5);animation:clk 4s ease-in-out infinite;}
+@keyframes clk{0%,100%{opacity:.75}50%{opacity:1}}
+/* luz volumétrica da janela */
+.light{position:absolute;top:0;left:50%;transform:translateX(-50%);width:50%;height:80%;background:linear-gradient(180deg,rgba(180,200,235,.12) 0%,rgba(180,200,235,.04) 40%,transparent 75%);filter:blur(20px);pointer-events:none;animation:lflick 9s ease-in-out infinite;}
+@keyframes lflick{0%,100%{opacity:.7}50%{opacity:1}}
+/* poeira */
+.dust{position:absolute;width:2px;height:2px;background:rgba(220,230,250,.5);border-radius:50%;pointer-events:none;animation:df linear infinite;}
+@keyframes df{0%{transform:translateY(40vh) translateX(0);opacity:0}12%{opacity:.9}88%{opacity:.7}100%{transform:translateY(-10vh) translateX(60px);opacity:0}}
+/* mesa */
+.desk{position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(180deg,#241c14 0%,#15100a 55%,#0a0705 100%);box-shadow:0 -10px 40px rgba(0,0,0,.6);}
+.desk::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 120px,rgba(197,160,89,.03) 120px,rgba(197,160,89,.03) 121px);}
+.desk::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(197,160,89,.25),transparent);}
+/* globo sobre a mesa */
+.globed{position:absolute;bottom:28%;left:13%;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#3a352c,#1a150e 70%);border:2px solid rgba(197,160,89,.5);box-shadow:0 14px 30px rgba(0,0,0,.6),inset -8px -8px 20px rgba(0,0,0,.5);transition:box-shadow .4s,transform .4s;cursor:pointer;}
+.globed::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(197,160,89,.2);background:repeating-linear-gradient(0deg,transparent 0,transparent 11px,rgba(197,160,89,.12) 11px,rgba(197,160,89,.12) 12px),repeating-linear-gradient(90deg,transparent 0,transparent 11px,rgba(197,160,89,.12) 11px,rgba(197,160,89,.12) 12px);}
+.globed::after{content:'';position:absolute;left:50%;top:-12px;bottom:-12px;width:2px;background:rgba(197,160,89,.4);transform:translateX(-50%) rotate(20deg);}
+.globed:hover{box-shadow:0 14px 30px rgba(0,0,0,.6),0 0 30px rgba(197,160,89,.4);transform:scale(1.04);}
+.globed .stand{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);width:8px;height:24px;background:linear-gradient(90deg,#2a2418,#4a3f28,#2a2418);}
+/* livros */
+.books{position:absolute;bottom:28%;right:16%;width:90px;height:46px;}
+.books i{position:absolute;left:0;right:0;height:13px;background:linear-gradient(90deg,#3a2418,#5a3822,#3a2418);border-top:1px solid rgba(197,160,89,.2);}
+.books i:nth-child(1){bottom:0}.books i:nth-child(2){bottom:14px;left:4px;right:-4px;background:linear-gradient(90deg,#24303a,#3a4a56,#24303a);}.books i:nth-child(3){bottom:28px;left:-2px;right:2px;}
+/* papéis TOP SECRET */
+.paper{position:absolute;bottom:6%;width:120px;height:78px;background:linear-gradient(180deg,#d8d2b8,#bdb698);box-shadow:0 6px 16px rgba(0,0,0,.5);transform:rotate(-4deg);}
+.paper::after{content:'TOP SECRET';position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) rotate(-8deg);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:rgba(160,40,40,.55);letter-spacing:.15em;border:2px solid rgba(160,40,40,.5);padding:2px 6px;}
+.paper.p1{left:30%}.paper.p2{left:42%;transform:rotate(3deg);bottom:4%;}
+/* header flutuante */
+.hdr{position:absolute;top:0;left:0;right:0;height:60px;z-index:40;background:linear-gradient(180deg,rgba(7,10,16,.92) 0%,transparent 100%);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+/* indicador de localização */
+.loc{position:absolute;top:78px;left:50%;transform:translateX(-50%);z-index:35;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;display:flex;align-items:center;gap:9px;background:rgba(7,10,16,.55);padding:9px 18px;border:.5px solid var(--gold);backdrop-filter:blur(8px);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+.loc svg{width:15px;height:15px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+/* sidebar */
+.side{position:absolute;left:32px;top:130px;width:262px;z-index:30;background:rgba(0,51,68,.2);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
+.side::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.prof{display:flex;align-items:center;gap:13px;margin-bottom:18px;padding-bottom:16px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
+.av{width:46px;height:46px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av svg{width:24px;height:24px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.prof h3{font-family:'Libre Caslon Text',serif;font-size:16px;color:var(--on);margin-bottom:2px;}
+.prof p{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
+.snav{display:flex;flex-direction:column;gap:5px;margin-bottom:18px;position:relative;}
+.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
+.si.on{background:rgba(197,160,89,.12);border-left-color:var(--gold);color:var(--gold);}
+.si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.btni{width:100%;padding:13px;background:var(--gold);border:1px solid var(--gold);color:var(--surface);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;cursor:pointer;transition:all .3s;position:relative;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btni:hover{background:var(--amber);border-color:var(--amber);box-shadow:0 0 20px rgba(255,191,0,.4);}
+/* terminal */
+.term{position:absolute;right:32px;top:130px;width:340px;z-index:30;background:rgba(0,51,68,.22);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.term::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.6;}
+.th{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
+.tht{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em;display:flex;align-items:center;gap:8px;}
+.tht .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 1.6s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+.thid{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
+.tbody{position:relative;min-height:120px;}
+.tl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--on);letter-spacing:.04em;line-height:20px;opacity:0;animation:ti .4s ease-out forwards;}
+.tl::before{content:'> ';color:var(--gold);}
+.tl.hi{color:var(--amber);}
+@keyframes ti{to{opacity:1}}
+.tcur{display:inline-block;width:7px;height:13px;background:var(--amber);vertical-align:middle;animation:bk 1s steps(2) infinite;}
+@keyframes bk{0%,50%{opacity:1}51%,100%{opacity:0}}
+/* dossiê */
+.doss{position:absolute;right:32px;bottom:96px;width:360px;z-index:30;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:26px;box-shadow:0 22px 50px rgba(0,0,0,.6);transform:rotate(-2.5deg);transition:transform .4s,box-shadow .4s;animation:breathe 5s ease-in-out infinite;clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+.doss::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+@keyframes breathe{0%,100%{transform:rotate(-2.5deg) translateY(0)}50%{transform:rotate(-2.5deg) translateY(-3px)}}
+.doss:hover{transform:rotate(0) translateY(-4px);box-shadow:0 26px 60px rgba(0,0,0,.7),0 0 22px rgba(255,191,0,.2);}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.dlab{font-family:'JetBrains Mono',monospace;font-size:8px;color:#6b6560;letter-spacing:.12em;text-transform:uppercase;}
+.dti{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;margin-top:3px;}
+.stamp{padding:5px 10px;border:2px solid var(--bronze);transform:rotate(11deg);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--bronze);letter-spacing:.12em;}
+.dtx{font-family:'Manrope',sans-serif;font-size:13px;line-height:20px;color:#3a3530;margin-bottom:14px;}
+.dft{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:.5px solid rgba(197,160,89,.3);font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.08em;}
+/* botão iniciar viagem */
+.journey{position:absolute;left:32px;bottom:96px;z-index:35;padding:18px 40px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:12px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.journey:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 30px rgba(255,191,0,.5);}
+.journey svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.5;fill:none;transition:transform .3s;}
+.journey:hover svg{transform:rotate(45deg);}
+footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;background:rgba(7,10,16,.94);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div><div class="vig"></div>
+<div class="room">
+  <div class="scene">
+    <div class="wall"></div>
+    <div class="window">
+      <div class="pane"><div class="skyline"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="pane"><div class="bigben"><div class="face"></div></div><div class="skyline"><i></i><i></i><i></i><i></i></div></div>
+      <div class="pane"><div class="skyline"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="mullion" style="left:33%"></div>
+      <div class="mullion" style="left:66%"></div>
+    </div>
+    <div class="light"></div>
+    <div id="dust"></div>
+    <div class="desk"></div>
+    <div class="globed"><div class="stand"></div></div>
+    <div class="books"><i></i><i></i><i></i></div>
+    <div class="paper p1"></div>
+    <div class="paper p2"></div>
+  </div>
+
+  <div class="hdr">
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#" class="on">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+  </div>
+
+  <div class="loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>LOC: TELA 06 // SALA DO DIRETOR</div>
+
+  <aside class="side">
+    <div class="prof">
+      <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div><h3>DIRETOR</h3><p>Operativo Nível 5</p></div>
+    </div>
+    <nav class="snav">
+      <button class="si on"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
+      <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo Terrestre</button>
+      <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
+      <button class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Logbook</button>
+    </nav>
+    <button class="btni">Acessar Intel</button>
+  </aside>
+
+  <div class="term">
+    <div class="th"><div class="tht"><span class="d"></span>SECURE FEED ACTIVE</div><div class="thid">ID: 884-X9</div></div>
+    <div class="tbody" id="tbody"></div>
+  </div>
+
+  <div class="doss">
+    <div class="dh">
+      <div><div class="dlab">Archive Global Intelligence</div><div class="dti">Dossiê: VANGUARD</div></div>
+      <div class="stamp">CONFIDENCIAL</div>
+    </div>
+    <div class="dtx">Relatório de Inteligência localizado em Londres. Alvo principal identificado como Agente 'Vanguard'. Movimentos recentes sugerem infiltração no setor de criptografia parlamentar.</div>
+    <div class="dtx">Status da Missão: Em andamento. Recomenda-se vigilância discreta nível Ômega. Documentação anexa revela conexões com o Protocolo Nexus.</div>
+    <div class="dft"><span>REF: 011-LONDON-B</span><span>••</span></div>
+  </div>
+
+  <button class="journey" id="journey"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>Iniciar Viagem</button>
+
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+/* poeira na luz */
+const dust=document.getElementById('dust');
+for(let i=0;i<22;i++){const d=document.createElement('div');d.className='dust';d.style.left=(30+Math.random()*40)+'%';d.style.animationDuration=(9+Math.random()*10)+'s';d.style.animationDelay=(Math.random()*10)+'s';d.style.opacity=(.3+Math.random()*.5);dust.appendChild(d);}
+/* terminal: sequência inicial + logs vivos */
+const init=['Acessando logs criptografados...','Descriptografando chave 44-B...','Conexão estabelecida com Whitehall.','Escaneando frequências locais...','Aguardando input do operativo'];
+const live=['Varredura do Setor 7 concluída.','Pacote criptografado recebido de Viena.','Assinatura de Vanguard detectada.','Nó_44 respondeu ao handshake.','Cache de dossiês sincronizado.','Intercepto de áudio arquivado.','Contramedidas em modo passivo.','Rota de courier recalculada.'];
+const tb=document.getElementById('tbody');let li=0;
+function addLine(txt,hi,cur){const el=document.createElement('div');el.className='tl'+(hi?' hi':'');el.style.animationDelay='0s';tb.appendChild(el);
+ let k=0;const iv=setInterval(()=>{if(k<txt.length){el.textContent=txt.substring(0,k+1);k++;}else{clearInterval(iv);if(cur)el.innerHTML=txt+'<span class="tcur"></span>';}},26);
+ while(tb.children.length>6)tb.removeChild(tb.firstChild);tb.scrollTop=tb.scrollHeight;}
+function runInit(){if(li<init.length){addLine(init[li],li===2,li===init.length-1);li++;setTimeout(runInit,620);}else{setTimeout(runLive,4000);}}
+function runLive(){const m=live[Math.floor(Math.random()*live.length)];
+ const last=tb.lastChild;if(last){const c=last.querySelector('.tcur');if(c)c.remove();}
+ addLine(m,false,true);setTimeout(runLive,4200+Math.random()*2500);}
+runInit();
+document.getElementById('journey').addEventListener('click',function(){const o=this.innerHTML;this.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Viagem Iniciada';this.style.background='var(--amber)';this.style.color='var(--surface)';addLine('Protocolo de viagem iniciado. Coordenadas travadas.',true,true);setTimeout(()=>{this.innerHTML=o;this.style.background='';this.style.color='';},2200);});
+document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Briefing da Missão</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+.bf{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+.body{flex:1;display:flex;padding:40px 48px;gap:40px;overflow:hidden;}
+.dos{flex:1;position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:56px 48px;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,.5);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);animation:sl .8s ease-out;}
+.dos::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);}
+@keyframes sl{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+.stamp{position:absolute;top:70px;right:70px;width:170px;height:54px;border:3px solid var(--bronze);transform:rotate(-15deg);display:flex;align-items:center;justify-content:center;opacity:.72;}
+.stamp::before{content:'';position:absolute;inset:4px;border:1px solid var(--bronze);}
+.stamp span{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--bronze);letter-spacing:.2em;text-transform:uppercase;}
+.dn{font-family:'JetBrains Mono',monospace;font-size:12px;color:#6b6560;letter-spacing:.1em;margin-bottom:14px;}
+.dt{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;line-height:52px;margin-bottom:22px;}
+.dd{width:100%;height:1px;background:var(--gold);opacity:.4;margin-bottom:28px;}
+.dtx{font-family:'Manrope',sans-serif;font-size:15px;line-height:24px;color:#3a3530;margin-bottom:20px;}
+.dtx:first-of-type::first-letter{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:var(--gold);float:left;line-height:1;margin-right:8px;margin-top:4px;}
+.pol{display:inline-block;background:#fff;padding:10px 10px 36px;box-shadow:0 8px 22px rgba(0,0,0,.22);transform:rotate(-2deg);margin-top:18px;transition:transform .3s;}
+.pol:hover{transform:rotate(0) translateY(-3px);}
+.pol .clip{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:34px;height:50px;border:2px solid #8a8580;border-radius:17px 17px 0 0;}
+.pol .clip::before{content:'';position:absolute;top:7px;left:50%;transform:translateX(-50%);width:16px;height:34px;border:2px solid #8a8580;border-radius:8px 8px 0 0;}
+.pol-img{width:200px;height:140px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;}
+.pol-img::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,248,220,.12),transparent 60%);}
+.pol-cap{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:13px;color:#1a1a1a;text-align:center;margin-top:10px;}
+.tac{width:440px;display:flex;flex-direction:column;gap:20px;animation:fr .8s ease-out .2s both;}
+@keyframes fr{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.th{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.th svg{width:22px;height:22px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.tht{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
+.ths{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;}
+.ac{position:relative;padding:20px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);}
+.ac::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.act{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;position:relative;}
+.act::before{content:'';width:3px;height:14px;background:var(--amber);}
+.coord{font-family:'JetBrains Mono',monospace;font-size:17px;color:var(--on);letter-spacing:.05em;margin-bottom:6px;position:relative;}
+.loc{font-family:'Manrope',sans-serif;font-size:13px;color:var(--onv);line-height:18px;position:relative;}
+.sus{list-style:none;position:relative;}
+.sus li{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);margin-bottom:10px;padding-left:14px;position:relative;}
+.sus li::before{content:'•';position:absolute;left:0;color:var(--amber);}
+.sus li.unk{color:var(--onv);opacity:.7;}
+.clue{font-family:'Manrope',sans-serif;font-size:13px;line-height:19px;color:var(--onv);position:relative;}
+.acc{margin-top:auto;padding:18px 40px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
+.acc:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 24px rgba(255,191,0,.4);}
+.acc .ar{transition:transform .3s;}
+.acc:hover .ar{transform:translateX(4px);}
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="bf">
+  <header>
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+  <div class="body">
+    <div class="dos">
+      <div class="stamp"><span>Confidencial</span></div>
+      <div class="dn">DOSSIÊ #89-X</div>
+      <h1 class="dt" id="dt">O Cálice de Antioquia</h1>
+      <div class="dd"></div>
+      <p class="dtx">Relatórios de inteligência indicam o deslocamento do artefato histórico Classe-4 do cofre seguro em Viena. A operação requer implantação imediata. O artefato possui propriedades metalúrgicas únicas atualmente não documentadas na literatura científica pública.</p>
+      <p class="dtx">A recuperação física é o objetivo primário. O objetivo secundário envolve neutralizar a rede de couriers envolvida na extração. A discrição é primordial. As autoridades locais desconhecem a verdadeira origem ou valor do artefato.</p>
+      <div class="pol" style="position:relative;">
+        <div class="clip"></div>
+        <div class="pol-img"></div>
+        <div class="pol-cap">Exhibit A — Cofre de Viena</div>
+      </div>
+    </div>
+    <div class="tac">
+      <div class="th">
+        <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+        <div><div class="tht">Análise Tática</div><div class="ths">SYS.SYNC: ON_LINE</div></div>
+      </div>
+      <div class="ac">
+        <div class="act">Último Avistamento</div>
+        <div class="coord">48°12'30"N 16°22'23"E</div>
+        <div class="loc">Estação Central, Viena. Captação térmica 03:45 AM.</div>
+      </div>
+      <div class="ac">
+        <div class="act">Suspeitos Conhecidos</div>
+        <ul class="sus"><li>Operativo 'SILVER'</li><li class="unk">Identidade Desconhecida (Driver)</li></ul>
+      </div>
+      <div class="ac">
+        <div class="act">Pistas Iniciais</div>
+        <p class="clue">Resíduos de fuligem industrial detectados no local da extração sugerem rota de fuga via rede de túneis abandonados do setor oeste.</p>
+      </div>
+      <button class="acc" id="acc">Aceitar Investigação <span class="ar">→</span></button>
+    </div>
+  </div>
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+const el=document.getElementById('dt'),orig=el.textContent;el.textContent='';let i=0;
+setTimeout(()=>{const iv=setInterval(()=>{if(i<orig.length){el.textContent=orig.substring(0,i+1);i++;}else clearInterval(iv);},55);},700);
+document.getElementById('acc').addEventListener('click',function(){this.textContent='Investigação Aceita ✓';this.style.background='var(--amber)';this.style.color='var(--surface)';});
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>

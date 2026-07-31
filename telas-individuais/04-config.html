@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE — Configurações</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+  :root {
+    --surface: #131313;
+    --surface-dim: #0e0e0e;
+    --surface-bright: #393939;
+    --on-surface: #e5e2e1;
+    --on-surface-variant: #c1c7cc;
+    --aged-gold: #C5A059;
+    --aged-gold-light: #e9c176;
+    --bronze: #CD7F32;
+    --amber: #FFBF00;
+    --petrol: #003344;
+    --ivory: #F5F5DC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--surface);
+    font-family: 'Manrope', sans-serif;
+    color: var(--on-surface);
+  }
+
+  /* ============ CONTAINER PRINCIPAL ============ */
+  .settings {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+  }
+
+  /* ============ FILM GRAIN ============ */
+  .grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation: grainShift 0.5s steps(4) infinite;
+  }
+
+  @keyframes grainShift {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-2%, -1%); }
+    50% { transform: translate(1%, 2%); }
+    75% { transform: translate(-1%, 1%); }
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    position: relative;
+    height: 64px;
+    background: var(--surface-dim);
+    border-bottom: 0.5px solid var(--aged-gold);
+    display: flex;
+    align-items: center;
+    padding: 0 64px;
+    z-index: 10;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    color: var(--on-surface);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .back-btn:hover {
+    color: var(--amber);
+  }
+
+  .back-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    fill: none;
+  }
+
+  .header-title {
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--aged-gold);
+    letter-spacing: -0.02em;
+    margin-left: 32px;
+  }
+
+  .settings-icon {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    stroke: var(--aged-gold);
+    stroke-width: 1.5;
+    fill: none;
+    animation: rotateGear 20s linear infinite;
+  }
+
+  @keyframes rotateGear {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ============ LAYOUT SPLIT ============ */
+  .content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar {
+    width: 320px;
+    background: var(--surface-dim);
+    border-right: 0.5px solid rgba(197, 160, 89, 0.3);
+    padding: 32px 0;
+    overflow-y: auto;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-item:hover {
+    background: rgba(197, 160, 89, 0.05);
+  }
+
+  .nav-item.active {
+    background: rgba(197, 160, 89, 0.1);
+    border-left-color: var(--aged-gold);
+  }
+
+  .nav-item.active .nav-label {
+    color: var(--aged-gold);
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    stroke: var(--on-surface-variant);
+    stroke-width: 1.5;
+    fill: none;
+    transition: stroke 0.3s ease;
+  }
+
+  .nav-item.active .nav-icon {
+    stroke: var(--aged-gold);
+  }
+
+  .nav-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    letter-spacing: 0.1em;
+    transition: color 0.3s ease;
+  }
+
+  /* ============ CARD SYSTEM STATUS ============ */
+  .system-status-card {
+    margin: 32px;
+    padding: 24px;
+    background: var(--ivory);
+    background-image: 
+      url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+      linear-gradient(180deg, #f5f5dc 0%, #ede9c8 100%);
+    border-radius: 4px;
+    border: 0.5px solid var(--aged-gold);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .status-title {
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+  }
+
+  .status-icon {
+    width: 24px;
+    height: 24px;
+    stroke: var(--bronze);
+    stroke-width: 1.5;
+    fill: none;
+  }
+
+  .status-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #6b6560;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .status-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .status-value {
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+
+  /* ============ MAIN CONTENT ============ */
+  .main-content {
+    flex: 1;
+    padding: 48px 64px;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .section-icon {
+    width: 24px;
+    height: 24px;
+    stroke: var(--aged-gold);
+    stroke-width: 1.5;
+    fill: none;
+  }
+
+  .section-title {
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--aged-gold);
+    letter-spacing: -0.02em;
+  }
+
+  /* ============ SLIDERS ============ */
+  .slider-group {
+    margin-bottom: 32px;
+  }
+
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .slider-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .slider-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--aged-gold);
+    letter-spacing: 0.05em;
+  }
+
+  .slider-container {
+    position: relative;
+    height: 24px;
+    display: flex;
+    align-items: center;
+  }
+
+  .slider-track {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: rgba(197, 160, 89, 0.2);
+    border-radius: 1px;
+  }
+
+  .slider-fill {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, var(--aged-gold), var(--amber));
+    border-radius: 1px;
+    transition: width 0.1s ease;
+  }
+
+  .slider-thumb {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--amber);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(255, 191, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transform: translateX(-50%);
+  }
+
+  .slider-thumb:hover {
+    transform: translateX(-50%) scale(1.2);
+    box-shadow: 0 0 20px rgba(255, 191, 0, 0.6);
+  }
+
+  .slider-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  /* ============ DROPDOWN ============ */
+  .dropdown-group {
+    margin-bottom: 32px;
+  }
+
+  .dropdown-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .dropdown-container {
+    position: relative;
+  }
+
+  .dropdown-select {
+    width: 100%;
+    padding: 14px 48px 14px 16px;
+    background: var(--surface-dim);
+    border: 1px solid var(--bronze);
+    border-radius: 4px;
+    color: var(--on-surface);
+    font-family: 'Manrope', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    appearance: none;
+    transition: all 0.3s ease;
+  }
+
+  .dropdown-select:focus {
+    outline: none;
+    border-color: var(--amber);
+    box-shadow: 0 0 12px rgba(255, 191, 0, 0.2);
+  }
+
+  .dropdown-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    stroke: var(--aged-gold);
+    stroke-width: 1.5;
+    fill: none;
+    pointer-events: none;
+  }
+
+  /* ============ TOGGLE SWITCH ============ */
+  .toggle-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    border-top: 0.5px solid rgba(197, 160, 89, 0.2);
+  }
+
+  .toggle-info {
+    flex: 1;
+  }
+
+  .toggle-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--on-surface);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .toggle-description {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    line-height: 20px;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 56px;
+    height: 28px;
+    background: var(--bronze);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-left: 32px;
+  }
+
+  .toggle-switch.active {
+    background: var(--amber);
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    background: var(--surface);
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+  }
+
+  .toggle-switch.active .toggle-thumb {
+    transform: translateX(28px);
+  }
+
+  /* ============ BOTÕES DE AÇÃO ============ */
+  .action-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    padding-top: 32px;
+    border-top: 0.5px solid rgba(197, 160, 89, 0.2);
+  }
+
+  .btn {
+    padding: 14px 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--bronze);
+    color: var(--bronze);
+  }
+
+  .btn-secondary:hover {
+    background: var(--bronze);
+    color: var(--surface);
+  }
+
+  .btn-primary {
+    background: var(--petrol);
+    border: 1px solid var(--petrol);
+    color: var(--ivory);
+  }
+
+  .btn-primary:hover {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: var(--surface);
+  }
+
+  /* ============ RESPONSIVO ============ */
+  @media (max-width: 1024px) {
+    .sidebar { width: 280px; }
+    .main-content { padding: 32px 48px; }
+  }
+
+  @media (max-width: 768px) {
+    .content { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 0.5px solid rgba(197, 160, 89, 0.3); }
+    .main-content { padding: 24px 32px; }
+    .header { padding: 0 32px; }
+  }
+</style>
+</head>
+<body>
+  <div class="settings">
+    <div class="grain"></div>
+
+    <!-- Header -->
+    <header class="header">
+      <button class="back-btn">
+        <svg class="back-icon" viewBox="0 0 24 24">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Voltar
+      </button>
+      <h1 class="header-title">Configurações</h1>
+      <svg class="settings-icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/>
+      </svg>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="nav-item active" data-section="system">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+            <circle cx="8" cy="6" r="1" fill="currentColor"/>
+            <circle cx="16" cy="12" r="1" fill="currentColor"/>
+            <circle cx="10" cy="18" r="1" fill="currentColor"/>
+          </svg>
+          <span class="nav-label">Sistema & Áudio</span>
+        </div>
+
+        <div class="nav-item" data-section="display">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+          <span class="nav-label">Exibição & Óptica</span>
+        </div>
+
+        <div class="nav-item" data-section="language">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span class="nav-label">Localização</span>
+        </div>
+
+        <div class="nav-item" data-section="privacy">
+          <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span class="nav-label">Privacidade de Dados</span>
+        </div>
+
+        <!-- System Status Card -->
+        <div class="system-status-card">
+          <div class="status-header">
+            <h3 class="status-title">Status do Sistema</h3>
+            <svg class="status-icon" viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="status-item">Versão: <span class="status-value">2.4.1_b</span></div>
+          <div class="status-item">Conexão: <span class="status-value">SEGURA</span></div>
+          <div class="status-item">Hora Local: <span class="status-value">23:45 UTC</span></div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Audio Parameters -->
+        <div class="section">
+          <div class="section-header">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            <h2 class="section-title">Parâmetros de Áudio</h2>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label">
+              <span class="slider-name">Música Atmosférica</span>
+              <span class="slider-value" id="musicValue">75%</span>
+            </div>
+            <div class="slider-container">
+              <div class="slider-track"></div>
+              <div class="slider-fill" id="musicFill" style="width: 75%"></div>
+              <div class="slider-thumb" id="musicThumb" style="left: 75%"></div>
+              <input type="range" class="slider-input" id="musicSlider" min="0" max="100" value="75">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label">
+              <span class="slider-name">Diagnósticos SFX</span>
+              <span class="slider-value" id="sfxValue">42%</span>
+            </div>
+            <div class="slider-container">
+              <div class="slider-track"></div>
+              <div class="slider-fill" id="sfxFill" style="width: 42%"></div>
+              <div class="slider-thumb" id="sfxThumb" style="left: 42%"></div>
+              <input type="range" class="slider-input" id="sfxSlider" min="0" max="100" value="42">
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Calibration -->
+        <div class="section">
+          <div class="section-header">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20z" fill="currentColor" opacity="0.3"/>
+            </svg>
+            <h2 class="section-title">Calibração Visual</h2>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label">
+              <span class="slider-name">Gama / Brilho</span>
+              <span class="slider-value" id="gammaValue">50%</span>
+            </div>
+            <div class="slider-container">
+              <div class="slider-track"></div>
+              <div class="slider-fill" id="gammaFill" style="width: 50%"></div>
+              <div class="slider-thumb" id="gammaThumb" style="left: 50%"></div>
+              <input type="range" class="slider-input" id="gammaSlider" min="0" max="100" value="50">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label">
+              <span class="slider-name">Taxa de Contraste</span>
+              <span class="slider-value" id="contrastValue">68%</span>
+            </div>
+            <div class="slider-container">
+              <div class="slider-track"></div>
+              <div class="slider-fill" id="contrastFill" style="width: 68%"></div>
+              <div class="slider-thumb" id="contrastThumb" style="left: 68%"></div>
+              <input type="range" class="slider-input" id="contrastSlider" min="0" max="100" value="68">
+            </div>
+          </div>
+        </div>
+
+        <!-- Operative Preferences -->
+        <div class="section">
+          <div class="section-header">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <h2 class="section-title">Preferências do Operativo</h2>
+          </div>
+
+          <div class="dropdown-group">
+            <div class="dropdown-label">Perfil de Localização</div>
+            <div class="dropdown-container">
+              <select class="dropdown-select" id="languageSelect">
+                <option value="pt-BR">Português (BR)</option>
+                <option value="en-US">English (US)</option>
+                <option value="fr-FR">Français (FR)</option>
+                <option value="de-DE">Deutsch (DE)</option>
+              </select>
+              <svg class="dropdown-arrow" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-info">
+              <div class="toggle-label">Dicas Táticas de UI</div>
+              <div class="toggle-description">Ativar sobreposições contextuais durante operações de campo.</div>
+            </div>
+            <div class="toggle-switch active" id="tacticalToggle">
+              <div class="toggle-thumb"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="resetBtn">Restaurar Padrões</button>
+          <button class="btn btn-primary" id="applyBtn">Aplicar Configuração</button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Sliders funcionais
+    const sliders = [
+      { input: 'musicSlider', fill: 'musicFill', thumb: 'musicThumb', value: 'musicValue' },
+      { input: 'sfxSlider', fill: 'sfxFill', thumb: 'sfxThumb', value: 'sfxValue' },
+      { input: 'gammaSlider', fill: 'gammaFill', thumb: 'gammaThumb', value: 'gammaValue' },
+      { input: 'contrastSlider', fill: 'contrastFill', thumb: 'contrastThumb', value: 'contrastValue' }
+    ];
+
+    sliders.forEach(({ input, fill, thumb, value }) => {
+      const sliderInput = document.getElementById(input);
+      const sliderFill = document.getElementById(fill);
+      const sliderThumb = document.getElementById(thumb);
+      const sliderValue = document.getElementById(value);
+
+      sliderInput.addEventListener('input', (e) => {
+        const val = e.target.value;
+        sliderFill.style.width = val + '%';
+        sliderThumb.style.left = val + '%';
+        sliderValue.textContent = val + '%';
+      });
+    });
+
+    // Toggle switch
+    const tacticalToggle = document.getElementById('tacticalToggle');
+    tacticalToggle.addEventListener('click', () => {
+      tacticalToggle.classList.toggle('active');
+    });
+
+    // Navegação da sidebar
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Botão Reset
+    const resetBtn = document.getElementById('resetBtn');
+    resetBtn.addEventListener('click', () => {
+      sliders.forEach(({ input, fill, thumb, value }) => {
+        const defaultValue = input === 'musicSlider' ? 75 : 
+                            input === 'sfxSlider' ? 42 :
+                            input === 'gammaSlider' ? 50 : 68;
+        const sliderInput = document.getElementById(input);
+        const sliderFill = document.getElementById(fill);
+        const sliderThumb = document.getElementById(thumb);
+        const sliderValue = document.getElementById(value);
+        
+        sliderInput.value = defaultValue;
+        sliderFill.style.width = defaultValue + '%';
+        sliderThumb.style.left = defaultValue + '%';
+        sliderValue.textContent = defaultValue + '%';
+      });
+
+      document.getElementById('languageSelect').value = 'pt-BR';
+      tacticalToggle.classList.add('active');
+    });
+
+    // Botão Apply
+    const applyBtn = document.getElementById('applyBtn');
+    applyBtn.addEventListener('click', () => {
+      const config = {
+        music: document.getElementById('musicSlider').value,
+        sfx: document.getElementById('sfxSlider').value,
+        gamma: document.getElementById('gammaSlider').value,
+        contrast: document.getElementById('contrastSlider').value,
+        language: document.getElementById('languageSelect').value,
+        tacticalHints: tacticalToggle.classList.contains('active')
+      };
+
+      console.log('Configuração aplicada:', config);
+      
+      // Feedback visual
+      applyBtn.textContent = 'Aplicado ✓';
+      applyBtn.style.background = 'var(--amber)';
+      applyBtn.style.color = 'var(--surface)';
+      
+      setTimeout(() => {
+        applyBtn.textContent = 'Aplicar Configuração';
+        applyBtn.style.background = '';
+        applyBtn.style.color = '';
+      }, 2000);
+    });
+
+    // Botão Voltar
+    document.querySelector('.back-btn').addEventListener('click', () => {
+      console.log('Voltar para tela anterior');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE OS — Banco de Dados</title>
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<style>
+:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+.db{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.icons{display:flex;gap:14px;}
+.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.icons svg:hover{stroke:var(--amber);}
+.body{flex:1;display:flex;overflow:hidden;}
+.content{flex:1;overflow-y:auto;padding:40px 48px;}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;padding-bottom:22px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.si2{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:7px;}
+.st{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:52px;margin-bottom:14px;}
+.sd{font-family:'Manrope',sans-serif;font-size:15px;line-height:23px;color:var(--onv);max-width:560px;}
+.srch{position:relative;width:300px;}
+.srch input{width:100%;padding:11px 38px 11px 14px;background:var(--dim);border:none;border-bottom:1px solid var(--bronze);color:var(--on);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;outline:none;transition:all .3s;}
+.srch input::placeholder{color:var(--onv);opacity:.5;}
+.srch input:focus{border-bottom-color:var(--amber);box-shadow:0 2px 8px rgba(255,191,0,.2);}
+.srch svg{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.card{position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);overflow:hidden;cursor:pointer;transition:all .4s;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.card::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
+.card.wide{grid-column:span 2;display:flex;}
+.cimg{width:100%;height:190px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;}
+.card.wide .cimg{width:200px;height:auto;flex-shrink:0;}
+.cimg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,248,220,.1),transparent 60%);}
+.badge{position:absolute;top:11px;right:11px;padding:5px 11px;background:rgba(14,14,14,.9);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;z-index:3;}
+.badge.vf{border-color:var(--gold);color:var(--gold);}
+.cbody{padding:18px;}
+.card.wide .cbody{flex:1;display:flex;flex-direction:column;justify-content:center;}
+.cid{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.1em;margin-bottom:7px;}
+.ct{font-family:'Libre Caslon Text',serif;font-size:19px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;line-height:23px;margin-bottom:7px;}
+.co{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b6560;letter-spacing:.05em;}
+.cdesc{font-family:'Manrope',sans-serif;font-size:13px;line-height:19px;color:#3a3530;margin-bottom:14px;}
+.crow{display:flex;gap:24px;padding-top:14px;border-top:.5px solid rgba(197,160,89,.3);}
+.crow .ci{display:flex;flex-direction:column;gap:3px;}
+.crow .cl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+.crow .cv{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b6560;}
+.decrypt .cimg{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--dim);}
+.decrypt .cimg svg{width:42px;height:42px;stroke:var(--onv);stroke-width:1.5;fill:none;opacity:.5;}
+.decrypt .dt2{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.1em;margin-top:14px;animation:fl 2s infinite;}
+@keyframes fl{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.6}94%{opacity:1}96%{opacity:.8}97%{opacity:1}}
+.decrypt .bar{width:60px;height:2px;background:rgba(197,160,89,.2);margin-top:11px;position:relative;overflow:hidden;}
+.decrypt .bar::after{content:'';position:absolute;left:0;top:0;height:100%;width:40%;background:var(--amber);animation:dp 2s ease-in-out infinite;}
+@keyframes dp{0%{left:-40%}100%{left:100%}}
+.classified{opacity:.6;}
+.classified .ct{color:#6b6560;font-style:italic;}
+.panel{width:340px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border-left:.5px solid var(--gold);padding:26px 24px;overflow-y:auto;position:relative;transform:translateX(20px);opacity:0;transition:all .4s;pointer-events:none;}
+.panel.on{transform:translateX(0);opacity:1;pointer-events:all;}
+.panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
+.pht{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;display:flex;align-items:center;gap:8px;}
+.pht svg{width:15px;height:15px;stroke:var(--gold);stroke-width:1.5;fill:none;}
+.pcl{width:22px;height:22px;stroke:var(--onv);stroke-width:1.5;fill:none;cursor:pointer;transition:stroke .3s;}
+.pcl:hover{stroke:var(--amber);}
+.pimg{width:100%;height:150px;background:linear-gradient(135deg,#2a2520,#1a1510);margin-bottom:18px;position:relative;}
+.pimg::before{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 .5pt var(--gold);opacity:.5;}
+.pmeta{display:flex;gap:10px;margin-bottom:14px;position:relative;}
+.pbadge{padding:4px 9px;background:rgba(205,127,50,.2);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--bronze);letter-spacing:.1em;}
+.pid{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);}
+.ptt{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:600;color:var(--on);letter-spacing:-.02em;margin-bottom:18px;position:relative;}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px;padding-bottom:18px;border-bottom:.5px solid rgba(197,160,89,.2);position:relative;}
+.pf{display:flex;flex-direction:column;gap:3px;}
+.pfl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;}
+.pfv{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--on);}
+.pdesc{font-family:'Manrope',sans-serif;font-size:13px;line-height:19px;color:var(--onv);margin-bottom:20px;position:relative;}
+.pact{display:flex;gap:10px;position:relative;}
+.pact button{flex:1;padding:11px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.pact button svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.5;fill:none;}
+.bs{background:transparent;border:1px solid var(--bronze);color:var(--bronze);}
+.bs:hover{background:var(--bronze);color:var(--surface);}
+.bp{background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);}
+.bp:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig{display:flex;align-items:center;gap:7px;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fi{opacity:0;animation:fi .7s ease-out forwards;}
+.d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="scan"></div>
+<div class="db">
+  <header class="fi">
+    <div class="logo">ARCHIVE</div>
+    <nav class="nav"><a href="#">Globo</a><a href="#" class="on">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+  <div class="body">
+    <main class="content">
+      <div class="sh fi d1">
+        <div>
+          <div class="si2">ÍNDICE // ALPHA-7</div>
+          <h1 class="st">Relicário Global</h1>
+          <p class="sd">Artefatos catalogados, discrepâncias históricas e ativos protegidos aguardando processamento ou recuperação em campo.</p>
+        </div>
+        <div class="srch">
+          <input type="text" id="q" placeholder="Busca criptografada...">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card fi d2" data-id="ART-892A">
+          <div class="cimg"><div class="badge">Não Verificado</div></div>
+          <div class="cbody"><div class="cid">#ART-892A</div><h3 class="ct">Cálice Bizantino</h3><div class="co">Origem: Constantinopla (Estimado séc. XI)</div></div>
+        </div>
+        <div class="card wide fi d2" data-id="ART-1156">
+          <div class="cimg"><div class="badge vf">Verificado</div></div>
+          <div class="cbody">
+            <div class="cid">ARQUIVO: INATIVO</div><h3 class="ct">A Tela Florentina</h3>
+            <p class="cdesc">Reportada como perdida durante a enchente de 1966. Interceptação recente sugere transporte via embarcação privada rumo a Gênova. Autenticação pendente de confirmação visual por agente de campo.</p>
+            <div class="crow"><div class="ci"><div class="cl">Status</div><div class="cv">Recuperado 1998</div></div><div class="ci"><div class="cl">Localização</div><div class="cv">Cofre C, Sede</div></div></div>
+          </div>
+        </div>
+        <div class="card fi d3" data-id="CRY-004X">
+          <div class="cimg"><div class="badge">Rastreamento</div></div>
+          <div class="cbody"><div class="cid">#CRY-004X</div><h3 class="ct">Fragmento de Ressonância</h3><div class="co">Sinal Atual: FRACO (Setor 4)</div></div>
+        </div>
+        <div class="card decrypt fi d3">
+          <div class="cimg"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div class="dt2">DESCRIPTOGRAFANDO...</div><div class="bar"></div></div>
+          <div class="cbody"><div class="cid">#UNK-???</div><h3 class="ct" style="color:#6b6560;">Ativo Classificado</h3><div class="co">Nível de Acesso: ÔMEGA</div></div>
+        </div>
+      </div>
+    </main>
+    <aside class="panel" id="panel">
+      <div class="ph">
+        <div class="pht"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>DOSSIÊ ATIVO</div>
+        <svg class="pcl" id="pcl" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+      <div class="pimg"></div>
+      <div class="pmeta"><div class="pbadge">Não Verificado</div><div class="pid">ID: ART-892A</div></div>
+      <h2 class="ptt">Cálice Bizantino</h2>
+      <div class="pgrid">
+        <div class="pf"><div class="pfl">Origem</div><div class="pfv">Constantinopla</div></div>
+        <div class="pf"><div class="pfl">Era Est.</div><div class="pfv">Século XI</div></div>
+        <div class="pf"><div class="pfl">Material</div><div class="pfv">Ouro, Esmalte</div></div>
+        <div class="pf"><div class="pfl">Última Vista</div><div class="pfv">Veneza, 1922</div></div>
+      </div>
+      <p class="pdesc">Acredita-se que fazia parte do tesouro imperial antes do saque de Constantinopla. O cálice apresenta distinto trabalho em esmalte cloisonné representando santos não registrados. Comunicações interceptadas sugerem que ressurgiu em um leilão privado em Veneza em 1922, adquirido por um colecionador desconhecido sob o alias 'Il Corvo'.</p>
+      <div class="pact">
+        <button class="bs"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Log</button>
+        <button class="bp"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Atribuir</button>
+      </div>
+    </aside>
+  </div>
+  <footer class="fi d3">
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+      <div class="ft">Status: CRIPTOGRAFADO</div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+    </div>
+  </footer>
+</div>
+<script>
+const panel=document.getElementById('panel');
+document.querySelectorAll('.card:not(.decrypt)').forEach(c=>c.addEventListener('click',()=>panel.classList.add('on')));
+document.getElementById('pcl').addEventListener('click',()=>panel.classList.remove('on'));
+document.addEventListener('click',e=>{if(!panel.contains(e.target)&&!e.target.closest('.card'))panel.classList.remove('on');});
+document.getElementById('q').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.card').forEach(c=>{const t=(c.querySelector('.ct')?.textContent||'').toLowerCase();const id=(c.querySelector('.cid')?.textContent||'').toLowerCase();c.style.display=(t.includes(q)||id.includes(q))?'':'none';});});
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
+setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+</script>
+</body>
+</html>
