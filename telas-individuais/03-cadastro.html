@@ -10,6 +10,9 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<!-- Integração com API e Sistema de Áudio -->
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
   :root {
     --surface: #131313;
@@ -316,24 +319,29 @@
     transition: opacity 0.4s ease;
   }
 
-  .authenticate-btn:hover {
+  .authenticate-btn:hover:not(:disabled) {
     background: var(--amber);
     border-color: var(--amber);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(255, 191, 0, 0.4);
   }
 
-  .authenticate-btn:hover::before {
+  .authenticate-btn:hover:not(:disabled)::before {
     opacity: 1;
   }
 
-  .authenticate-btn:hover .lock-icon {
+  .authenticate-btn:hover:not(:disabled) .lock-icon {
     stroke: #1a1a1a;
     animation: lockTurn 0.6s ease;
   }
 
-  .authenticate-btn:hover .btn-label {
+  .authenticate-btn:hover:not(:disabled) .btn-label {
     color: #1a1a1a;
+  }
+
+  .authenticate-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 
   @keyframes lockTurn {
@@ -490,6 +498,7 @@
             class="field-input" 
             placeholder="[Insira o nome completo]"
             autocomplete="off"
+            required
           >
           <div class="field-line"></div>
         </div>
@@ -502,6 +511,7 @@
             class="field-input" 
             placeholder="[Insira a designação operacional]"
             autocomplete="off"
+            required
           >
           <div class="field-line"></div>
         </div>
@@ -514,6 +524,7 @@
             class="field-input" 
             placeholder="[Área de atuação primária]"
             autocomplete="off"
+            required
           >
           <div class="field-line"></div>
         </div>
@@ -563,10 +574,15 @@
           input.style.borderBottomColor = '';
         }
       });
+      
+      // Feedback sonoro ao focar
+      input.addEventListener('focus', () => {
+        if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+      });
     });
 
     // Submissão do formulário
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const directorName = document.getElementById('directorName').value.trim();
@@ -575,73 +591,72 @@
 
       // Validação básica
       if (!directorName || !codename || !specialty) {
-        // Shake animation no botão
+        if(window.ArchiveAudio) window.ArchiveAudio.playError();
         authBtn.style.animation = 'shake 0.4s ease';
-        setTimeout(() => {
-          authBtn.style.animation = '';
-        }, 400);
+        setTimeout(() => { authBtn.style.animation = ''; }, 400);
         return;
       }
 
-      // Simular processamento
-      authBtn.style.pointerEvents = 'none';
+      // Estado de processamento
+      authBtn.disabled = true;
       const btnLabel = authBtn.querySelector('.btn-label');
       const originalLabel = btnLabel.textContent;
-      btnLabel.textContent = '...';
+      btnLabel.textContent = 'PROCESSANDO';
 
-      // Efeito de "processando"
-      let dots = 0;
-      const processingInterval = setInterval(() => {
-        dots = (dots + 1) % 4;
-        btnLabel.textContent = '.'.repeat(dots);
-      }, 300);
-
-      // Após 1.5s, mostrar sucesso
-      setTimeout(() => {
-        clearInterval(processingInterval);
-        btnLabel.textContent = originalLabel;
-        authBtn.style.pointerEvents = 'all';
-
-        // Mostrar overlay de sucesso
-        successOverlay.classList.add('active');
-
-        // Salvar dados (simulação)
-        console.log('Diretor cadastrado:', {
-          nome: directorName,
-          codinome: codename,
-          especialidade: specialty
+      try {
+        // 1. Salvar estado local imediatamente para resiliência
+        window.ArchiveAPI.setState({
+          director: {
+            name: directorName,
+            codename: codename,
+            specialty: specialty
+          }
         });
 
-        // Redirecionar após 2s
+        // 2. Tentar registrar no backend (ou mock)
+        const result = await window.ArchiveAPI.createPlayer(directorName, codename, specialty);
+
+        if (result && result.id) {
+          // Sucesso!
+          if(window.ArchiveAudio) window.ArchiveAudio.playSuccess();
+          successOverlay.classList.add('active');
+
+          // Redirecionar para a introdução cinemática após 2 segundos
+          setTimeout(() => {
+            window.location.href = '02-intro.html';
+          }, 2000);
+        } else {
+          throw new Error(result?.error || 'Falha desconhecida no cadastro.');
+        }
+      } catch (err) {
+        if(window.ArchiveAudio) window.ArchiveAudio.playError();
+        
+        const errorMsg = err.message.includes('uso') 
+          ? 'Codinome já em uso. Escolha outro.' 
+          : 'Erro de conexão com a Archive. Tente novamente.';
+          
+        window.ArchiveAPI.notify(errorMsg, 'error');
+        
+        btnLabel.textContent = 'FALHA';
         setTimeout(() => {
-          console.log('Prosseguir para Introdução Cinemática ou Tela Inicial');
-          // window.location.href = 'intro.html';
+          authBtn.disabled = false;
+          btnLabel.textContent = originalLabel;
         }, 2000);
-      }, 1500);
+      }
     });
 
-    // Adicionar animação de shake
+    // Adicionar animação de shake dinamicamente
     const style = document.createElement('style');
     style.textContent = `
       @keyframes shake {
         0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-8px); }
-        75% { transform: translateX(8px); }
+        20% { transform: translateX(-8px); }
+        40% { transform: translateX(8px); }
+        60% { transform: translateX(-4px); }
+        80% { transform: translateX(4px); }
       }
     `;
     document.head.appendChild(style);
-
-    // Efeito de digitação nos placeholders (typewriter sutil)
-    const placeholders = [
-      '[Insira o nome completo]',
-      '[Insira a designação operacional]',
-      '[Área de atuação primária]'
-    ];
-
-    inputs.forEach((input, index) => {
-      const originalPlaceholder = placeholders[index];
-      input.setAttribute('data-placeholder', originalPlaceholder);
-    });
   </script>
 </body>
 </html>

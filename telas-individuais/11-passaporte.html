@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -53,7 +55,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .prt::before{content:'';width:14px;height:1px;background:var(--gold);}
 .prv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);letter-spacing:.05em;}
 .prb{height:4px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-bottom:10px;}
-.prf{height:100%;width:74%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);animation:pg 1.5s ease-out;}
+.prf{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);animation:pg 1.5s ease-out forwards;}
 @keyframes pg{from{width:0}to{width:74%}}
 .prst{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.08em;}
 .prst .hl{color:var(--gold);font-weight:500;}
@@ -82,7 +84,12 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="pass">
   <header>
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#" class="on">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <nav class="nav">
+      <a href="05-globo.html">Globo</a>
+      <a href="15-museu.html">Banco de Dados</a>
+      <a href="#" class="on">Passaporte</a>
+      <a href="07-briefing.html">Diário de Bordo</a>
+    </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -98,17 +105,17 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         </div>
         <div class="photo">
           <svg viewBox="0 0 100 120"><path d="M50 20c-12 0-20 10-20 22 0 8 4 14 8 18-12 4-22 15-22 28v8h68v-8c0-13-10-24-22-28 4-4 8-10 8-18 0-12-8-22-20-22z" fill="#0c0a07"/></svg>
-          <div class="pl">ID: NEXUS-8942-X<br>CLEARANCE: LEVEL 5<br>STATUS: ATIVO</div>
+          <div class="pl">ID: <span id="passportId">NEXUS-8942-X</span><br>CLEARANCE: <span id="passportClearance">LEVEL 5</span><br>STATUS: ATIVO</div>
         </div>
         <div class="ad">
-          <div class="df"><div class="dl">Designação</div><div class="dv">OPERATIVO DE CAMPO</div></div>
-          <div class="df"><div class="dl">Número de ID</div><div class="dv">NEXUS-8942-X</div></div>
-          <div class="df"><div class="dl">Clearance</div><div class="dv">NÍVEL 5 / ÔMEGA</div></div>
+          <div class="df"><div class="dl">Designação</div><div class="dv" id="passportName">OPERATIVO DE CAMPO</div></div>
+          <div class="df"><div class="dl">Número de ID</div><div class="dv" id="passportIdNum">NEXUS-8942-X</div></div>
+          <div class="df"><div class="dl">Clearance</div><div class="dv" id="passportRank">NÍVEL 5 / ÔMEGA</div></div>
         </div>
         <div class="prs">
-          <div class="prh"><div class="prt">Progresso de Exploração</div><div class="prv">74%</div></div>
-          <div class="prb"><div class="prf"></div></div>
-          <div class="prst"><span>REGIÕES: <span class="hl">12/18</span></span><span>VISTOS COLETADOS: <span class="hl">24</span></span></div>
+          <div class="prh"><div class="prt">Progresso de Exploração</div><div class="prv" id="progressVal">0%</div></div>
+          <div class="prb"><div class="prf" id="progressFill"></div></div>
+          <div class="prst"><span>REGIÕES: <span class="hl" id="regionsVal">0/18</span></span><span>VISTOS COLETADOS: <span class="hl" id="visasVal">0</span></span></div>
         </div>
       </div>
       <div class="spine"></div>
@@ -133,9 +140,73 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-document.querySelectorAll('.st:not(.red)').forEach(s=>s.addEventListener('click',function(){this.style.transform='rotate(0) scale(1.1)';this.style.opacity='1';setTimeout(()=>{this.style.transform='';this.style.opacity='';},400);}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await window.ArchiveAPI.init();
+    const state = window.ArchiveAPI.getState();
+    const player = await window.ArchiveAPI.getPlayer();
+    
+    const director = (state && state.director) ? state.director : { name: 'DIRETOR', codename: 'NOVICE', specialty: 'Investigação' };
+    
+    // Atualizar dados do passaporte
+    const nameEl = document.getElementById('passportName');
+    const idNumEl = document.getElementById('passportIdNum');
+    const idPhotoEl = document.getElementById('passportId');
+    const rankEl = document.getElementById('passportRank');
+    const progressValEl = document.getElementById('progressVal');
+    const progressFillEl = document.getElementById('progressFill');
+    const regionsEl = document.getElementById('regionsVal');
+    const visasEl = document.getElementById('visasVal');
+
+    if (player && player.name) {
+      nameEl.textContent = (player.name).toUpperCase();
+      const shortCode = (player.codename || 'X').substring(0, 1).toUpperCase();
+      const idStr = `NEXUS-${String(player.id || 8942).padStart(4, '0')}-${shortCode}`;
+      idNumEl.textContent = idStr;
+      idPhotoEl.textContent = idStr;
+      rankEl.textContent = `${(player.rank || 'DIRETOR INTERINO').toUpperCase()} / NÍVEL ${player.level || 1}`;
+      
+      // Calcular progresso (ex: baseado no nível, nível 10 = 100%)
+      const level = player.level || 1;
+      const progress = Math.min(100, (level / 10) * 100);
+      progressValEl.textContent = `${Math.round(progress)}%`;
+      progressFillEl.style.width = `${progress}%`;
+      
+      const missions = player.missionsCompleted || 0;
+      regionsEl.textContent = `${Math.min(18, 12 + Math.floor(missions / 2))}/18`;
+      visasEl.textContent = String(missions * 3).padStart(2, '0');
+    } else {
+      nameEl.textContent = director.name.toUpperCase();
+      idNumEl.textContent = `NEXUS-8942-${director.codename.substring(0, 1).toUpperCase()}`;
+      idPhotoEl.textContent = `NEXUS-8942-${director.codename.substring(0, 1).toUpperCase()}`;
+    }
+  } catch (err) {
+    console.warn('Falha ao carregar dados do passaporte', err);
+  }
+
+  // Interações
+  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
+    if (a.getAttribute('href') === '#') e.preventDefault();
+    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+    a.classList.add('on');
+  }));
+
+  document.querySelectorAll('.st:not(.red)').forEach(s => s.addEventListener('click', function() {
+    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+    this.style.transform = 'rotate(0) scale(1.1)';
+    this.style.opacity = '1';
+    setTimeout(() => {
+      this.style.transform = '';
+      this.style.opacity = '';
+    }, 400);
+  }));
+
+  setInterval(() => {
+    const n = new Date();
+    document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+  }, 1000);
+});
 </script>
 </body>
 </html>

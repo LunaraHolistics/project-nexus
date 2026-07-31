@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -47,7 +49,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .globed{position:absolute;bottom:28%;left:13%;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#3a352c,#1a150e 70%);border:2px solid rgba(197,160,89,.5);box-shadow:0 14px 30px rgba(0,0,0,.6),inset -8px -8px 20px rgba(0,0,0,.5);transition:box-shadow .4s,transform .4s;cursor:pointer;}
 .globed::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(197,160,89,.2);background:repeating-linear-gradient(0deg,transparent 0,transparent 11px,rgba(197,160,89,.12) 11px,rgba(197,160,89,.12) 12px),repeating-linear-gradient(90deg,transparent 0,transparent 11px,rgba(197,160,89,.12) 11px,rgba(197,160,89,.12) 12px);}
 .globed::after{content:'';position:absolute;left:50%;top:-12px;bottom:-12px;width:2px;background:rgba(197,160,89,.4);transform:translateX(-50%) rotate(20deg);}
-.globed:hover{box-shadow:0 14px 30px rgba(0,0,0,.6),0 0 30px rgba(197,160,89,.4);transform:scale(1.04);}
+.globed:hover{box-shadow:0 14px 30px rgba(0,0,0,.6),0 0 40px rgba(197,160,89,.6);transform:scale(1.06);}
 .globed .stand{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);width:8px;height:24px;background:linear-gradient(90deg,#2a2418,#4a3f28,#2a2418);}
 /* livros */
 .books{position:absolute;bottom:28%;right:16%;width:90px;height:46px;}
@@ -138,7 +140,7 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
     <div class="light"></div>
     <div id="dust"></div>
     <div class="desk"></div>
-    <div class="globed"><div class="stand"></div></div>
+    <div class="globed" id="deskGlobe" title="Abrir Globo Terrestre"><div class="stand"></div></div>
     <div class="books"><i></i><i></i><i></i></div>
     <div class="paper p1"></div>
     <div class="paper p2"></div>
@@ -146,7 +148,12 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
 
   <div class="hdr">
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#" class="on">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <nav class="nav">
+      <a href="../05-globo.html">Globo</a>
+      <a href="../15-museu.html" class="on">Banco de Dados</a>
+      <a href="#">Passaporte</a>
+      <a href="../07-briefing.html">Diário de Bordo</a>
+    </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -158,30 +165,34 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
   <aside class="side">
     <div class="prof">
       <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div><h3>DIRETOR</h3><p>Operativo Nível 5</p></div>
+      <div>
+        <h3 id="pName">DIRETOR</h3>
+        <p id="pCodename">Operativo Nível 5</p>
+        <p id="pCredits" style="color:var(--gold); margin-top:4px;">CR 0</p>
+      </div>
     </div>
     <nav class="snav">
-      <button class="si on"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
-      <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo Terrestre</button>
-      <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
-      <button class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Logbook</button>
+      <a href="../15-museu.html" class="si on"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+      <a href="../05-globo.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo Terrestre</a>
+      <a href="#" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
+      <a href="../07-briefing.html" class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Logbook</a>
     </nav>
-    <button class="btni">Acessar Intel</button>
+    <button class="btni" id="btnIntel">Acessar Intel</button>
   </aside>
 
   <div class="term">
-    <div class="th"><div class="tht"><span class="d"></span>SECURE FEED ACTIVE</div><div class="thid">ID: 884-X9</div></div>
+    <div class="th"><div class="tht"><span class="d"></span>SECURE FEED ACTIVE</div><div class="thid" id="termId">ID: ---</div></div>
     <div class="tbody" id="tbody"></div>
   </div>
 
   <div class="doss">
     <div class="dh">
-      <div><div class="dlab">Archive Global Intelligence</div><div class="dti">Dossiê: VANGUARD</div></div>
+      <div><div class="dlab">Archive Global Intelligence</div><div class="dti" id="dossierTitle">Dossiê: AGUARDANDO</div></div>
       <div class="stamp">CONFIDENCIAL</div>
     </div>
-    <div class="dtx">Relatório de Inteligência localizado em Londres. Alvo principal identificado como Agente 'Vanguard'. Movimentos recentes sugerem infiltração no setor de criptografia parlamentar.</div>
-    <div class="dtx">Status da Missão: Em andamento. Recomenda-se vigilância discreta nível Ômega. Documentação anexa revela conexões com o Protocolo Nexus.</div>
-    <div class="dft"><span>REF: 011-LONDON-B</span><span>••</span></div>
+    <div class="dtx" id="dossierText1">Relatório de Inteligência pendente de sincronização com o servidor central.</div>
+    <div class="dtx" id="dossierText2">Aguardando novas ordens do Comando. Mantenha os canais de comunicação abertos.</div>
+    <div class="dft"><span id="dossierRef">REF: ---</span><span>••</span></div>
   </div>
 
   <button class="journey" id="journey"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>Iniciar Viagem</button>
@@ -196,25 +207,146 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
   </footer>
 </div>
 <script>
-/* poeira na luz */
-const dust=document.getElementById('dust');
-for(let i=0;i<22;i++){const d=document.createElement('div');d.className='dust';d.style.left=(30+Math.random()*40)+'%';d.style.animationDuration=(9+Math.random()*10)+'s';d.style.animationDelay=(Math.random()*10)+'s';d.style.opacity=(.3+Math.random()*.5);dust.appendChild(d);}
-/* terminal: sequência inicial + logs vivos */
-const init=['Acessando logs criptografados...','Descriptografando chave 44-B...','Conexão estabelecida com Whitehall.','Escaneando frequências locais...','Aguardando input do operativo'];
-const live=['Varredura do Setor 7 concluída.','Pacote criptografado recebido de Viena.','Assinatura de Vanguard detectada.','Nó_44 respondeu ao handshake.','Cache de dossiês sincronizado.','Intercepto de áudio arquivado.','Contramedidas em modo passivo.','Rota de courier recalculada.'];
-const tb=document.getElementById('tbody');let li=0;
-function addLine(txt,hi,cur){const el=document.createElement('div');el.className='tl'+(hi?' hi':'');el.style.animationDelay='0s';tb.appendChild(el);
- let k=0;const iv=setInterval(()=>{if(k<txt.length){el.textContent=txt.substring(0,k+1);k++;}else{clearInterval(iv);if(cur)el.innerHTML=txt+'<span class="tcur"></span>';}},26);
- while(tb.children.length>6)tb.removeChild(tb.firstChild);tb.scrollTop=tb.scrollHeight;}
-function runInit(){if(li<init.length){addLine(init[li],li===2,li===init.length-1);li++;setTimeout(runInit,620);}else{setTimeout(runLive,4000);}}
-function runLive(){const m=live[Math.floor(Math.random()*live.length)];
- const last=tb.lastChild;if(last){const c=last.querySelector('.tcur');if(c)c.remove();}
- addLine(m,false,true);setTimeout(runLive,4200+Math.random()*2500);}
-runInit();
-document.getElementById('journey').addEventListener('click',function(){const o=this.innerHTML;this.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Viagem Iniciada';this.style.background='var(--amber)';this.style.color='var(--surface)';addLine('Protocolo de viagem iniciado. Coordenadas travadas.',true,true);setTimeout(()=>{this.innerHTML=o;this.style.background='';this.style.color='';},2200);});
-document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Inicializar API e buscar dados
+  await ArchiveAPI.init();
+  const state = ArchiveAPI.getState();
+  const director = (state && state.director) ? state.director : { name: 'Diretor', codename: 'NOVICE', specialty: 'Investigação' };
+  const player = await ArchiveAPI.getPlayer();
+  
+  // Atualizar Perfil
+  document.getElementById('pName').textContent = (player.name || director.name).toUpperCase();
+  document.getElementById('pCodename').textContent = `${player.codename || director.codename} | ${player.rank || 'Diretor Interino'}`;
+  document.getElementById('pCredits').textContent = `CR ${(player.credits || 0).toLocaleString('pt-BR')}`;
+  document.getElementById('termId').textContent = `ID: ${(player.codename || 'NOVICE').toUpperCase()}-${Math.floor(Math.random()*900)+100}`;
+
+  // 2. Buscar Missão Ativa para o Dossiê
+  const missions = await ArchiveAPI.getMissions();
+  const activeMission = missions.find(m => m.status === 'ativa') || missions[0];
+  
+  if (activeMission) {
+    document.getElementById('dossierTitle').textContent = `Dossiê: ${activeMission.codename}`;
+    document.getElementById('dossierText1').textContent = `Relatório de Inteligência localizado em ${activeMission.location}. Alvo principal: ${activeMission.title}.`;
+    document.getElementById('dossierText2').textContent = `Status da Missão: ${activeMission.status.toUpperCase()}. Prioridade: ${activeMission.priority}. Recomenda-se ação imediata.`;
+    const city = activeMission.location.split(',')[0].trim().toUpperCase();
+    document.getElementById('dossierRef').textContent = `REF: ${String(activeMission.id).padStart(3, '0')}-${city}-A`;
+  }
+
+  // 3. Terminal Dinâmico
+  const initLogs = [
+    `Inicializando ARCHIVE OS v2.0...`,
+    `Autenticando Operativo: ${player.codename || 'NOVICE'}...`,
+    `Conexão com Backend: ${ArchiveAPI.online ? 'ESTABELECIDA' : 'MODO OFFLINE (MOCK ATIVO)'}`,
+    `Carregando módulos de inteligência...`,
+    `Sistema pronto. Aguardando input.`
+  ];
+  
+  const liveLogs = [
+    `Varredura do Setor ${Math.floor(Math.random()*9)+1} concluída.`,
+    `Pacote criptografado recebido de ${activeMission ? activeMission.location.split(',')[0] : 'Viena'}.`,
+    `Assinatura de ${activeMission ? activeMission.codename : 'ALVO DESCONHECIDO'} detectada.`,
+    `Nó_44 respondeu ao handshake.`,
+    `Cache de dossiês sincronizado.`,
+    `Intercepto de áudio arquivado.`,
+    `Contramedidas em modo passivo.`
+  ];
+
+  const tb = document.getElementById('tbody');
+  let li = 0;
+
+  function addLine(txt, hi, cur) {
+    const el = document.createElement('div');
+    el.className = 'tl' + (hi ? ' hi' : '');
+    el.style.animationDelay = '0s';
+    tb.appendChild(el);
+    
+    let k = 0;
+    const iv = setInterval(() => {
+      if (k < txt.length) {
+        el.textContent = txt.substring(0, k + 1);
+        k++;
+      } else {
+        clearInterval(iv);
+        if (cur) el.innerHTML = txt + '<span class="tcur"></span>';
+      }
+    }, 26);
+    
+    while (tb.children.length > 6) tb.removeChild(tb.firstChild);
+    tb.scrollTop = tb.scrollHeight;
+  }
+
+  function runInit() {
+    if (li < initLogs.length) {
+      addLine(initLogs[li], li === 2, li === initLogs.length - 1);
+      li++;
+      setTimeout(runInit, 620);
+    } else {
+      setTimeout(runLive, 4000);
+    }
+  }
+
+  function runLive() {
+    const m = liveLogs[Math.floor(Math.random() * liveLogs.length)];
+    const last = tb.lastChild;
+    if (last) {
+      const c = last.querySelector('.tcur');
+      if (c) c.remove();
+    }
+    addLine(m, false, true);
+    setTimeout(runLive, 4200 + Math.random() * 2500);
+  }
+
+  runInit();
+
+  // 4. Interações
+  document.getElementById('deskGlobe').addEventListener('click', () => {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    window.location.href = '../05-globo.html';
+  });
+
+  document.getElementById('journey').addEventListener('click', function() {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    const target = activeMission ? `../07-briefing.html?id=${activeMission.id}` : '../05-globo.html';
+    
+    this.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Redirecionando...';
+    this.style.background = 'var(--amber)';
+    this.style.color = 'var(--surface)';
+    addLine(`Protocolo de viagem iniciado. Destino: ${activeMission ? activeMission.location : 'Globo Terrestre'}.`, true, true);
+    
+    setTimeout(() => {
+      window.location.href = target;
+    }, 1500);
+  });
+
+  document.getElementById('btnIntel').addEventListener('click', () => {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    window.location.href = '../15-museu.html';
+  });
+
+  document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
+    i.classList.add('on');
+  }));
+
+  // 5. Efeitos Visuais (Poeira)
+  const dustContainer = document.getElementById('dust');
+  for (let i = 0; i < 22; i++) {
+    const d = document.createElement('div');
+    d.className = 'dust';
+    d.style.left = (30 + Math.random() * 40) + '%';
+    d.style.animationDuration = (9 + Math.random() * 10) + 's';
+    d.style.animationDelay = (Math.random() * 10) + 's';
+    d.style.opacity = (.3 + Math.random() * .5);
+    dustContainer.appendChild(d);
+  }
+});
+
+// Relógio do sistema
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+}, 1000);
 </script>
 </body>
 </html>

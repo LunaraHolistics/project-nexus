@@ -2,29 +2,26 @@ const express = require('express');
 const router = express.Router();
 const { getDb } = require('../database');
 
-// Listar artefatos (Museu)
 router.get('/artifacts', (req, res) => {
   const db = getDb();
   try {
     const artifacts = db.prepare('SELECT * FROM artifacts ORDER BY name ASC').all();
-    res.json(artifacts);
+    res.json({ artifacts });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Listar suspeitos (Banco de Dados / Teia)
 router.get('/suspects', (req, res) => {
   const db = getDb();
   try {
     const suspects = db.prepare('SELECT * FROM suspects ORDER BY alias ASC').all();
-    res.json(suspects);
+    res.json({ suspects });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Estatísticas globais (Biblioteca / HQ)
 router.get('/stats', (req, res) => {
   const db = getDb();
   try {
@@ -33,11 +30,20 @@ router.get('/stats', (req, res) => {
     const completedMissions = db.prepare('SELECT COUNT(*) as count FROM missions WHERE status = "concluida"').get().count;
     
     res.json({
-      total_artifacts: totalArtifacts,
-      total_suspects: totalSuspects,
-      completed_missions: completedMissions,
-      system_integrity: '99.8%',
-      active_nodes: 1402
+      stats: {
+        totalArtifacts,
+        categories: [
+          { name: 'Arqueologico', count: Math.floor(totalArtifacts * 0.4) },
+          { name: 'Documental', count: Math.floor(totalArtifacts * 0.3) },
+          { name: 'Artistico', count: Math.floor(totalArtifacts * 0.2) },
+          { name: 'Cientifico', count: Math.floor(totalArtifacts * 0.1) }
+        ],
+        recentAdditions: Math.floor(Math.random() * 5) + 1,
+        totalSuspects,
+        completedMissions,
+        system_integrity: '99.8%',
+        active_nodes: 1402
+      }
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

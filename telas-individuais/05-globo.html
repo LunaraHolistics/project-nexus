@@ -10,6 +10,7 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{
   --surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;
@@ -18,7 +19,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
 
-/* CINEMATIC INTRO COM IMAGENS */
+/* CINEMATIC INTRO */
 .cinematic{position:fixed;inset:0;z-index:9500;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .cinematic.hidden{display:none;}
 .cinematic-slide{position:absolute;inset:0;opacity:0;transition:opacity 2s ease;display:flex;align-items:center;justify-content:center;}
@@ -42,10 +43,10 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 
-.side{position:absolute;left:32px;top:96px;width:320px;z-index:30;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:22px;}
+.side{position:absolute;left:32px;top:96px;width:340px;z-index:30;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:22px;max-height:calc(100vh - 140px);overflow-y:auto;}
 .side h2{font-family:'Libre Caslon Text',serif;font-size:22px;color:var(--gold);margin-bottom:2px;}
 .side .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.1em;margin-bottom:18px;}
-.btnp{width:100%;padding:13px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;margin-bottom:20px;}
+.btnp{width:100%;padding:13px;background:var(--petrol);border:1px solid var(--petrol);color:var(--on);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;margin-bottom:20px;}
 .btnp:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
 .tlabel{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;}
 .tgt{padding:13px;background:rgba(14,14,14,.55);border:.5px solid var(--gold);margin-bottom:10px;cursor:pointer;transition:all .3s;}
@@ -62,7 +63,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .tgt button:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
 .tgt button:disabled{opacity:.4;cursor:not-allowed;}
 
-.panel{position:absolute;right:32px;top:96px;width:300px;z-index:30;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:22px;}
+.panel{position:absolute;right:32px;top:96px;width:320px;z-index:30;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:22px;max-height:calc(100vh - 140px);overflow-y:auto;}
 .panel .ph{display:flex;align-items:center;gap:8px;margin-bottom:18px;}
 .panel .ph .d{width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 8px rgba(255,191,0,0)}}
@@ -74,6 +75,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .panel .mission-detail{display:none;margin-top:8px;padding-top:14px;border-top:.5px solid rgba(197,160,89,.25);}
 .panel .mission-detail.show{display:block;}
 .panel .mission-detail .rv.desc{font-size:12px;line-height:18px;color:var(--onv);}
+.panel .mission-detail .rv.obj-list{font-size:11px;line-height:20px;color:var(--on);margin-top:8px;padding-left:12px;border-left:2px solid var(--gold);}
 .panel .mission-detail .threat{display:inline-block;padding:2px 8px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;margin-top:6px;}
 .panel .mission-detail .threat.BAIXO{background:rgba(143,214,160,.15);color:#8fd6a0;}
 .panel .mission-detail .threat.MÉDIO{background:rgba(255,191,0,.15);color:var(--amber);}
@@ -96,70 +98,43 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="cinematic" id="cinematic">
   <button class="cinematic-skip" onclick="skipCinematic()">PULAR INTRODUÇÃO ›</button>
   
-  <!-- Slide 1 -->
   <div class="cinematic-slide active" data-slide="0">
     <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%23111%22 width=%221920%22 height=%221080%22/><circle cx=%22960%22 cy=%22540%22 r=%22200%22 fill=%22none%22 stroke=%22%23C5A059%22 stroke-width=%222%22 opacity=%220.3%22/></svg>');"></div>
     <div class="cinematic-content">
       <h1 class="cinematic-title">O ARQUITETO</h1>
-      <p class="cinematic-text">
-        Por décadas, ele operou nas sombras. Um colecionador obcecado, 
-        um estrategista genial, um ladrão sem igual.<br><br>
-        Seu nome verdadeiro? Desconhecido. Suas ambições? Claras como cristal.
-      </p>
+      <p class="cinematic-text">Por décadas, ele operou nas sombras. Um colecionador obcecado, um estrategista genial, um ladrão sem igual.<br><br>Seu nome verdadeiro? Desconhecido. Suas ambições? Claras como cristal.</p>
     </div>
   </div>
   
-  <!-- Slide 2 -->
   <div class="cinematic-slide" data-slide="1">
     <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%230a0a0a%22 width=%221920%22 height=%221080%22/><path d=%22M0,540 Q480,480 960,540 T1920,540%22 stroke=%22%23FFBF00%22 stroke-width=%223%22 fill=%22none%22 opacity=%220.4%22/></svg>');"></div>
     <div class="cinematic-content">
       <h1 class="cinematic-title">A REDE INVISÍVEL</h1>
-      <p class="cinematic-text">
-        Ele não age sozinho. Uma rede de agentes, hackers, historiadores 
-        corruptos e mercenários trabalha para ele em todos os continentes.<br><br>
-        Cada roubo é meticulosamente planejado.
-      </p>
+      <p class="cinematic-text">Ele não age sozinho. Uma rede de agentes, hackers, historiadores corruptos e mercenários trabalha para ele em todos os continentes.<br><br>Cada roubo é meticulosamente planejado.</p>
     </div>
   </div>
   
-  <!-- Slide 3 -->
   <div class="cinematic-slide" data-slide="2">
     <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%231a1510%22 width=%221920%22 height=%221080%22/><rect x=%22760%22 y=%22340%22 width=%22400%22 height=%22400%22 fill=%22none%22 stroke=%22%23CD7F32%22 stroke-width=%223%22 opacity=%220.5%22/></svg>');"></div>
     <div class="cinematic-content">
       <h1 class="cinematic-title">OS ARTEFATOS</h1>
-      <p class="cinematic-text">
-        O Cálice de Antioquia desapareceu de Viena.<br>
-        A Máscara Inca foi roubada em Cusco.<br>
-        Manuscritos milenares sumiram de bibliotecas protegidas.<br><br>
-        Não é apenas roubo. É uma reescrita da história.
-      </p>
+      <p class="cinematic-text">O Cálice de Antioquia desapareceu de Viena.<br>A Máscara Inca foi roubada em Cusco.<br>Manuscritos milenares sumiram de bibliotecas protegidas.<br><br>Não é apenas roubo. É uma reescrita da história.</p>
     </div>
   </div>
   
-  <!-- Slide 4 -->
   <div class="cinematic-slide" data-slide="3">
     <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%230d121b%22 width=%221920%22 height=%221080%22/><polygon points=%22960,440 1060,640 860,640%22 fill=%22%23C5A059%22 opacity=%220.4%22/></svg>');"></div>
     <div class="cinematic-content">
       <h1 class="cinematic-title">A ARCHIVE</h1>
-      <p class="cinematic-text">
-        Somos a última linha de defesa. Uma organização secreta dedicada 
-        a proteger o patrimônio da humanidade.<br><br>
-        Agora, você é parte dela.
-      </p>
+      <p class="cinematic-text">Somos a última linha de defesa. Uma organização secreta dedicada a proteger o patrimônio da humanidade.<br><br>Agora, você é parte dela.</p>
     </div>
   </div>
   
-  <!-- Slide 5 -->
   <div class="cinematic-slide" data-slide="4">
     <div class="cinematic-bg" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1920 1080%22><rect fill=%22%23000%22 width=%221920%22 height=%221080%22/><circle cx=%22960%22 cy=%22540%22 r=%22300%22 fill=%22none%22 stroke=%22%23FFBF00%22 stroke-width=%221%22 opacity=%220.6%22/><circle cx=%22960%22 cy=%22540%22 r=%22250%22 fill=%22none%22 stroke=%22%23FFBF00%22 stroke-width=%221%22 opacity=%220.4%22/></svg>');"></div>
     <div class="cinematic-content">
       <h1 class="cinematic-title">A CAÇADA COMEÇA</h1>
-      <p class="cinematic-text">
-        Os pontos luminosos no globo representam atividades suspeitas.<br>
-        Cada um é uma pista. Cada pista, uma oportunidade.<br><br>
-        <strong>Bem-vindo à Archive, Diretor.</strong><br>
-        O tempo está correndo.
-      </p>
+      <p class="cinematic-text">Os pontos luminosos no globo representam atividades suspeitas.<br>Cada um é uma pista. Cada pista, uma oportunidade.<br><br><strong>Bem-vindo à Archive, Diretor.</strong><br>O tempo está correndo.</p>
     </div>
   </div>
   
@@ -173,14 +148,14 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   <header>
     <div class="logo">ARCHIVE</div>
     <nav class="nav">
-      <a href="#" class="on">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a>
+      <a href="#" class="on">Globo</a><a href="../15-museu.html">Banco de Dados</a><a href="#">Passaporte</a><a href="../07-briefing.html">Diário de Bordo</a>
     </nav>
   </header>
 
   <aside class="side">
     <h2>PROJECT NEXUS</h2>
     <div class="sub" id="dirName">Field Operative</div>
-    <button class="btnp" id="btnNewMission" onclick="generateNewMission()">+ Gerar Nova Missão</button>
+    <button class="btnp" id="btnNewMission">+ Gerar Nova Missão</button>
     <div class="tlabel">ALVOS ATIVOS <span id="missionCount">0</span></div>
     <div id="targetsList">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);text-align:center;padding:20px;">SINCRONIZANDO...</div>
@@ -194,8 +169,9 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     <div class="row"><div class="rl">Nível de Ameaça</div><div class="rv al" id="panelThreat">—</div></div>
     <div class="mission-detail" id="missionDetail">
       <div class="row"><div class="rl">Localização</div><div class="rv" id="detailLocation">—</div></div>
-      <div class="row"><div class="rl">Alvo</div><div class="rv" id="detailTarget">—</div></div>
-      <div class="row"><div class="rl">Objetivo</div><div class="rv desc" id="detailObjective">—</div></div>
+      <div class="row"><div class="rl">Fase Atual</div><div class="rv" id="detailPhase">—</div></div>
+      <div class="row"><div class="rl">Descrição</div><div class="rv desc" id="detailDesc">—</div></div>
+      <div class="row"><div class="rl">Objetivos</div><div class="rv obj-list" id="detailObjectives">—</div></div>
       <div class="row"><div class="rl">Recompensa</div><div class="rv al" id="detailReward">—</div></div>
       <span class="threat" id="detailThreat">—</span>
     </div>
@@ -220,18 +196,27 @@ let selectedMission = null;
 let currentSlide = 0;
 let cinematicInterval = null;
 
-// Coordenadas das cidades
+// Coordenadas expandidas para cobrir todas as 20 missões do api.js
 const CITY_COORDS = {
+  'Viena': {lat: 48.2082, lon: 16.3738},
   'Londres': {lat: 51.5074, lon: -0.1278},
+  'Cusco': {lat: -13.5319, lon: -71.9675},
+  'Roma': {lat: 41.9028, lon: 12.4964},
+  'Mumbai': {lat: 19.0760, lon: 72.8777},
   'Tóquio': {lat: 35.6762, lon: 139.6503},
   'Cairo': {lat: 30.0444, lon: 31.2357},
-  'Berlim': {lat: 52.5200, lon: 13.4050},
-  'Viena': {lat: 48.2082, lon: 16.3738},
-  'Istambul': {lat: 41.0082, lon: 28.9784},
-  'Moscou': {lat: 55.7558, lon: 37.6173},
   'Pequim': {lat: 39.9042, lon: 116.4074},
+  'Berlim': {lat: 52.5200, lon: 13.4050},
+  'Paris': {lat: 48.8566, lon: 2.3522},
+  'Atenas': {lat: 37.9838, lon: 23.7275},
   'Nova York': {lat: 40.7128, lon: -74.0060},
-  'Rio de Janeiro': {lat: -22.9068, lon: -43.1729}
+  'Cidade do México': {lat: 19.4326, lon: -99.1332},
+  'Dubai': {lat: 25.2048, lon: 55.2708},
+  'Luxor': {lat: 25.6872, lon: 32.6396},
+  'Bangkok': {lat: 13.7563, lon: 100.5018},
+  'Moscou': {lat: 55.7558, lon: 37.6173},
+  'Rio de Janeiro': {lat: -22.9068, lon: -43.1729},
+  'Istambul': {lat: 41.0082, lon: 28.9784}
 };
 
 // ============================================================
@@ -259,7 +244,6 @@ function skipCinematic() {
   document.getElementById('cinematic').classList.add('hidden');
 }
 
-// Auto-start cinematic
 window.addEventListener('load', () => {
   startCinematic();
   setTimeout(() => skipCinematic(), 30000);
@@ -276,102 +260,52 @@ ren.setSize(innerWidth, innerHeight);
 ren.setPixelRatio(Math.min(devicePixelRatio, 2));
 
 function createContinentTexture() {
-  const w = 1024;
-  const h = 512;
+  const w = 1024, h = 512;
   const canvas = document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
+  canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d');
-
   const ocean = ctx.createLinearGradient(0, 0, 0, h);
-  ocean.addColorStop(0, '#0b1a2e');
-  ocean.addColorStop(0.5, '#0a1628');
-  ocean.addColorStop(1, '#081220');
-  ctx.fillStyle = ocean;
-  ctx.fillRect(0, 0, w, h);
+  ocean.addColorStop(0, '#0b1a2e'); ocean.addColorStop(0.5, '#0a1628'); ocean.addColorStop(1, '#081220');
+  ctx.fillStyle = ocean; ctx.fillRect(0, 0, w, h);
 
   function land(lat, lon, rw, rh, rot) {
     const x = ((lon + 180) / 360) * w;
     const y = ((90 - lat) / 180) * h;
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot || 0);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot || 0);
     const g = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.max(rw, rh));
-    g.addColorStop(0, '#3d6b4f');
-    g.addColorStop(0.6, '#2a5238');
-    g.addColorStop(1, 'rgba(26,58,42,0)');
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, rw, rh, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    g.addColorStop(0, '#3d6b4f'); g.addColorStop(0.6, '#2a5238'); g.addColorStop(1, 'rgba(26,58,42,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, rw, rh, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
-
-  // Massas de terra simplificadas (projeção equirectangular)
-  land(45, -100, 90, 55, -0.2);   // América do Norte
-  land(-15, -60, 55, 70, 0.15);   // América do Sul
-  land(50, 10, 55, 40, 0.1);      // Europa
-  land(5, 20, 70, 80, 0);         // África
-  land(35, 95, 110, 55, 0.1);     // Ásia
-  land(-25, 135, 35, 25, 0);      // Austrália
-  land(75, -45, 40, 30, 0);       // Groenlândia
-  land(65, -150, 30, 20, 0);      // Alaska
-
-  // Grão fino de relevo
+  land(45, -100, 90, 55, -0.2); land(-15, -60, 55, 70, 0.15); land(50, 10, 55, 40, 0.1);
+  land(5, 20, 70, 80, 0); land(35, 95, 110, 55, 0.1); land(-25, 135, 35, 25, 0);
+  land(75, -45, 40, 30, 0); land(65, -150, 30, 20, 0);
   for (let i = 0; i < 800; i++) {
-    const x = Math.random() * w;
-    const y = Math.random() * h;
     ctx.fillStyle = `rgba(61,107,79,${Math.random() * 0.08})`;
-    ctx.fillRect(x, y, 2, 2);
+    ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
   }
-
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
   return texture;
 }
 
-const continentTexture = createContinentTexture();
-
 const globeGeometry = new THREE.SphereGeometry(5, 64, 64);
-const globeMaterial = new THREE.MeshPhongMaterial({
-  map: continentTexture,
-  color: 0xffffff,
-  emissive: 0x0a1420,
-  specular: 0x445566,
-  shininess: 20,
-  transparent: true,
-  opacity: 0.95
-});
+const globeMaterial = new THREE.MeshPhongMaterial({ map: createContinentTexture(), color: 0xffffff, emissive: 0x0a1420, specular: 0x445566, shininess: 20, transparent: true, opacity: 0.95 });
 const globe = new THREE.Mesh(globeGeometry, globeMaterial);
 scene.add(globe);
 
 const wireGeometry = new THREE.SphereGeometry(5.05, 32, 32);
-const wireMaterial = new THREE.MeshBasicMaterial({
-  color: 0xC5A059,
-  wireframe: true,
-  transparent: true,
-  opacity: 0.4
-});
-const wireframe = new THREE.Mesh(wireGeometry, wireMaterial);
-globe.add(wireframe);
+const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xC5A059, wireframe: true, transparent: true, opacity: 0.4 });
+globe.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
 const atmoGeometry = new THREE.SphereGeometry(5.3, 64, 64);
-const atmoMaterial = new THREE.MeshBasicMaterial({
-  color: 0xC5A059,
-  transparent: true,
-  opacity: 0.12,
-  side: THREE.BackSide
-});
-const atmosphere = new THREE.Mesh(atmoGeometry, atmoMaterial);
-scene.add(atmosphere);
+const atmoMaterial = new THREE.MeshBasicMaterial({ color: 0xC5A059, transparent: true, opacity: 0.12, side: THREE.BackSide });
+scene.add(new THREE.Mesh(atmoGeometry, atmoMaterial));
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 const dirLight = new THREE.DirectionalLight(0xfff2d0, 1.6);
-dirLight.position.set(8, 5, 6);
-scene.add(dirLight);
+dirLight.position.set(8, 5, 6); scene.add(dirLight);
 const fillLight = new THREE.DirectionalLight(0x6688aa, 0.35);
-fillLight.position.set(-6, -2, -4);
-scene.add(fillLight);
+fillLight.position.set(-6, -2, -4); scene.add(fillLight);
 
 cam.position.z = 14;
 
@@ -383,33 +317,28 @@ const GLOW_OPACITY = 0.4;
 function latLonToVector3(lat, lon, radius) {
   const phi = (90 - lat) * (Math.PI / 180);
   const theta = (lon + 180) * (Math.PI / 180);
-  return new THREE.Vector3(
-    -(radius * Math.sin(phi) * Math.cos(theta)),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.sin(theta)
-  );
+  return new THREE.Vector3(-(radius * Math.sin(phi) * Math.cos(theta)), radius * Math.cos(phi), radius * Math.sin(phi) * Math.sin(theta));
 }
 
-function getThreatLevel(mission) {
-  if (mission.threat_level) return mission.threat_level;
-  const p = (mission.priority || '').toUpperCase();
+function mapPriorityToThreat(priority) {
+  const p = (priority || '').toUpperCase();
+  if (p === 'CRÍTICA') return 'CRÍTICO';
   if (p === 'ALTA') return 'ELEVADO';
-  if (p === 'MEDIA' || p === 'MÉDIA') return 'MÉDIO';
+  if (p === 'MÉDIA' || p === 'MEDIA') return 'MÉDIO';
   return 'BAIXO';
 }
 
 function getCityFromMission(mission) {
-  const raw = mission.location?.split(',')[0]?.trim() || 'Londres';
-  return CITY_COORDS[raw] ? raw : Object.keys(CITY_COORDS).find(c => mission.location?.includes(c)) || 'Londres';
+  const raw = (mission.location || '').split(',')[0].trim();
+  return CITY_COORDS[raw] ? raw : Object.keys(CITY_COORDS).find(c => (mission.location || '').includes(c)) || 'Londres';
 }
 
 function disposeMarker(m) {
-  globe.remove(m.mesh);
-  globe.remove(m.glow);
-  m.mesh.geometry.dispose();
-  m.mesh.material.dispose();
-  m.glow.geometry.dispose();
-  m.glow.material.dispose();
+  globe.remove(m.mesh); globe.remove(m.glow);
+  if (m.ring) globe.remove(m.ring);
+  m.mesh.geometry.dispose(); m.mesh.material.dispose();
+  m.glow.geometry.dispose(); m.glow.material.dispose();
+  if (m.ring) { m.ring.geometry.dispose(); m.ring.material.dispose(); }
 }
 
 function updateGlobeMarkers() {
@@ -422,32 +351,34 @@ function updateGlobeMarkers() {
     if (!coords) return;
 
     const pos = latLonToVector3(coords.lat, coords.lon, 5.08);
-    const threat = getThreatLevel(mission);
-    const color = threat === 'CRÍTICO' ? 0xff4444 :
-                  threat === 'ELEVADO' ? 0xCD7F32 :
-                  threat === 'MÉDIO' ? 0xFFBF00 : 0x8fd6a0;
+    const threat = mapPriorityToThreat(mission.priority);
+    const color = threat === 'CRÍTICO' ? 0xff3333 : threat === 'ELEVADO' ? 0xCD7F32 : threat === 'MÉDIO' ? 0xFFBF00 : 0x8fd6a0;
 
-    const marker = new THREE.Mesh(
-      new THREE.SphereGeometry(MARKER_RADIUS, 16, 16),
-      new THREE.MeshBasicMaterial({ color })
-    );
-    marker.position.copy(pos);
-    marker.userData = { mission, id: idx };
+    const marker = new THREE.Mesh(new THREE.SphereGeometry(MARKER_RADIUS, 16, 16), new THREE.MeshBasicMaterial({ color }));
+    marker.position.copy(pos); marker.userData = { mission, id: idx };
 
-    const glow = new THREE.Mesh(
-      new THREE.SphereGeometry(GLOW_RADIUS, 16, 16),
-      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: GLOW_OPACITY })
-    );
+    const glow = new THREE.Mesh(new THREE.SphereGeometry(GLOW_RADIUS, 16, 16), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: GLOW_OPACITY }));
     glow.position.copy(pos);
-    glow.userData = { isGlow: true, mission };
 
-    globe.add(marker);
-    globe.add(glow);
-    markers.push({ mesh: marker, glow, basePos: pos, mission });
+    globe.add(marker); globe.add(glow);
+    
+    const markerObj = { mesh: marker, glow, basePos: pos, mission };
+    
+    // Marcadores melhorados: Anel pulsante para missões importantes
+    if (threat === 'CRÍTICO' || threat === 'ELEVADO') {
+      const ringGeo = new THREE.RingGeometry(0.18, 0.22, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.copy(pos);
+      ring.lookAt(new THREE.Vector3(0,0,0));
+      globe.add(ring);
+      markerObj.ring = ring;
+    }
+    
+    markers.push(markerObj);
   });
 }
 
-// Interação
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let px = 0, py = 0;
@@ -467,7 +398,7 @@ function updateMouseNDC(e) {
 function getMarkerIntersections() {
   globe.updateMatrixWorld(true);
   raycaster.setFromCamera(mouse, cam);
-  const targets = markers.flatMap(m => [m.mesh, m.glow]);
+  const targets = markers.flatMap(m => [m.mesh, m.glow, m.ring].filter(Boolean));
   return raycaster.intersectObjects(targets, false);
 }
 
@@ -477,7 +408,7 @@ function updateHover(e) {
   const hit = hits.length > 0 ? hits[0].object : null;
 
   if (hit !== hoveredMarker) {
-    if (hoveredMarker && hoveredMarker.userData.mission) {
+    if (hoveredMarker && hoveredMarker.parent === globe) {
       hoveredMarker.scale.set(1, 1, 1);
     }
     hoveredMarker = hit;
@@ -491,116 +422,82 @@ function updateHover(e) {
 }
 
 cv.addEventListener('pointerdown', e => {
-  isDragging = false;
-  dragStartX = e.clientX;
-  dragStartY = e.clientY;
-  px = e.clientX;
-  py = e.clientY;
+  isDragging = false; dragStartX = e.clientX; dragStartY = e.clientY; px = e.clientX; py = e.clientY;
   cv.setPointerCapture(e.pointerId);
 });
 
 cv.addEventListener('pointermove', e => {
-  const dx = e.clientX - dragStartX;
-  const dy = e.clientY - dragStartY;
-
-  if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
-    isDragging = true;
-    focusRotation = false;
-  }
-
+  const dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
+  if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) { isDragging = true; focusRotation = false; }
   if (isDragging) {
-    try_ += (e.clientX - px) * 0.005;
-    trx += (e.clientY - py) * 0.005;
-    px = e.clientX;
-    py = e.clientY;
+    try_ += (e.clientX - px) * 0.005; trx += (e.clientY - py) * 0.005;
+    px = e.clientX; py = e.clientY;
   }
-
   updateHover(e);
 });
 
 cv.addEventListener('pointerup', e => {
-  cv.releasePointerCapture(e.pointerId);
-  updateMouseNDC(e);
-
+  cv.releasePointerCapture(e.pointerId); updateMouseNDC(e);
   if (!isDragging) {
     const hits = getMarkerIntersections();
     if (hits.length > 0) {
-      const mission = hits[0].object.userData.mission;
-      if (mission) selectMission(mission);
+      const obj = hits[0].object;
+      if (obj.userData && obj.userData.mission) selectMission(obj.userData.mission);
     }
   }
-
-  isDragging = false;
-  updateHover(e);
+  isDragging = false; updateHover(e);
 });
 
-cv.addEventListener('pointerleave', () => {
-  hoveredMarker = null;
-  cv.style.cursor = 'default';
-});
+cv.addEventListener('pointerleave', () => { hoveredMarker = null; cv.style.cursor = 'default'; });
 
 function animateGlobe() {
   requestAnimationFrame(animateGlobe);
-
   if (!isDragging && !focusRotation) try_ += 0.0008;
-
-  ry += (try_ - ry) * 0.08;
-  rx += (trx - rx) * 0.08;
+  ry += (try_ - ry) * 0.08; rx += (trx - rx) * 0.08;
   trx = Math.max(-1.2, Math.min(1.2, trx));
-
-  globe.rotation.y = ry;
-  globe.rotation.x = rx;
+  globe.rotation.y = ry; globe.rotation.x = rx;
 
   const time = performance.now() * 0.003;
   markers.forEach((m, i) => {
     const pulse = Math.sin(time + i * 1.4);
     const scale = 1 + pulse * 0.3;
     m.mesh.scale.set(scale, scale, scale);
-    if (m.glow) {
-      m.glow.scale.set(scale, scale, scale);
-      m.glow.material.opacity = GLOW_OPACITY + pulse * 0.15;
+    m.glow.scale.set(scale, scale, scale);
+    m.glow.material.opacity = GLOW_OPACITY + pulse * 0.15;
+    if (m.ring) {
+      m.ring.scale.set(scale * 1.2, scale * 1.2, scale * 1.2);
+      m.ring.material.opacity = 0.6 - (pulse * 0.3);
     }
   });
-
   ren.render(scene, cam);
 }
-
 animateGlobe();
 
 addEventListener('resize', () => {
-  cam.aspect = innerWidth / innerHeight;
-  cam.updateProjectionMatrix();
+  cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix();
   ren.setSize(innerWidth, innerHeight);
 });
 
 // ============================================================
-// INTEGRAÇÃO COM API - CORRIGIDA
+// INTEGRAÇÃO COM API V2.0
 // ============================================================
 function hasDirector(state) {
-  return state && state.director && (state.director.code || state.director.codename);
+  return state && state.director && (state.director.codename || state.director.code);
 }
 
 async function loadMissions() {
-  // Verifica se diretor está cadastrado
   const state = ArchiveAPI.getState();
-  if(!hasDirector(state)) {
-    // Usa dados mock mesmo assim
-    console.warn('Diretor não cadastrado, usando dados locais');
+  if (hasDirector(state)) {
+    document.getElementById('dirName').textContent = state.director.codename || state.director.code;
   } else {
-    document.getElementById('dirName').textContent = state.director.code || state.director.codename;
+    document.getElementById('dirName').textContent = 'Operativo Não Identificado';
   }
   
-  // Filtra por especialidade se fornecida
   const specialty = ArchiveAPI.getDirectorSpecialty();
   missions = await ArchiveAPI.getMissions(specialty);
   
-  if(missions.length === 0) {
-    // Gera missões mock
-    missions = [
-      {id:1,title:'Operação Typhon',location:'Istambul, Turquia',target:'O Arquiteto',threat_level:'MÉDIO',objective:'Investigar documentos falsificados',reward:{credits:800}},
-      {id:2,title:'Operação Meridian',location:'Cairo, Egito',target:'Agente V',threat_level:'ELEVADO',objective:'Rastrear artefato roubado',reward:{credits:1200}},
-      {id:3,title:'Operação Signal',location:'Londres, Reino Unido',target:'Desconhecido',threat_level:'BAIXO',objective:'Monitorar comunicações',reward:{credits:500}}
-    ];
+  if (!missions || missions.length === 0) {
+    ArchiveAPI.notify('Nenhuma missão encontrada.', 'info');
   }
   
   renderMissions();
@@ -612,37 +509,46 @@ function renderMissions() {
   document.getElementById('missionCount').textContent = missions.length;
   document.getElementById('panelMissions').textContent = missions.length;
   
-  if(missions.length === 0) {
+  if (missions.length === 0) {
     list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--onv);">NENHUMA MISSÃO</div>';
     return;
   }
   
-  const threats = missions.map(m => getThreatLevel(m));
-  const maxThreat = threats.includes('CRÍTICO') ? 'CRÍTICO' : 
-                    threats.includes('ELEVADO') ? 'ELEVADO' : 
-                    threats.includes('MÉDIO') ? 'MÉDIO' : 'BAIXO';
+  const threats = missions.map(m => mapPriorityToThreat(m.priority));
+  const maxThreat = threats.includes('CRÍTICO') ? 'CRÍTICO' : threats.includes('ELEVADO') ? 'ELEVADO' : threats.includes('MÉDIO') ? 'MÉDIO' : 'BAIXO';
   document.getElementById('panelThreat').textContent = '⚠ ' + maxThreat;
   
   list.innerHTML = missions.map((m, idx) => `
-    <div class="tgt" data-idx="${idx}" onclick="selectMissionByIndex(${idx})">
+    <div class="tgt" data-idx="${idx}">
       <div class="tn">${m.title || 'Operação Desconhecida'}</div>
       <div class="to">${m.location || 'Local Desconhecido'}</div>
-      <div class="td">${m.objective || m.description || 'Sem descrição'}</div>
+      <div class="td">${(m.objectives && m.objectives.length > 0) ? m.objectives.slice(0, 2).join(' • ') : (m.description || 'Sem descrição')}</div>
       <div style="margin-bottom:8px;">
-        <span class="threat ${getThreatLevel(m)}">${getThreatLevel(m)}</span>
-        <span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:9px;">+${m.reward?.credits || m.reward_credits || 0} CR</span>
+        <span class="threat ${mapPriorityToThreat(m.priority)}">${mapPriorityToThreat(m.priority)}</span>
+        <span style="color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:9px;">+${m.reward ? m.reward.credits : 0} CR</span>
       </div>
-      <button onclick="acceptMission(${m.id || idx}, event)">ENGATAR</button>
+      <button class="accept-btn" data-id="${m.id}">ENGATAR</button>
     </div>
   `).join('');
-}
+  
+  // Delegação de eventos para hover de áudio e clique
+  list.querySelectorAll('.accept-btn').forEach(btn => {
+    btn.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mId = parseInt(btn.dataset.id);
+      acceptMission(mId, btn);
+    });
+  });
 
-function selectMissionByIndex(idx) {
-  if(missions[idx]) selectMission(missions[idx]);
+  list.querySelectorAll('.tgt').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.idx);
+      if (missions[idx]) selectMission(missions[idx]);
+    });
+    el.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+  });
 }
-
-// Event Listeners para áudio
-document.querySelectorAll('.tgt button').forEach(b => b.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); }));
 
 function selectMission(mission) {
   if(window.ArchiveAudio) ArchiveAudio.playClick();
@@ -654,11 +560,21 @@ function selectMission(mission) {
   const detail = document.getElementById('missionDetail');
   detail.classList.add('show');
   document.getElementById('detailLocation').textContent = mission.location || 'Desconhecido';
-  document.getElementById('detailTarget').textContent = mission.target || '—';
-  document.getElementById('detailObjective').textContent = mission.objective || mission.description || 'Sem descrição';
-  const credits = mission.reward?.credits || mission.reward_credits || 0;
-  document.getElementById('detailReward').textContent = '+' + credits + ' CR';
-  const threat = getThreatLevel(mission);
+  document.getElementById('detailPhase').textContent = `Fase ${mission.phase || 1} de ${mission.totalPhases || 1}`;
+  document.getElementById('detailDesc').textContent = mission.description || 'Sem descrição disponível.';
+  
+  const objList = document.getElementById('detailObjectives');
+  if (mission.objectives && Array.isArray(mission.objectives)) {
+    objList.innerHTML = mission.objectives.map(o => `• ${o}`).join('<br>');
+  } else {
+    objList.textContent = '—';
+  }
+
+  const credits = mission.reward ? mission.reward.credits : 0;
+  const xp = mission.reward ? mission.reward.xp : 0;
+  document.getElementById('detailReward').textContent = `+${xp} XP | +${credits} CR`;
+  
+  const threat = mapPriorityToThreat(mission.priority);
   const threatEl = document.getElementById('detailThreat');
   threatEl.textContent = threat;
   threatEl.className = 'threat ' + threat;
@@ -679,85 +595,85 @@ function selectMission(mission) {
   }
 }
 
-async function acceptMission(missionId, event) {
-  if(event) event.stopPropagation();
-  
+async function acceptMission(missionId, btnElement) {
   const state = ArchiveAPI.getState();
-  if(!hasDirector(state)) {
-    ArchiveAPI.notify('Diretor não cadastrado. Faça login pelo index.html primeiro.', 'error');
+  if (!hasDirector(state)) {
+    if(window.ArchiveAudio) ArchiveAudio.playError();
+    ArchiveAPI.notify('Diretor não cadastrado. Faça login primeiro.', 'error');
     return;
   }
   
-  const btn = event.target;
-  btn.disabled = true;
-  btn.textContent = 'PROCESSANDO...';
+  btnElement.disabled = true;
+  btnElement.textContent = 'PROCESSANDO...';
   
   try {
     await ArchiveAPI.init();
-    if(!ArchiveAPI.playerId) {
+    if (!ArchiveAPI.playerId) {
       await ArchiveAPI.createPlayer(
-        state.director.name,
-        state.director.code || state.director.codename,
+        state.director.name || 'Diretor',
+        state.director.codename || state.director.code || 'NOVICE',
         state.director.specialty || 'Investigação'
       );
     }
     
     const result = await ArchiveAPI.acceptMission(missionId);
-    if(result && result.success) {
+    if (result && result.success) {
       if(window.ArchiveAudio) ArchiveAudio.playSuccess();
       ArchiveAPI.notify('Missão aceita com sucesso!', 'success');
-      btn.textContent = '✓ ACEITA';
-      btn.style.background = 'var(--gold)';
-      btn.style.color = 'var(--surface)';
+      btnElement.textContent = '✓ ACEITA';
+      btnElement.style.background = 'var(--gold)';
+      btnElement.style.color = 'var(--surface)';
       setTimeout(() => loadMissions(), 1500);
     } else {
-      throw new Error('Falha ao aceitar');
+      throw new Error(result.error || 'Falha ao aceitar');
     }
-  } catch(err) {
+  } catch (err) {
     console.error('Erro:', err);
+    if(window.ArchiveAudio) ArchiveAudio.playError();
     ArchiveAPI.notify('Erro ao aceitar missão.', 'error');
-    btn.disabled = false;
-    btn.textContent = 'TENTAR NOVAMENTE';
+    btnElement.disabled = false;
+    btnElement.textContent = 'TENTAR NOVAMENTE';
   }
 }
 
-async function generateNewMission() {
+document.getElementById('btnNewMission').addEventListener('click', async function() {
   if(window.ArchiveAudio) ArchiveAudio.playClick();
-  const btn = document.getElementById('btnNewMission');
+  const btn = this;
   btn.textContent = 'GERANDO...';
   btn.disabled = true;
   
   try {
     const newMission = await ArchiveAPI.generateMission();
-    missions.push(newMission);
-    renderMissions();
-    updateGlobeMarkers();
-    ArchiveAPI.notify('Nova missão gerada.', 'success');
-  } catch(err) {
+    if (newMission) {
+      missions.push(newMission);
+      renderMissions();
+      updateGlobeMarkers();
+      if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+      ArchiveAPI.notify('Nova missão interceptada.', 'success');
+    }
+  } catch (err) {
     console.error('Erro ao gerar missão:', err);
-    ArchiveAPI.notify('Erro ao gerar missão.', 'error');
+    if(window.ArchiveAudio) ArchiveAudio.playError();
+    ArchiveAPI.notify('Falha na geração procedural.', 'error');
   }
   
   btn.textContent = '+ Gerar Nova Missão';
   btn.disabled = false;
-}
+});
 
-// Navegação
 document.querySelectorAll('.nav a').forEach(a => {
   a.addEventListener('click', e => {
-    e.preventDefault();
+    if (a.getAttribute('href') === '#') e.preventDefault();
     document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
     a.classList.add('on');
   });
 });
 
-// Relógio
 setInterval(() => {
   const n = new Date();
   document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
 }, 1000);
 
-// Inicialização
 window.addEventListener('load', () => {
   loadMissions();
 });

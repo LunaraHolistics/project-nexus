@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -105,7 +107,12 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="hq">
   <header class="fi">
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <nav class="nav">
+      <a href="05-globo.html">Globo</a>
+      <a href="15-museu.html">Banco de Dados</a>
+      <a href="11-passaporte.html">Passaporte</a>
+      <a href="07-briefing.html">Diário de Bordo</a>
+    </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -116,17 +123,20 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     <aside class="side fi d1">
       <div class="prof">
         <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div><h3>PROJECT NEXUS</h3><p>Field Operative</p></div>
+        <div>
+          <h3 id="pName">PROJECT NEXUS</h3>
+          <p id="pCodename">Field Operative</p>
+        </div>
       </div>
       <nav class="snav">
-        <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</button>
-        <button class="si on"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Status da Sede</button>
-        <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>Configurações</button>
+        <a href="05-globo.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
+        <a href="15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+        <a href="11-passaporte.html" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
+        <a href="07-briefing.html" class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
+        <a href="#" class="si on"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Status da Sede</a>
+        <a href="17-configuracoes.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>Configurações</a>
       </nav>
-      <button class="btni">Acessar Intel</button>
+      <button class="btni" id="btnIntel">Acessar Intel</button>
     </aside>
     <main class="content">
       <div class="ph fi d1">
@@ -138,22 +148,22 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde da Rede</div></div>
           <div class="mrow"><div class="ml2">Criptografia</div><div class="mv2 hl">AES-256</div></div>
           <div class="mrow"><div class="ml2">Força do Sinal</div><div class="mv2" id="sig">94.2%</div></div>
-          <div class="mrow"><div class="ml2">Nós Ativos</div><div class="mv2" id="nodes">1.402</div></div>
-          <div class="mrow"><div class="ml2">Nível de Ameaça</div><div class="mv2 al">ELEVADO</div></div>
+          <div class="mrow"><div class="ml2">Artefatos no Acervo</div><div class="mv2" id="statArtifacts">0</div></div>
+          <div class="mrow"><div class="ml2">Missões Ativas</div><div class="mv2" id="statMissions">0</div></div>
+          <div class="mrow"><div class="ml2">Nível de Ameaça</div><div class="mv2 al" id="threatLevel">BAIXO</div></div>
         </div>
         <div class="pnl fi d2">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Setores Ativos</div></div>
-          <div class="map">
+          <div class="map" id="activeMap">
             <div class="g"></div>
-            <div class="mk" style="top:35%;left:42%"><div class="ring"></div><div class="dt"></div><div class="lb">LND_01</div></div>
-            <div class="mk" style="top:58%;left:74%"><div class="ring"></div><div class="dt"></div><div class="lb">TKO_44</div></div>
+            <!-- Marcadores injetados via JS -->
           </div>
         </div>
         <div class="pnl fi d3">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Operativos em Campo</div></div>
-          <div class="orow"><div class="oav">AG</div><div class="oinfo"><div class="onm">Agente_Garrison</div><div class="osc">SETOR: EUR_W</div></div><div><div class="ost tr">EM_TRANSITO</div><div class="opg">Ping: 24ms</div></div></div>
-          <div class="orow"><div class="oav">CL</div><div class="oinfo"><div class="onm">Agente_Calloway</div><div class="osc">SETOR: ASI_E</div></div><div><div class="ost st">ESTACIONÁRIO</div><div class="opg">Ping: 102ms</div></div></div>
-          <div class="orow al"><div class="oav">XV</div><div class="oinfo"><div class="onm">Agente_Voss</div><div class="osc">SETOR: DESCONHECIDO</div></div><div><div class="ost lo">COMMS_LOST</div><div class="opg">T-minus 4h</div></div></div>
+          <div id="agentsList">
+            <!-- Agentes injetados via JS -->
+          </div>
         </div>
         <div class="pnl fi d3">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>Feed de Inteligência</div></div>
@@ -172,22 +182,147 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-const FEED=[
- {t:'14:22:09',x:'DECRYPT_SUCCESS',m:'Fragmento de registro recuperado do Setor 7. Aguardando análise.',al:false},
- {t:'13:45:11',x:'SYSTEM_LOG',m:'Varredura de rotina concluída. 0 anomalias detectadas.',al:false},
- {t:'12:10:00',x:'ASSET_UPDATE',m:'Safehouse \'Bravo\' reabastecida e protegida.',al:false},
- {t:'11:05:44',x:'ALERTA',m:'Tentativa de acesso não autorizado no Nó_44. Contramedidas acionadas. Rastreamento iniciado.',al:true},
- {t:'09:30:00',x:'SYSTEM_LOG',m:'Troca de turno registrada. Comando transferido.',al:false}
-];
-const box=document.getElementById('logs');
-FEED.forEach((f,i)=>{const e=document.createElement('div');e.className='le'+(f.al?' al':'');e.style.animationDelay=(i*.45)+'s';e.innerHTML=`<div class="lt">[${f.t}]</div><div class="ltx"><strong>${f.x}:</strong> ${f.m}</div>`;box.appendChild(e);});
-let sig=94.2,nodes=1402;
-setInterval(()=>{sig=Math.max(88,Math.min(99,sig+(Math.random()-.5)*1.4));document.getElementById('sig').textContent=sig.toFixed(1)+'%';},2200);
-setInterval(()=>{if(Math.random()>.6){nodes+=Math.floor(Math.random()*5)-2;document.getElementById('nodes').textContent=nodes.toLocaleString('pt-BR');}},3000);
-document.querySelectorAll('.orow').forEach(r=>r.addEventListener('click',function(){this.style.borderColor='var(--amber)';setTimeout(()=>this.style.borderColor='',500);}));
-document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await ArchiveAPI.init();
+    const player = await ArchiveAPI.getPlayer();
+    const missions = await ArchiveAPI.getMissions();
+    const stats = await ArchiveAPI.getArchiveStats().catch(() => ({ totalArtifacts: 47 }));
+
+    // 1. Atualizar Perfil
+    document.getElementById('pName').textContent = (player.name || 'DIRETOR').toUpperCase();
+    document.getElementById('pCodename').textContent = `${player.codename || 'NOVICE'} | ${player.rank || 'Diretor Interino'}`;
+
+    // 2. Atualizar Estatísticas
+    const activeMissions = missions.filter(m => m.status === 'ativa');
+    document.getElementById('statArtifacts').textContent = stats.totalArtifacts || 0;
+    document.getElementById('statMissions').textContent = activeMissions.length;
+    
+    const threatEl = document.getElementById('threatLevel');
+    const hasCritical = activeMissions.some(m => m.priority === 'CRÍTICA');
+    if (hasCritical) { 
+      threatEl.textContent = 'CRÍTICO'; 
+      threatEl.className = 'mv2 al'; 
+    } else if (activeMissions.length > 0) { 
+      threatEl.textContent = 'ELEVADO'; 
+      threatEl.className = 'mv2 al'; 
+    } else { 
+      threatEl.textContent = 'BAIXO'; 
+      threatEl.className = 'mv2'; 
+    }
+
+    // 3. Gerar Marcadores no Mapa Dinamicamente
+    const mapContainer = document.getElementById('activeMap');
+    let mapHTML = '<div class="g"></div>';
+    activeMissions.forEach((m, i) => {
+      const top = 20 + (m.id * 13) % 60; 
+      const left = 20 + (m.id * 17) % 60;
+      mapHTML += `
+        <div class="mk" style="top:${top}%;left:${left}%">
+          <div class="ring"></div><div class="dt"></div><div class="lb">${m.codename}</div>
+        </div>
+      `;
+    });
+    mapContainer.innerHTML = mapHTML;
+
+    // 4. Gerar Lista de Agentes Dinamicamente
+    const agentsContainer = document.getElementById('agentsList');
+    const numAgents = player.agentsRecruited || 3;
+    let agentsHTML = '';
+    const agentNames = ['Garrison', 'Calloway', 'Voss', 'Rook', 'Sparrow'];
+    const sectors = ['EUR_W', 'ASI_E', 'AME_N', 'AFR_S', 'DESCONHECIDO'];
+    const statuses = [
+      { text: 'EM_TRANSITO', class: 'tr' },
+      { text: 'ESTACIONÁRIO', class: 'st' },
+      { text: 'EM_CAMPO', class: 'tr' }
+    ];
+
+    for(let i = 0; i < Math.min(numAgents, 5); i++) {
+      const name = agentNames[i];
+      const sector = sectors[i];
+      const status = statuses[i % statuses.length];
+      const initials = name.substring(0, 2).toUpperCase();
+      const ping = Math.floor(Math.random() * 150) + 10;
+      
+      agentsHTML += `
+      <div class="orow">
+        <div class="oav">${initials}</div>
+        <div class="oinfo"><div class="onm">Agente_${name}</div><div class="osc">SETOR: ${sector}</div></div>
+        <div><div class="ost ${status.class}">${status.text}</div><div class="opg">Ping: ${ping}ms</div></div>
+      </div>`;
+    }
+    
+    if (numAgents < 3) {
+      agentsHTML += `
+      <div class="orow al">
+        <div class="oav">XX</div>
+        <div class="oinfo"><div class="onm">Agente_Desconhecido</div><div class="osc">SETOR: DESCONHECIDO</div></div>
+        <div><div class="ost lo">COMMS_LOST</div><div class="opg">T-minus 4h</div></div>
+      </div>`;
+    }
+    agentsContainer.innerHTML = agentsHTML;
+
+    // 5. Feed de Inteligência Vivo
+    const box = document.getElementById('logs');
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    
+    const dynamicFeed = [
+      { t: timeStr, x: 'SYSTEM_LOG', m: `Sincronização de perfil concluída para Operativo ${player.codename || 'NOVICE'}.`, al: false },
+      { t: timeStr, x: 'NETWORK', m: `Conexão com backend: ${ArchiveAPI.online ? 'ESTABELECIDA' : 'MODO OFFLINE (MOCK ATIVO)'}`, al: false },
+      { t: '11:05:44', x: 'ALERTA', m: 'Tentativa de acesso não autorizado no Nó_44. Contramedidas acionadas.', al: true },
+      { t: '09:30:00', x: 'SYSTEM_LOG', m: 'Troca de turno registrada. Comando transferido.', al: false }
+    ];
+
+    dynamicFeed.forEach((f, i) => {
+      const e = document.createElement('div');
+      e.className = 'le' + (f.al ? ' al' : '');
+      e.style.animationDelay = (i * 0.45) + 's';
+      e.innerHTML = `<div class="lt">[${f.t}]</div><div class="ltx"><strong>${f.x}:</strong> ${f.m}</div>`;
+      box.appendChild(e);
+    });
+
+    // 6. Event Listeners
+    document.getElementById('btnIntel').addEventListener('click', () => {
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      window.location.href = '15-museu.html';
+    });
+
+    document.querySelectorAll('.orow').forEach(r => r.addEventListener('click', function() {
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      this.style.borderColor = 'var(--amber)';
+      setTimeout(() => this.style.borderColor = '', 500);
+    }));
+
+    document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
+      i.classList.add('on');
+    }));
+
+    document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
+      if (a.getAttribute('href') === '#') e.preventDefault();
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+      a.classList.add('on');
+    }));
+
+  } catch (err) {
+    console.error('Falha ao carregar status da rede', err);
+  }
+});
+
+// Efeitos de fundo contínuos
+let sig = 94.2;
+setInterval(() => {
+  sig = Math.max(88, Math.min(99, sig + (Math.random() - 0.5) * 1.4));
+  document.getElementById('sig').textContent = sig.toFixed(1) + '%';
+}, 2200);
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+}, 1000);
 </script>
 </body>
 </html>

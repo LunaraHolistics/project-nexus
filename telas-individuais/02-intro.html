@@ -19,14 +19,14 @@
   .slide.active { opacity: 1; }
   
   .content { z-index: 10; max-width: 800px; padding: 40px; text-align: center; }
-  .title { font-family: 'Libre Caslon Text', serif; font-size: 40px; color: var(--aged-gold); margin-bottom: 20px; }
-  .narrative { font-size: 18px; line-height: 1.6; }
+  .title { font-family: 'Libre Caslon Text', serif; font-size: 40px; color: var(--aged-gold); margin-bottom: 20px; text-shadow: 0 0 20px rgba(197, 160, 89, 0.3); }
+  .narrative { font-size: 18px; line-height: 1.6; color: var(--on-surface); opacity: 0.9; }
   
-  .skip-btn { position: absolute; top: 40px; right: 40px; padding: 12px 24px; background: transparent; border: 1px solid var(--aged-gold); color: var(--on-surface); cursor: pointer; font-family: 'JetBrains Mono', monospace; z-index: 20; }
-  .skip-btn:hover { background: var(--petrol); }
+  .skip-btn { position: absolute; top: 40px; right: 40px; padding: 12px 24px; background: transparent; border: 1px solid var(--aged-gold); color: var(--on-surface); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; z-index: 20; transition: all 0.3s; }
+  .skip-btn:hover { background: var(--aged-gold); color: #000; }
   
-  .progress-container { position: absolute; bottom: 40px; left: 40px; right: 40px; height: 4px; background: rgba(255,255,255,0.1); z-index: 20; }
-  .progress-bar { height: 100%; width: 0%; background: var(--amber); transition: width 2s linear; }
+  .progress-container { position: absolute; bottom: 40px; left: 40px; right: 40px; height: 2px; background: rgba(255,255,255,0.1); z-index: 20; }
+  .progress-bar { height: 100%; width: 0%; background: var(--amber); transition: width 0.5s linear; box-shadow: 0 0 10px var(--amber); }
 
   @media (max-width: 900px) and (orientation: landscape) {
     .content { padding: 20px; }
@@ -52,7 +52,7 @@
   <div class="slide" id="slide4">
     <div class="content"><h1 class="title">Início</h1><p class="narrative">Sua investigação começa agora.</p></div>
   </div>
-  <button class="skip-btn" onclick="finish()">PULAR INTRODUÇÃO</button>
+  <button class="skip-btn" id="skipBtn">PULAR INTRODUÇÃO ›</button>
   <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
 </div>
 
@@ -60,25 +60,44 @@
   let currentSlide = 0;
   const slides = document.querySelectorAll('.slide');
   const progressBar = document.getElementById('progressBar');
-  
-  function finish() { window.location.href = '../index.html'; }
+  let slideInterval;
+
+  function finish() {
+    if (window.ArchiveAudio) window.ArchiveAudio.playClick();
+    
+    // Roteamento inteligente baseado no estado do jogador
+    const state = window.ArchiveAPI ? window.ArchiveAPI.getState() : null;
+    const targetUrl = (state && state.director && state.director.codename) ? '19-hq-atrium.html' : 'index.html';
+    
+    window.location.href = targetUrl;
+  }
 
   function nextSlide() {
     slides[currentSlide].classList.remove('active');
     currentSlide++;
-    if(currentSlide < slides.length) {
+    
+    if (currentSlide < slides.length) {
       slides[currentSlide].classList.add('active');
-      progressBar.style.width = (currentSlide * 25) + '%';
-      setTimeout(nextSlide, 5000);
+      const progress = (currentSlide / (slides.length - 1)) * 100;
+      progressBar.style.width = progress + '%';
+      
+      if (window.ArchiveAudio) window.ArchiveAudio.playTransition();
+      
+      slideInterval = setTimeout(nextSlide, 5000);
     } else {
       finish();
     }
   }
 
-  window.onload = () => {
-    if(window.ArchiveAudio) ArchiveAudio.playTransition();
-    setTimeout(nextSlide, 5000);
-  };
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.ArchiveAudio) window.ArchiveAudio.playStartup();
+    slideInterval = setTimeout(nextSlide, 5000);
+  });
+
+  document.getElementById('skipBtn').addEventListener('click', () => {
+    clearTimeout(slideInterval);
+    finish();
+  });
 </script>
 </body>
 </html>

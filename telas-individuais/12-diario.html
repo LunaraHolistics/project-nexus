@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -63,7 +65,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .ebd{font-family:'Manrope',sans-serif;font-size:14px;line-height:21px;color:#3a3530;margin-bottom:14px;}
 .pol{display:inline-block;background:#fff;padding:10px 10px 32px;box-shadow:0 6px 18px rgba(0,0,0,.2);transform:rotate(-2deg);margin-top:14px;transition:transform .3s;}
 .pol:hover{transform:rotate(0) translateY(-2px);}
-.pol .pi{width:190px;height:130px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;}
+.pol .pi{width:190px;height:130px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;}
 .pol .pi::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,248,220,.12),transparent 60%);}
 .pol .pc{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:12px;color:#1a1a1a;text-align:center;margin-top:10px;}
 .decrypt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;margin-top:18px;padding:10px 12px;background:rgba(197,160,89,.08);border-left:2px solid var(--gold);}
@@ -108,7 +110,12 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="lb">
   <header>
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
+    <nav class="nav">
+      <a href="05-globo.html">Globo</a>
+      <a href="15-museu.html">Banco de Dados</a>
+      <a href="11-passaporte.html">Passaporte</a>
+      <a href="#" class="on">Diário de Bordo</a>
+    </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -119,15 +126,18 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     <aside class="side">
       <div class="prof">
         <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div><h3>PROJECT NEXUS</h3><p>Field Operative</p></div>
+        <div>
+          <h3 id="pName">PROJECT NEXUS</h3>
+          <p id="pCodename">Field Operative</p>
+        </div>
       </div>
       <nav class="snav">
-        <button class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
-        <button class="si on"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</button>
+        <a href="05-globo.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
+        <a href="15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+        <a href="11-passaporte.html" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
+        <a href="#" class="si on"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
       </nav>
-      <button class="btni">Acessar Intel</button>
+      <button class="btni" id="btnIntel">Acessar Intel</button>
     </aside>
     <main class="content">
       <div class="phd">
@@ -135,25 +145,28 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <div class="coords">LAT: 51.5074° N | LON: 0.1278° W</div>
       </div>
       <div class="tl">
+        <!-- Bloco 1: Artefato -->
         <div class="te">
           <div class="td"></div>
-          <div class="ed">14.10.1984 — 23:45</div>
+          <div class="ed" id="date1">--.--.---- --:--</div>
           <div class="ec">
-            <div class="eh"><h3 class="et">Registro Recuperado</h3><div class="eb">Evidência #402</div></div>
-            <p class="ebd">Encontrado oculto no fundo falso de um umidor de mogno. A cifra corresponde ao intercepto de Berlim. Várias páginas faltando.</p>
-            <div class="pol"><div class="pi"></div><div class="pc">Exhibit A — Fundo Falso</div></div>
-            <div class="decrypt">Descriptografia em andamento... Tempo estimado: 48h.</div>
+            <div class="eh"><h3 class="et" id="title1">Registro Recuperado</h3><div class="eb" id="badge1">Categoria: ---</div></div>
+            <p class="ebd" id="desc1">Carregando dados do acervo...</p>
+            <div class="pol"><div class="pi" id="img1"></div><div class="pc" id="cap1">Exhibit A</div></div>
+            <div class="decrypt" id="decrypt1">Descriptografia em andamento... Tempo estimado: 48h.</div>
           </div>
         </div>
+        
+        <!-- Bloco 2: Intercepto de Áudio -->
         <div class="te">
           <div class="td act"></div>
-          <div class="ed">15.10.1984 — 04:12</div>
+          <div class="ed" id="date2">--.--.---- --:--</div>
           <div class="ec">
-            <div class="eh"><h3 class="et">Intercepto de Áudio</h3></div>
+            <div class="eh"><h3 class="et" id="title2">Intercepto de Áudio</h3></div>
             <div class="acard">
               <div class="ah"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg><div class="at">Intercepto de Áudio</div></div>
-              <div class="am">FREQ: 144.2 MHz | DUR: 00:02:14</div>
-              <div class="aq">"...o pacote está se movendo em direção às docas. Repito, a coruja deixou o ninho..."</div>
+              <div class="am" id="am2">FREQ: --- MHz | MISSÃO: ---</div>
+              <div class="aq" id="aq2">"Aguardando sincronização da missão..."</div>
               <div style="display:flex;align-items:center;">
                 <div class="aw" id="aw"></div>
                 <div class="ap" id="ap"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
@@ -161,17 +174,19 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
             </div>
           </div>
         </div>
+        
+        <!-- Bloco 3: Suspeito -->
         <div class="te">
           <div class="td"></div>
-          <div class="ed">16.10.1984 — 18:00</div>
+          <div class="ed" id="date3">--.--.---- --:--</div>
           <div class="ec">
-            <div class="eh"><h3 class="et">Suspeito Identificado</h3><div class="eb">Alias: O Relojoeiro</div></div>
+            <div class="eh"><h3 class="et">Suspeito Identificado</h3><div class="eb" id="badge3">Alias: ---</div></div>
             <div class="srow">
               <div class="sph"><svg viewBox="0 0 100 120"><path d="M50 20c-12 0-20 10-20 22 0 8 4 14 8 18-12 4-22 15-22 28v8h68v-8c0-13-10-24-22-28 4-4 8-10 8-18 0-12-8-22-20-22z" fill="#0c0a07"/></svg></div>
               <div class="sda">
-                <div class="sf"><div class="sfl">Status</div><div class="sfv al">FORAGIDO</div></div>
-                <div class="sf"><div class="sfl">Local</div><div class="sfv">Visto pela última vez perto da Estação Victoria.</div></div>
-                <div class="sf"><div class="sfl">Notas</div><div class="sfv">Especialista em dispositivos mecânicos. Provavelmente carrega a chave primária. Abordar com extrema cautela.</div></div>
+                <div class="sf"><div class="sfl">Status</div><div class="sfv al" id="status3">---</div></div>
+                <div class="sf"><div class="sfl">Local</div><div class="sfv" id="loc3">Carregando...</div></div>
+                <div class="sf"><div class="sfl">Notas</div><div class="sfv" id="notes3">Carregando...</div></div>
               </div>
             </div>
           </div>
@@ -180,9 +195,9 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     </main>
   </div>
   <div class="tbar">
-    <div class="tbl">Início: 01.10.1984</div>
+    <div class="tbl">Início: <span id="startDate">--.--.----</span></div>
     <div class="ttr"><div class="tpr"></div><div class="tmk" style="left:10%"></div><div class="tmk" style="left:35%"></div><div class="tmk act" style="left:65%"></div><div class="tmk" style="left:90%"></div></div>
-    <div class="tbl">Atual: 16.10.1984</div>
+    <div class="tbl">Atual: <span id="currentDate">--.--.----</span></div>
     <div class="tbl">Fim: Classificado</div>
   </div>
   <footer>
@@ -195,13 +210,107 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-const aw=document.getElementById('aw');for(let i=0;i<24;i++){const b=document.createElement('div');b.className='b';b.style.animationDelay=(i*.06)+'s';aw.appendChild(b);}
-let playing=true;
-document.getElementById('ap').addEventListener('click',function(){playing=!playing;aw.querySelectorAll('.b').forEach(b=>b.style.animationPlayState=playing?'running':'paused');this.querySelector('svg').innerHTML=playing?'<polygon points="5 3 19 12 5 21 5 3"/>':'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';});
-document.querySelectorAll('.tmk').forEach(m=>m.addEventListener('click',function(){document.querySelectorAll('.tmk').forEach(x=>x.classList.remove('act'));this.classList.add('act');}));
-document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+// Inicialização das ondas de áudio
+const aw = document.getElementById('aw');
+for(let i = 0; i < 24; i++) {
+  const b = document.createElement('div');
+  b.className = 'b';
+  b.style.animationDelay = (i * 0.06) + 's';
+  aw.appendChild(b);
+}
+
+let playing = true;
+document.getElementById('ap').addEventListener('click', function() {
+  playing = !playing;
+  aw.querySelectorAll('.b').forEach(b => b.style.animationPlayState = playing ? 'running' : 'paused');
+  this.querySelector('svg').innerHTML = playing ? '<polygon points="5 3 19 12 5 21 5 3"/>' : '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await ArchiveAPI.init();
+    const player = await ArchiveAPI.getPlayer();
+    const artifacts = await ArchiveAPI.getArtifacts();
+    const missions = await ArchiveAPI.getMissions();
+    
+    // Atualizar Perfil
+    document.getElementById('pName').textContent = (player.name || 'DIRETOR').toUpperCase();
+    document.getElementById('pCodename').textContent = `${player.codename || 'NOVICE'} | ${player.rank || 'Diretor Interino'}`;
+
+    // Datas Relativas
+    const now = new Date();
+    const format = (d) => `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`;
+    const d1 = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const d2 = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+    const d3 = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
+    
+    document.getElementById('date1').textContent = `${format(d1)} — 23:45`;
+    document.getElementById('date2').textContent = `${format(d2)} — 04:12`;
+    document.getElementById('date3').textContent = `${format(d3)} — 18:00`;
+    document.getElementById('startDate').textContent = format(d1);
+    document.getElementById('currentDate').textContent = format(now);
+
+    // Bloco 1: Artefato
+    const artifact = artifacts[0] || { name: 'Artefato Desconhecido', origin: 'Desconhecida', category: 'Não Catalogado', id: 1 };
+    document.getElementById('title1').textContent = `Registro: ${artifact.name}`;
+    document.getElementById('badge1').textContent = `Categoria: ${artifact.category}`;
+    document.getElementById('desc1').textContent = `Recuperado em ${artifact.origin}. Apresenta anomalias estruturais que exigem análise profunda no laboratório da Archive. Várias páginas do relatório original estão faltando.`;
+    document.getElementById('img1').style.backgroundImage = `url('https://image.pollinations.ai/prompt/${encodeURIComponent(artifact.name + ', polaroid photo, cinematic, dark archive')}&width=200&height=150&nologo=true&seed=${artifact.id}')`;
+    document.getElementById('cap1').textContent = `Exhibit A — ${artifact.origin}`;
+
+    // Bloco 2: Áudio (Missão)
+    const mission = missions[0] || { codename: 'OP', description: 'Sem dados' };
+    document.getElementById('title2').textContent = `Intercepto: ${mission.codename}`;
+    document.getElementById('am2').textContent = `FREQ: ${100 + Math.floor(Math.random()*50)}.${Math.floor(Math.random()*9)} MHz | MISSÃO: ${mission.codename}`;
+    document.getElementById('aq2').textContent = `"${mission.description}"`;
+
+    // Bloco 3: Suspeito
+    const suspects = [
+      { alias: 'O Relojoeiro', status: 'Foragido', last_location: 'Londres', notes: 'Especialista em dispositivos mecânicos. Provavelmente carrega a chave primária.' },
+      { alias: 'Agente V', status: 'Desaparecido', last_location: 'Genebra', notes: 'Ex-operador de inteligência russa.' },
+      { alias: 'Victor Volkov', status: 'Vigilância', last_location: 'Tóquio', notes: 'Suspeito de lavagem de artefatos.' }
+    ];
+    const suspect = suspects[0];
+    document.getElementById('badge3').textContent = `Alias: ${suspect.alias}`;
+    document.getElementById('status3').textContent = suspect.status.toUpperCase();
+    document.getElementById('loc3').textContent = `Visto pela última vez em ${suspect.last_location}.`;
+    document.getElementById('notes3').textContent = suspect.notes;
+
+  } catch (err) {
+    console.warn('Falha ao carregar diário', err);
+  }
+
+  // Event Listeners de UI
+  document.getElementById('btnIntel').addEventListener('click', () => {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    window.location.href = '15-museu.html';
+  });
+
+  document.querySelectorAll('.tmk').forEach(m => m.addEventListener('click', function() {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    document.querySelectorAll('.tmk').forEach(x => x.classList.remove('act'));
+    this.classList.add('act');
+  }));
+
+  document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
+    i.classList.add('on');
+  }));
+
+  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
+    if (a.getAttribute('href') === '#') e.preventDefault();
+    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+    a.classList.add('on');
+  }));
+});
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+}, 1000);
 </script>
 </body>
 </html>

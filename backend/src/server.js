@@ -10,12 +10,14 @@ const archiveRouter = require('./routes/archive');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(helmet());
 const ALLOWED_ORIGINS = [
   'http://localhost:5500',
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
+  'http://localhost:8080', // Adicionado para compatibilidade com outros servidores de dev
+  'http://127.0.0.1:8080'
 ];
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || ALLOWED_ORIGINS.includes(origin)) {
@@ -28,39 +30,35 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100
 });
 app.use('/api/', limiter);
 
-// Routes
 app.use('/api/missions', missionsRouter);
 app.use('/api/player', playerRouter);
 app.use('/api/archive', archiveRouter);
 
-// Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'online',
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '2.0.0'
   });
 });
 
-// Initialize database and start server
 async function start() {
   try {
     await initDatabase();
     console.log('✅ Database initialized');
     
     app.listen(PORT, () => {
-      console.log(`🎮 PROJECT NEXUS API running on port ${PORT}`);
-      console.log(` Health check: http://localhost:${PORT}/api/health`);
+      console.log(`🎮 PROJECT NEXUS API v2.0 running on port ${PORT}`);
+      console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
     });
   } catch (error) {
-    console.error(' Failed to start server:', error);
+    console.error('❌ Failed to start server:', error);
     process.exit(1);
   }
 }

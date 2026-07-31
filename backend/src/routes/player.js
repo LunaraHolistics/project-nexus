@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { getDb } = require('../database');
 
-// Criar novo jogador
 router.post('/', (req, res) => {
   const db = getDb();
   const { name, codename, specialty } = req.body;
@@ -13,7 +12,7 @@ router.post('/', (req, res) => {
 
   try {
     const stmt = db.prepare('INSERT INTO players (name, codename, specialty) VALUES (?, ?, ?)');
-    const info = stmt.run(name, codename, specialty || 'Não especificada');
+    const info = stmt.run(name, codename, specialty || 'Investigação');
     const player = db.prepare('SELECT * FROM players WHERE id = ?').get(info.lastInsertRowid);
     res.status(201).json(player);
   } catch (err) {
@@ -24,7 +23,6 @@ router.post('/', (req, res) => {
   }
 });
 
-// Obter perfil do jogador
 router.get('/:id', (req, res) => {
   const db = getDb();
   try {
@@ -44,7 +42,41 @@ router.get('/:id', (req, res) => {
   }
 });
 
-// Comprar upgrade
+// Atualizar dados do jogador (usado pelo frontend savePlayer)
+router.put('/:id', (req, res) => {
+  const db = getDb();
+  const { id } = req.params;
+  const data = req.body;
+  
+  try {
+    const stmt = db.prepare(`
+      UPDATE players SET 
+        name = COALESCE(?, name),
+        codename = COALESCE(?, codename),
+        level = COALESCE(?, level),
+        xp = COALESCE(?, xp),
+        xp_to_next = COALESCE(?, xp_to_next),
+        credits = COALESCE(?, credits),
+        rank = COALESCE(?, rank),
+        missions_completed = COALESCE(?, missions_completed),
+        missions_failed = COALESCE(?, missions_failed),
+        artifacts_recovered = COALESCE(?, artifacts_recovered),
+        agents_recruited = COALESCE(?, agents_recruited)
+      WHERE id = ?
+    `);
+    
+    stmt.run(
+      data.name, data.codename, data.level, data.xp, data.xpToNext, 
+      data.credits, data.rank, data.missionsCompleted, data.missionsFailed, 
+      data.artifactsRecovered, data.agentsRecruited, id
+    );
+    
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post('/:id/upgrades', (req, res) => {
   const db = getDb();
   const { id } = req.params;
@@ -52,15 +84,15 @@ router.post('/:id/upgrades', (req, res) => {
 
   try {
     const upgrade = db.prepare('SELECT * FROM upgrades WHERE id = ?').get(upgrade_id);
-    if (!upgrade) return res.status(404).json({ error: 'Upgrade não encontrado.' });
+    if (!upgrade) return res.status(404).json({ success: false, error: 'Upgrade não encontrado.' });
 
     const player = db.prepare('SELECT * FROM players WHERE id = ?').get(id);
     if (player.credits < upgrade.cost) {
-      return res.status(400).json({ error: 'Créditos insuficientes.' });
+      return res.status(400).json({ success: false, error: 'Créditos insuficientes.' });
     }
 
     const existing = db.prepare('SELECT * FROM player_upgrades WHERE player_id = ? AND upgrade_id = ?').get(id, upgrade_id);
-    if (existing) return res.status(400).json({ error: 'Upgrade já adquirido.' });
+    if (existing) return res.status(400).json({ success: false, error: 'Upgrade já adquirido.' });
 
     const transaction = db.transaction(() => {
       db.prepare('UPDATE players SET credits = credits - ? WHERE id = ?').run(upgrade.cost, id);
@@ -70,7 +102,7 @@ router.post('/:id/upgrades', (req, res) => {
 
     res.json({ success: true, message: `${upgrade.name} desbloqueado.` });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 

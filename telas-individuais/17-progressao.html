@@ -138,7 +138,10 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   <header>
     <div class="logo">ARCHIVE</div>
     <nav class="nav">
-      <a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a>
+      <a href="05-globo.html">Globo</a>
+      <a href="15-museu.html">Banco de Dados</a>
+      <a href="11-passaporte.html">Passaporte</a>
+      <a href="12-diario.html" class="on">Diário de Bordo</a>
     </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -152,35 +155,36 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
       <div class="ph">
         <div><h1 class="pt">Progressão da Agência</h1><div class="ps">Status Operacional: Nível <span id="statusLevel">1</span> Liberado</div></div>
         <div class="res">
-          <div class="ri"><div class="rl">Recursos Operacionais</div><div class="rv">Créditos: <span id="cred">1.000</span></div></div>
+          <div class="ri"><div class="rl">Recursos Operacionais</div><div class="rv">Créditos: <span id="cred">0</span></div></div>
           <div class="ri"><div class="rl">Nível de Agência</div><div class="rv">Influência: Nível <span id="infLevel">1</span></div></div>
         </div>
       </div>
       
       <div class="tree" id="tree">
         <div class="grid"></div>
-        <div class="tag">[ SYSTEM_MAP_v0.84 ]<br><b>READY FOR DATA INPUT</b></div>
+        <div class="tag">[ SYSTEM_MAP_v2.0 ]<br><b>SYNCING WITH ARCHIVE API...</b></div>
         <svg id="lines"></svg>
         
-        <div class="node center unlocked" data-u="nexus" style="left:50%;top:50%;animation-delay:.1s">
+        <!-- Os nós serão atualizados dinamicamente via JS, mas mantemos a estrutura base -->
+        <div class="node center unlocked" data-u="nexus" data-id="0" style="left:50%;top:50%;animation-delay:.1s">
           <div class="nc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/></svg></div>
           <div class="nl">Nexus Core</div>
         </div>
-        <div class="node unlocked" data-u="tech" style="left:22%;top:26%;animation-delay:.25s">
+        <div class="node locked" data-u="tech" data-id="1" style="left:22%;top:26%;animation-delay:.25s">
           <div class="nc"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></div>
-          <div class="nl">Tecnologia</div>
+          <div class="nl">Carregando...</div>
         </div>
-        <div class="node avail" data-u="informants" style="left:78%;top:26%;animation-delay:.4s">
+        <div class="node locked" data-u="informants" data-id="2" style="left:78%;top:26%;animation-delay:.4s">
           <div class="nc"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <div class="nl">Informantes</div>
+          <div class="nl">Carregando...</div>
         </div>
-        <div class="node locked" data-u="analysis" style="left:22%;top:74%;animation-delay:.55s">
+        <div class="node locked" data-u="analysis" data-id="3" style="left:22%;top:74%;animation-delay:.55s">
           <div class="nc"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
-          <div class="nl">Análise</div>
+          <div class="nl">Carregando...</div>
         </div>
-        <div class="node locked" data-u="resources" style="left:78%;top:74%;animation-delay:.7s">
+        <div class="node locked" data-u="resources" data-id="99" style="left:78%;top:74%;animation-delay:.7s">
           <div class="nc"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
-          <div class="nl">Recursos</div>
+          <div class="nl">Em Desenvolvimento</div>
         </div>
       </div>
     </main>
@@ -217,204 +221,268 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 
 <script>
 // ============================================================
-// DADOS E ESTADO
+// ESTADO GLOBAL
 // ============================================================
-const UPGRADES = {
-  nexus: {id:1, t:'Nexus Core', d:'Sistema central de processamento e coordenação de todas as operações da ARCHIVE. Permite acesso a missões de alto nível e integração de dados globais em tempo real.', cost:'—', req:'Base', st:'unlocked', price:0},
-  tech: {id:2, t:'Criptografia Quântica', d:'Melhora drasticamente a segurança de todas as comunicações de campo, reduzindo o tempo de interceptação inimiga em 45%. Transmissão de dados classificados sem risco de comprometimento.', cost:'4.500 CR', req:'Rede II', st:'unlocked', price:4500},
-  informants: {id:3, t:'Rede de Informantes', d:'Expande a rede de inteligência global, permitindo acesso a missões de infiltração na Eurásia. Aumenta a cobertura de vigilância em 30% e revela contatos locais ocultos.', cost:'3.200 CR', req:'Agência Nível 2', st:'avail', price:3200},
-  analysis: {id:4, t:'Análise Preditiva', d:'Sistema de IA avançado que prevê movimentos de alvos com 78% de precisão. Requer infraestrutura de processamento de alto nível e acesso ao Nexus Core expandido.', cost:'6.800 CR', req:'Tecnologia III', st:'locked', price:6800},
-  resources: {id:5, t:'Logística Global', d:'Estabelece rotas de suprimento seguras em 12 países. Reduz o tempo de deslocamento de agentes em 40% e habilita operações simultâneas em múltiplos teatros.', cost:'5.500 CR', req:'Informantes III', st:'locked', price:5500}
-};
-
-let credits = 1000;
-let influenceLevel = 1;
-let xp = 0;
-let purchasedUpgrades = new Set([1, 2]); // nexus e tech já comprados por padrão no mock
-let sel = null;
+let playerData = {};
+let upgradesData = [];
+let selectedUpgradeId = null;
 
 const tree = document.getElementById('tree');
 const svg = document.getElementById('lines');
+// Mapeamento das conexões visuais da árvore
 const links = [['nexus','tech'],['nexus','informants'],['nexus','analysis'],['nexus','resources']];
 
 // ============================================================
 // FUNÇÕES DE RENDERIZAÇÃO
 // ============================================================
 function ctr(u){
-  const n = tree.querySelector(`[data-u="${u}"]`), c = n.querySelector('.nc');
-  const tr = tree.getBoundingClientRect(), r = c.getBoundingClientRect();
-  return {x:r.left-tr.left+r.width/2, y:r.top-tr.top+r.height/2};
+  const n = tree.querySelector(`[data-u="${u}"]`);
+  if (!n) return {x:0, y:0};
+  const c = n.querySelector('.nc');
+  const tr = tree.getBoundingClientRect();
+  const r = c.getBoundingClientRect();
+  return {x: r.left - tr.left + r.width/2, y: r.top - tr.top + r.height/2};
 }
 
-function draw(){
+function drawLines(){
   svg.innerHTML = '';
   links.forEach(([a,b]) => {
-    const p1 = ctr(a), p2 = ctr(b);
-    const un = UPGRADES[a].st === 'unlocked' && UPGRADES[b].st === 'unlocked';
+    const p1 = ctr(a);
+    const p2 = ctr(b);
+    if (p1.x === 0 && p1.y === 0) return; // Segurança caso o nó não exista
+    
+    // Verifica se ambos os nós estão desbloqueados para animar a linha
+    const nodeA = tree.querySelector(`[data-u="${a}"]`);
+    const nodeB = tree.querySelector(`[data-u="${b}"]`);
+    const isFlow = nodeA && nodeB && nodeA.classList.contains('unlocked') && nodeB.classList.contains('unlocked');
+    
     const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
-    ln.setAttribute('x1', p1.x); ln.setAttribute('y1', p1.y);
-    ln.setAttribute('x2', p2.x); ln.setAttribute('y2', p2.y);
-    ln.setAttribute('class', 'll' + (un ? ' flow' : ''));
+    ln.setAttribute('x1', p1.x); 
+    ln.setAttribute('y1', p1.y);
+    ln.setAttribute('x2', p2.x); 
+    ln.setAttribute('y2', p2.y);
+    ln.setAttribute('class', 'll' + (isFlow ? ' flow' : ''));
     svg.appendChild(ln);
   });
 }
 
 function updatePlayerDisplay(){
-  document.getElementById('cred').textContent = credits.toLocaleString('pt-BR');
-  document.getElementById('infLevel').textContent = influenceLevel;
-  const statusLevel = document.getElementById('statusLevel');
-  if(statusLevel) statusLevel.textContent = influenceLevel;
+  document.getElementById('cred').textContent = (playerData.credits || 0).toLocaleString('pt-BR');
+  const level = playerData.level || playerData.influence_level || 1;
+  document.getElementById('infLevel').textContent = level;
+  document.getElementById('statusLevel').textContent = level;
 }
 
-function hasDirector(state){
-  return state && state.director && (state.director.code || state.director.codename);
+function refreshTreeNodes() {
+  // O nó 'nexus' é sempre base (unlocked)
+  // Os outros nós são mapeados pelos IDs do upgrade (1, 2, 3)
+  document.querySelectorAll('.node[data-id]').forEach(node => {
+    const id = parseInt(node.dataset.id);
+    if (id === 0) return; // Nexus
+
+    const upgrade = upgradesData.find(u => u.id === id);
+    const isPurchased = playerData.upgrades && playerData.upgrades.some(u => u.id === id);
+    
+    if (upgrade) {
+      // Atualiza texto
+      node.querySelector('.nl').textContent = upgrade.name;
+      
+      // Atualiza classes de estado
+      node.classList.remove('locked', 'avail', 'unlocked');
+      if (isPurchased) {
+        node.classList.add('unlocked');
+      } else if (playerData.credits >= upgrade.cost) {
+        node.classList.add('avail');
+      } else {
+        node.classList.add('locked');
+      }
+    }
+  });
+  
+  drawLines();
+  
+  // Se houver um upgrade selecionado, atualiza o painel lateral
+  if (selectedUpgradeId) {
+    selectUpgrade(selectedUpgradeId);
+  }
 }
 
 // ============================================================
-// LÓGICA DE SELEÇÃO E COMPRA (CORRIGIDA)
+// LÓGICA DE SELEÇÃO E COMPRA
 // ============================================================
-function select(u){
-  sel = u;
-  const d = UPGRADES[u];
-  document.getElementById('empty').style.display = 'none';
-  const f = document.getElementById('filled');
-  f.classList.add('show');
+function selectUpgrade(id) {
+  selectedUpgradeId = id;
   
-  document.getElementById('fTitle').textContent = d.t;
-  document.getElementById('fDesc').textContent = d.d;
-  document.getElementById('fCost').textContent = d.cost;
-  document.getElementById('fReq').textContent = d.req;
-  
-  const btn = document.getElementById('btnu');
-  btn.className = 'btnu';
-  btn.disabled = false;
-  btn.onclick = null; // Limpa listeners anteriores
-  
-  // Lógica de estado do botão
-  if(d.st === 'unlocked' || purchasedUpgrades.has(d.id)){
-    btn.textContent = 'Já Adquirido ✓';
-    btn.classList.add('done');
+  if (id === 0) {
+    // Nexus Core (sempre desbloqueado, info estática)
+    document.getElementById('empty').style.display = 'none';
+    document.getElementById('filled').classList.add('show');
+    document.getElementById('fTitle').textContent = 'Nexus Core';
+    document.getElementById('fDesc').textContent = 'Sistema central de processamento e coordenação de todas as operações da ARCHIVE. Permite acesso a missões de alto nível e integração de dados globais em tempo real.';
+    document.getElementById('fCost').textContent = '—';
+    document.getElementById('fReq').textContent = 'Base';
+    
+    const btn = document.getElementById('btnu');
+    btn.textContent = 'Sistema Base';
+    btn.className = 'btnu done';
     btn.disabled = true;
-  } else if(d.st === 'locked'){
-    btn.textContent = 'Requisito não atendido';
+    btn.onclick = null;
+  } else if (id === 99) {
+    // Placeholder futuro
+    document.getElementById('empty').style.display = 'none';
+    document.getElementById('filled').classList.add('show');
+    document.getElementById('fTitle').textContent = 'Em Desenvolvimento';
+    document.getElementById('fDesc').textContent = 'Este módulo de progressão está sendo desenvolvido pelos engenheiros da Archive. Verifique novamente após a próxima atualização de firmware.';
+    document.getElementById('fCost').textContent = '???';
+    document.getElementById('fReq').textContent = 'Classificado';
+    
+    const btn = document.getElementById('btnu');
+    btn.textContent = 'Indisponível';
+    btn.className = 'btnu';
     btn.disabled = true;
+    btn.onclick = null;
   } else {
-    btn.textContent = 'Desbloquear';
-    btn.onclick = () => purchaseUpgrade(u);
+    const upgrade = upgradesData.find(u => u.id === id);
+    if (!upgrade) return;
+
+    const isPurchased = playerData.upgrades && playerData.upgrades.some(u => u.id === id);
+    const canAfford = playerData.credits >= upgrade.cost;
+
+    document.getElementById('empty').style.display = 'none';
+    const filled = document.getElementById('filled');
+    filled.classList.remove('show');
+    void filled.offsetWidth; // Força reflow para reiniciar animação
+    filled.classList.add('show');
+    
+    document.getElementById('fTitle').textContent = upgrade.name;
+    document.getElementById('fDesc').textContent = upgrade.description;
+    document.getElementById('fCost').textContent = `${upgrade.cost.toLocaleString('pt-BR')} CR`;
+    document.getElementById('fReq').textContent = upgrade.requirement;
+    
+    const btn = document.getElementById('btnu');
+    btn.className = 'btnu';
+    btn.disabled = false;
+    btn.onclick = null;
+    
+    if (isPurchased) {
+      btn.textContent = 'Já Adquirido ✓';
+      btn.classList.add('done');
+      btn.disabled = true;
+    } else if (!canAfford) {
+      btn.textContent = 'Créditos Insuficientes';
+      btn.disabled = true;
+    } else {
+      btn.textContent = 'Desbloquear';
+      btn.onclick = () => purchaseUpgrade(id);
+    }
   }
   
-  document.querySelectorAll('.node').forEach(n => n.classList.toggle('sel', n.dataset.u === u));
+  // Highlight visual no nó
+  document.querySelectorAll('.node').forEach(n => {
+    n.classList.toggle('sel', parseInt(n.dataset.id) === id);
+  });
 }
 
-async function purchaseUpgrade(u){
-  const d = UPGRADES[u];
+async function purchaseUpgrade(id) {
   const btn = document.getElementById('btnu');
-  
-  // Verificação de Diretor via ArchiveAPI
-  const state = ArchiveAPI.getState();
-  if (!hasDirector(state)) {
-    ArchiveAPI.notify('Diretor não cadastrado.', 'error');
-    console.warn('Diretor não cadastrado');
-  }
-
-  // Inicializa API e garante playerId
-  await ArchiveAPI.init();
-  if (!ArchiveAPI.playerId && hasDirector(state)) {
-    await ArchiveAPI.createPlayer(state.director.name, state.director.code || state.director.codename, state.director.specialty || 'Investigação');
-  }
-
   btn.disabled = true;
   btn.textContent = 'PROCESSANDO...';
   
   try {
-    const result = await ArchiveAPI.buyUpgrade(d.id);
-    if(result && result.success){
-      if(window.ArchiveAudio) ArchiveAudio.playSuccess();
-      ArchiveAPI.notify('Upgrade adquirido!', 'success');
-      purchasedUpgrades.add(d.id);
-      // Atualiza créditos do estado
-      const p = await ArchiveAPI.getPlayer();
-      credits = p.credits ?? credits;
-      d.st = 'unlocked';
+    // Garante que o jogador está registrado no backend
+    await ArchiveAPI.init();
+    if (!ArchiveAPI.playerId) {
+      const state = ArchiveAPI.getState();
+      if (state && state.director) {
+        await ArchiveAPI.createPlayer(state.director.name, state.director.codename || state.director.code, state.director.specialty);
+      } else {
+        throw new Error('Nenhum diretor cadastrado. Faça login primeiro.');
+      }
+    }
+
+    const result = await ArchiveAPI.buyUpgrade(id);
+    
+    if (result && result.success) {
+      if (window.ArchiveAudio) window.ArchiveAudio.playSuccess();
+      ArchiveAPI.notify('Upgrade adquirido com sucesso!', 'success');
       
-      const node = tree.querySelector(`[data-u="${u}"]`);
-      node.classList.remove('avail', 'locked');
-      node.classList.add('unlocked');
-      
+      // Recarrega dados do jogador para atualizar créditos e lista de upgrades
+      playerData = await ArchiveAPI.getPlayer();
       updatePlayerDisplay();
-      draw();
+      refreshTreeNodes();
       
       btn.textContent = '✓ Desbloqueado';
       btn.classList.add('done');
-      setTimeout(() => select(u), 1500);
     } else {
-      throw new Error(result?.error || 'Créditos insuficientes ou erro no servidor');
+      throw new Error(result?.error || 'Falha na transação.');
     }
-  } catch(err){
-    if(window.ArchiveAudio) ArchiveAudio.playError();
-    ArchiveAPI.notify('Erro na transação.', 'error');
-    console.error('Erro ao comprar upgrade:', err);
-    btn.textContent = '⚠ ' + (err.message || 'Falha na transação');
+  } catch (err) {
+    if (window.ArchiveAudio) window.ArchiveAudio.playError();
+    ArchiveAPI.notify(err.message || 'Erro na transação.', 'error');
+    
+    btn.textContent = '⚠ Falha';
     btn.classList.add('error');
-    setTimeout(() => select(u), 2500);
+    
+    setTimeout(() => {
+      selectUpgrade(id); // Restaura o estado do botão
+    }, 2500);
   }
 }
 
 // ============================================================
 // INICIALIZAÇÃO E EVENTOS
 // ============================================================
-async function loadPlayerData(){
-  const state = ArchiveAPI.getState();
-  if(state && state.stats){
-    credits = state.stats.credits ?? 1000;
-    influenceLevel = state.stats.level ?? 1;
-    xp = state.stats.xp ?? 0;
+async function loadData() {
+  try {
+    await ArchiveAPI.init();
+    playerData = await ArchiveAPI.getPlayer();
+    upgradesData = await ArchiveAPI.getUpgrades();
+    
+    updatePlayerDisplay();
+    refreshTreeNodes();
+    
+    // Atualiza a tag de sistema
+    const tag = document.querySelector('.tree .tag');
+    if (tag) tag.innerHTML = `[ SYSTEM_MAP_v2.0 ]<br><b>SYNC COMPLETE. ${upgradesData.length} MODULES LOADED.</b>`;
+  } catch (err) {
+    console.error('Falha ao carregar dados de progressão:', err);
+    ArchiveAPI.notify('Falha ao sincronizar com a Archive.', 'error');
   }
-
-  await ArchiveAPI.init();
-  if (ArchiveAPI.playerId) {
-    const player = await ArchiveAPI.getPlayer();
-    if (player) {
-      credits = player.credits ?? credits;
-      influenceLevel = player.influence_level ?? player.level ?? influenceLevel;
-    }
-  }
-  updatePlayerDisplay();
 }
 
-// Event Listeners com Áudio
+// Event Listeners
 document.querySelectorAll('.node').forEach(n => {
-  n.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+  n.addEventListener('mouseenter', () => { if (window.ArchiveAudio) window.ArchiveAudio.playHover(); });
   n.addEventListener('click', () => { 
-    if(window.ArchiveAudio) ArchiveAudio.playClick(); 
-    select(n.dataset.u); 
+    if (window.ArchiveAudio) window.ArchiveAudio.playClick(); 
+    selectUpgrade(parseInt(n.dataset.id)); 
   });
 });
 
 document.querySelectorAll('.nav a').forEach(a => {
-  a.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+  a.addEventListener('mouseenter', () => { if (window.ArchiveAudio) window.ArchiveAudio.playHover(); });
   a.addEventListener('click', e => {
-    e.preventDefault();
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
+    if (a.getAttribute('href') === '#') e.preventDefault();
+    if (window.ArchiveAudio) window.ArchiveAudio.playClick();
     document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
     a.classList.add('on');
   });
 });
 
-document.getElementById('btnu').addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+document.getElementById('btnu').addEventListener('mouseenter', () => { if (window.ArchiveAudio) window.ArchiveAudio.playHover(); });
 
 // Inicialização
-draw();
-addEventListener('resize', draw);
-setTimeout(draw, 800); // Garante desenho após renderização inicial
+window.addEventListener('resize', drawLines);
+setTimeout(() => {
+  loadData();
+  setTimeout(drawLines, 100); // Garante desenho após o CSS aplicar posições
+}, 100);
 
+// Relógio
 setInterval(() => {
   const n = new Date();
   document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
 }, 1000);
-
-// Carrega dados (áudio só após interação do usuário)
-loadPlayerData();
 </script>
 </body>
 </html>

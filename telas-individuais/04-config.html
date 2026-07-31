@@ -10,6 +10,9 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<!-- Integração com API e Sistema de Áudio -->
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
   :root {
     --surface: #131313;
@@ -530,13 +533,13 @@
 
     <!-- Header -->
     <header class="header">
-      <button class="back-btn">
+      <button class="back-btn" id="backBtn">
         <svg class="back-icon" viewBox="0 0 24 24">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
-        Voltar
+        <span data-i18n="back">Voltar</span>
       </button>
-      <h1 class="header-title">Configurações</h1>
+      <h1 class="header-title" data-i18n="pageTitle">Configurações</h1>
       <svg class="settings-icon" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="3"/>
         <path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/>
@@ -554,7 +557,7 @@
             <circle cx="16" cy="12" r="1" fill="currentColor"/>
             <circle cx="10" cy="18" r="1" fill="currentColor"/>
           </svg>
-          <span class="nav-label">Sistema & Áudio</span>
+          <span class="nav-label" data-i18n="system">Sistema & Áudio</span>
         </div>
 
         <div class="nav-item" data-section="display">
@@ -562,7 +565,7 @@
             <circle cx="12" cy="12" r="10"/>
             <circle cx="12" cy="12" r="4"/>
           </svg>
-          <span class="nav-label">Exibição & Óptica</span>
+          <span class="nav-label" data-i18n="display">Exibição & Óptica</span>
         </div>
 
         <div class="nav-item" data-section="language">
@@ -570,27 +573,27 @@
             <circle cx="12" cy="12" r="10"/>
             <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
           </svg>
-          <span class="nav-label">Localização</span>
+          <span class="nav-label" data-i18n="language">Localização</span>
         </div>
 
         <div class="nav-item" data-section="privacy">
           <svg class="nav-icon" viewBox="0 0 24 24">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <span class="nav-label">Privacidade de Dados</span>
+          <span class="nav-label" data-i18n="privacy">Privacidade de Dados</span>
         </div>
 
         <!-- System Status Card -->
         <div class="system-status-card">
           <div class="status-header">
-            <h3 class="status-title">Status do Sistema</h3>
+            <h3 class="status-title" data-i18n="systemStatus">Status do Sistema</h3>
             <svg class="status-icon" viewBox="0 0 24 24">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
           </div>
           <div class="status-item">Versão: <span class="status-value">2.4.1_b</span></div>
           <div class="status-item">Conexão: <span class="status-value">SEGURA</span></div>
-          <div class="status-item">Hora Local: <span class="status-value">23:45 UTC</span></div>
+          <div class="status-item">Hora Local: <span class="status-value" id="localTime">23:45 UTC</span></div>
         </div>
       </aside>
 
@@ -602,12 +605,12 @@
             <svg class="section-icon" viewBox="0 0 24 24">
               <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
             </svg>
-            <h2 class="section-title">Parâmetros de Áudio</h2>
+            <h2 class="section-title" data-i18n="audioParams">Parâmetros de Áudio</h2>
           </div>
 
           <div class="slider-group">
             <div class="slider-label">
-              <span class="slider-name">Música Atmosférica</span>
+              <span class="slider-name" data-i18n="music">Música Atmosférica</span>
               <span class="slider-value" id="musicValue">75%</span>
             </div>
             <div class="slider-container">
@@ -620,7 +623,7 @@
 
           <div class="slider-group">
             <div class="slider-label">
-              <span class="slider-name">Diagnósticos SFX</span>
+              <span class="slider-name" data-i18n="sfx">Diagnósticos SFX</span>
               <span class="slider-value" id="sfxValue">42%</span>
             </div>
             <div class="slider-container">
@@ -639,12 +642,12 @@
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20z" fill="currentColor" opacity="0.3"/>
             </svg>
-            <h2 class="section-title">Calibração Visual</h2>
+            <h2 class="section-title" data-i18n="visualCal">Calibração Visual</h2>
           </div>
 
           <div class="slider-group">
             <div class="slider-label">
-              <span class="slider-name">Gama / Brilho</span>
+              <span class="slider-name" data-i18n="gamma">Gama / Brilho</span>
               <span class="slider-value" id="gammaValue">50%</span>
             </div>
             <div class="slider-container">
@@ -657,7 +660,7 @@
 
           <div class="slider-group">
             <div class="slider-label">
-              <span class="slider-name">Taxa de Contraste</span>
+              <span class="slider-name" data-i18n="contrast">Taxa de Contraste</span>
               <span class="slider-value" id="contrastValue">68%</span>
             </div>
             <div class="slider-container">
@@ -676,11 +679,11 @@
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <h2 class="section-title">Preferências do Operativo</h2>
+            <h2 class="section-title" data-i18n="operativePref">Preferências do Operativo</h2>
           </div>
 
           <div class="dropdown-group">
-            <div class="dropdown-label">Perfil de Localização</div>
+            <div class="dropdown-label" data-i18n="locationProfile">Perfil de Localização</div>
             <div class="dropdown-container">
               <select class="dropdown-select" id="languageSelect">
                 <option value="pt-BR">Português (BR)</option>
@@ -696,8 +699,8 @@
 
           <div class="toggle-group">
             <div class="toggle-info">
-              <div class="toggle-label">Dicas Táticas de UI</div>
-              <div class="toggle-description">Ativar sobreposições contextuais durante operações de campo.</div>
+              <div class="toggle-label" data-i18n="tacticalHints">Dicas Táticas de UI</div>
+              <div class="toggle-description" data-i18n="tacticalDesc">Ativar sobreposições contextuais durante operações de campo.</div>
             </div>
             <div class="toggle-switch active" id="tacticalToggle">
               <div class="toggle-thumb"></div>
@@ -707,15 +710,173 @@
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <button class="btn btn-secondary" id="resetBtn">Restaurar Padrões</button>
-          <button class="btn btn-primary" id="applyBtn">Aplicar Configuração</button>
+          <button class="btn btn-secondary" id="resetBtn" data-i18n="reset">Restaurar Padrões</button>
+          <button class="btn btn-primary" id="applyBtn" data-i18n="apply">Aplicar Configuração</button>
         </div>
       </main>
     </div>
   </div>
 
   <script>
-    // Sliders funcionais
+    // Dicionário de Traduções
+    const translations = {
+      'pt-BR': {
+        back: 'Voltar',
+        pageTitle: 'Configurações',
+        system: 'Sistema & Áudio',
+        display: 'Exibição & Óptica',
+        language: 'Localização',
+        privacy: 'Privacidade de Dados',
+        systemStatus: 'Status do Sistema',
+        audioParams: 'Parâmetros de Áudio',
+        music: 'Música Atmosférica',
+        sfx: 'Diagnósticos SFX',
+        visualCal: 'Calibração Visual',
+        gamma: 'Gama / Brilho',
+        contrast: 'Taxa de Contraste',
+        operativePref: 'Preferências do Operativo',
+        locationProfile: 'Perfil de Localização',
+        tacticalHints: 'Dicas Táticas de UI',
+        tacticalDesc: 'Ativar sobreposições contextuais durante operações de campo.',
+        reset: 'Restaurar Padrões',
+        apply: 'Aplicar Configuração',
+        applied: 'Aplicado ✓'
+      },
+      'en-US': {
+        back: 'Back',
+        pageTitle: 'Settings',
+        system: 'System & Audio',
+        display: 'Display & Optics',
+        language: 'Localization',
+        privacy: 'Data Privacy',
+        systemStatus: 'System Status',
+        audioParams: 'Audio Parameters',
+        music: 'Atmospheric Music',
+        sfx: 'Diagnostics SFX',
+        visualCal: 'Visual Calibration',
+        gamma: 'Gamma / Brightness',
+        contrast: 'Contrast Rate',
+        operativePref: 'Operative Preferences',
+        locationProfile: 'Location Profile',
+        tacticalHints: 'UI Tactical Hints',
+        tacticalDesc: 'Enable contextual overlays during field operations.',
+        reset: 'Restore Defaults',
+        apply: 'Apply Configuration',
+        applied: 'Applied ✓'
+      },
+      'fr-FR': {
+        back: 'Retour',
+        pageTitle: 'Paramètres',
+        system: 'Système & Audio',
+        display: 'Affichage & Optique',
+        language: 'Localisation',
+        privacy: 'Confidentialité des Données',
+        systemStatus: 'État du Système',
+        audioParams: 'Paramètres Audio',
+        music: 'Musique Atmosphérique',
+        sfx: 'Diagnostics SFX',
+        visualCal: 'Calibrage Visuel',
+        gamma: 'Gamma / Luminosité',
+        contrast: 'Taux de Contraste',
+        operativePref: 'Préférences de l\'Operatif',
+        locationProfile: 'Profil de Localisation',
+        tacticalHints: 'Indices Tactiques UI',
+        tacticalDesc: 'Activer les superpositions contextuelles pendant les opérations.',
+        reset: 'Restaurer les Paramètres',
+        apply: 'Appliquer la Configuration',
+        applied: 'Appliqué ✓'
+      },
+      'de-DE': {
+        back: 'Zurück',
+        pageTitle: 'Einstellungen',
+        system: 'System & Audio',
+        display: 'Anzeige & Optik',
+        language: 'Lokalisierung',
+        privacy: 'Datenschutz',
+        systemStatus: 'Systemstatus',
+        audioParams: 'Audioparameter',
+        music: 'Atmosphärische Musik',
+        sfx: 'Diagnose-SFX',
+        visualCal: 'Visuelle Kalibrierung',
+        gamma: 'Gamma / Helligkeit',
+        contrast: 'Kontrastverhältnis',
+        operativePref: 'Operative Präferenzen',
+        locationProfile: 'Standortprofil',
+        tacticalHints: 'Taktische UI-Hinweise',
+        tacticalDesc: 'Kontextbezogene Overlays während Feldeinsätzen aktivieren.',
+        reset: 'Standardeinstellungen',
+        apply: 'Konfiguration Anwenden',
+        applied: 'Angewendet ✓'
+      }
+    };
+
+    // Função para atualizar o idioma da interface
+    function updateLanguage(lang) {
+      const t = translations[lang] || translations['pt-BR'];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+          // Preserva o texto "Aplicado ✓" se o botão já tiver sido clicado
+          if (el.id === 'applyBtn' && el.textContent.includes('✓')) return;
+          el.textContent = t[key];
+        }
+      });
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Carregar configurações salvas ou usar padrões
+      const state = ArchiveAPI.getState() || {};
+      const settings = state.settings || {
+        music: 75,
+        sfx: 42,
+        gamma: 50,
+        contrast: 68,
+        language: 'pt-BR',
+        tacticalHints: true
+      };
+
+      // Aplicar configurações aos elementos da UI
+      document.getElementById('musicSlider').value = settings.music;
+      document.getElementById('musicFill').style.width = settings.music + '%';
+      document.getElementById('musicThumb').style.left = settings.music + '%';
+      document.getElementById('musicValue').textContent = settings.music + '%';
+
+      document.getElementById('sfxSlider').value = settings.sfx;
+      document.getElementById('sfxFill').style.width = settings.sfx + '%';
+      document.getElementById('sfxThumb').style.left = settings.sfx + '%';
+      document.getElementById('sfxValue').textContent = settings.sfx + '%';
+
+      document.getElementById('gammaSlider').value = settings.gamma;
+      document.getElementById('gammaFill').style.width = settings.gamma + '%';
+      document.getElementById('gammaThumb').style.left = settings.gamma + '%';
+      document.getElementById('gammaValue').textContent = settings.gamma + '%';
+
+      document.getElementById('contrastSlider').value = settings.contrast;
+      document.getElementById('contrastFill').style.width = settings.contrast + '%';
+      document.getElementById('contrastThumb').style.left = settings.contrast + '%';
+      document.getElementById('contrastValue').textContent = settings.contrast + '%';
+
+      document.getElementById('languageSelect').value = settings.language;
+      
+      if (settings.tacticalHints) {
+        document.getElementById('tacticalToggle').classList.add('active');
+      } else {
+        document.getElementById('tacticalToggle').classList.remove('active');
+      }
+
+      // Aplicar idioma inicial
+      updateLanguage(settings.language);
+
+      // Relógio em tempo real
+      setInterval(() => {
+        const n = new Date();
+        document.getElementById('localTime').textContent = 
+          String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0') + ' UTC';
+      }, 1000);
+    });
+
+    // Lógica dos Sliders
     const sliders = [
       { input: 'musicSlider', fill: 'musicFill', thumb: 'musicThumb', value: 'musicValue' },
       { input: 'sfxSlider', fill: 'sfxFill', thumb: 'sfxThumb', value: 'sfxValue' },
@@ -740,13 +901,15 @@
     // Toggle switch
     const tacticalToggle = document.getElementById('tacticalToggle');
     tacticalToggle.addEventListener('click', () => {
+      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
       tacticalToggle.classList.toggle('active');
     });
 
-    // Navegação da sidebar
+    // Navegação da sidebar (visual apenas nesta demo)
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       item.addEventListener('click', () => {
+        if(window.ArchiveAudio) window.ArchiveAudio.playClick();
         navItems.forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
       });
@@ -755,54 +918,81 @@
     // Botão Reset
     const resetBtn = document.getElementById('resetBtn');
     resetBtn.addEventListener('click', () => {
-      sliders.forEach(({ input, fill, thumb, value }) => {
-        const defaultValue = input === 'musicSlider' ? 75 : 
-                            input === 'sfxSlider' ? 42 :
-                            input === 'gammaSlider' ? 50 : 68;
-        const sliderInput = document.getElementById(input);
-        const sliderFill = document.getElementById(fill);
-        const sliderThumb = document.getElementById(thumb);
-        const sliderValue = document.getElementById(value);
-        
-        sliderInput.value = defaultValue;
-        sliderFill.style.width = defaultValue + '%';
-        sliderThumb.style.left = defaultValue + '%';
-        sliderValue.textContent = defaultValue + '%';
-      });
-
-      document.getElementById('languageSelect').value = 'pt-BR';
-      tacticalToggle.classList.add('active');
+      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+      const defaults = {
+        music: 75, sfx: 42, gamma: 50, contrast: 68, language: 'pt-BR', tacticalHints: true
+      };
+      
+      // Atualiza UI
+      document.getElementById('musicSlider').value = defaults.music;
+      document.getElementById('musicFill').style.width = defaults.music + '%';
+      document.getElementById('musicThumb').style.left = defaults.music + '%';
+      document.getElementById('musicValue').textContent = defaults.music + '%';
+      
+      document.getElementById('sfxSlider').value = defaults.sfx;
+      document.getElementById('sfxFill').style.width = defaults.sfx + '%';
+      document.getElementById('sfxThumb').style.left = defaults.sfx + '%';
+      document.getElementById('sfxValue').textContent = defaults.sfx + '%';
+      
+      document.getElementById('gammaSlider').value = defaults.gamma;
+      document.getElementById('gammaFill').style.width = defaults.gamma + '%';
+      document.getElementById('gammaThumb').style.left = defaults.gamma + '%';
+      document.getElementById('gammaValue').textContent = defaults.gamma + '%';
+      
+      document.getElementById('contrastSlider').value = defaults.contrast;
+      document.getElementById('contrastFill').style.width = defaults.contrast + '%';
+      document.getElementById('contrastThumb').style.left = defaults.contrast + '%';
+      document.getElementById('contrastValue').textContent = defaults.contrast + '%';
+      
+      document.getElementById('languageSelect').value = defaults.language;
+      document.getElementById('tacticalToggle').classList.add('active');
+      
+      updateLanguage(defaults.language);
+      ArchiveAPI.setState({ settings: defaults });
     });
 
     // Botão Apply
     const applyBtn = document.getElementById('applyBtn');
     applyBtn.addEventListener('click', () => {
+      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+      
       const config = {
         music: document.getElementById('musicSlider').value,
         sfx: document.getElementById('sfxSlider').value,
         gamma: document.getElementById('gammaSlider').value,
         contrast: document.getElementById('contrastSlider').value,
         language: document.getElementById('languageSelect').value,
-        tacticalHints: tacticalToggle.classList.contains('active')
+        tacticalHints: document.getElementById('tacticalToggle').classList.contains('active')
       };
 
-      console.log('Configuração aplicada:', config);
+      // Salva no ArchiveAPI
+      ArchiveAPI.setState({ settings: config });
       
+      // Aplica o idioma imediatamente
+      updateLanguage(config.language);
+
       // Feedback visual
-      applyBtn.textContent = 'Aplicado ✓';
+      const t = translations[config.language] || translations['pt-BR'];
+      const originalText = t.apply;
+      const appliedText = t.applied;
+      
+      applyBtn.textContent = appliedText;
       applyBtn.style.background = 'var(--amber)';
       applyBtn.style.color = 'var(--surface)';
       
+      if(window.ArchiveAudio) window.ArchiveAudio.playSuccess();
+      
       setTimeout(() => {
-        applyBtn.textContent = 'Aplicar Configuração';
+        applyBtn.textContent = originalText;
         applyBtn.style.background = '';
         applyBtn.style.color = '';
       }, 2000);
     });
 
     // Botão Voltar
-    document.querySelector('.back-btn').addEventListener('click', () => {
-      console.log('Voltar para tela anterior');
+    document.getElementById('backBtn').addEventListener('click', () => {
+      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+      window.location.href = '19-hq-atrium.html';
     });
   </script>
 </body>

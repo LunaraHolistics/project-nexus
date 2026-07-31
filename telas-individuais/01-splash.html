@@ -11,6 +11,9 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<!-- Integração com a API e Sistema de Áudio -->
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
   :root {
     --graphite: #131313;
@@ -476,13 +479,13 @@
   </div>
 
   <script>
-    // Sequência de mensagens de status (typewriter effect)
+    // Sequência de mensagens de status vinculadas a ações reais da API
     const statusMessages = [
-      'INICIANDO PROTOCOLO DE CONEXÃO',
-      'VERIFICANDO CREDENCIAIS',
-      'ESTABELECENDO CANAL SEGURO',
-      'SINCRONIZANDO ARQUIVOS',
-      'ACESSO AUTORIZADO'
+      { text: 'INICIANDO PROTOCOLO DE CONEXÃO', delay: 800 },
+      { text: 'VERIFICANDO CREDENCIAIS LOCAIS', delay: 600 },
+      { text: 'ESTABELECENDO CANAL SEGURO (PORTA 3000)', delay: 1200 },
+      { text: 'SINCRONIZANDO ARQUIVOS DA ARCHIVE', delay: 1500 },
+      { text: 'ACESSO AUTORIZADO', delay: 800 }
     ];
 
     let messageIndex = 0;
@@ -497,40 +500,73 @@
         charIndex++;
         if (charIndex >= message.length) {
           clearInterval(typeInterval);
-          setTimeout(callback, 600);
+          setTimeout(callback, 400);
         }
-      }, 40);
+      }, 35);
     }
 
-    function nextMessage() {
+    async function processStep() {
       if (messageIndex < statusMessages.length) {
-        typeMessage(statusMessages[messageIndex], () => {
+        const step = statusMessages[messageIndex];
+        
+        // Ações reais disparadas durante mensagens específicas
+        if (messageIndex === 1) {
+          // Verifica se já existe um jogador salvo
+          window.ArchiveAPI.getState();
+        }
+        if (messageIndex === 2) {
+          // Tenta conectar ao backend (se falhar, o api.js usa o MOCK automaticamente)
+          await window.ArchiveAPI.init();
+          if(window.ArchiveAudio && window.ArchiveAudio.playStartup) {
+             window.ArchiveAudio.playStartup();
+          }
+        }
+        if (messageIndex === 3) {
+          // Se houver jogador, pré-carrega os dados
+          if (window.ArchiveAPI.playerId) {
+            await window.ArchiveAPI.getPlayer();
+          }
+        }
+
+        typeMessage(step.text, () => {
           messageIndex++;
-          setTimeout(nextMessage, 400);
+          setTimeout(processStep, step.delay);
         });
       } else {
-        // Transição de saída
+        // Transição de saída e redirecionamento inteligente
         setTimeout(() => {
           splash.classList.add('exiting');
+          
           setTimeout(() => {
-            // Aqui você redireciona para a próxima tela
-            console.log('Splash completa — prosseguir para Introdução Cinemática');
+            // Lógica de roteamento baseada no estado do jogador
+            const state = window.ArchiveAPI.getState();
+            let targetUrl = 'index.html'; // Padrão para novos jogadores (tela de criação/login)
+            
+            if (state && state.director && state.director.codename) {
+              // Jogador existente vai direto para a ação (Globo ou HQ)
+              targetUrl = '19-hq-atrium.html'; 
+            }
+            
+            window.location.href = targetUrl;
           }, 1200);
         }, 500);
       }
     }
 
-    // Iniciar sequência após animações iniciais
+    // Iniciar sequência após animações iniciais de CSS
     setTimeout(() => {
-      nextMessage();
-    }, 3500);
+      processStep();
+    }, 2500);
 
-    // Permitir pular com clique
+    // Permitir pular com clique (acelera o processo)
     splash.addEventListener('click', () => {
-      splash.classList.add('exiting');
-      setTimeout(() => {
-        console.log('Splash pulada — prosseguir para Introdução Cinemática');
-      }, 1200);
+      if (!splash.classList.contains('exiting')) {
+        splash.classList.add('exiting');
+        setTimeout(() => {
+          const state = window.ArchiveAPI.getState();
+          window.location.href = (state && state.director) ? '19-hq-atrium.html' : 'index.html';
+        }, 1200);
+      }
     });
   </script>
 </body>

@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -87,7 +89,12 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="home">
   <header class="fi">
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
+    <nav class="nav">
+      <a href="05-globo.html">Globo</a>
+      <a href="15-museu.html">Banco de Dados</a>
+      <a href="#">Passaporte</a>
+      <a href="07-briefing.html" class="on">Diário de Bordo</a>
+    </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -98,28 +105,31 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     <aside class="left fi d1">
       <div class="prof">
         <div class="av"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div><h3>PROJECT NEXUS</h3><p>Field Operative</p></div>
+        <div>
+          <h3 id="pName">PROJECT NEXUS</h3>
+          <p id="pCodename">Field Operative</p>
+        </div>
       </div>
-      <button class="btnp">Acessar Intel <span class="ar">→</span></button>
+      <button class="btnp" id="btnIntel">Acessar Intel <span class="ar">→</span></button>
       <nav class="snav">
-        <button class="si on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</button>
-        <button class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</button>
+        <a href="05-globo.html" class="si on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
+        <a href="15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+        <a href="#" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
+        <a href="07-briefing.html" class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
       </nav>
     </aside>
     <main class="center">
       <div class="wel fi d2">
         <div class="wl">TERMINAL ALPHA</div>
-        <h1 class="wt">Aguardando Instruções,<br><span class="hl">Operativo.</span></h1>
+        <h1 class="wt" id="welcomeText">Aguardando Instruções,<br><span class="hl">Operativo.</span></h1>
         <p class="wd">O relicário digital foi sincronizado. Todas as conexões históricas estão online. Proceda com cautela ao iniciar nova investigação.</p>
       </div>
       <div class="cards">
-        <div class="ac fi d3">
+        <div class="ac fi d3" data-action="globe">
           <div class="ach"><div class="aci"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="act">Iniciar Nova Missão</div></div>
           <div class="acd">Estabelecer novo ponto de entrada na linha do tempo.</div>
         </div>
-        <div class="ac fi d3">
+        <div class="ac fi d3" data-action="museum">
           <div class="ach"><div class="aci"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="act">Museu da Archive</div></div>
           <div class="acd">Acessar artefatos recuperados e relatórios passados.</div>
         </div>
@@ -132,8 +142,8 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
       </div>
       <div class="sc">
         <div class="sch"><span class="sct">Inteligência Ativa</span></div>
-        <div class="sr"><div class="srl">Operações em Andamento</div><div class="srv">03</div></div>
-        <div class="sr"><div class="srl">Nível de Ameaça</div><div class="srv al">⚠ ELEVADO</div></div>
+        <div class="sr"><div class="srl">Operações em Andamento</div><div class="srv" id="activeOps">00</div></div>
+        <div class="sr"><div class="srl">Nível de Ameaça</div><div class="srv al" id="threatLevel">⚠ BAIXO</div></div>
       </div>
     </aside>
   </div>
@@ -148,10 +158,90 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-document.querySelectorAll('.si').forEach(i=>i.addEventListener('click',()=>{document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));i.classList.add('on');}));
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-document.querySelectorAll('.ac').forEach(c=>c.addEventListener('click',()=>{const t=c.querySelector('.act').textContent;console.log('Ação:',t);}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Inicializar API e buscar dados do jogador
+  await window.ArchiveAPI.init();
+  const state = window.ArchiveAPI.getState();
+  const player = await window.ArchiveAPI.getPlayer();
+  
+  const director = (state && state.director) ? state.director : { name: 'Diretor', codename: 'NOVICE', rank: 'Diretor Interino' };
+  
+  // 2. Atualizar Perfil na Sidebar
+  document.getElementById('pName').textContent = (player.name || director.name).toUpperCase();
+  document.getElementById('pCodename').textContent = `${player.codename || director.codename} | ${player.rank || director.rank}`;
+  
+  // 3. Atualizar Mensagem de Boas-vindas
+  const welcomeName = player.codename || director.codename || 'Operativo';
+  document.getElementById('welcomeText').innerHTML = `Bem-vindo de volta,<br><span class="hl">${welcomeName}</span>.`;
+  
+  // 4. Atualizar Painel de Inteligência com dados reais
+  try {
+    const missions = await window.ArchiveAPI.getMissions();
+    const activeMissions = missions.filter(m => m.status === 'ativa').length;
+    document.getElementById('activeOps').textContent = String(activeMissions).padStart(2, '0');
+    
+    // Calcular nível de ameaça com base nas missões ativas
+    const hasCritical = missions.some(m => m.priority === 'CRÍTICA' && m.status === 'ativa');
+    const hasHigh = missions.some(m => m.priority === 'ALTA' && m.status === 'ativa');
+    
+    const threatEl = document.getElementById('threatLevel');
+    if (hasCritical) {
+      threatEl.textContent = '⚠ CRÍTICO';
+      threatEl.style.color = '#ff6464';
+    } else if (hasHigh) {
+      threatEl.textContent = '⚠ ELEVADO';
+      threatEl.style.color = 'var(--bronze)';
+    } else if (activeMissions > 0) {
+      threatEl.textContent = '⚠ MODERADO';
+      threatEl.style.color = 'var(--amber)';
+    } else {
+      threatEl.textContent = '✓ BAIXO';
+      threatEl.style.color = '#8fd6a0';
+    }
+  } catch (e) {
+    console.warn('Falha ao carregar missões para o dashboard', e);
+  }
+
+  // 5. Ações dos Cards Centrais
+  document.querySelectorAll('.ac').forEach(c => {
+    c.addEventListener('click', () => {
+      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+      const action = c.dataset.action;
+      if (action === 'globe') {
+        window.location.href = '05-globo.html';
+      } else if (action === 'museum') {
+        window.location.href = '15-museu.html';
+      }
+    });
+  });
+
+  // 6. Botão Acessar Intel
+  document.getElementById('btnIntel').addEventListener('click', () => {
+    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+    window.location.href = '15-museu.html';
+  });
+
+  // 7. Navegação da Sidebar (manter estado visual)
+  document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
+    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+    document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
+    i.classList.add('on');
+  }));
+
+  // 8. Navegação do Header
+  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
+    if (a.getAttribute('href') === '#') e.preventDefault();
+    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+    a.classList.add('on');
+  }));
+});
+
+// Relógio do sistema
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+}, 1000);
 </script>
 </body>
 </html>

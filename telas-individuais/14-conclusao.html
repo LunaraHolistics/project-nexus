@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -92,7 +94,7 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="cc">
   <header>
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
+    <nav class="nav"><a href="../05-globo.html">Globo</a><a href="../15-museu.html">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -103,21 +105,25 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     <div class="hd">
       <div class="seal"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#CD7F32" stroke-width="1.5"/><circle cx="40" cy="40" r="30" fill="none" stroke="#CD7F32" stroke-width=".5" stroke-dasharray="2 2"/><path class="ck" d="M28 42 L36 50 L54 30" stroke="#CD7F32" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <h1 class="tt">Missão Concluída</h1>
-      <div class="st">Operação: Nightfall — Status: Finalizada</div>
+      <div class="st" id="missionStatus">Operação: Nightfall — Status: Finalizada</div>
     </div>
-    <div class="sgrid">
+    
+    <div class="sgrid" id="statsGrid">
       <div class="sc"><div class="scl">Objetivos</div><div class="scv"><span data-count="3" data-suf="/3">0/3</span><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg></div></div>
       <div class="sc"><div class="scl">Tempo de Operação</div><div class="scv">00:42:15</div></div>
       <div class="sc"><div class="scl">Precisão Tática</div><div class="scv"><span data-count="94" data-suf="%">0%</span></div></div>
       <div class="sc"><div class="scl">Evidências Coletadas</div><div class="scv"><span data-count="7" data-pad="2">0</span></div></div>
     </div>
+    
     <div class="div"><div class="dvt">Recuperação de Ativos</div></div>
-    <div class="rgrid">
+    
+    <div class="rgrid" id="rewardsGrid">
       <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="rt">Artefato Recuperado</div><div class="rd">Relicário da Era Tudor contendo microchips criptografados.</div></div>
       <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div class="rt">Documento Classificado</div><div class="rd">Dossiê 'Nightfall' descriptografado com sucesso em campo.</div></div>
       <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8M8 14h8"/></svg></div><div class="rt">Créditos Archive</div><div class="rd">12.500 unidades de crédito depositadas em sua conta offshore.</div></div>
       <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rt">Influência de Campo</div><div class="rd">Acesso concedido aos terminais de segurança de Nível 4.</div></div>
     </div>
+    
     <div class="agrid">
       <div class="apnl">
         <div class="ah"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg><div class="aht">Análise Tática de Desempenho</div></div>
@@ -127,12 +133,13 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
       </div>
       <div class="apnl">
         <div class="ah"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="aht">Nota do Diretor</div></div>
-        <div class="dn"><p>Seu desempenho na Operação Nightfall superou nossas expectativas analíticas. Os dados recuperados em Londres já estão sendo processados pela IA Central. Prepare-se para o briefing de Istambul.</p></div>
+        <div class="dn"><p id="directorNote">Seu desempenho na Operação Nightfall superou nossas expectativas analíticas. Os dados recuperados em Londres já estão sendo processados pela IA Central. Prepare-se para o briefing de Istambul.</p></div>
       </div>
     </div>
+    
     <div class="act">
-      <button class="btns"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retornar ao Globo</button>
-      <button class="btnp">Próxima Missão <span class="ar">→</span></button>
+      <button class="btns" id="btnReturn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Retornar ao Globo</button>
+      <button class="btnp" id="btnNext">Próxima Missão <span class="ar">→</span></button>
     </div>
   </div>
   <footer>
@@ -145,11 +152,99 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-function countUp(el){const target=+el.dataset.count,suf=el.dataset.suf||'',pad=el.dataset.pad?+el.dataset.pad:0;let cur=0;const step=Math.max(1,Math.round(target/40));const iv=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(iv);}let v=String(cur);if(pad)v=v.padStart(pad,'0');el.textContent=v+suf;},28);}
-setTimeout(()=>document.querySelectorAll('[data-count]').forEach(countUp),700);
-setTimeout(()=>document.querySelectorAll('.mrf').forEach(b=>b.style.width=b.dataset.w+'%'),900);
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+document.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const missionId = parseInt(urlParams.get('id')) || 1;
+  
+  try {
+    const missions = await ArchiveAPI.getMissions();
+    const mission = missions.find(m => m.id === missionId) || missions[0];
+    
+    // 1. Atualizar Cabeçalho
+    document.getElementById('missionStatus').textContent = `Operação: ${mission.codename} — Status: Finalizada`;
+    
+    // 2. Atualizar Grid de Estatísticas
+    const objCount = mission.objectives ? mission.objectives.length : 3;
+    const mins = (mission.totalPhases || 3) * 14;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    const timeStr = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
+    
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="sc"><div class="scl">Objetivos</div><div class="scv"><span data-count="${objCount}" data-suf="/${objCount}">0/${objCount}</span><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg></div></div>
+      <div class="sc"><div class="scl">Tempo de Operação</div><div class="scv">${timeStr}</div></div>
+      <div class="sc"><div class="scl">Precisão Tática</div><div class="scv"><span data-count="94" data-suf="%">0%</span></div></div>
+      <div class="sc"><div class="scl">Evidências Coletadas</div><div class="scv"><span data-count="${objCount + 2}" data-pad="2">0</span></div></div>
+    `;
+
+    // 3. Atualizar Grid de Recompensas Dinamicamente
+    const xp = mission.reward ? mission.reward.xp : 0;
+    const credits = mission.reward ? mission.reward.credits : 0;
+    const artifacts = mission.reward ? mission.reward.artifacts : 0;
+    const artifactName = artifacts > 0 ? mission.title : 'Nenhum artefato físico';
+    
+    document.getElementById('rewardsGrid').innerHTML = `
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div><div class="rt">Artefato Recuperado</div><div class="rd">${artifactName} adicionado ao acervo seguro.</div></div>
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="rt">Inteligência Processada</div><div class="rd">Relatório de campo de ${mission.location} descriptografado e arquivado.</div></div>
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M8 10h8"/></svg></div><div class="rt">Recompensa Financeira</div><div class="rd">+${credits} créditos depositados na conta offshore da Archive.</div></div>
+      <div class="rc"><div class="ric"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="rt">Experiência de Campo</div><div class="rd">+${xp} XP acumulados. Progresso de patente atualizado.</div></div>
+    `;
+
+    // 4. Atualizar Nota do Diretor
+    document.getElementById('directorNote').textContent = `Seu desempenho na Operação ${mission.codename} foi registrado. Os dados recuperados em ${mission.location} já estão sendo processados pela IA Central. Mantenha-se alerta para os próximos desdobramentos.`;
+
+    // 5. Re-disparar animações para os novos elementos
+    setTimeout(() => {
+      function countUp(el) {
+        const target = +el.dataset.count;
+        const suf = el.dataset.suf || '';
+        const pad = el.dataset.pad ? +el.dataset.pad : 0;
+        let cur = 0;
+        const step = Math.max(1, Math.round(target / 40));
+        const iv = setInterval(() => {
+          cur += step;
+          if (cur >= target) {
+            cur = target;
+            clearInterval(iv);
+          }
+          let v = String(cur);
+          if (pad) v = v.padStart(pad, '0');
+          el.textContent = v + suf;
+        }, 28);
+      }
+      document.querySelectorAll('[data-count]').forEach(countUp);
+      document.querySelectorAll('.mrf').forEach(b => b.style.width = b.dataset.w + '%');
+      
+      if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+    }, 700);
+
+    // 6. Ações dos Botões
+    document.getElementById('btnReturn').addEventListener('click', () => {
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      window.location.href = '../05-globo.html';
+    });
+    
+    document.getElementById('btnNext').addEventListener('click', () => {
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      window.location.href = '../05-globo.html';
+    });
+
+  } catch (err) {
+    console.error("Falha ao carregar dados da conclusão", err);
+    ArchiveAPI.notify('Falha ao carregar relatório de missão.', 'error');
+  }
+});
+
+document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
+  if (a.getAttribute('href') === '#') e.preventDefault();
+  document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+  a.classList.add('on');
+}));
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+}, 1000);
 </script>
 </body>
 </html>

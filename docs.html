@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROJECT NEXUS — Documentação Técnica</title>
+<title>PROJECT NEXUS — Documentação Técnica v2.0</title>
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
@@ -14,46 +14,73 @@
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--surface);color:var(--on);font-family:'Manrope',sans-serif;line-height:1.6;}
-.container{max-width:1200px;margin:0 auto;padding:0 64px;}
+
+/* OVERLAYS DO SISTEMA */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
+@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+
+.container{max-width:1200px;margin:0 auto;padding:0 64px;position:relative;z-index:10;}
 header{padding:80px 0 60px;border-bottom:.5px solid rgba(197,160,89,.3);}
 .logo{font-family:'Libre Caslon Text',serif;font-size:72px;font-weight:700;color:var(--gold);letter-spacing:.15em;margin-bottom:16px;}
 .subtitle{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
-.version{display:inline-block;margin-top:16px;padding:6px 14px;background:rgba(197,160,89,.1);border:.5px solid var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.12em;}
+.version{display:inline-block;margin-top:16px;padding:6px 14px;background:rgba(255,191,0,.1);border:.5px solid var(--amber);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.12em;}
+
 section{padding:64px 0;border-bottom:.5px solid rgba(197,160,89,.15);}
 .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
 .section-label::before{content:'';width:24px;height:1px;background:var(--gold);}
 h2{font-family:'Libre Caslon Text',serif;font-size:40px;font-weight:700;color:var(--on);letter-spacing:-.02em;line-height:48px;margin-bottom:24px;}
 h3{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:600;color:var(--gold);letter-spacing:-.01em;margin:32px 0 16px;}
 p{font-size:16px;line-height:26px;color:var(--onv);margin-bottom:16px;}
+
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin:40px 0;}
-.stat{background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);border-radius:4px;padding:24px;}
+.stat{background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);border-radius:4px;padding:24px;transition:transform .3s;}
+.stat:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
 .stat-value{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:500;color:var(--gold);letter-spacing:-.02em;}
 .stat-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.12em;text-transform:uppercase;margin-top:8px;}
-.file-tree{background:rgba(10,13,18,.5);border:.5px solid rgba(197,160,89,.3);border-radius:4px;padding:24px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--onv);line-height:1.8;overflow-x:auto;}
+
+.file-tree{background:rgba(10,13,18,.6);border:.5px solid rgba(197,160,89,.3);border-radius:4px;padding:24px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--onv);line-height:1.8;overflow-x:auto;}
 .file-tree .folder{color:var(--gold);}
 .file-tree .file{color:var(--on);}
-.code-block{background:rgba(10,13,18,.6);border:.5px solid rgba(197,160,89,.3);border-radius:4px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--on);line-height:1.8;overflow-x:auto;margin:16px 0;}
+
+.code-block{background:rgba(10,13,18,.8);border:.5px solid rgba(197,160,89,.3);border-radius:4px;padding:20px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--on);line-height:1.8;overflow-x:auto;margin:16px 0;}
+.code-block .cmd{color:var(--amber);}
+.code-block .comment{color:var(--onv);opacity:.6;}
+
 .steps{counter-reset:step;margin:32px 0;}
 .step{counter-increment:step;padding:24px 24px 24px 80px;position:relative;background:rgba(0,51,68,.1);border:.5px solid rgba(197,160,89,.2);border-radius:4px;margin-bottom:16px;}
 .step::before{content:counter(step,decimal-leading-zero);position:absolute;left:24px;top:24px;font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;color:var(--gold);letter-spacing:-.02em;}
 .step h4{font-family:'Libre Caslon Text',serif;font-size:20px;font-weight:600;color:var(--on);margin-bottom:8px;}
+
 .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin:24px 0;}
-.card{background:rgba(0,51,68,.12);backdrop-filter:blur(20px);border:.5px solid var(--gold);border-radius:4px;padding:24px;}
+.card{background:rgba(0,51,68,.12);backdrop-filter:blur(20px);border:.5px solid var(--gold);border-radius:4px;padding:24px;transition:border-color .3s;}
+.card:hover{border-color:var(--amber);}
 .card h4{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:600;color:var(--gold);margin-bottom:12px;}
 .card ul{list-style:none;padding:0;}
 .card li{font-size:14px;line-height:22px;color:var(--onv);padding-left:20px;position:relative;margin-bottom:6px;}
 .card li::before{content:'›';position:absolute;left:0;color:var(--amber);font-weight:700;}
+.card code{background:rgba(197,160,89,.1);color:var(--amber);padding:2px 6px;border-radius:3px;font-size:12px;}
+
 footer{padding:48px 0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.1em;}
 footer .gold{color:var(--gold);}
-@media(max-width:900px){.container{padding:0 24px}.stats{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.logo{font-size:42px}}
+
+@media(max-width:900px){
+  .container{padding:0 24px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .logo{font-size:42px}
+}
 </style>
 </head>
 <body>
+<div class="grain"></div>
+<div class="scan"></div>
+
 <header>
   <div class="container">
     <div class="logo">ARCHIVE</div>
     <div class="subtitle">PROJECT NEXUS — Documentação Técnica</div>
-    <div class="version">v1.0.0 // RELEASE CANDIDATE</div>
+    <div class="version">v2.0.0 // STABLE RELEASE</div>
   </div>
 </header>
 
@@ -64,17 +91,58 @@ footer .gold{color:var(--gold);}
     <p><strong style="color:var(--gold)">PROJECT NEXUS</strong> é uma nova Propriedade Intelectual de investigação geopolítica e dedução moderna. Posicionado como sucessor espiritual de clássicos do gênero, o jogo coloca o jogador no comando da <strong>ARCHIVE</strong> — uma agência global dedicada a proteger o patrimônio material e imaterial da humanidade.</p>
     
     <div class="stats">
-      <div class="stat"><div class="stat-value">19</div><div class="stat-label">Telas Implementadas</div></div>
-      <div class="stat"><div class="stat-value">15K+</div><div class="stat-label">Linhas de Código</div></div>
-      <div class="stat"><div class="stat-value">80%</div><div class="stat-label">Progresso Geral</div></div>
-      <div class="stat"><div class="stat-value">100%</div><div class="stat-label">Identidade Archive OS</div></div>
+      <div class="stat"><div class="stat-value">19</div><div class="stat-label">Telas Evoluídas</div></div>
+      <div class="stat"><div class="stat-value">20</div><div class="stat-label">Missões Dinâmicas</div></div>
+      <div class="stat"><div class="stat-value">25</div><div class="stat-label">Artefatos Catalogados</div></div>
+      <div class="stat"><div class="stat-value">100%</div><div class="stat-label">Integração API v2</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="novidades">
+  <div class="container">
+    <div class="section-label">02 — Novidades da v2.0</div>
+    <h2>Evoluções Técnicas Principais</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Integração Backend Real</h4>
+        <ul>
+          <li>Comunicação resiliente com Node.js (fallback para MOCK se offline).</li>
+          <li>Persistência de estado via <code>localStorage</code> e banco SQLite.</li>
+          <li>Sistema de upgrades e progressão de jogador funcional.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Imagens Dinâmicas (IA)</h4>
+        <ul>
+          <li>Geração procedural de imagens via Pollinations AI.</li>
+          <li>Cada missão e artefato possui uma imagem única baseada em seu nome e categoria.</li>
+          <li>Seed fixo por ID para consistência visual entre recarregamentos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Feedback Imersivo</h4>
+        <ul>
+          <li>Sistema de notificações Toast nativo (<code>ArchiveAPI.notify</code>).</li>
+          <li>Integração completa com <code>audio-system.js</code> para cliques, sucessos e erros.</li>
+          <li>Animações de entrada e transições refinadas em todas as telas.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Localização Funcional</h4>
+        <ul>
+          <li>Sistema de tradução i18n nativo na tela de configurações.</li>
+          <li>Suporte a PT-BR, EN-US, FR-FR e DE-DE com persistência de preferência.</li>
+          <li>Dicionário expansível para futuras adições de idioma.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="arquivos">
   <div class="container">
-    <div class="section-label">02 — Estrutura de Arquivos</div>
+    <div class="section-label">03 — Estrutura de Arquivos</div>
     <h2>Lista Completa de Arquivos</h2>
     <div class="file-tree"><span class="folder">project-nexus/</span>
 ├── <span class="folder">backend/</span>
@@ -88,15 +156,13 @@ footer .gold{color:var(--gold);}
 │       │   ├── <span class="file">player.js</span>
 │       │   └── <span class="file">archive.js</span>
 │       └── <span class="folder">services/</span>
-│           ├── <span class="file">missionGenerator.js</span>
-│           ├── <span class="file">evidenceSystem.js</span>
-│           └── <span class="file">progression.js</span>
+│           └── <span class="file">missionGenerator.js</span>
 │
 ├── <span class="folder">telas-individuais/</span>
 │   ├── <span class="file">01-splash.html</span>
 │   ├── <span class="file">02-intro.html</span>
 │   ├── <span class="file">03-cadastro.html</span>
-│   ├── <span class="file">04-config.html</span>
+│   ├── <span class="file">04-configuracao.html</span>
 │   ├── <span class="file">05-globo.html</span>
 │   ├── <span class="file">06-tela-inicial.html</span>
 │   ├── <span class="file">07-briefing.html</span>
@@ -105,7 +171,7 @@ footer .gold{color:var(--gold);}
 │   ├── <span class="file">10-missao-ativa.html</span>
 │   ├── <span class="file">11-passaporte.html</span>
 │   ├── <span class="file">12-diario.html</span>
-│   ├── <span class="file">13-status-sede.html</span>
+│   ├── <span class="file">13-status-rede.html</span>
 │   ├── <span class="file">14-conclusao.html</span>
 │   ├── <span class="file">15-museu.html</span>
 │   ├── <span class="file">16-biblioteca.html</span>
@@ -113,17 +179,17 @@ footer .gold{color:var(--gold);}
 │   ├── <span class="file">18-sala-diretor.html</span>
 │   └── <span class="file">19-hq-atrium.html</span>
 │
+├── <span class="file">api.js</span> <span class="comment">// Cliente de API Resiliente</span>
+├── <span class="file">audio-system.js</span>
 ├── <span class="file">index.html</span>
 ├── <span class="file">preview.html</span>
-├── <span class="file">audio-system.html</span>
-├── <span class="file">docs.html</span>
-└── <span class="file">README.md</span></div>
+└── <span class="file">docs.html</span></div>
   </div>
 </section>
 
 <section id="instalacao">
   <div class="container">
-    <div class="section-label">03 — Instalação</div>
+    <div class="section-label">04 — Instalação</div>
     <h2>Como Instalar e Rodar</h2>
     <div class="steps">
       <div class="step">
@@ -151,7 +217,7 @@ NODE_ENV=development</div>
       </div>
       <div class="step">
         <h4>Servir Frontend</h4>
-        <div class="code-block"><span class="comment"># Opção 1: VS Code Live Server</span>
+        <div class="code-block"><span class="comment"># Opção 1: VS Code Live Server (Recomendado)</span>
 <span class="comment"># Clique direito em index.html → "Open with Live Server"</span>
 
 <span class="comment"># Opção 2: Python</span>
@@ -166,43 +232,43 @@ NODE_ENV=development</div>
 
 <section id="api">
   <div class="container">
-    <div class="section-label">04 — API Reference</div>
+    <div class="section-label">05 — API Reference</div>
     <h2>Endpoints Principais</h2>
     <div class="grid-2">
       <div class="card">
         <h4>Missões</h4>
         <ul>
-          <li><code>GET /api/missions</code> — Listar missões</li>
-          <li><code>GET /api/missions/:id</code> — Detalhes da missão</li>
-          <li><code>POST /api/missions/generate</code> — Gerar missões procedurais</li>
-          <li><code>POST /api/missions/:id/accept</code> — Aceitar missão</li>
-          <li><code>POST /api/missions/:id/complete</code> — Completar missão</li>
+          <li><code>GET /api/missions</code> — Lista missões (Retorna <code>{ "missions": [...] }</code>)</li>
+          <li><code>POST /api/missions/generate</code> — Gera missão procedural</li>
+          <li><code>POST /api/missions/:id/accept</code> — Aceita missão (requer <code>player_id</code>)</li>
+          <li><code>POST /api/missions/:id/complete</code> — Completa missão e distribui recompensas</li>
         </ul>
       </div>
       <div class="card">
         <h4>Jogador</h4>
         <ul>
-          <li><code>POST /api/player</code> — Criar jogador</li>
-          <li><code>GET /api/player/:id</code> — Perfil do jogador</li>
-          <li><code>PUT /api/player/:id</code> — Atualizar jogador</li>
-          <li><code>POST /api/player/:id/upgrades</code> — Comprar upgrade</li>
+          <li><code>POST /api/player</code> — Cria novo jogador</li>
+          <li><code>GET /api/player/:id</code> — Retorna perfil, missões ativas e upgrades</li>
+          <li><code>PUT /api/player/:id</code> — Atualiza dados do jogador (XP, créditos, etc)</li>
+          <li><code>POST /api/player/:id/upgrades</code> — Compra um upgrade (valida créditos)</li>
         </ul>
       </div>
       <div class="card">
-        <h4>Archive</h4>
+        <h4>Archive (Acervo)</h4>
         <ul>
-          <li><code>GET /api/archive/artifacts</code> — Listar artefatos</li>
-          <li><code>GET /api/archive/suspects</code> — Listar suspeitos</li>
-          <li><code>GET /api/archive/stats</code> — Estatísticas</li>
+          <li><code>GET /api/archive/artifacts</code> — Lista artefatos (Retorna <code>{ "artifacts": [...] }</code>)</li>
+          <li><code>GET /api/archive/suspects</code> — Lista suspeitos</li>
+          <li><code>GET /api/archive/upgrades</code> — Lista árvore de upgrades disponíveis</li>
+          <li><code>GET /api/archive/stats</code> — Retorna estatísticas globais do acervo</li>
         </ul>
       </div>
       <div class="card">
         <h4>Sistema</h4>
         <ul>
-          <li><code>GET /api/health</code> — Health check</li>
-          <li>CORS habilitado para localhost:5500</li>
-          <li>Rate limiting: 100 req/15min</li>
-          <li>SQLite com WAL mode</li>
+          <li><code>GET /api/health</code> — Health check do servidor</li>
+          <li>CORS habilitado para <code>localhost:5500</code> e <code>127.0.0.1:5500</code></li>
+          <li>Rate limiting: 100 req/15min por IP</li>
+          <li>SQLite com persistência em <code>nexus.db</code></li>
         </ul>
       </div>
     </div>
@@ -212,7 +278,7 @@ NODE_ENV=development</div>
 <footer>
   <div class="container">
     <div>© 1984 <span class="gold">ARCHIVE GLOBAL INTELLIGENCE</span></div>
-    <div style="margin-top:8px;opacity:.6;">PROJECT NEXUS v1.0.0 // DOCUMENTAÇÃO TÉCNICA</div>
+    <div style="margin-top:8px;opacity:.6;">PROJECT NEXUS v2.0.0 // DOCUMENTAÇÃO TÉCNICA ATUALIZADA</div>
   </div>
 </footer>
 </body>

@@ -21,64 +21,32 @@
   var LEGACY_STATE_KEY = "project_nexus_state_v1";
 
   /* ===========================================
-     DADOS MOCK DE FALLBACK
+     DADOS MOCK DE FALLBACK - EVOLUÇÃO COMPLETA
      =========================================== */
   var MOCK = {
     missions: [
-      {
-        id: 1,
-        codename: "MERIDIAN",
-        title: "Operação Meridian",
-        location: "Cairo, Egito",
-        priority: "ALTA",
-        status: "ativa",
-        phase: 2,
-        totalPhases: 4,
-        specialty_filter: ["arqueologia", "historia"],
-        description:
-          "Rastreamento de artefato roubado do Museo Egizio. Indícios apontam para rede de contrabando operando entre Cairo e Istanbul.",
-        objectives: [
-          "Localizar o artefato #47",
-          "Identificar os intermediários",
-          "Recuperar sem expor a Archive",
-        ],
-        reward: { xp: 350, credits: 1200, artifacts: 1 },
-      },
-      {
-        id: 2,
-        codename: "TYPHON",
-        title: "Operação Typhon",
-        location: "Istambul, Turquia",
-        priority: "MEDIA",
-        status: "ativa",
-        phase: 1,
-        totalPhases: 3,
-        specialty_filter: ["investigacao", "inteligencia"],
-        description:
-          "Investigação de documentos históricos falsificados circulando no mercado negro de antiguidades.",
-        objectives: [
-          "Analisar documentos interceptados",
-          "Rastrear a origem das falsificações",
-          "Proteger coleções vulneráveis",
-        ],
-        reward: { xp: 250, credits: 800, artifacts: 0 },
-      },
-      {
-        id: 3,
-        codename: "SIGNAL",
-        title: "Operação Signal",
-        location: "Londres, Reino Unido",
-        priority: "BAIXA",
-        status: "reconhecimento",
-        phase: 1,
-        totalPhases: 2,
-        specialty_filter: ["tecnologia", "criptografia"],
-        description:
-          "Monitoramento de sinais de comunicação suspeitos próximo a um depósito de arte classificada.",
-        objectives: ["Mapear padrões de comunicação", "Identificar envolvidos"],
-        reward: { xp: 150, credits: 500, artifacts: 0 },
-      },
+      { id: 1, codename: 'MERIDIAN', title: 'O Cálice de Antioquia', location: 'Viena, Áustria', priority: 'ALTA', status: 'ativa', phase: 1, totalPhases: 3, specialty_filter: ['arqueologia', 'historia'], description: 'Recuperação de um artefato Classe-4. Inteligência sugere conexão com rede clandestina.', objectives: ['Localizar cofre', 'Neutralizar courier', 'Recuperar cálice'], reward: {xp: 500, credits: 1200, artifacts: 1} },
+      { id: 2, codename: 'TYPHON', title: 'Manuscrito de Voynich', location: 'Londres, Reino Unido', priority: 'MÉDIA', status: 'ativa', phase: 1, totalPhases: 2, specialty_filter: ['criptografia', 'historia'], description: 'Estudo de um manuscrito criptografado. Suspeita de segredos químicos ocultos.', objectives: ['Obter acesso', 'Escanear páginas', 'Traduzir fragmento'], reward: {xp: 300, credits: 800, artifacts: 0} },
+      { id: 3, codename: 'SIGNAL', title: 'Máscara Dourada Inca', location: 'Cusco, Peru', priority: 'CRÍTICA', status: 'ativa', phase: 1, totalPhases: 5, specialty_filter: ['arqueologia', 'investigacao'], description: 'Recuperação urgente antes da venda em leilão privado.', objectives: ['Infiltrar mansão', 'Localizar máscara', 'Extrair via helicóptero'], reward: {xp: 1000, credits: 2500, artifacts: 1} },
+      { id: 4, codename: 'PHOENIX', title: 'Moedas de Ouro Romano', location: 'Roma, Itália', priority: 'BAIXA', status: 'ativa', phase: 1, totalPhases: 2, specialty_filter: ['historia', 'arqueologia'], description: 'Rastreamento de moedas raras contrabandeadas.', objectives: ['Identificar fonte', 'Monitorar transação', 'Apreender carga'], reward: {xp: 200, credits: 500, artifacts: 0} },
+      { id: 5, codename: 'ECLIPSE', title: 'Estátua de Shiva', location: 'Mumbai, Índia', priority: 'ALTA', status: 'ativa', phase: 2, totalPhases: 4, specialty_filter: ['arqueologia', 'investigacao'], description: 'A estátua foi roubada de um templo protegido.', objectives: ['Localizar templo', 'Monitorar suspeito', 'Resgatar estátua'], reward: {xp: 700, credits: 1800, artifacts: 1} },
+      { id: 6, codename: 'SENTINEL', title: 'Arma de Samurai', location: 'Tóquio, Japão', priority: 'MÉDIA', status: 'ativa', phase: 1, totalPhases: 3, specialty_filter: ['historia', 'investigacao'], description: 'Espada antiga do período Edo sendo negociada.', objectives: ['Infiltrar dojo', 'Verificar autenticidade', 'Recuperar katana'], reward: {xp: 400, credits: 1000, artifacts: 0} },
+      { id: 7, codename: 'VIPER', title: 'Pergaminhos do Mar Morto', location: 'Cairo, Egito', priority: 'CRÍTICA', status: 'ativa', phase: 1, totalPhases: 6, specialty_filter: ['historia', 'arqueologia'], description: 'Recuperar fragmentos antes da destruição.', objectives: ['Alcançar sítio', 'Proteger pergaminhos', 'Extrair sob fogo'], reward: {xp: 1200, credits: 3000, artifacts: 1} },
+      { id: 8, codename: 'GHOST', title: 'Colar de Pérolas Chinês', location: 'Pequim, China', priority: 'MÉDIA', status: 'ativa', phase: 2, totalPhases: 3, specialty_filter: ['investigacao', 'inteligencia'], description: 'Joia da dinastia Qing em rota de contrabando.', objectives: ['Rastrear courier', 'Identificar comprador', 'Interceptar'], reward: {xp: 450, credits: 1100, artifacts: 0} },
+      { id: 9, codename: 'IRONCLAD', title: 'Relíquia Viking', location: 'Berlim, Alemanha', priority: 'BAIXA', status: 'ativa', phase: 1, totalPhases: 2, specialty_filter: ['arqueologia', 'historia'], description: 'Amuleto encontrado em escavação.', objectives: ['Monitorar museu', 'Registrar inventário', 'Apreender'], reward: {xp: 250, credits: 600, artifacts: 0} },
+      { id: 10, codename: 'SHADOW', title: 'Joias Reais', location: 'Paris, França', priority: 'ALTA', status: 'ativa', phase: 1, totalPhases: 4, specialty_filter: ['investigacao', 'inteligencia'], description: 'Roubo de joias no Louvre.', objectives: ['Infiltrar Louvre', 'Desativar alarme', 'Recuperar'], reward: {xp: 800, credits: 2000, artifacts: 1} },
+      { id: 11, codename: 'VALKYRIE', title: 'Busto Grego', location: 'Atenas, Grécia', priority: 'MÉDIA', status: 'ativa', phase: 1, totalPhases: 3, specialty_filter: ['arqueologia', 'historia'], description: 'Busto sendo leiloado ilegalmente.', objectives: ['Verificar galeria', 'Localizar busto', 'Apreender'], reward: {xp: 500, credits: 1300, artifacts: 0} },
+      { id: 12, codename: 'PEGASUS', title: 'Relógio de Bolso', location: 'Nova York, EUA', priority: 'BAIXA', status: 'ativa', phase: 1, totalPhases: 2, specialty_filter: ['tecnologia', 'investigacao'], description: 'Relógio de inventor famoso.', objectives: ['Rastrear leilão', 'Monitorar', 'Interceptar'], reward: {xp: 300, credits: 700, artifacts: 0} },
+      { id: 13, codename: 'ORACLE', title: 'Máscara Asteca', location: 'Cidade do México, México', priority: 'ALTA', status: 'ativa', phase: 2, totalPhases: 4, specialty_filter: ['arqueologia', 'historia'], description: 'Máscara roubada de sítio arqueológico.', objectives: ['Explorar sítio', 'Rastrear suspeitos', 'Recuperar'], reward: {xp: 900, credits: 2200, artifacts: 1} },
+      { id: 14, codename: 'TITAN', title: 'Estátua de Bronze', location: 'Roma, Itália', priority: 'CRÍTICA', status: 'ativa', phase: 1, totalPhases: 5, specialty_filter: ['arqueologia', 'investigacao'], description: 'Estátua de valor inestimável.', objectives: ['Infiltrar cofre', 'Desativar laser', 'Extrair'], reward: {xp: 1500, credits: 3500, artifacts: 1} },
+      { id: 15, codename: 'SERPENT', title: 'Adaga Pérsia', location: 'Dubai, EAU', priority: 'MÉDIA', status: 'ativa', phase: 1, totalPhases: 3, specialty_filter: ['historia', 'investigacao'], description: 'Adaga cerimonial em leilão.', objectives: ['Infiltrar evento', 'Localizar item', 'Extrair'], reward: {xp: 600, credits: 1500, artifacts: 0} },
+      { id: 16, codename: 'GRIFFIN', title: 'Amuleto Egípcio', location: 'Luxor, Egito', priority: 'ALTA', status: 'ativa', phase: 2, totalPhases: 4, specialty_filter: ['arqueologia', 'historia'], description: 'Amuleto escondido em tumba.', objectives: ['Explorar tumba', 'Localizar amuleto', 'Extrair'], reward: {xp: 750, credits: 1900, artifacts: 1} },
+      { id: 17, codename: 'DRAGON', title: 'Vaso Chinês', location: 'Bangkok, Tailândia', priority: 'MÉDIA', status: 'ativa', phase: 1, totalPhases: 3, specialty_filter: ['historia', 'arqueologia'], description: 'Vaso de dinastia Ming.', objectives: ['Rastrear contrabando', 'Identificar local', 'Apreender'], reward: {xp: 550, credits: 1400, artifacts: 0} },
+      { id: 18, codename: 'HYDRA', title: 'Espada Medieval', location: 'Moscou, Rússia', priority: 'ALTA', status: 'ativa', phase: 1, totalPhases: 4, specialty_filter: ['historia', 'investigacao'], description: 'Espada em coleção privada.', objectives: ['Infiltrar propriedade', 'Localizar espada', 'Recuperar'], reward: {xp: 850, credits: 2100, artifacts: 0} },
+      { id: 19, codename: 'PHANTOM', title: 'Anel de Sinete', location: 'Rio de Janeiro, Brasil', priority: 'BAIXA', status: 'ativa', phase: 1, totalPhases: 2, specialty_filter: ['investigacao', 'inteligencia'], description: 'Anel em colecionador.', objectives: ['Localizar anel', 'Monitorar', 'Interceptar'], reward: {xp: 350, credits: 900, artifacts: 0} },
+      { id: 20, codename: 'CERBERUS', title: 'Manuscrito Persa', location: 'Istambul, Turquia', priority: 'CRÍTICA', status: 'ativa', phase: 1, totalPhases: 6, specialty_filter: ['historia', 'criptografia'], description: 'Manuscrito perdido de sabedoria.', objectives: ['Localizar biblioteca', 'Proteger item', 'Extrair'], reward: {xp: 1300, credits: 3200, artifacts: 1} }
     ],
+    
     player: {
       name: "Diretor",
       codename: "NOVICE",
@@ -90,82 +58,37 @@
       missionsCompleted: 0,
       missionsFailed: 0,
       artifactsRecovered: 0,
-      agentsRecruited: 3,
+      agentsRecruited: 3
     },
+    
     artifacts: [
-      {
-        id: 1,
-        name: "Tabuinha de Narmer",
-        origin: "Egito Antigo",
-        circa: "3100 a.C.",
-        category: "Arqueologico",
-        status: "catalogado",
-        location: "Acervo Digital",
-      },
-      {
-        id: 2,
-        name: "Códice de Hammurabi (fragmento)",
-        origin: "Mesopotâmia",
-        circa: "1750 a.C.",
-        category: "Documental",
-        status: "catalogado",
-        location: "Acervo Digital",
-      },
-      {
-        id: 3,
-        name: "Mosaico de Pela",
-        origin: "Macedônia Antiga",
-        circa: "300 a.C.",
-        category: "Artistico",
-        status: "em analise",
-        location: "Laboratório",
-      },
-      {
-        id: 4,
-        name: "Pergaminho de Qumran",
-        origin: "Judeia",
-        circa: "100 a.C.",
-        category: "Documental",
-        status: "catalogado",
-        location: "Acervo Digital",
-      },
-      {
-        id: 5,
-        name: "Estela de Rosetta (réplica exata)",
-        origin: "Egito Ptolemaico",
-        circa: "196 a.C.",
-        category: "Arqueologico",
-        status: "catalogado",
-        location: "Museu Archive",
-      },
-      {
-        id: 6,
-        name: "Moeda de Creso",
-        origin: "Lídia",
-        circa: "550 a.C.",
-        category: "Numismatico",
-        status: "catalogado",
-        location: "Acervo Digital",
-      },
-      {
-        id: 7,
-        name: "Taça de Dario I",
-        origin: "Pérsia Aquemênida",
-        circa: "500 a.C.",
-        category: "Artistico",
-        status: "em restauracao",
-        location: "Laboratório",
-      },
-      {
-        id: 8,
-        name: "Lança de Bronze Nórdica",
-        origin: "Escandinávia",
-        circa: "800 d.C.",
-        category: "Arqueologico",
-        status: "catalogado",
-        location: "Acervo Digital",
-      },
+      { id: 1, name: 'Cálice de Antioquia', origin: 'Bizâncio', circa: 'Século I', category: 'Religioso', status: 'em analise', location: 'Laboratório' },
+      { id: 2, name: 'Manuscrito de Voynich', origin: 'Europa Central', circa: 'Século XV', category: 'Documental', status: 'em restauracao', location: 'Acervo Digital' },
+      { id: 3, name: 'Máscara de Jade Inca', origin: 'Império Inca', circa: 'Século XV', category: 'Arqueologico', status: 'catalogado', location: 'Museu Archive' },
+      { id: 4, name: 'Adaga de Bronze Pérsica', origin: 'Pérsia', circa: 'Século V a.C.', category: 'Militar', status: 'em analise', location: 'Laboratório' },
+      { id: 5, name: 'Vaso Dinastia Ming', origin: 'China', circa: 'Século XIV', category: 'Artistico', status: 'confidencial', location: 'Cofre Omega' },
+      { id: 6, name: 'Moedas de Ouro Romano', origin: 'Roma', circa: 'Século II', category: 'Numismatico', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 7, name: 'Espada de Samurai', origin: 'Japão', circa: 'Século XVII', category: 'Militar', status: 'em restauracao', location: 'Laboratório' },
+      { id: 8, name: 'Papiro Egípcio', origin: 'Egito', circa: 'Século XII a.C.', category: 'Documental', status: 'em analise', location: 'Acervo Digital' },
+      { id: 9, name: 'Estátua de Shiva', origin: 'Índia', circa: 'Século X', category: 'Artistico', status: 'confidencial', location: 'Célula-47' },
+      { id: 10, name: 'Amuleto de Proteção', origin: 'Egito', circa: 'Século VIII a.C.', category: 'Religioso', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 11, name: 'Anel de Sinete', origin: 'França', circa: 'Século XVI', category: 'Artistico', status: 'emprestado', location: 'Museu Externo' },
+      { id: 12, name: 'Relógio de Inventores', origin: 'Suíça', circa: 'Século XVIII', category: 'Cientifico', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 13, name: 'Máscara Asteca', origin: 'Império Asteca', circa: 'Século XIV', category: 'Arqueologico', status: 'em analise', location: 'Laboratório' },
+      { id: 14, name: 'Busto Grego', origin: 'Grécia', circa: 'Século IV a.C.', category: 'Artistico', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 15, name: 'Pergaminho de Sabedoria', origin: 'Pérsia', circa: 'Século X', category: 'Documental', status: 'em restauracao', location: 'Laboratório' },
+      { id: 16, name: 'Escudo Viking', origin: 'Escandinávia', circa: 'Século IX', category: 'Militar', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 17, name: 'Jarro Grego', origin: 'Grécia', circa: 'Século V a.C.', category: 'Artistico', status: 'em analise', location: 'Laboratório' },
+      { id: 18, name: 'Colar de Pérolas', origin: 'China', circa: 'Século XVIII', category: 'Artistico', status: 'confidencial', location: 'Cofre Omega' },
+      { id: 19, name: 'Bússola Antiga', origin: 'China', circa: 'Século XI', category: 'Cientifico', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 20, name: 'Adaga Asteca', origin: 'Império Asteca', circa: 'Século XV', category: 'Militar', status: 'em analise', location: 'Laboratório' },
+      { id: 21, name: 'Manuscrito Maya', origin: 'Império Maia', circa: 'Século XIII', category: 'Documental', status: 'em restauracao', location: 'Laboratório' },
+      { id: 22, name: 'Busto Romano', origin: 'Roma', circa: 'Século I', category: 'Artistico', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 23, name: 'Elmo Medieval', origin: 'Europa', circa: 'Século XII', category: 'Militar', status: 'confidencial', location: 'Célula-47' },
+      { id: 24, name: 'Pote de Cerâmica', origin: 'Mesopotâmia', circa: 'Século III a.C.', category: 'Arqueologico', status: 'catalogado', location: 'Acervo Digital' },
+      { id: 25, name: 'Cálice de Ouro', origin: 'Europa', circa: 'Século XII', category: 'Religioso', status: 'em analise', location: 'Laboratório' }
     ],
+    
     archive: {
       totalArtifacts: 47,
       categories: [
@@ -173,10 +96,11 @@
         { name: "Documental", count: 12 },
         { name: "Artistico", count: 9 },
         { name: "Numismatico", count: 5 },
-        { name: "Cientifico", count: 3 },
+        { name: "Cientifico", count: 3 }
       ],
-      recentAdditions: 5,
+      recentAdditions: 5
     },
+    
     upgrades: [
       {
         id: 1,
@@ -184,7 +108,7 @@
         category: "Tecnologia",
         cost: 4500,
         requirement: "Rede II",
-        description: "Segurança de comunicações +45%.",
+        description: "Segurança de comunicações +45%."
       },
       {
         id: 2,
@@ -192,7 +116,7 @@
         category: "Inteligência",
         cost: 3200,
         requirement: "Nível 2",
-        description: "Cobertura de vigilância +30%.",
+        description: "Cobertura de vigilância +30%."
       },
       {
         id: 3,
@@ -200,9 +124,9 @@
         category: "Análise",
         cost: 6800,
         requirement: "Tecnologia III",
-        description: "IA de previsão de movimentos.",
-      },
-    ],
+        description: "IA de previsão de movimentos."
+      }
+    ]
   };
 
   /* ===========================================
@@ -219,7 +143,6 @@
           if (res.ok) {
             _isOnline = true;
             console.log("[ARCHIVE API] Backend conectado em " + BASE_URL);
-            // Tenta recuperar playerId do localStorage
             var saved = localStorage.getItem("nexus_player_id");
             if (saved) _playerId = saved;
             return true;
@@ -280,7 +203,7 @@
         .catch(function (err) {
           console.warn(
             "[ARCHIVE API] Falha POST em " + endpoint + ":",
-            err.message,
+            err.message
           );
           return null;
         });
@@ -290,7 +213,6 @@
     getMissions: function (specialty) {
       return this._request("/missions").then(function (data) {
         var missions = data && data.missions ? data.missions : MOCK.missions;
-        // Filtra por especialidade se fornecida
         if (specialty) {
           return missions.filter(function (m) {
             return (
@@ -464,7 +386,6 @@
       toast.textContent = message;
       document.body.appendChild(toast);
       
-      // Estilos inline básicos para garantir funcionamento
       toast.style.position = 'fixed';
       toast.style.bottom = '20px';
       toast.style.right = '20px';

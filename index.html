@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Integração com o Sistema de Áudio -->
+  <script src="audio-system.js"></script>
   <style>
     /* ============================================
        VARIÁVEIS DE DESIGN — ARCHIVE OS
@@ -573,7 +575,7 @@
       <div id="admit-header">
         <i class="fas fa-shield-halved"></i>
         <h1>ADMITIR ACESSO</h1>
-        <p>Identificacao requerida para entrar no Archive OS</p>
+        <p>Identificação requerida para entrar no Archive OS</p>
       </div>
       <form id="admit-form" novalidate>
         <div class="form-group">
@@ -581,12 +583,12 @@
           <input type="text" id="dir-name" placeholder="Ex: Alexandre Moreira" autocomplete="name" required>
         </div>
         <div class="form-group">
-          <label for="dir-codename">Codinome de Operacao</label>
+          <label for="dir-codename">Codinome de Operação</label>
           <input type="text" id="dir-codename" placeholder="Ex: CIPHER" autocomplete="off" required>
         </div>
         <div id="admit-error" role="alert"></div>
         <button type="submit" id="admit-btn">
-          <span>INICIAR SESSAO</span>
+          <span>INICIAR SESSÃO</span>
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
@@ -601,16 +603,16 @@
     <div id="sidebar-overlay"></div>
 
     <!-- Sidebar -->
-    <nav id="sidebar" aria-label="Navegacao principal">
+    <nav id="sidebar" aria-label="Navegação principal">
       <div id="sidebar-brand">
         <span class="brand-icon">A</span>
         <span class="brand-text">ARCHIVE</span>
       </div>
       <div id="sidebar-nav" role="navigation"></div>
       <div id="sidebar-footer">
-        <button id="logout-btn" aria-label="Encerrar sessao">
+        <button id="logout-btn" aria-label="Encerrar sessão">
           <i class="fas fa-power-off"></i>
-          <span>Encerrar Sessao</span>
+          <span>Encerrar Sessão</span>
         </button>
       </div>
     </nav>
@@ -633,14 +635,14 @@
       </header>
 
       <div id="frame-container">
-        <!-- Dashboard inicial (visivel por padrao) -->
+        <!-- Dashboard inicial (visível por padrão) -->
         <div id="home-dashboard"></div>
         <!-- Iframe para as telas individuais -->
-        <iframe id="app-frame" src="about:blank" title="Modulo do Archive OS"></iframe>
+        <iframe id="app-frame" src="about:blank" title="Módulo do Archive OS"></iframe>
         <!-- Overlay de carregamento -->
         <div id="frame-loading">
           <div class="spinner"></div>
-          <span>Carregando modulo...</span>
+          <span>Carregando módulo...</span>
         </div>
       </div>
     </main>
@@ -657,10 +659,8 @@
     'use strict';
 
     /* ==============================================
-       CONFIGURACAO DE NAVEGACAO
-       Ajuste os caminhos dos arquivos conforme necessario.
-       O campo "file" aponta para telas-individuais/.
-       Se "file" estiver ausente, abre o dashboard.
+       CONFIGURAÇÃO DE NAVEGAÇÃO
+       Nomes de arquivos confirmados e corretos.
        ============================================== */
     var NAV_CONFIG = [
       {
@@ -671,10 +671,10 @@
         ]
       },
       {
-        group: 'OPERACOES',
+        group: 'OPERAÇÕES',
         items: [
-          { id: 'missions',  icon: 'fa-crosshairs',      label: 'Missoes Ativas',      file: 'telas-individuais/07-briefing.html' },
-          { id: 'evidence',  icon: 'fa-diagram-project',  label: 'Teia de Evidencias',  file: 'telas-individuais/09-teia.html' }
+          { id: 'missions',  icon: 'fa-crosshairs',      label: 'Missões Ativas',      file: 'telas-individuais/07-briefing.html' },
+          { id: 'evidence',  icon: 'fa-diagram-project',  label: 'Teia de Evidências',  file: 'telas-individuais/09-teia.html' }
         ]
       },
       {
@@ -689,12 +689,12 @@
         group: 'AGENTE',
         items: [
           { id: 'passport', icon: 'fa-id-card',    label: 'Passaporte',         file: 'telas-individuais/11-passaporte.html' },
-          { id: 'journal',  icon: 'fa-pen-nib',    label: 'Diario de Bordo',    file: 'telas-individuais/12-diario.html' },
-          { id: 'progress', icon: 'fa-chart-line', label: 'Progressao',         file: 'telas-individuais/17-progressao.html' }
+          { id: 'journal',  icon: 'fa-pen-nib',    label: 'Diário de Bordo',    file: 'telas-individuais/12-diario.html' },
+          { id: 'progress', icon: 'fa-chart-line', label: 'Progressão',         file: 'telas-individuais/17-progressao.html' }
         ]
       },
       {
-        group: 'INSTALACOES',
+        group: 'INSTALAÇÕES',
         items: [
           { id: 'hq',       icon: 'fa-building',    label: 'Status da Sede',     file: 'telas-individuais/13-status-sede.html' },
           { id: 'director', icon: 'fa-user-shield', label: 'Sala do Diretor',    file: 'telas-individuais/18-sala-diretor.html' },
@@ -704,26 +704,24 @@
       {
         group: 'SISTEMA',
         items: [
-          { id: 'settings', icon: 'fa-gear', label: 'Configuracoes', file: 'telas-individuais/04-config.html' }
+          { id: 'settings', icon: 'fa-gear', label: 'Configurações', file: 'telas-individuais/04-config.html' }
         ]
       }
     ];
 
     /* Dados do dashboard (fallback local) */
-    var DASH_STATS = {
-      missions: 3, artifacts: 47, agents: 12, integrity: 94.7
-    };
+    var DASH_STATS = { missions: 3, artifacts: 47, agents: 12, integrity: 94.7 };
     var DASH_MISSION = {
-      name: 'OPERACAO MERIDIAN', location: 'Cairo, Egito',
+      name: 'OPERAÇÃO MERIDIAN', location: 'Cairo, Egito',
       priority: 'ALTA', phase: 2, totalPhases: 4, progress: 50
     };
     var DASH_ACTIVITY = [
-      { time: '14:32', text: 'Agente ORACLE reportou posicao em Cairo' },
+      { time: '14:32', text: 'Agente ORACLE reportou posição em Cairo' },
       { time: '14:15', text: 'Artefato #47 adicionado ao acervo digital' },
-      { time: '13:58', text: 'Analise de evidencias da Missao Typhon atualizada' },
-      { time: '13:40', text: 'Tunel criptografado reestabelecido com nodo Londres' },
-      { time: '13:22', text: 'Alerta de movimentacao suspeita em Istanbul' },
-      { time: '12:50', text: 'Backup do banco de dados concluido com sucesso' }
+      { time: '13:58', text: 'Análise de evidências da Missão Typhon atualizada' },
+      { time: '13:40', text: 'Túnel criptografado reestabelecido com nodo Londres' },
+      { time: '13:22', text: 'Alerta de movimentação suspeita em Istanbul' },
+      { time: '12:50', text: 'Backup do banco de dados concluído com sucesso' }
     ];
 
     /* ==============================================
@@ -735,7 +733,7 @@
     var loadTimeout = null;
 
     /* ==============================================
-       UTILITARIOS
+       UTILITÁRIOS
        ============================================== */
     function getState() {
       try { return JSON.parse(localStorage.getItem(STATE_KEY)) || null; }
@@ -750,7 +748,6 @@
       localStorage.removeItem(STATE_KEY);
     }
 
-    /* Aguarda um tempo (ms) */
     function wait(ms) {
       return new Promise(function(resolve) { setTimeout(resolve, ms); });
     }
@@ -768,7 +765,6 @@
         '<span>' + message + '</span>' +
         '<button class="toast-close" aria-label="Fechar"><i class="fas fa-xmark"></i></button>';
       container.appendChild(toast);
-      /* Forcar reflow para a animacao funcionar */
       toast.offsetHeight;
       toast.classList.add('show');
       var closeBtn = toast.querySelector('.toast-close');
@@ -794,14 +790,13 @@
       var text = 'ARCHIVE';
       var baseDelay = fast ? 30 : 90;
       var logLines = [
-        'INICIALIZANDO NUCLEO ARCHIVE...',
-        'CARREGANDO MODULOS CRIPTOGRAFICOS...',
-        'ESTABELECENDO TUNEL SEGURO...',
+        'INICIALIZANDO NÚCLEO ARCHIVE...',
+        'CARREGANDO MÓDULOS CRIPTOGRÁFICOS...',
+        'ESTABELECENDO TÚNEL SEGURO...',
         'VERIFICANDO INTEGRIDADE DOS DADOS...',
         'CONECTANDO REDE ARCHIVE-NET...'
       ];
 
-      /* Fase 1: Digitar o logo */
       for (var i = 0; i < text.length; i++) {
         logoText.textContent += text[i];
         await wait(baseDelay);
@@ -810,7 +805,6 @@
       await wait(fast ? 200 : 500);
       subtitle.classList.add('visible');
 
-      /* Fase 2: Log de inicializacao + barra de progresso */
       await wait(fast ? 100 : 400);
       progressWrap.classList.add('visible');
 
@@ -825,7 +819,6 @@
         await wait(fast ? 80 : 350);
       }
 
-      /* Linha final */
       await wait(fast ? 80 : 300);
       var okLine = document.createElement('div');
       okLine.className = 'log-line log-ok';
@@ -836,7 +829,6 @@
 
       await wait(fast ? 300 : 800);
 
-      /* Fase 3: Transicao */
       bootEl.classList.add('fade-out');
       await wait(600);
       bootEl.style.display = 'none';
@@ -848,7 +840,6 @@
     function showAdmit() {
       var admit = document.getElementById('admit');
       admit.style.display = 'flex';
-      /* Forcar reflow */
       admit.offsetHeight;
       admit.classList.add('visible', 'show');
       document.getElementById('dir-name').focus();
@@ -875,24 +866,24 @@
         var codename = codeInput.value.trim().toUpperCase();
         errorEl.textContent = '';
 
-        if (!name) { errorEl.textContent = 'Nome do Diretor e obrigatorio.'; nameInput.focus(); return; }
-        if (!codename) { errorEl.textContent = 'Codinome de Operacao e obrigatorio.'; codeInput.focus(); return; }
+        if (!name) { errorEl.textContent = 'Nome do Diretor é obrigatório.'; nameInput.focus(); return; }
+        if (!codename) { errorEl.textContent = 'Codinome de Operação é obrigatório.'; codeInput.focus(); return; }
         if (codename.length < 3) { errorEl.textContent = 'Codinome deve ter ao menos 3 caracteres.'; codeInput.focus(); return; }
 
-        /* Salvar estado */
         setState({
           director: { name: name, codename: codename },
           loggedInAt: new Date().toISOString(),
           stats: DASH_STATS
         });
 
+        if(window.ArchiveAudio) window.ArchiveAudio.playSuccess();
         hideAdmit();
         setTimeout(function() { enterShell(); }, 300);
       });
     }
 
     /* ==============================================
-       SHELL — Entrada e Construcao
+       SHELL — Entrada e Construção
        ============================================== */
     function enterShell() {
       var shell = document.getElementById('shell');
@@ -907,7 +898,7 @@
       startClock();
       updateTopbarDirector(state);
       checkAPIStatus();
-      showToast('Sessao iniciada com sucesso', 'success');
+      showToast('Sessão iniciada com sucesso', 'success');
     }
 
     function buildNavigation() {
@@ -930,9 +921,16 @@
           a.setAttribute('role', 'button');
           a.setAttribute('tabindex', '0');
           a.innerHTML = '<i class="fas ' + item.icon + '"></i><span>' + item.label + '</span>';
-          a.addEventListener('click', function() { navigateTo(item); });
+          a.addEventListener('click', function() { 
+            if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+            navigateTo(item); 
+          });
           a.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigateTo(item); }
+            if (e.key === 'Enter' || e.key === ' ') { 
+              e.preventDefault(); 
+              if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+              navigateTo(item); 
+            }
           });
           groupDiv.appendChild(a);
         });
@@ -942,16 +940,12 @@
     }
 
     function navigateTo(item) {
-      /* Atualizar active state na sidebar */
       var allItems = document.querySelectorAll('.nav-item');
       allItems.forEach(function(el) { el.classList.remove('active'); });
       var target = document.querySelector('[data-nav-id="' + item.id + '"]');
       if (target) target.classList.add('active');
 
-      /* Atualizar titulo do topbar */
       document.getElementById('topbar-title').textContent = item.label.toUpperCase();
-
-      /* Fechar sidebar no mobile */
       closeSidebar();
 
       if (!item.file) {
@@ -993,7 +987,6 @@
         showToast('Falha ao carregar: ' + (label || file), 'error');
       };
 
-      /* Timeout de seguranca (10s) */
       loadTimeout = setTimeout(function() {
         loading.style.display = 'none';
       }, 10000);
@@ -1004,11 +997,25 @@
     /* ==============================================
        DASHBOARD
        ============================================== */
-    function buildDashboard(state) {
+    async function buildDashboard(state) {
       var dash = document.getElementById('home-dashboard');
       var directorName = (state && state.director) ? state.director.name : 'Diretor';
       var stats = (state && state.stats) ? state.stats : DASH_STATS;
       var mission = DASH_MISSION;
+
+      /* Tentativa de enriquecer com dados reais da API se disponível */
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getPlayer === 'function') {
+        try {
+          var player = await window.ArchiveAPI.getPlayer();
+          if (player) {
+            stats.missions = player.active_missions ? player.active_missions.length : (state.stats ? state.stats.missions : 3);
+            stats.artifacts = player.artifactsRecovered || stats.artifacts;
+            stats.agents = player.agentsRecruited || stats.agents;
+          }
+        } catch(e) {
+          /* Fallback silencioso para os dados estáticos */
+        }
+      }
 
       dash.innerHTML =
         '<div class="dash-welcome">' +
@@ -1017,20 +1024,20 @@
           '<div class="dash-welcome-line"></div>' +
         '</div>' +
         '<div class="dash-stats">' +
-          buildStatCard('fa-crosshairs', stats.missions, 'Missoes Ativas') +
+          buildStatCard('fa-crosshairs', stats.missions, 'Missões Ativas') +
           buildStatCard('fa-gem', stats.artifacts, 'Artefatos Catalogados') +
           buildStatCard('fa-user-secret', stats.agents, 'Agentes em Campo') +
           buildStatCard('fa-signal', stats.integrity + '%', 'Integridade da Rede') +
         '</div>' +
         '<div class="dash-grid">' +
           '<div class="dash-panel">' +
-            '<div class="dash-panel-title">MISSAO EM ANDAMENTO <span class="priority-tag">' + mission.priority + '</span></div>' +
+            '<div class="dash-panel-title">MISSÃO EM ANDAMENTO <span class="priority-tag">' + mission.priority + '</span></div>' +
             '<div class="mission-name">' + mission.name + '</div>' +
             '<div class="mission-detail"><i class="fas fa-location-dot"></i>' + mission.location + '</div>' +
             '<div class="mission-detail"><i class="fas fa-layer-group"></i>Fase ' + mission.phase + ' de ' + mission.totalPhases + '</div>' +
-            '<div class="mission-detail"><i class="fas fa-clock"></i>Atualizado ha 12 min</div>' +
+            '<div class="mission-detail"><i class="fas fa-clock"></i>Atualizado há 12 min</div>' +
             '<div class="mission-progress-bar"><div class="mission-progress-fill" style="width:0%"></div></div>' +
-            '<button class="mission-btn" data-nav-target="missions">ACESSAR MISSAO</button>' +
+            '<button class="mission-btn" data-nav-target="missions">ACESSAR MISSÃO</button>' +
           '</div>' +
           '<div class="dash-panel">' +
             '<div class="dash-panel-title">ATIVIDADE RECENTE</div>' +
@@ -1038,16 +1045,15 @@
           '</div>' +
         '</div>';
 
-      /* Animar barra de progresso da missao */
       setTimeout(function() {
         var fill = dash.querySelector('.mission-progress-fill');
         if (fill) fill.style.width = mission.progress + '%';
       }, 300);
 
-      /* Botao de acessar missao */
       var missionBtn = dash.querySelector('[data-nav-target="missions"]');
       if (missionBtn) {
         missionBtn.addEventListener('click', function() {
+          if(window.ArchiveAudio) window.ArchiveAudio.playClick();
           var missionsItem = findNavItem('missions');
           if (missionsItem) navigateTo(missionsItem);
         });
@@ -1089,7 +1095,7 @@
     }
 
     /* ==============================================
-       TOPBAR — Relogio, Status, Diretor
+       TOPBAR — Relógio, Status, Diretor
        ============================================== */
     function startClock() {
       if (clockInterval) clearInterval(clockInterval);
@@ -1137,6 +1143,7 @@
       var overlay = document.getElementById('sidebar-overlay');
 
       toggle.addEventListener('click', function() {
+        if(window.ArchiveAudio) window.ArchiveAudio.playClick();
         sidebar.classList.add('open');
         overlay.classList.add('open');
       });
@@ -1153,15 +1160,19 @@
        ============================================== */
     function setupLogout() {
       document.getElementById('logout-btn').addEventListener('click', function() {
+        if(window.ArchiveAudio) window.ArchiveAudio.playClick();
         clearState();
+        if (window.ArchiveAPI && typeof window.ArchiveAPI.clearState === 'function') {
+          window.ArchiveAPI.clearState();
+        }
         if (clockInterval) { clearInterval(clockInterval); clockInterval = null; }
-        /* Resetar visual */
+        
         var shell = document.getElementById('shell');
         shell.classList.remove('show');
         setTimeout(function() {
           shell.style.display = 'none';
           shell.classList.remove('visible');
-          /* Resetar boot para poder repetir */
+          
           var boot = document.getElementById('boot');
           boot.style.display = 'flex';
           boot.classList.remove('fade-out');
@@ -1170,47 +1181,37 @@
           document.getElementById('boot-log').innerHTML = '';
           document.getElementById('boot-progress-bar').style.width = '0%';
           document.getElementById('boot-progress-wrap').classList.remove('visible');
-          /* Resetar admit */
+          
           document.getElementById('admit-form').reset();
           document.getElementById('admit-error').textContent = '';
-          /* Reiniciar fluxo */
+          
           init();
         }, 400);
       });
     }
 
     /* ==============================================
-       INICIALIZACAO PRINCIPAL
+       INICIALIZAÇÃO PRINCIPAL
        ============================================== */
     async function init() {
       var state = getState();
       var alreadyLoggedIn = !!(state && state.director && state.director.name);
 
       try {
-        /* Boot sequence — mais rapido se ja logado */
         await runBoot(alreadyLoggedIn);
 
         if (alreadyLoggedIn) {
-          /* Pular admit, ir direto pro shell */
           enterShell();
         } else {
-          /* Mostrar tela de login */
           showAdmit();
         }
       } catch(err) {
-        /* Failsafe absoluto: se qualquer coisa falhar no boot,
-           forcar a tela de admit direta */
         console.error('[ARCHIVE OS] Erro no boot:', err);
         document.getElementById('boot').style.display = 'none';
         showAdmit();
       }
     }
 
-    /* ==============================================
-       PONTO DE ENTRADA
-       Executa quando o DOM estiver pronto.
-       Nao dependemos de nenhum arquivo externo aqui.
-       ============================================== */
     setupAdmitForm();
     setupMobileSidebar();
     setupLogout();

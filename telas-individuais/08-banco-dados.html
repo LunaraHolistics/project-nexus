@@ -9,6 +9,8 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -42,7 +44,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .card::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
 .card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
 .card.wide{grid-column:span 2;display:flex;}
-.cimg{width:100%;height:190px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;}
+.cimg{width:100%;height:190px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;}
 .card.wide .cimg{width:200px;height:auto;flex-shrink:0;}
 .cimg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,248,220,.1),transparent 60%);}
 .badge{position:absolute;top:11px;right:11px;padding:5px 11px;background:rgba(14,14,14,.9);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;z-index:3;}
@@ -64,8 +66,6 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .decrypt .bar{width:60px;height:2px;background:rgba(197,160,89,.2);margin-top:11px;position:relative;overflow:hidden;}
 .decrypt .bar::after{content:'';position:absolute;left:0;top:0;height:100%;width:40%;background:var(--amber);animation:dp 2s ease-in-out infinite;}
 @keyframes dp{0%{left:-40%}100%{left:100%}}
-.classified{opacity:.6;}
-.classified .ct{color:#6b6560;font-style:italic;}
 .panel{width:340px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border-left:.5px solid var(--gold);padding:26px 24px;overflow-y:auto;position:relative;transform:translateX(20px);opacity:0;transition:all .4s;pointer-events:none;}
 .panel.on{transform:translateX(0);opacity:1;pointer-events:all;}
 .panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
@@ -74,7 +74,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .pht svg{width:15px;height:15px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .pcl{width:22px;height:22px;stroke:var(--onv);stroke-width:1.5;fill:none;cursor:pointer;transition:stroke .3s;}
 .pcl:hover{stroke:var(--amber);}
-.pimg{width:100%;height:150px;background:linear-gradient(135deg,#2a2520,#1a1510);margin-bottom:18px;position:relative;}
+.pimg{width:100%;height:150px;background:linear-gradient(135deg,#2a2520,#1a1510);margin-bottom:18px;position:relative;background-size:cover;background-position:center;}
 .pimg::before{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 .5pt var(--gold);opacity:.5;}
 .pmeta{display:flex;gap:10px;margin-bottom:14px;position:relative;}
 .pbadge{padding:4px 9px;background:rgba(205,127,50,.2);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--bronze);letter-spacing:.1em;}
@@ -108,7 +108,12 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="db">
   <header class="fi">
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#" class="on">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <nav class="nav">
+      <a href="05-globo.html">Globo</a>
+      <a href="15-museu.html" class="on">Banco de Dados</a>
+      <a href="11-passaporte.html">Passaporte</a>
+      <a href="07-briefing.html">Diário de Bordo</a>
+    </nav>
     <div class="icons">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -128,27 +133,8 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </div>
       </div>
-      <div class="grid">
-        <div class="card fi d2" data-id="ART-892A">
-          <div class="cimg"><div class="badge">Não Verificado</div></div>
-          <div class="cbody"><div class="cid">#ART-892A</div><h3 class="ct">Cálice Bizantino</h3><div class="co">Origem: Constantinopla (Estimado séc. XI)</div></div>
-        </div>
-        <div class="card wide fi d2" data-id="ART-1156">
-          <div class="cimg"><div class="badge vf">Verificado</div></div>
-          <div class="cbody">
-            <div class="cid">ARQUIVO: INATIVO</div><h3 class="ct">A Tela Florentina</h3>
-            <p class="cdesc">Reportada como perdida durante a enchente de 1966. Interceptação recente sugere transporte via embarcação privada rumo a Gênova. Autenticação pendente de confirmação visual por agente de campo.</p>
-            <div class="crow"><div class="ci"><div class="cl">Status</div><div class="cv">Recuperado 1998</div></div><div class="ci"><div class="cl">Localização</div><div class="cv">Cofre C, Sede</div></div></div>
-          </div>
-        </div>
-        <div class="card fi d3" data-id="CRY-004X">
-          <div class="cimg"><div class="badge">Rastreamento</div></div>
-          <div class="cbody"><div class="cid">#CRY-004X</div><h3 class="ct">Fragmento de Ressonância</h3><div class="co">Sinal Atual: FRACO (Setor 4)</div></div>
-        </div>
-        <div class="card decrypt fi d3">
-          <div class="cimg"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div class="dt2">DESCRIPTOGRAFANDO...</div><div class="bar"></div></div>
-          <div class="cbody"><div class="cid">#UNK-???</div><h3 class="ct" style="color:#6b6560;">Ativo Classificado</h3><div class="co">Nível de Acesso: ÔMEGA</div></div>
-        </div>
+      <div class="grid" id="artifactGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;font-family:'JetBrains Mono',monospace;color:var(--gold);">SINCRONIZANDO RELICÁRIO...</div>
       </div>
     </main>
     <aside class="panel" id="panel">
@@ -156,19 +142,22 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <div class="pht"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>DOSSIÊ ATIVO</div>
         <svg class="pcl" id="pcl" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </div>
-      <div class="pimg"></div>
-      <div class="pmeta"><div class="pbadge">Não Verificado</div><div class="pid">ID: ART-892A</div></div>
-      <h2 class="ptt">Cálice Bizantino</h2>
-      <div class="pgrid">
-        <div class="pf"><div class="pfl">Origem</div><div class="pfv">Constantinopla</div></div>
-        <div class="pf"><div class="pfl">Era Est.</div><div class="pfv">Século XI</div></div>
-        <div class="pf"><div class="pfl">Material</div><div class="pfv">Ouro, Esmalte</div></div>
-        <div class="pf"><div class="pfl">Última Vista</div><div class="pfv">Veneza, 1922</div></div>
+      <div class="pimg" id="pImg"></div>
+      <div class="pmeta">
+        <div class="pbadge" id="pBadge">Não Verificado</div>
+        <div class="pid" id="pId">ID: ---</div>
       </div>
-      <p class="pdesc">Acredita-se que fazia parte do tesouro imperial antes do saque de Constantinopla. O cálice apresenta distinto trabalho em esmalte cloisonné representando santos não registrados. Comunicações interceptadas sugerem que ressurgiu em um leilão privado em Veneza em 1922, adquirido por um colecionador desconhecido sob o alias 'Il Corvo'.</p>
+      <h2 class="ptt" id="pTitle">Aguardando Seleção</h2>
+      <div class="pgrid">
+        <div class="pf"><div class="pfl">Origem</div><div class="pfv" id="pOrigin">—</div></div>
+        <div class="pf"><div class="pfl">Era Est.</div><div class="pfv" id="pEra">—</div></div>
+        <div class="pf"><div class="pfl">Material</div><div class="pfv" id="pMaterial">—</div></div>
+        <div class="pf"><div class="pfl">Localização</div><div class="pfv" id="pLocation">—</div></div>
+      </div>
+      <p class="pdesc" id="pDesc">Selecione um artefato no grid principal para visualizar as especificações técnicas e histórico de extração.</p>
       <div class="pact">
-        <button class="bs"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Log</button>
-        <button class="bp"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Atribuir</button>
+        <button class="bs" id="btnLog"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Log</button>
+        <button class="bp" id="btnAssign"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Atribuir</button>
       </div>
     </aside>
   </div>
@@ -182,13 +171,115 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-const panel=document.getElementById('panel');
-document.querySelectorAll('.card:not(.decrypt)').forEach(c=>c.addEventListener('click',()=>panel.classList.add('on')));
-document.getElementById('pcl').addEventListener('click',()=>panel.classList.remove('on'));
-document.addEventListener('click',e=>{if(!panel.contains(e.target)&&!e.target.closest('.card'))panel.classList.remove('on');});
-document.getElementById('q').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.card').forEach(c=>{const t=(c.querySelector('.ct')?.textContent||'').toLowerCase();const id=(c.querySelector('.cid')?.textContent||'').toLowerCase();c.style.display=(t.includes(q)||id.includes(q))?'':'none';});});
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+let artifactsData = [];
+const panel = document.getElementById('panel');
+
+async function loadDatabase() {
+  const grid = document.getElementById('artifactGrid');
+  try {
+    const data = await ArchiveAPI.getArtifacts();
+    artifactsData = Array.isArray(data) ? data : (data.artifacts || []);
+    
+    grid.innerHTML = artifactsData.map((a, index) => {
+      const isWide = index === 1; 
+      const statusBadge = a.status === 'catalogado' ? 'vf' : '';
+      const statusText = a.status === 'catalogado' ? 'Verificado' : (a.status === 'em analise' ? 'Em Análise' : 'Não Verificado');
+      const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(a.name + ', ancient artifact, cinematic lighting, dark archive aesthetic, highly detailed')}&width=300&height=200&nologo=true&seed=${a.id}`;
+
+      return `
+      <div class="card ${isWide ? 'wide' : ''} fi d2" data-id="${a.id}" data-name="${a.name.toLowerCase()}" data-origin="${a.origin.toLowerCase()}">
+        <div class="cimg" style="background-image: url('${imgUrl}')">
+          <div class="badge ${statusBadge}">${statusText}</div>
+        </div>
+        <div class="cbody">
+          <div class="cid">#ART-${String(a.id).padStart(4, '0')}</div>
+          <h3 class="ct">${a.name}</h3>
+          <div class="co">Origem: ${a.origin} (${a.circa || 'Era Desconhecida'})</div>
+          ${isWide ? `<p class="cdesc" style="margin-top:10px;">Artefato de categoria ${a.category}. Atualmente mantido em ${a.location}. Requer análise contínua para determinar propriedades anômalas.</p>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    // Card de descriptografia estático no final para sabor
+    grid.innerHTML += `
+    <div class="card decrypt fi d3">
+      <div class="cimg"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div class="dt2">DESCRIPTOGRAFANDO...</div><div class="bar"></div></div>
+      <div class="cbody"><div class="cid">#UNK-???</div><h3 class="ct" style="color:#6b6560;">Ativo Classificado</h3><div class="co">Nível de Acesso: ÔMEGA</div></div>
+    </div>`;
+
+    attachCardEvents();
+  } catch (err) {
+    console.error('Falha ao carregar banco de dados', err);
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:\'JetBrains Mono\',monospace;color:var(--onv);">Falha na sincronização do Relicário.</div>';
+  }
+}
+
+function attachCardEvents() {
+  document.querySelectorAll('.card:not(.decrypt)').forEach(c => {
+    c.addEventListener('click', () => {
+      if(window.ArchiveAudio) ArchiveAudio.playClick();
+      const id = parseInt(c.dataset.id);
+      const artifact = artifactsData.find(a => a.id === id);
+      if (!artifact) return;
+
+      // Popula o painel
+      document.getElementById('pTitle').textContent = artifact.name;
+      document.getElementById('pId').textContent = `ID: #ART-${String(artifact.id).padStart(4, '0')}`;
+      document.getElementById('pOrigin').textContent = artifact.origin;
+      document.getElementById('pEra').textContent = artifact.circa || 'Desconhecida';
+      document.getElementById('pMaterial').textContent = artifact.category;
+      document.getElementById('pLocation').textContent = artifact.location;
+      document.getElementById('pDesc').textContent = `Artefato classificado como ${artifact.category}. Origem: ${artifact.origin}, datado de ${artifact.circa || 'período desconhecido'}. Apresenta características únicas de preservação, atualmente sob análise da divisão de acervo da Archive.`;
+      
+      const badgeEl = document.getElementById('pBadge');
+      badgeEl.textContent = artifact.status === 'catalogado' ? 'Verificado' : 'Não Verificado';
+      badgeEl.className = `pbadge ${artifact.status === 'catalogado' ? 'vf' : ''}`;
+      
+      document.getElementById('pImg').style.backgroundImage = `url('https://image.pollinations.ai/prompt/${encodeURIComponent(artifact.name + ', ancient artifact, cinematic')}&width=400&height=200&nologo=true&seed=${artifact.id}')`;
+
+      panel.classList.add('on');
+    });
+  });
+}
+
+document.getElementById('pcl').addEventListener('click', () => {
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
+  panel.classList.remove('on');
+});
+
+document.addEventListener('click', e => {
+  if (!panel.contains(e.target) && !e.target.closest('.card')) {
+    panel.classList.remove('on');
+  }
+});
+
+document.getElementById('q').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll('.card:not(.decrypt)').forEach(c => {
+    const name = c.dataset.name || '';
+    const origin = c.dataset.origin || '';
+    c.style.display = (name.includes(q) || origin.includes(q)) ? '' : 'none';
+  });
+});
+
+document.getElementById('btnAssign').addEventListener('click', () => {
+  if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+  ArchiveAPI.notify('Artefato atribuído à missão ativa.', 'success');
+});
+
+document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
+  if (a.getAttribute('href') === '#') e.preventDefault();
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
+  document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
+  a.classList.add('on');
+}));
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+}, 1000);
+
+window.addEventListener('DOMContentLoaded', loadDatabase);
 </script>
 </body>
 </html>

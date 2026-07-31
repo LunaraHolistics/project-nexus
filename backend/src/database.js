@@ -9,36 +9,45 @@ async function initDatabase() {
   const SQL = await initSqlJs();
   
   try {
-    // Tenta carregar o banco existente
     const fileBuffer = fs.readFileSync(DB_PATH);
     db = new SQL.Database(fileBuffer);
   } catch (err) {
-    // Se não existir, cria um novo em memória
     db = new SQL.Database();
   }
 
-  // Criação das tabelas
   db.run(`
     CREATE TABLE IF NOT EXISTS players (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       codename TEXT UNIQUE NOT NULL,
       specialty TEXT,
+      level INTEGER DEFAULT 1,
+      xp INTEGER DEFAULT 0,
+      xp_to_next INTEGER DEFAULT 500,
       credits INTEGER DEFAULT 1000,
-      influence_level INTEGER DEFAULT 1,
+      rank TEXT DEFAULT 'Diretor Interino',
+      missions_completed INTEGER DEFAULT 0,
+      missions_failed INTEGER DEFAULT 0,
+      artifacts_recovered INTEGER DEFAULT 0,
+      agents_recruited INTEGER DEFAULT 3,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS missions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      codename TEXT,
       title TEXT NOT NULL,
       location TEXT NOT NULL,
-      objective TEXT NOT NULL,
-      target TEXT,
-      threat_level TEXT DEFAULT 'MÉDIO',
+      priority TEXT DEFAULT 'MÉDIA',
       status TEXT DEFAULT 'disponivel',
+      phase INTEGER DEFAULT 1,
+      total_phases INTEGER DEFAULT 3,
+      specialty_filter TEXT,
+      description TEXT,
+      objectives TEXT,
+      reward_xp INTEGER DEFAULT 0,
       reward_credits INTEGER DEFAULT 0,
-      reward_influence INTEGER DEFAULT 0,
+      reward_artifacts INTEGER DEFAULT 0,
       player_id INTEGER,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
@@ -47,10 +56,10 @@ async function initDatabase() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       origin TEXT NOT NULL,
-      era TEXT NOT NULL,
-      material TEXT,
-      status TEXT DEFAULT 'Recuperado',
-      description TEXT
+      circa TEXT,
+      category TEXT,
+      status TEXT DEFAULT 'em analise',
+      location TEXT
     );
 
     CREATE TABLE IF NOT EXISTS suspects (
@@ -80,7 +89,6 @@ async function initDatabase() {
 
   seedData();
   saveDatabase();
-  
   return db;
 }
 
@@ -95,46 +103,60 @@ function saveDatabase() {
 function seedData() {
   const artifactCount = db.exec("SELECT COUNT(*) as count FROM artifacts")[0]?.values[0][0] || 0;
   if (artifactCount === 0) {
-    db.run("INSERT INTO artifacts (name, origin, era, material, description) VALUES ('Cálice de Prata', 'Pequim, China', '1450', 'Prata, Jade', 'Cálice cerimonial da Dinastia Ming.')");
-    db.run("INSERT INTO artifacts (name, origin, era, material, description) VALUES ('Manuscrito Voynich', 'Europa Central', 'Séc. XV', 'Pergaminho', 'Códice ilustrado indecifrado.')");
-    db.run("INSERT INTO artifacts (name, origin, era, material, description) VALUES ('Máscara de Ouro', 'Cusco, Peru', '1400', 'Ouro, Turquesa', 'Máscara funerária do Império Inca.')");
+    const artifacts = [
+      ['Cálice de Antioquia', 'Bizâncio', 'Século I', 'Religioso', 'em analise', 'Laboratório'],
+      ['Manuscrito de Voynich', 'Europa Central', 'Século XV', 'Documental', 'em restauracao', 'Acervo Digital'],
+      ['Máscara de Jade Inca', 'Império Inca', 'Século XV', 'Arqueologico', 'catalogado', 'Museu Archive']
+    ];
+    const stmt = db.prepare("INSERT INTO artifacts (name, origin, circa, category, status, location) VALUES (?, ?, ?, ?, ?, ?)");
+    artifacts.forEach(a => stmt.run(a));
+    stmt.free();
   }
 
-  const suspectCount = db.exec("SELECT COUNT(*) as count FROM suspects")[0]?.values[0][0] || 0;
-  if (suspectCount === 0) {
-    db.run("INSERT INTO suspects (alias, status, last_location, notes) VALUES ('O Relojoeiro', 'Foragido', 'Londres', 'Especialista em dispositivos mecânicos.')");
-    db.run("INSERT INTO suspects (alias, status, last_location, notes) VALUES ('Agente V', 'Desaparecido', 'Genebra', 'Ex-operador de inteligência russa.')");
-    db.run("INSERT INTO suspects (alias, status, last_location, notes) VALUES ('Victor Volkov', 'Vigilância', 'Tóquio', 'Suspeito de lavagem de artefatos.')");
+  const missionCount = db.exec("SELECT COUNT(*) as count FROM missions")[0]?.values[0][0] || 0;
+  if (missionCount === 0) {
+    const missions = [
+      ['MERIDIAN', 'O Cálice de Antioquia', 'Viena, Áustria', 'ALTA', 'disponivel', 1, 3, '["arqueologia", "historia"]', 'Recuperação de um artefato Classe-4.', '["Localizar cofre", "Neutralizar courier", "Recuperar cálice"]', 500, 1200, 1],
+      ['TYPHON', 'Manuscrito de Voynich', 'Londres, Reino Unido', 'MÉDIA', 'disponivel', 1, 2, '["criptografia", "historia"]', 'Estudo de um manuscrito criptografado.', '["Obter acesso", "Escanear páginas", "Traduzir fragmento"]', 300, 800, 0]
+    ];
+    const stmt = db.prepare(`INSERT INTO missions (codename, title, location, priority, status, phase, total_phases, specialty_filter, description, objectives, reward_xp, reward_credits, reward_artifacts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+    missions.forEach(m => stmt.run(m));
+    stmt.free();
   }
 
   const upgradeCount = db.exec("SELECT COUNT(*) as count FROM upgrades")[0]?.values[0][0] || 0;
   if (upgradeCount === 0) {
-    db.run("INSERT INTO upgrades (name, category, cost, requirement, description) VALUES ('Criptografia Quântica', 'Tecnologia', 4500, 'Rede II', 'Segurança de comunicações +45%.')");
-    db.run("INSERT INTO upgrades (name, category, cost, requirement, description) VALUES ('Rede de Informantes', 'Inteligência', 3200, 'Nível 2', 'Cobertura de vigilância +30%.')");
-    db.run("INSERT INTO upgrades (name, category, cost, requirement, description) VALUES ('Análise Preditiva', 'Análise', 6800, 'Tecnologia III', 'IA de previsão de movimentos.')");
+    const upgrades = [
+      ['Criptografia Quântica', 'Tecnologia', 4500, 'Rede II', 'Segurança de comunicações +45%.'],
+      ['Rede de Informantes', 'Inteligência', 3200, 'Nível 2', 'Cobertura de vigilância +30%.'],
+      ['Análise Preditiva', 'Análise', 6800, 'Tecnologia III', 'IA de previsão de movimentos.']
+    ];
+    const stmt = db.prepare("INSERT INTO upgrades (name, category, cost, requirement, description) VALUES (?, ?, ?, ?, ?)");
+    upgrades.forEach(u => stmt.run(u));
+    stmt.free();
   }
   saveDatabase();
 }
 
-// Wrapper para imitar a API do better-sqlite3 e não precisar mudar as rotas
 function getDb() {
   return {
     prepare: (sql) => {
       return {
         run: (params) => {
           const stmt = db.prepare(sql);
-          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (params || []);
+          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (Array.isArray(params) ? params : []);
           stmt.run(values);
-          stmt.free();
           const res = db.exec("SELECT last_insert_rowid() as id");
-          return { 
-            lastInsertRowid: res[0]?.values[0][0], 
+          const result = { 
+            lastInsertRowid: res[0]?.values[0][0] || 0, 
             changes: db.getRowsModified() 
           };
+          stmt.free();
+          return result;
         },
         get: (params) => {
           const stmt = db.prepare(sql);
-          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (params || []);
+          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (Array.isArray(params) ? params : [params]);
           stmt.bind(values);
           let result = null;
           if (stmt.step()) {
@@ -145,7 +167,7 @@ function getDb() {
         },
         all: (params) => {
           const stmt = db.prepare(sql);
-          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (params || []);
+          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (Array.isArray(params) ? params : [params]);
           stmt.bind(values);
           const results = [];
           while (stmt.step()) {

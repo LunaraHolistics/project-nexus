@@ -1,8 +1,8 @@
 {
   "name": "project-nexus-backend",
-  "version": "1.0.0",
-  "description": "PROJECT NEXUS - Backend API",
-  "main": "backend/src/server.js",
+  "version": "2.0.0",
+  "description": "PROJECT NEXUS - Backend API v2.0",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",

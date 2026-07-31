@@ -2,9 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ARCHIVE OS — Teia de Evidências</title>
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <script src="../api.js"></script>
@@ -13,64 +14,400 @@
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gr .42s steps(3) infinite;}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-1.5%,-1%)}66%{transform:translate(1%,1.5%)}100%{transform:translate(0,0)}}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px 3px);opacity:.5;}
+
 .web{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
+header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.nav{display:flex;gap:30px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav a:hover,.nav a.on{color:var(--gold);}
+.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+
+.body{flex:1;display:flex;overflow:hidden;position:relative;}
 .canvas{flex:1;position:relative;overflow:hidden;background-image:linear-gradient(rgba(197,160,89,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(197,160,89,.04) 1px,transparent 1px);background-size:48px 48px;}
-.ev{position:absolute;width:232px;background:var(--ivory);cursor:grab;z-index:10;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
-.ev.drag{cursor:grabbing;}
-.detail{width:372px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border-left:.5px solid var(--gold);padding:30px 26px;}
+#connections{position:absolute;inset:0;pointer-events:none;z-index:1;}
+
+.ev{position:absolute;width:240px;background:var(--ivory);cursor:grab;z-index:10;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);box-shadow:0 8px 24px rgba(0,0,0,.3);transition:box-shadow .3s, transform .2s;}
+.ev:hover{box-shadow:0 12px 32px rgba(0,0,0,.5), 0 0 16px rgba(255,191,0,.2);}
+.ev.drag{cursor:grabbing;z-index:20;transform:scale(1.05);}
+.ev.sel{box-shadow:0 0 0 2px var(--amber), 0 12px 32px rgba(0,0,0,.5);}
+
+.ev-head{padding:16px 16px 8px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(197,160,89,.2);}
+.ev-icon{width:32px;height:32px;stroke:var(--bronze);stroke-width:1.5;fill:none;flex-shrink:0;}
+.ev-cat{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--bronze);letter-spacing:.12em;text-transform:uppercase;}
+.ev-body{padding:12px 16px 16px;}
+.ev-title{font-family:'Libre Caslon Text',serif;font-size:16px;font-weight:700;color:#1a1a1a;margin-bottom:6px;line-height:1.3;}
+.ev-loc{font-family:'Manrope',sans-serif;font-size:11px;color:#6b6560;display:flex;align-items:center;gap:6px;}
+.ev-loc svg{width:12px;height:12px;stroke:#6b6560;stroke-width:2;fill:none;}
+
+.detail{width:360px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border-left:.5px solid var(--gold);padding:30px 26px;overflow-y:auto;position:relative;z-index:30;}
+.detail::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px 3px);opacity:.5;}
+.d-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:16px;opacity:.6;}
+.d-empty svg{width:48px;height:48px;stroke:var(--onv);stroke-width:1;fill:none;}
+.d-filled{display:none;flex-direction:column;gap:4px;}
+.d-filled.show{display:flex;animation:fu .4s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.pl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.12em;text-transform:uppercase;margin:18px 0 9px;position:relative;}
+.pl:first-child{margin-top:0;}
+.ptt{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:28px;position:relative;}
+.pdesc{font-family:'Manrope',sans-serif;font-size:13px;line-height:20px;color:var(--onv);position:relative;}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;position:relative;}
+.pcell{background:rgba(14,14,14,.4);border:.5px solid rgba(197,160,89,.2);padding:11px;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
+.pcl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.pcv{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);}
+
+.btn-act{margin-top:auto;padding:14px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:9px;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btn-act:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+
+footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
+.ftc{display:flex;gap:26px;align-items:center;}
+.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
 
 @media (max-width: 900px) and (orientation: landscape) {
-    .body { flex-direction: row; }
-    .detail { width: 250px; padding: 15px; }
+  .detail { width: 280px; padding: 20px; }
+  .ev { width: 200px; }
 }
 </style>
 </head>
 <body>
+<div class="grain"></div><div class="scan"></div>
 <div class="web">
-  <header style="height:64px;display:flex;align-items:center;padding:0 48px;border-bottom:.5px solid var(--gold);">
+  <header>
     <div class="logo">ARCHIVE</div>
-    <div style="flex:1;"></div>
-    <button id="bconn">Conectar</button>
+    <nav class="nav">
+      <a href="../05-globo.html">Globo</a>
+      <a href="../15-museu.html">Banco de Dados</a>
+      <a href="#" class="on">Teia de Evidências</a>
+      <a href="../07-briefing.html">Diário de Bordo</a>
+    </nav>
   </header>
-  <div class="body" style="flex:1;display:flex;overflow:hidden;">
+  
+  <div class="body">
     <div class="canvas" id="cv">
-        <!-- Evidências -->
+      <svg id="connections"></svg>
+      <!-- Evidências serão injetadas aqui via JS -->
     </div>
+    
     <aside class="detail">
-        <div id="dcont">Selecione uma evidência.</div>
+      <div class="d-empty" id="dEmpty">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <h3 style="font-family:'Libre Caslon Text',serif;font-size:20px;color:var(--on);">Aguardando Análise</h3>
+        <p style="font-family:'Manrope',sans-serif;font-size:13px;line-height:20px;color:var(--onv);max-width:240px;">Selecione um nó na teia para visualizar os metadados do artefato e estabelecer conexões lógicas.</p>
+      </div>
+      
+      <div class="d-filled" id="dFilled">
+        <div class="pl">Artefato Identificado</div>
+        <h2 class="ptt" id="fTitle">—</h2>
+        <div class="pl">Descrição do Acervo</div>
+        <div class="pdesc" id="fDesc">—</div>
+        <div class="pl">Especificações</div>
+        <div class="pgrid">
+          <div class="pcell"><div class="pcl">Origem</div><div class="pcv" id="fOrig">—</div></div>
+          <div class="pcell"><div class="pcl">Era</div><div class="pcv" id="fEra">—</div></div>
+          <div class="pcell"><div class="pcl">Categoria</div><div class="pcv" id="fCat">—</div></div>
+          <div class="pcell"><div class="pcl">Status</div><div class="pcv" id="fStat">—</div></div>
+        </div>
+        <div class="pl">Localização Atual</div>
+        <div class="pcell" style="width:100%"><div class="pcl">Custódia</div><div class="pcv" id="fLoc">—</div></div>
+        <button class="btn-act" id="btnLink" style="margin-top:24px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Vincular à Missão Ativa
+        </button>
+      </div>
     </aside>
   </div>
+  
+  <footer>
+    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+    <div class="ftc">
+      <div class="ft">NÓS ATIVOS: <span style="color:var(--gold);font-weight:500;" id="nodeCount">0</span></div>
+      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+      <div class="ft">LONDRES <span id="ck">23:45</span> · CRIPTOGRAFADO</div>
+    </div>
+  </footer>
 </div>
+
 <script>
-  // Drag & Drop básico
-  let dragged = null;
-  document.addEventListener('pointerdown', e => {
-      if(e.target.closest('.ev')) {
-          dragged = e.target.closest('.ev');
-          dragged.classList.add('drag');
-      }
+// ============================================================
+// ESTADO E DADOS
+// ============================================================
+let artifacts = [];
+let selectedId = null;
+let connections = []; // { from: id, to: id }
+let draggedNode = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+// Mapeamento de ícones SVG por categoria
+function getIconSVG(category) {
+  const c = (category || '').toLowerCase();
+  if (c.includes('documental') || c.includes('papiro') || c.includes('manuscrito')) {
+    return `<svg class="ev-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
+  }
+  if (c.includes('militar') || c.includes('arma') || c.includes('elmo')) {
+    return `<svg class="ev-icon" viewBox="0 0 24 24"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/></svg>`;
+  }
+  if (c.includes('artistico') || c.includes('máscara') || c.includes('busto')) {
+    return `<svg class="ev-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M3 21v-2a7 7 0 0 1 7-7h4a7 7 0 0 1 7 7v2"/></svg>`;
+  }
+  if (c.includes('numismatico') || c.includes('moeda')) {
+    return `<svg class="ev-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M15 9.5a3 3 0 0 0-6 0v5a3 3 0 0 0 6 0"/></svg>`;
+  }
+  if (c.includes('cientifico') || c.includes('relógio') || c.includes('bússola')) {
+    return `<svg class="ev-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+  }
+  // Default: Arqueológico / Religioso / Genérico
+  return `<svg class="ev-icon" viewBox="0 0 24 24"><path d="M2 22h20"/><path d="M12 2v20"/><path d="M12 8a4 4 0 0 0-4 4v2h8v-2a4 4 0 0 0-4-4z"/></svg>`;
+}
+
+// ============================================================
+// RENDERIZAÇÃO
+// ============================================================
+async function loadData() {
+  try {
+    const data = await ArchiveAPI.getArtifacts();
+    artifacts = data || [];
+    document.getElementById('nodeCount').textContent = artifacts.length;
+    renderWeb();
+  } catch (err) {
+    console.warn('Falha ao carregar artefatos', err);
+    ArchiveAPI.notify('Falha na sincronização da teia.', 'error');
+  }
+}
+
+function renderWeb() {
+  const cv = document.getElementById('cv');
+  // Limpar nós existentes (mantendo o SVG de conexões)
+  const existingNodes = cv.querySelectorAll('.ev');
+  existingNodes.forEach(n => n.remove());
+
+  const cvRect = cv.getBoundingClientRect();
+  const cols = Math.max(3, Math.floor(cvRect.width / 280));
+  
+  artifacts.forEach((a, index) => {
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+    
+    // Posição inicial em grade com leve variação aleatória para organicidade
+    const x = 40 + (col * 280) + (Math.random() * 40 - 20);
+    const y = 40 + (row * 180) + (Math.random() * 40 - 20);
+
+    const node = document.createElement('div');
+    node.className = 'ev';
+    node.dataset.id = a.id;
+    node.style.left = `${x}px`;
+    node.style.top = `${y}px`;
+    
+    node.innerHTML = `
+      <div class="ev-head">
+        ${getIconSVG(a.category)}
+        <div class="ev-cat">${a.category || 'Desconhecido'}</div>
+      </div>
+      <div class="ev-body">
+        <div class="ev-title">${a.name}</div>
+        <div class="ev-loc">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${a.origin}
+        </div>
+      </div>
+    `;
+    
+    // Eventos de interação
+    node.addEventListener('pointerdown', handleDragStart);
+    node.addEventListener('click', (e) => {
+      if (!draggedNode) selectEvidence(a.id);
+    });
+    node.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); });
+    
+    cv.appendChild(node);
   });
-  document.addEventListener('pointermove', e => {
-      if(!dragged) return;
-      dragged.style.left = (e.clientX - 100) + 'px';
-      dragged.style.top = (e.clientY - 100) + 'px';
-  });
-  document.addEventListener('pointerup', e => {
-      if(dragged) {
-          dragged.classList.remove('drag');
-          // Verificar conexão (lógica simplificada)
-          if(window.ArchiveAudio) ArchiveAudio.playSuccess();
-          ArchiveAPI.notify('Conexão estabelecida', 'success');
-          dragged = null;
+}
+
+// ============================================================
+// DRAG & DROP E CONEXÕES
+// ============================================================
+function handleDragStart(e) {
+  if (e.button !== 0) return; // Apenas clique esquerdo
+  draggedNode = e.currentTarget;
+  draggedNode.classList.add('drag');
+  
+  const rect = draggedNode.getBoundingClientRect();
+  dragOffsetX = e.clientX - rect.left;
+  dragOffsetY = e.clientY - rect.top;
+  
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
+  e.preventDefault();
+}
+
+document.addEventListener('pointermove', (e) => {
+  if (!draggedNode) return;
+  
+  const cv = document.getElementById('cv');
+  const cvRect = cv.getBoundingClientRect();
+  
+  let newX = e.clientX - cvRect.left - dragOffsetX;
+  let newY = e.clientY - cvRect.top - dragOffsetY;
+  
+  // Limites do canvas
+  newX = Math.max(0, Math.min(newX, cvRect.width - draggedNode.offsetWidth));
+  newY = Math.max(0, Math.min(newY, cvRect.height - draggedNode.offsetHeight));
+  
+  draggedNode.style.left = `${newX}px`;
+  draggedNode.style.top = `${newY}px`;
+  
+  updateConnections();
+});
+
+document.addEventListener('pointerup', (e) => {
+  if (!draggedNode) return;
+  
+  draggedNode.classList.remove('drag');
+  
+  // Lógica de conexão automática por proximidade
+  const draggedId = parseInt(draggedNode.dataset.id);
+  const draggedRect = draggedNode.getBoundingClientRect();
+  const draggedCenter = {
+    x: draggedRect.left + draggedRect.width / 2,
+    y: draggedRect.top + draggedRect.height / 2
+  };
+  
+  let connected = false;
+  document.querySelectorAll('.ev').forEach(otherNode => {
+    const otherId = parseInt(otherNode.dataset.id);
+    if (draggedId === otherId) return;
+    
+    const otherRect = otherNode.getBoundingClientRect();
+    const otherCenter = {
+      x: otherRect.left + otherRect.width / 2,
+      y: otherRect.top + otherRect.height / 2
+    };
+    
+    const dist = Math.hypot(draggedCenter.x - otherCenter.x, draggedCenter.y - otherCenter.y);
+    
+    if (dist < 160) { // Distância máxima para conexão
+      // Verificar se já não existe
+      const exists = connections.some(c => 
+        (c.from === draggedId && c.to === otherId) || 
+        (c.from === otherId && c.to === draggedId)
+      );
+      
+      if (!exists) {
+        connections.push({ from: draggedId, to: otherId });
+        connected = true;
       }
+    }
   });
   
-  // Carregar dados
-  async function loadData() {
-      const artifacts = await ArchiveAPI.getArtifacts();
-      // Renderizar cards...
+  if (connected) {
+    if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+    ArchiveAPI.notify('Conexão lógica estabelecida', 'success');
   }
+  
+  updateConnections();
+  draggedNode = null;
+});
+
+function updateConnections() {
+  const svg = document.getElementById('connections');
+  svg.innerHTML = ''; // Limpar linhas
+  
+  const cvRect = document.getElementById('cv').getBoundingClientRect();
+  
+  connections.forEach(conn => {
+    const nodeA = document.querySelector(`.ev[data-id="${conn.from}"]`);
+    const nodeB = document.querySelector(`.ev[data-id="${conn.to}"]`);
+    if (!nodeA || !nodeB) return;
+    
+    const rectA = nodeA.getBoundingClientRect();
+    const rectB = nodeB.getBoundingClientRect();
+    
+    const x1 = rectA.left + rectA.width / 2 - cvRect.left;
+    const y1 = rectA.top + rectA.height / 2 - cvRect.top;
+    const x2 = rectB.left + rectB.width / 2 - cvRect.left;
+    const y2 = rectB.top + rectB.height / 2 - cvRect.top;
+    
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', '#C5A059');
+    line.setAttribute('stroke-width', '2');
+    line.setAttribute('stroke-dasharray', '6,4');
+    line.setAttribute('opacity', '0.6');
+    
+    svg.appendChild(line);
+  });
+}
+
+// ============================================================
+// PAINEL DE DETALHES
+// ============================================================
+function selectEvidence(id) {
+  selectedId = id;
+  const a = artifacts.find(x => x.id === id);
+  if (!a) return;
+  
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
+  
+  // Highlight visual
+  document.querySelectorAll('.ev').forEach(n => n.classList.remove('sel'));
+  const node = document.querySelector(`.ev[data-id="${id}"]`);
+  if (node) node.classList.add('sel');
+  
+  // Preencher painel
+  document.getElementById('dEmpty').style.display = 'none';
+  const filled = document.getElementById('dFilled');
+  filled.classList.remove('show');
+  
+  // Forçar reflow para reiniciar animação
+  void filled.offsetWidth;
+  filled.classList.add('show');
+  
+  document.getElementById('fTitle').textContent = a.name;
+  document.getElementById('fDesc').textContent = `Artefato classificado como ${a.category}. Origem: ${a.origin}, datado de ${a.circa || 'Período desconhecido'}. Apresenta características únicas de preservação, atualmente sob análise da divisão de acervo da Archive.`;
+  document.getElementById('fOrig').textContent = a.origin;
+  document.getElementById('fEra').textContent = a.circa || '—';
+  document.getElementById('fCat').textContent = a.category;
+  document.getElementById('fStat').textContent = a.status;
+  document.getElementById('fLoc').textContent = a.location;
+}
+
+document.getElementById('btnLink').addEventListener('click', function() {
+  if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+  ArchiveAPI.notify('Artefato vinculado ao dossiê atual.', 'success');
+  this.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> VINCULADO`;
+  this.style.background = 'var(--amber)';
+  this.style.color = 'var(--surface)';
+  setTimeout(() => {
+    this.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Vincular à Missão Ativa`;
+    this.style.background = '';
+    this.style.color = '';
+  }, 2500);
+});
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+window.addEventListener('resize', () => {
+  updateConnections();
+});
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+}, 1000);
+
+document.addEventListener('DOMContentLoaded', () => {
   loadData();
+});
 </script>
 </body>
 </html>
