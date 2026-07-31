@@ -3,515 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARCHIVE — A Crônica da Gênese</title>
+<title>ARCHIVE — Introdução</title>
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
-  :root {
-    --graphite: #1A1A1A;
-    --graphite-dim: #0e0e0e;
-    --on-surface: #e5e2e1;
-    --on-surface-variant: #c1c7cc;
-    --aged-gold: #C5A059;
-    --bronze: #CD7F32;
-    --amber: #FFBF00;
-    --petrol: #003344;
-    --ivory: #F5F5DC;
-  }
-
+  :root { --graphite: #1A1A1A; --on-surface: #e5e2e1; --aged-gold: #C5A059; --amber: #FFBF00; --petrol: #003344; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Manrope', sans-serif; color: var(--on-surface); }
+  
+  .cinematic { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 2s ease; display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; }
+  .slide.active { opacity: 1; }
+  
+  .content { z-index: 10; max-width: 800px; padding: 40px; text-align: center; }
+  .title { font-family: 'Libre Caslon Text', serif; font-size: 40px; color: var(--aged-gold); margin-bottom: 20px; }
+  .narrative { font-size: 18px; line-height: 1.6; }
+  
+  .skip-btn { position: absolute; top: 40px; right: 40px; padding: 12px 24px; background: transparent; border: 1px solid var(--aged-gold); color: var(--on-surface); cursor: pointer; font-family: 'JetBrains Mono', monospace; z-index: 20; }
+  .skip-btn:hover { background: var(--petrol); }
+  
+  .progress-container { position: absolute; bottom: 40px; left: 40px; right: 40px; height: 4px; background: rgba(255,255,255,0.1); z-index: 20; }
+  .progress-bar { height: 100%; width: 0%; background: var(--amber); transition: width 2s linear; }
 
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    font-family: 'Manrope', sans-serif;
-    color: var(--on-surface);
-  }
-
-  /* ============ CONTAINER CINEMÁTICO ============ */
-  .cinematic {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  /* ============ FUNDO CINEMATOGRÁFICO ============ */
-  .cinematic-bg {
-    position: absolute;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse at 30% 20%, rgba(197, 160, 89, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 80%, rgba(0, 51, 68, 0.15) 0%, transparent 60%),
-      linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0e0e0e 100%);
-    z-index: 1;
-  }
-
-  /* Simulação de livro antigo sobre mesa (sem imagem externa) */
-  .book-scene {
-    position: absolute;
-    bottom: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 400px;
-    z-index: 2;
-    opacity: 0.4;
-  }
-
-  .book {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 500px;
-    height: 280px;
-    background: linear-gradient(135deg, #2a2520 0%, #1a1510 100%);
-    border-radius: 4px;
-    box-shadow: 
-      0 20px 60px rgba(0, 0, 0, 0.8),
-      inset 0 2px 4px rgba(197, 160, 89, 0.1);
-  }
-
-  .book::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    left: 30px;
-    right: 30px;
-    bottom: 20px;
-    border: 1px solid rgba(197, 160, 89, 0.2);
-    border-radius: 2px;
-  }
-
-  .book-spine {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    background: linear-gradient(90deg, #1a1510 0%, #2a2520 100%);
-    border-radius: 4px 0 0 4px;
-  }
-
-  /* Luz volumétrica da janela */
-  .volumetric-light {
-    position: absolute;
-    top: 0;
-    left: 20%;
-    width: 40%;
-    height: 60%;
-    background: linear-gradient(180deg, 
-      rgba(255, 248, 220, 0.15) 0%, 
-      rgba(255, 248, 220, 0.05) 50%, 
-      transparent 100%);
-    filter: blur(40px);
-    z-index: 2;
-    animation: lightFlicker 8s ease-in-out infinite;
-  }
-
-  @keyframes lightFlicker {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 0.8; }
-  }
-
-  /* ============ VINHETA ============ */
-  .vignette {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.8) 100%);
-    pointer-events: none;
-    z-index: 3;
-  }
-
-  /* ============ FILM GRAIN ============ */
-  .grain {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 4;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    animation: grainShift 0.5s steps(4) infinite;
-  }
-
-  @keyframes grainShift {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(-2%, -1%); }
-    50% { transform: translate(1%, 2%); }
-    75% { transform: translate(-1%, 1%); }
-  }
-
-  /* ============ SCANLINES ============ */
-  .scanlines {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 5;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.02),
-      rgba(0, 0, 0, 0.02) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    opacity: 0.4;
-  }
-
-  /* ============ PARTÍCULAS DE POEIRA ============ */
-  .dust-container {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .dust {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: rgba(255, 248, 220, 0.4);
-    border-radius: 50%;
-    animation: dustFloat linear infinite;
-  }
-
-  @keyframes dustFloat {
-    0% {
-      transform: translateY(100vh) translateX(0);
-      opacity: 0;
-    }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% {
-      transform: translateY(-100px) translateX(100px);
-      opacity: 0;
-    }
-  }
-
-  /* ============ LOGO ARCHIVE ============ */
-  .logo {
-    position: absolute;
-    top: 48px;
-    left: 64px;
-    font-family: 'Libre Caslon Text', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--aged-gold);
-    letter-spacing: 0.15em;
-    z-index: 10;
-    opacity: 0;
-    animation: logoFadeIn 1.5s ease-out 0.5s forwards;
-    text-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
-  }
-
-  @keyframes logoFadeIn {
-    from { opacity: 0; letter-spacing: 0.25em; }
-    to { opacity: 1; letter-spacing: 0.15em; }
-  }
-
-  /* ============ BOTÃO PULAR INTRO ============ */
-  .skip-btn {
-    position: absolute;
-    top: 48px;
-    right: 64px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 24px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--bronze);
-    color: var(--on-surface);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    z-index: 10;
-    opacity: 0;
-    animation: fadeIn 1s ease-out 1s forwards;
-    transition: all 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-
-  .skip-btn:hover {
-    border-bottom-color: var(--amber);
-    color: var(--amber);
-  }
-
-  .skip-btn .arrow {
-    display: inline-block;
-    transition: transform 0.3s ease;
-  }
-
-  .skip-btn:hover .arrow {
-    transform: translateX(4px);
-  }
-
-  /* ============ CONTEÚDO PRINCIPAL ============ */
-  .content {
-    position: absolute;
-    bottom: 120px;
-    left: 64px;
-    right: 64px;
-    z-index: 10;
-    max-width: 800px;
-  }
-
-  .title {
-    font-family: 'Libre Caslon Text', serif;
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--aged-gold);
-    letter-spacing: -0.02em;
-    line-height: 56px;
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: titleReveal 1.5s ease-out 1.5s forwards;
-    text-shadow: 0 0 30px rgba(197, 160, 89, 0.2);
-  }
-
-  @keyframes titleReveal {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .narrative {
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    line-height: 28px;
-    color: var(--on-surface);
-    opacity: 0.9;
-    min-height: 84px;
-  }
-
-  .narrative .cursor {
-    display: inline-block;
-    width: 2px;
-    height: 20px;
-    background: var(--amber);
-    margin-left: 2px;
-    animation: cursorBlink 1s steps(2) infinite;
-    vertical-align: middle;
-  }
-
-  @keyframes cursorBlink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-
-  /* ============ BARRA DE PROGRESSO INFERIOR ============ */
-  .progress-bar {
-    position: absolute;
-    bottom: 64px;
-    left: 64px;
-    right: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
-    opacity: 0;
-    animation: fadeIn 1s ease-out 2s forwards;
-  }
-
-  .sequence-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--on-surface-variant);
-    letter-spacing: 0.1em;
-  }
-
-  .progress-line {
-    flex: 1;
-    height: 1px;
-    background: rgba(197, 160, 89, 0.2);
-    margin: 0 32px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--aged-gold), var(--amber));
-    box-shadow: 0 0 10px var(--amber);
-    animation: fillProgress 60s linear forwards;
-  }
-
-  @keyframes fillProgress {
-    from { width: 0%; }
-    to { width: 100%; }
-  }
-
-  .timestamp {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    color: var(--on-surface-variant);
-    letter-spacing: 0.05em;
-    animation: timestampFlicker 4s infinite;
-  }
-
-  @keyframes timestampFlicker {
-    0%, 100% { opacity: 1; }
-    92% { opacity: 1; }
-    93% { opacity: 0.6; }
-    94% { opacity: 1; }
-    96% { opacity: 0.8; }
-    97% { opacity: 1; }
-  }
-
-  /* ============ TRANSIÇÃO DE SAÍDA ============ */
-  .cinematic.exiting {
-    animation: fadeOut 1.5s ease-in forwards;
-  }
-
-  @keyframes fadeOut {
-    to { opacity: 0; visibility: hidden; }
-  }
-
-  /* ============ RESPONSIVO ============ */
-  @media (max-width: 1024px) {
-    .title { font-size: 36px; line-height: 44px; }
-    .narrative { font-size: 16px; line-height: 24px; }
-    .content { left: 32px; right: 32px; bottom: 100px; }
-    .progress-bar { left: 32px; right: 32px; bottom: 48px; }
-    .logo { left: 32px; font-size: 24px; }
-    .skip-btn { right: 32px; }
-  }
-
-  @media (max-width: 768px) {
-    .title { font-size: 32px; line-height: 40px; }
-    .book-scene { width: 400px; height: 300px; }
-    .book { width: 350px; height: 200px; }
+  @media (max-width: 900px) and (orientation: landscape) {
+    .content { padding: 20px; }
+    .title { font-size: 28px; }
+    .narrative { font-size: 14px; }
   }
 </style>
 </head>
 <body>
-  <div class="cinematic" id="cinematic">
-    <!-- Fundo cinematográfico -->
-    <div class="cinematic-bg"></div>
-    
-    <!-- Cena do livro -->
-    <div class="book-scene">
-      <div class="book">
-        <div class="book-spine"></div>
-      </div>
-    </div>
-
-    <!-- Luz volumétrica -->
-    <div class="volumetric-light"></div>
-
-    <!-- Efeitos visuais -->
-    <div class="vignette"></div>
-    <div class="grain"></div>
-    <div class="scanlines"></div>
-
-    <!-- Partículas de poeira -->
-    <div class="dust-container" id="dustContainer"></div>
-
-    <!-- Logo ARCHIVE -->
-    <div class="logo">ARCHIVE</div>
-
-    <!-- Botão Pular Intro -->
-    <button class="skip-btn" id="skipBtn">
-      PULAR INTRO
-      <span class="arrow">→</span>
-    </button>
-
-    <!-- Conteúdo principal -->
-    <div class="content">
-      <h1 class="title">A Crônica da Gênese</h1>
-      <p class="narrative" id="narrative"></p>
-    </div>
-
-    <!-- Barra de progresso inferior -->
-    <div class="progress-bar">
-      <span class="sequence-label">SEQ 01 / INICIAÇÃO</span>
-      <div class="progress-line">
-        <div class="progress-fill"></div>
-      </div>
-      <span class="timestamp" id="timestamp">00:00</span>
-    </div>
+<div class="cinematic" id="cinematic">
+  <div class="slide active" id="slide0">
+    <div class="content"><h1 class="title">O Arquiteto</h1><p class="narrative">A história é uma teia, e nós somos os observadores.</p></div>
   </div>
+  <div class="slide" id="slide1">
+    <div class="content"><h1 class="title">A Archive</h1><p class="narrative">Uma organização antiga dedicada a preservar o que a história tentou apagar.</p></div>
+  </div>
+  <div class="slide" id="slide2">
+    <div class="content"><h1 class="title">A Missão</h1><p class="narrative">Descobrir segredos, conectar evidências e garantir que a verdade prevaleça.</p></div>
+  </div>
+  <div class="slide" id="slide3">
+    <div class="content"><h1 class="title">O Nexus</h1><p class="narrative">O ponto de convergência de toda informação oculta.</p></div>
+  </div>
+  <div class="slide" id="slide4">
+    <div class="content"><h1 class="title">Início</h1><p class="narrative">Sua investigação começa agora.</p></div>
+  </div>
+  <button class="skip-btn" onclick="finish()">PULAR INTRODUÇÃO</button>
+  <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+</div>
 
-  <script>
-    // Texto narrativo em PT-BR
-    const narrativeText = "Muito antes da era digital, a história era escrita em tinta e sombra. Curamos as narrativas silenciosas de milênios, preservando a verdade que outros buscaram enterrar.";
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const progressBar = document.getElementById('progressBar');
+  
+  function finish() { window.location.href = '../index.html'; }
 
-    const narrativeEl = document.getElementById('narrative');
-    const timestampEl = document.getElementById('timestamp');
-    const cinematic = document.getElementById('cinematic');
-    const skipBtn = document.getElementById('skipBtn');
-
-    // Efeito typewriter
-    let charIndex = 0;
-    const typeSpeed = 40; // ms por caractere
-
-    function typeWriter() {
-      if (charIndex < narrativeText.length) {
-        narrativeEl.innerHTML = narrativeText.substring(0, charIndex + 1) + '<span class="cursor"></span>';
-        charIndex++;
-        setTimeout(typeWriter, typeSpeed);
-      } else {
-        narrativeEl.innerHTML = narrativeText;
-      }
+  function nextSlide() {
+    slides[currentSlide].classList.remove('active');
+    currentSlide++;
+    if(currentSlide < slides.length) {
+      slides[currentSlide].classList.add('active');
+      progressBar.style.width = (currentSlide * 25) + '%';
+      setTimeout(nextSlide, 5000);
+    } else {
+      finish();
     }
+  }
 
-    // Iniciar typewriter após animações iniciais
-    setTimeout(typeWriter, 2500);
-
-    // Atualizar timestamp
-    let seconds = 0;
-    setInterval(() => {
-      seconds++;
-      const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-      const secs = (seconds % 60).toString().padStart(2, '0');
-      timestampEl.textContent = `${mins}:${secs}`;
-    }, 1000);
-
-    // Gerar partículas de poeira
-    const dustContainer = document.getElementById('dustContainer');
-    const dustCount = 30;
-
-    for (let i = 0; i < dustCount; i++) {
-      const dust = document.createElement('div');
-      dust.className = 'dust';
-      dust.style.left = Math.random() * 100 + '%';
-      dust.style.animationDuration = (Math.random() * 10 + 10) + 's';
-      dust.style.animationDelay = Math.random() * 10 + 's';
-      dust.style.opacity = Math.random() * 0.5 + 0.2;
-      dustContainer.appendChild(dust);
-    }
-
-    // Pular intro
-    skipBtn.addEventListener('click', () => {
-      cinematic.classList.add('exiting');
-      setTimeout(() => {
-        console.log('Intro pulada — prosseguir para Cadastro do Diretor');
-        // window.location.href = 'cadastro.html';
-      }, 1500);
-    });
-
-    // Auto-avançar após 60 segundos
-    setTimeout(() => {
-      cinematic.classList.add('exiting');
-      setTimeout(() => {
-        console.log('Intro completa — prosseguir para Cadastro do Diretor');
-      }, 1500);
-    }, 60000);
-  </script>
+  window.onload = () => {
+    if(window.ArchiveAudio) ArchiveAudio.playTransition();
+    setTimeout(nextSlide, 5000);
+  };
+</script>
 </body>
 </html>

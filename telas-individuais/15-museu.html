@@ -9,6 +9,7 @@
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -176,8 +177,8 @@ function classifyRegion(origin){
 async function loadArtifacts(){
   const grid = document.getElementById('grid');
   try {
-    if(window.archiveAPI){
-      const data = await window.archiveAPI.getArtifacts();
+    if(window.ArchiveAPI){
+      const data = await window.ArchiveAPI.getArtifacts();
       if(data && data.length > 0){
         artifacts = data.map(a => ({...a, region: classifyRegion(a.origin)}));
       } else {

@@ -455,6 +455,39 @@
         ? s.director.specialty
         : null;
     },
+
+    /** Sistema de Notificações Toast */
+    notify: function (message, type) {
+      type = type || 'info';
+      var toast = document.createElement('div');
+      toast.className = 'archive-notify ' + type;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      // Estilos inline básicos para garantir funcionamento
+      toast.style.position = 'fixed';
+      toast.style.bottom = '20px';
+      toast.style.right = '20px';
+      toast.style.padding = '15px 25px';
+      if (type === 'error') {
+          toast.style.background = '#8B0000';
+      } else if (type === 'success') {
+          toast.style.background = '#004400';
+      } else {
+          toast.style.background = '#003344';
+      }
+      toast.style.color = '#FFBF00';
+      toast.style.border = '1px solid #C5A059';
+      toast.style.zIndex = '9999';
+      toast.style.borderRadius = '4px';
+      toast.style.fontFamily = 'JetBrains Mono, monospace';
+      toast.style.textTransform = 'uppercase';
+      
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.remove(); }, 500);
+      }, 3000);
+    }
   };
 
   /* Expor globalmente */

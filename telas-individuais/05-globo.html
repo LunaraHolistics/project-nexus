@@ -84,6 +84,10 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
 .ftc{display:flex;gap:26px;align-items:center;}
+@media (max-width: 900px) and (orientation: landscape) {
+  .side { top: 20px; left: 20px; width: 280px; }
+  .panel { top: 20px; right: 20px; width: 250px; }
+}
 </style>
 </head>
 <body>
@@ -586,8 +590,9 @@ async function loadMissions() {
     document.getElementById('dirName').textContent = state.director.code || state.director.codename;
   }
   
-  await ArchiveAPI.init();
-  missions = await ArchiveAPI.getMissions();
+  // Filtra por especialidade se fornecida
+  const specialty = ArchiveAPI.getDirectorSpecialty();
+  missions = await ArchiveAPI.getMissions(specialty);
   
   if(missions.length === 0) {
     // Gera missões mock
@@ -636,7 +641,11 @@ function selectMissionByIndex(idx) {
   if(missions[idx]) selectMission(missions[idx]);
 }
 
+// Event Listeners para áudio
+document.querySelectorAll('.tgt button').forEach(b => b.addEventListener('mouseenter', () => { if(window.ArchiveAudio) ArchiveAudio.playHover(); }));
+
 function selectMission(mission) {
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
   selectedMission = mission;
   focusRotation = true;
 
@@ -675,7 +684,7 @@ async function acceptMission(missionId, event) {
   
   const state = ArchiveAPI.getState();
   if(!hasDirector(state)) {
-    alert('⚠️ Diretor não cadastrado. Faça login pelo index.html primeiro.');
+    ArchiveAPI.notify('Diretor não cadastrado. Faça login pelo index.html primeiro.', 'error');
     return;
   }
   
@@ -695,6 +704,8 @@ async function acceptMission(missionId, event) {
     
     const result = await ArchiveAPI.acceptMission(missionId);
     if(result && result.success) {
+      if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+      ArchiveAPI.notify('Missão aceita com sucesso!', 'success');
       btn.textContent = '✓ ACEITA';
       btn.style.background = 'var(--gold)';
       btn.style.color = 'var(--surface)';
@@ -704,29 +715,28 @@ async function acceptMission(missionId, event) {
     }
   } catch(err) {
     console.error('Erro:', err);
+    ArchiveAPI.notify('Erro ao aceitar missão.', 'error');
     btn.disabled = false;
     btn.textContent = 'TENTAR NOVAMENTE';
   }
 }
 
 async function generateNewMission() {
+  if(window.ArchiveAudio) ArchiveAudio.playClick();
   const btn = document.getElementById('btnNewMission');
   btn.textContent = 'GERANDO...';
   btn.disabled = true;
   
-  const newMission = {
-    id: Date.now(),
-    title: 'Operação ' + Math.random().toString(36).substring(7).toUpperCase(),
-    location: Object.keys(CITY_COORDS)[Math.floor(Math.random() * Object.keys(CITY_COORDS).length)],
-    target: 'Desconhecido',
-    threat_level: ['BAIXO','MÉDIO','ELEVADO'][Math.floor(Math.random()*3)],
-    objective: 'Investigar atividade suspeita',
-    reward: {credits: Math.floor(Math.random() * 1000) + 500}
-  };
-  
-  missions.push(newMission);
-  renderMissions();
-  updateGlobeMarkers();
+  try {
+    const newMission = await ArchiveAPI.generateMission();
+    missions.push(newMission);
+    renderMissions();
+    updateGlobeMarkers();
+    ArchiveAPI.notify('Nova missão gerada.', 'success');
+  } catch(err) {
+    console.error('Erro ao gerar missão:', err);
+    ArchiveAPI.notify('Erro ao gerar missão.', 'error');
+  }
   
   btn.textContent = '+ Gerar Nova Missão';
   btn.disabled = false;

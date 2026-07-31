@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARCHIVE OS — Briefing da Missão</title>
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
+<script src="../api.js"></script>
+<script src="../audio-system.js"></script>
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -72,6 +72,11 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    .body { flex-direction: column; padding: 20px; }
+    .tac { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -131,11 +136,36 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-const el=document.getElementById('dt'),orig=el.textContent;el.textContent='';let i=0;
-setTimeout(()=>{const iv=setInterval(()=>{if(i<orig.length){el.textContent=orig.substring(0,i+1);i++;}else clearInterval(iv);},55);},700);
-document.getElementById('acc').addEventListener('click',function(){this.textContent='Investigação Aceita ✓';this.style.background='var(--amber)';this.style.color='var(--surface)';});
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav a').forEach(x=>x.classList.remove('on'));a.classList.add('on');}));
-setInterval(()=>{const n=new Date();document.getElementById('ck').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');},1000);
+  const el = document.getElementById('dt'), orig = el.textContent; el.textContent = ''; let i = 0;
+  setTimeout(() => { const iv = setInterval(() => { if (i < orig.length) { el.textContent = orig.substring(0, i + 1); i++; } else clearInterval(iv); }, 55); }, 700);
+
+  document.getElementById('acc').addEventListener('click', async function() {
+    try {
+      const state = ArchiveAPI.getState();
+      if (!state || !state.director) {
+        if(window.ArchiveAudio) ArchiveAudio.playError();
+        ArchiveAPI.notify('Faça login primeiro para aceitar missões.', 'error');
+        return;
+      }
+      
+      const missionId = '89-X'; // Simulado
+      const result = await ArchiveAPI.acceptMission(missionId);
+      
+      if(result && result.success) {
+        if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+        ArchiveAPI.notify('Missão Aceita', 'success');
+        this.textContent = 'Investigação Aceita ✓';
+        this.style.background = 'var(--amber)';
+        this.style.color = 'var(--surface)';
+      }
+    } catch(err) {
+      if(window.ArchiveAudio) ArchiveAudio.playError();
+      ArchiveAPI.notify('Erro ao aceitar missão.', 'error');
+    }
+  });
+
+  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on')); a.classList.add('on'); }));
+  setInterval(() => { const n = new Date(); document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0'); }, 1000);
 </script>
 </body>
 </html>

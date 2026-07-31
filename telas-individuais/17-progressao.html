@@ -124,6 +124,12 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+@media (max-width: 900px) and (orientation: landscape) {
+  .body { flex-direction: row; }
+  .content { padding: 15px; }
+  .tree { height: 300px; }
+  .detail { width: 250px; padding: 15px; }
+}
 </style>
 </head>
 <body>
@@ -307,16 +313,13 @@ async function purchaseUpgrade(u){
   // Verificação de Diretor via ArchiveAPI
   const state = ArchiveAPI.getState();
   if (!hasDirector(state)) {
-    if(window.ArchiveAudio) ArchiveAudio.playError();
-    btn.textContent = 'DIRETOR NÃO CADASTRADO';
-    btn.classList.add('error');
-    setTimeout(() => select(u), 2500);
-    return;
+    ArchiveAPI.notify('Diretor não cadastrado.', 'error');
+    console.warn('Diretor não cadastrado');
   }
 
   // Inicializa API e garante playerId
   await ArchiveAPI.init();
-  if (!ArchiveAPI.playerId) {
+  if (!ArchiveAPI.playerId && hasDirector(state)) {
     await ArchiveAPI.createPlayer(state.director.name, state.director.code || state.director.codename, state.director.specialty || 'Investigação');
   }
 
@@ -327,8 +330,11 @@ async function purchaseUpgrade(u){
     const result = await ArchiveAPI.buyUpgrade(d.id);
     if(result && result.success){
       if(window.ArchiveAudio) ArchiveAudio.playSuccess();
+      ArchiveAPI.notify('Upgrade adquirido!', 'success');
       purchasedUpgrades.add(d.id);
-      credits -= d.price;
+      // Atualiza créditos do estado
+      const p = await ArchiveAPI.getPlayer();
+      credits = p.credits ?? credits;
       d.st = 'unlocked';
       
       const node = tree.querySelector(`[data-u="${u}"]`);
@@ -346,6 +352,7 @@ async function purchaseUpgrade(u){
     }
   } catch(err){
     if(window.ArchiveAudio) ArchiveAudio.playError();
+    ArchiveAPI.notify('Erro na transação.', 'error');
     console.error('Erro ao comprar upgrade:', err);
     btn.textContent = '⚠ ' + (err.message || 'Falha na transação');
     btn.classList.add('error');
