@@ -1348,7 +1348,7 @@
         // 4. Interações (Caminhos absolutos corrigidos)
         document.getElementById("deskGlobe").addEventListener("click", () => {
           if (window.ArchiveAudio) ArchiveAudio.playClick();
-          window.location.href = "/05-globo.html";
+          window.location.href = "/telas-individuais/05-globo.html";
         });
 
         document
@@ -1357,8 +1357,8 @@
             if (window.ArchiveAudio) ArchiveAudio.playClick();
             // Caminho absoluto para garantir que o Netlify encontre o arquivo
             const target = activeMission
-              ? `/07-briefing.html?id=${activeMission.id}`
-              : "/05-globo.html";
+              ? `/telas-individuais/07-briefing.html?id=${activeMission.id}`
+              : "/telas-individuais/05-globo.html";
 
             this.innerHTML =
               '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Redirecionando...';
@@ -1377,7 +1377,7 @@
 
         document.getElementById("btnIntel").addEventListener("click", () => {
           if (window.ArchiveAudio) ArchiveAudio.playClick();
-          window.location.href = "/15-museu.html";
+          window.location.href = "/telas-individuais/15-museu.html";
         });
 
         document.querySelectorAll(".si").forEach((i) =>
