@@ -17,7 +17,7 @@
   var BASE_URL = (function() {
     // Produção (Vercel/Netlify) - MUDAR DEPOIS QUANDO TIVER BACKEND
     if (window.location.hostname !== 'localhost') {
-      return 'https://project-nexus-mi7.netlify.app/'; // ← Trocar quando deploy backend
+      return 'https://project-nexus-15sj.onrender.com'; // ← Trocar quando deploy backend
     }
     // Desenvolvimento local
     return 'http://localhost:3000/api';
