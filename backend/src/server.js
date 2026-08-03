@@ -15,7 +15,9 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'http://localhost:8080', // Adicionado para compatibilidade com outros servidores de dev
-  'http://127.0.0.1:8080'
+  'http://127.0.0.1:8080',
+  'https://project-nexus-mi7.netlify.app', // <-- Adicione esta linha
+  'https://project-nexus-15sj.onrender.com' // <-- Adicione esta linha por segurança
 ];
 
 app.use(cors({

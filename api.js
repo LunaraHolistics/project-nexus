@@ -22,7 +22,7 @@
     ) {
       return "http://localhost:3000/api";
     }
-    // Se estiver em produção (Netlify, Vercel, etc.), usa o backend do Render
+    // Se estiver em produção (Netlify), usa o backend do Render
     return "https://project-nexus-15sj.onrender.com/api";
   })();
 
