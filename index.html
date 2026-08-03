@@ -1761,22 +1761,24 @@
         async function checkAPIStatus() {
           var dot = document.getElementById("status-dot");
           var text = document.getElementById("status-text");
-          try {
-            var res = await fetch("http://localhost:3000/api/health", {
-              signal: AbortSignal.timeout(3000),
-            });
-            if (res.ok) {
+
+          // Aguarda o ArchiveAPI inicializar para saber o status real
+          if (window.ArchiveAPI) {
+            await window.ArchiveAPI.init();
+
+            if (window.ArchiveAPI.online) {
               dot.classList.add("online");
               text.textContent = "ONLINE";
             } else {
-              throw new Error("bad status");
+              dot.classList.remove("online");
+              text.textContent = "OFFLINE (MODO STANDALONE)";
             }
-          } catch (e) {
+          } else {
+            // Fallback caso o api.js falhe ao carregar
             dot.classList.remove("online");
             text.textContent = "OFFLINE";
           }
         }
-
         /* ==============================================
        SIDEBAR MOBILE
        ============================================== */
