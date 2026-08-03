@@ -191,7 +191,7 @@ async function loadDatabase() {
       const isWide = index === 1; 
       const statusBadge = a.status === 'catalogado' ? 'vf' : '';
       const statusText = a.status === 'catalogado' ? 'Verificado' : (a.status === 'em analise' ? 'Em Análise' : 'Não Verificado');
-      const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(a.name + ', ancient artifact, cinematic lighting, dark archive aesthetic, highly detailed')}&width=300&height=200&nologo=true&seed=${a.id}`;
+      const imgUrl = `https://via.placeholder.com/300x200/C5A059/1a1a1a?text=${encodeURIComponent(artifact.name)}`;
 
       return `
       <div class="card ${isWide ? 'wide' : ''} fi d2" data-id="${a.id}" data-name="${a.name.toLowerCase()}" data-origin="${a.origin.toLowerCase()}">

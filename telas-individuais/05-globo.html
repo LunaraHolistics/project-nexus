@@ -146,6 +146,34 @@
         color: #e5e2e1;
       }
 
+      .mission-btn {
+        width: 100%;
+        margin-top: 16px;
+        padding: 12px;
+        background: #c5a059;
+        color: #000;
+        border: none;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: all 0.3s;
+      }
+
+      .mission-btn:hover:not(:disabled) {
+        background: #ffbf00;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 191, 0, 0.4);
+      }
+
+      .mission-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       #loading {
         position: fixed;
         inset: 0;
@@ -250,6 +278,9 @@
               —
             </div>
           </div>
+          <button id="accept-mission-btn" class="mission-btn">
+            ACEITAR MISSÃO
+          </button>
         </div>
       </div>
     </div>
@@ -266,9 +297,6 @@
           markers = [];
         let missions = [];
         let selectedMission = null;
-        let isDragging = false;
-        let autoRotate = true;
-        let autoRotateSpeed = 0.3;
 
         // Coordenadas das cidades
         const cityCoords = {
@@ -294,10 +322,7 @@
         };
 
         function init() {
-          // Cena
           scene = new THREE.Scene();
-
-          // Câmera
           camera = new THREE.PerspectiveCamera(
             45,
             window.innerWidth / window.innerHeight,
@@ -307,7 +332,6 @@
           camera.position.z = 3;
           camera.position.y = 0.5;
 
-          // Renderer
           renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(window.innerWidth, window.innerHeight);
           renderer.setPixelRatio(window.devicePixelRatio);
@@ -315,7 +339,6 @@
             .getElementById("globe-container")
             .appendChild(renderer.domElement);
 
-          // Controls
           controls = new THREE.OrbitControls(camera, renderer.domElement);
           controls.enableDamping = true;
           controls.dampingFactor = 0.05;
@@ -323,9 +346,8 @@
           controls.minDistance = 1.5;
           controls.maxDistance = 5;
           controls.autoRotate = true;
-          controls.autoRotateSpeed = autoRotateSpeed;
+          controls.autoRotateSpeed = 0.5;
 
-          // Luzes
           const ambientLight = new THREE.AmbientLight(0x404040, 1);
           scene.add(ambientLight);
 
@@ -337,29 +359,20 @@
           pointLight.position.set(-5, 2, -5);
           scene.add(pointLight);
 
-          // Criar globo
           createGlobe();
-
-          // Carregar missões
           loadMissions();
 
-          // Event listeners
           window.addEventListener("resize", onWindowResize);
 
-          // Esconder loading
           setTimeout(() => {
             document.getElementById("loading").classList.add("hidden");
           }, 1000);
 
-          // Loop de animação
           animate();
         }
 
         function createGlobe() {
-          // Geometria do globo
           const geometry = new THREE.SphereGeometry(1, 64, 64);
-
-          // Material com textura wireframe
           const material = new THREE.MeshPhongMaterial({
             color: 0x0a3a5c,
             emissive: 0x001133,
@@ -369,11 +382,9 @@
             transparent: true,
             opacity: 0.95,
           });
-
           globe = new THREE.Mesh(geometry, material);
           scene.add(globe);
 
-          // Wireframe overlay
           const wireGeometry = new THREE.SphereGeometry(1.01, 32, 32);
           const wireMaterial = new THREE.MeshBasicMaterial({
             color: 0xc5a059,
@@ -381,11 +392,8 @@
             transparent: true,
             opacity: 0.15,
           });
+          globe.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
-          const wireframe = new THREE.Mesh(wireGeometry, wireMaterial);
-          globe.add(wireframe);
-
-          // Atmosfera
           const atmosphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
           const atmosphereMaterial = new THREE.MeshPhongMaterial({
             color: 0x4ade80,
@@ -393,30 +401,22 @@
             opacity: 0.1,
             side: THREE.BackSide,
           });
-
-          const atmosphere = new THREE.Mesh(
-            atmosphereGeometry,
-            atmosphereMaterial,
-          );
-          scene.add(atmosphere);
+          scene.add(new THREE.Mesh(atmosphereGeometry, atmosphereMaterial));
         }
 
         function createMarker(lat, lon, mission) {
-          // Converter lat/lon para coordenadas 3D
           const phi = (90 - lat) * (Math.PI / 180);
           const theta = (lon + 180) * (Math.PI / 180);
-
           const radius = 1.05;
+
           const x = -(radius * Math.sin(phi) * Math.cos(theta));
           const z = radius * Math.sin(phi) * Math.sin(theta);
           const y = radius * Math.cos(phi);
 
-          // Grupo do marcador
           const markerGroup = new THREE.Group();
           markerGroup.position.set(x, y, z);
           markerGroup.lookAt(0, 0, 0);
 
-          // Círculo base
           const circleGeometry = new THREE.RingGeometry(0.02, 0.04, 32);
           const circleMaterial = new THREE.MeshBasicMaterial({
             color: getPriorityColor(mission.priority),
@@ -424,20 +424,14 @@
             transparent: true,
             opacity: 0.8,
           });
+          markerGroup.add(new THREE.Mesh(circleGeometry, circleMaterial));
 
-          const circle = new THREE.Mesh(circleGeometry, circleMaterial);
-          markerGroup.add(circle);
-
-          // Ponto central
           const pointGeometry = new THREE.SphereGeometry(0.015, 16, 16);
           const pointMaterial = new THREE.MeshBasicMaterial({
             color: 0xffbf00,
           });
+          markerGroup.add(new THREE.Mesh(pointGeometry, pointMaterial));
 
-          const point = new THREE.Mesh(pointGeometry, pointMaterial);
-          markerGroup.add(point);
-
-          // Anel pulsante
           const ringGeometry = new THREE.RingGeometry(0.04, 0.06, 32);
           const ringMaterial = new THREE.MeshBasicMaterial({
             color: getPriorityColor(mission.priority),
@@ -445,16 +439,12 @@
             transparent: true,
             opacity: 0.3,
           });
-
           const ring = new THREE.Mesh(ringGeometry, ringMaterial);
           ring.userData = { isPulsing: true };
           markerGroup.add(ring);
 
-          // Adicionar ao globo
           globe.add(markerGroup);
           markers.push({ mesh: markerGroup, mission: mission });
-
-          return markerGroup;
         }
 
         function getPriorityColor(priority) {
@@ -482,15 +472,11 @@
             document.getElementById("total-missions").textContent =
               missions.length;
 
-            // Criar marcadores
             missions.forEach((mission) => {
               const coords = cityCoords[mission.location];
-              if (coords) {
-                createMarker(coords.lat, coords.lon, mission);
-              }
+              if (coords) createMarker(coords.lat, coords.lon, mission);
             });
 
-            // Renderizar lista de missões
             renderMissionList();
           } catch (error) {
             console.error("Erro ao carregar missões:", error);
@@ -504,12 +490,18 @@
           missions.forEach((mission) => {
             const card = document.createElement("div");
             card.className = "mission-card";
-            card.innerHTML = `
-            <div class="mission-title">${mission.title}</div>
-            <div class="mission-location">${mission.location}</div>
-            <div class="mission-priority priority-${mission.priority.toLowerCase()}">${mission.priority}</div>
-          `;
 
+            // Remove acentos para a classe CSS funcionar corretamente
+            const priorityClass = mission.priority
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "");
+
+            card.innerHTML = `
+              <div class="mission-title">${mission.title}</div>
+              <div class="mission-location">${mission.location}</div>
+              <div class="mission-priority priority-${priorityClass}">${mission.priority}</div>
+            `;
             card.addEventListener("click", () => selectMission(mission));
             list.appendChild(card);
           });
@@ -518,7 +510,6 @@
         function selectMission(mission) {
           selectedMission = mission;
 
-          // Atualizar UI
           document.querySelectorAll(".mission-card").forEach((card) => {
             card.classList.remove("active");
             if (
@@ -539,23 +530,28 @@
             mission.description;
           document.getElementById("detail-objectives").innerHTML =
             mission.objectives.map((obj) => `• ${obj}`).join("<br>");
+
+          const reward = mission.reward || { xp: 0, credits: 0, artifacts: 0 };
           document.getElementById("detail-reward").textContent =
-            `${mission.reward.xp} XP • ${mission.reward.credits} CR`;
+            `${reward.xp} XP • ${reward.credits} CR`;
+
+          const priorityClass = mission.priority
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
           document.getElementById("threat-level").textContent =
             mission.priority;
           document.getElementById("threat-level").className =
-            `info-value priority-${mission.priority.toLowerCase()}`;
+            `info-value priority-${priorityClass}`;
 
-          // Som
-          if (window.ArchiveAudio) {
+          if (
+            window.ArchiveAudio &&
+            typeof window.ArchiveAudio.playClick === "function"
+          ) {
             window.ArchiveAudio.playClick();
           }
 
-          // Parar rotação automática
-          autoRotate = false;
           controls.autoRotate = false;
-
-          // Focar no marcador
           focusOnMarker(mission);
         }
 
@@ -566,32 +562,36 @@
           const phi = (90 - coords.lat) * (Math.PI / 180);
           const theta = (coords.lon + 180) * (Math.PI / 180);
 
-          const radius = 2.5;
-          const x = -(radius * Math.sin(phi) * Math.cos(theta));
-          const z = radius * Math.sin(phi) * Math.sin(theta);
-          const y = radius * Math.cos(phi);
+          const targetRadius = 1.05;
+          const targetX = -(targetRadius * Math.sin(phi) * Math.cos(theta));
+          const targetY = targetRadius * Math.cos(phi);
+          const targetZ = targetRadius * Math.sin(phi) * Math.sin(theta);
 
-          // Animar câmera
+          const camRadius = 2.5;
+          const camX = -(camRadius * Math.sin(phi) * Math.cos(theta));
+          const camY = camRadius * Math.cos(phi);
+          const camZ = camRadius * Math.sin(phi) * Math.sin(theta);
+
           const startPos = camera.position.clone();
-          const endPos = new THREE.Vector3(x, y, z);
+          const startTarget = controls.target.clone();
+          const endPos = new THREE.Vector3(camX, camY, camZ);
+          const endTarget = new THREE.Vector3(targetX, targetY, targetZ);
 
-          let progress = 0;
           const duration = 1000;
           const startTime = Date.now();
 
           function animateCamera() {
-            progress = (Date.now() - startTime) / duration;
+            const progress = Math.min((Date.now() - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+            camera.position.lerpVectors(startPos, endPos, ease);
+            controls.target.lerpVectors(startTarget, endTarget, ease);
+            controls.update();
 
             if (progress < 1) {
-              camera.position.lerpVectors(startPos, endPos, progress);
-              camera.lookAt(0, 0, 0);
               requestAnimationFrame(animateCamera);
-            } else {
-              camera.position.copy(endPos);
-              camera.lookAt(0, 0, 0);
             }
           }
-
           animateCamera();
         }
 
@@ -603,11 +603,8 @@
 
         function animate() {
           requestAnimationFrame(animate);
-
-          // Atualizar controls
           controls.update();
 
-          // Pulsar anéis dos marcadores
           markers.forEach((marker) => {
             const ring = marker.mesh.children[2];
             if (ring && ring.userData.isPulsing) {
@@ -620,7 +617,65 @@
           renderer.render(scene, camera);
         }
 
-        // Inicializar
+        // Lógica para aceitar a missão
+        document
+          .getElementById("accept-mission-btn")
+          .addEventListener("click", async () => {
+            if (!selectedMission) return;
+
+            const btn = document.getElementById("accept-mission-btn");
+            const originalText = btn.textContent;
+            btn.textContent = "PROCESSANDO...";
+            btn.disabled = true;
+
+            try {
+              await window.ArchiveAPI.init();
+
+              const state = window.ArchiveAPI.getState();
+              if (!state || !state.director) {
+                alert(
+                  "Você precisa estar cadastrado como Diretor para aceitar missões.",
+                );
+                window.location.href = "index.html";
+                return;
+              }
+
+              const result = await window.ArchiveAPI.acceptMission(
+                selectedMission.id,
+              );
+
+              if (result && result.success) {
+                if (
+                  window.ArchiveAudio &&
+                  typeof window.ArchiveAudio.playSuccess === "function"
+                ) {
+                  window.ArchiveAudio.playSuccess();
+                }
+                alert(
+                  "Missão aceita com sucesso! Redirecionando para o briefing...",
+                );
+                window.location.href = "07-briefing.html";
+              } else {
+                if (
+                  window.ArchiveAudio &&
+                  typeof window.ArchiveAudio.playError === "function"
+                ) {
+                  window.ArchiveAudio.playError();
+                }
+                alert(
+                  "Erro ao aceitar missão: " +
+                    (result?.error || "Falha desconhecida."),
+                );
+              }
+            } catch (err) {
+              console.error("Erro ao aceitar missão:", err);
+              alert("Erro de conexão. Tente novamente.");
+            } finally {
+              btn.textContent = originalText;
+              btn.disabled = false;
+            }
+          });
+
         init();
       })();
     </script>
