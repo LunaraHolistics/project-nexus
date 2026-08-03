@@ -15,12 +15,12 @@
 
   // Detectar ambiente automaticamente
   var BASE_URL = (function() {
-    // Produção (Vercel/Netlify) - MUDAR DEPOIS QUANDO TIVER BACKEND
-    if (window.location.hostname !== 'localhost') {
-      return 'https://project-nexus-15sj.onrender.com'; // ← Trocar quando deploy backend
+    // Se estiver rodando localmente, usa o backend local
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:3000/api';
     }
-    // Desenvolvimento local
-    return 'http://localhost:3000/api';
+    // Se estiver em produção (Netlify, Vercel, etc.), usa o backend do Render
+    return 'https://project-nexus-15sj.onrender.com/api';
   })();
 
   var _isOnline = false;
