@@ -1,245 +1,816 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <!-- Mobile Viewport Otimizado -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Briefing da Missão</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
-<style>
-:root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
-.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
-@keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
-.scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
-.bf{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
-header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
-.logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
-.nav{display:flex;gap:30px;}
-.nav a{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
-.nav a:hover,.nav a.on{color:var(--gold);}
-.nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
-.icons{display:flex;gap:14px;}
-.icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
-.icons svg:hover{stroke:var(--amber);}
-.body{flex:1;display:flex;padding:40px 48px;gap:40px;overflow:hidden;}
-.dos{flex:1;position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:56px 48px;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,.5);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);animation:sl .8s ease-out;}
-.dos::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);}
-@keyframes sl{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
-.stamp{position:absolute;top:70px;right:70px;width:170px;height:54px;border:3px solid var(--bronze);transform:rotate(-15deg);display:flex;align-items:center;justify-content:center;opacity:.72;}
-.stamp::before{content:'';position:absolute;inset:4px;border:1px solid var(--bronze);}
-.stamp span{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--bronze);letter-spacing:.2em;text-transform:uppercase;}
-.dn{font-family:'JetBrains Mono',monospace;font-size:12px;color:#6b6560;letter-spacing:.1em;margin-bottom:14px;}
-.dt{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;line-height:52px;margin-bottom:22px;}
-.dd{width:100%;height:1px;background:var(--gold);opacity:.4;margin-bottom:28px;}
-.dtx{font-family:'Manrope',sans-serif;font-size:15px;line-height:24px;color:#3a3530;margin-bottom:20px;}
-.dtx:first-of-type::first-letter{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:var(--gold);float:left;line-height:1;margin-right:8px;margin-top:4px;}
-.pol{display:inline-block;background:#fff;padding:10px 10px 36px;box-shadow:0 8px 22px rgba(0,0,0,.22);transform:rotate(-2deg);margin-top:18px;transition:transform .3s;}
-.pol:hover{transform:rotate(0) translateY(-3px);}
-.pol .clip{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:34px;height:50px;border:2px solid #8a8580;border-radius:17px 17px 0 0;}
-.pol .clip::before{content:'';position:absolute;top:7px;left:50%;transform:translateX(-50%);width:16px;height:34px;border:2px solid #8a8580;border-radius:8px 8px 0 0;}
-.pol-img{width:100%;height:200px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;}
-.pol-img::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,248,220,.15),transparent 60%), linear-gradient(180deg, rgba(26,21,16,0.1) 0%, rgba(26,21,16,0.6) 100%);z-index:1;}
-.pol-cap{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:13px;color:#1a1a1a;text-align:center;margin-top:10px;position:relative;z-index:2;}
-.tac{width:440px;display:flex;flex-direction:column;gap:20px;animation:fr .8s ease-out .2s both;}
-@keyframes fr{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.th{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:.5px solid rgba(197,160,89,.3);}
-.th svg{width:22px;height:22px;stroke:var(--gold);stroke-width:1.5;fill:none;}
-.tht{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
-.ths{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;}
-.ac{position:relative;padding:20px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);}
-.ac::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
-.act{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;position:relative;}
-.act::before{content:'';width:3px;height:14px;background:var(--amber);}
-.coord{font-family:'JetBrains Mono',monospace;font-size:17px;color:var(--on);letter-spacing:.05em;margin-bottom:6px;position:relative;}
-.loc{font-family:'Manrope',sans-serif;font-size:13px;color:var(--onv);line-height:18px;position:relative;}
-.sus{list-style:none;position:relative;}
-.sus li{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);margin-bottom:10px;padding-left:14px;position:relative;}
-.sus li::before{content:'•';position:absolute;left:0;color:var(--amber);}
-.sus li.unk{color:var(--onv);opacity:.7;}
-.clue{font-family:'Manrope',sans-serif;font-size:13px;line-height:19px;color:var(--onv);position:relative;}
-.acc{margin-top:auto;padding:18px 40px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
-.acc:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 24px rgba(255,191,0,.4);}
-.acc .ar{transition:transform .3s;}
-.acc:hover .ar{transform:translateX(4px);}
-footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
-.ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
-.sig{display:flex;align-items:center;gap:7px;}
-.sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
-@keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
-@media (max-width: 900px) and (orientation: landscape) {
-.body { flex-direction: column; padding: 20px; }
-.tac { width: 100%; }
-}
-</style>
-</head>
-<body>
-<div class="grain"></div><div class="scan"></div>
-<div class="bf">
-  <header>
-    <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#">Banco de Dados</a><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a></nav>
-    <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
-  </header>
-  <div class="body">
-    <div class="dos">
-      <div class="stamp"><span>Confidencial</span></div>
-      <div class="dn" id="dn">DOSSIÊ #---</div>
-      <h1 class="dt" id="dt"></h1>
-      <div class="dd"></div>
-      <p class="dtx" id="desc"></p>
-      <p class="dtx" id="obj" style="font-weight:600; color:#1a1a1a; margin-top:30px;">Objetivos da operação:</p>
-      <div class="pol" style="position:relative;">
-        <div class="clip"></div>
-        <div class="pol-img" id="pol-img"></div>
-        <div class="pol-cap" id="pol-cap">Exhibit A</div>
-      </div>
-    </div>
-    <div class="tac">
-      <div class="th">
-        <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
-        <div><div class="tht">Análise Tática</div><div class="ths">SYS.SYNC: ON_LINE</div></div>
-      </div>
-      <div class="ac">
-        <div class="act">Localização</div>
-        <div class="coord" id="coord">--</div>
-        <div class="loc" id="loc">--</div>
-      </div>
-      <div class="ac">
-        <div class="act">Objetivos da Missão</div>
-        <ul class="sus" id="sus-list"></ul>
-      </div>
-      <button class="acc" id="acc">Aceitar Investigação <span class="ar">→</span></button>
-    </div>
-  </div>
-  <footer>
-    <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
-    <div class="ftc">
-      <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
-      <div class="ft">Status: CRIPTOGRAFADO</div>
-      <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
-    </div>
-  </footer>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', async function() {
-  try {
-    // 1. Obter ID da URL ou usar padrão 1
-    const urlParams = new URLSearchParams(window.location.search);
-    const missionId = parseInt(urlParams.get('id')) || 1;
+  <head>
+    <!-- Mobile Viewport Otimizado -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
 
-    // 2. Buscar missões (aguardando a Promise corretamente)
-    const missions = await window.ArchiveAPI.getMissions();
-    const mission = missions.find(m => m.id === missionId) || missions[0];
+    <!-- Animações Archive OS -->
+    <link rel="stylesheet" href="../animations.css" />
+    <script src="../animations.js"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    `r`n
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>ARCHIVE OS — Briefing da Missão</title>
+    <!-- Fontes Confiáveis (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
-    if (!mission) {
-      window.ArchiveAPI.notify('Dados da missão corrompidos.', 'error');
-      return;
-    }
-
-    // 3. Atualizações de UI
-    document.getElementById('dn').textContent = 'DOSSIÊ #' + mission.codename;
-
-    // Efeito de digitação no título
-    const el = document.getElementById('dt');
-    const orig = mission.title;
-    el.textContent = '';
-    let i = 0;
-    setTimeout(() => {
-      const iv = setInterval(() => {
-        if (i < orig.length) {
-          el.textContent = orig.substring(0, i + 1);
-          i++;
-        } else {
-          clearInterval(iv);
-        }
-      }, 55);
-    }, 700);
-
-    document.getElementById('desc').textContent = mission.description;
-    
-    // Imagem dinâmica via Pollinations (com seed fixo por missão para consistência)
-    const prompt = encodeURIComponent(mission.title + ', ancient artifact, cinematic lighting, photorealistic, dark archive aesthetic, highly detailed, 8k');
-    document.getElementById('pol-img').style.backgroundImage = `url('https://image.pollinations.ai/prompt/${prompt}&width=400&height=300&nologo=true&seed=${mission.id}')`;
-    
-    document.getElementById('pol-cap').textContent = 'Exhibit A — ' + mission.location;
-    document.getElementById('loc').textContent = mission.location;
-    
-    // Coordenadas fictícias estilizadas para imersão
-    const lat = Math.floor(Math.random() * 90) + '°' + Math.floor(Math.random() * 60) + "'N";
-    const lon = Math.floor(Math.random() * 180) + '°' + Math.floor(Math.random() * 60) + "'E";
-    document.getElementById('coord').textContent = `LAT: ${lat} // LON: ${lon}`;
-
-    // Lista de objetivos
-    const susList = document.getElementById('sus-list');
-    susList.innerHTML = mission.objectives.map(o => `<li>${o}</li>`).join('');
-
-    // 4. Ação do botão
-    document.getElementById('acc').addEventListener('click', async function() {
-      try {
-        const state = window.ArchiveAPI.getState();
-        if (!state || !state.director) {
-          if(window.ArchiveAudio) window.ArchiveAudio.playError();
-          window.ArchiveAPI.notify('Faça login primeiro para aceitar missões.', 'error');
-          return;
-        }
-        
-        const result = await window.ArchiveAPI.acceptMission(mission.id);
-        
-        if(result && result.success) {
-          if(window.ArchiveAudio) window.ArchiveAudio.playSuccess();
-          window.ArchiveAPI.notify('Missão Aceita: ' + mission.codename, 'success');
-          this.innerHTML = 'Investigação Aceita <span style="margin-left:8px">✓</span>';
-          this.style.background = 'var(--amber)';
-          this.style.color = 'var(--surface)';
-          this.style.borderColor = 'var(--amber)';
-        } else {
-          if(window.ArchiveAudio) window.ArchiveAudio.playError();
-          window.ArchiveAPI.notify(result.error || 'Falha ao processar missão.', 'error');
-        }
-      } catch(err) {
-        console.error(err);
-        if(window.ArchiveAudio) window.ArchiveAudio.playError();
-        window.ArchiveAPI.notify('Erro de conexão ao aceitar missão.', 'error');
+    <!-- Font Awesome com atributos para silenciar avisos de privacidade do navegador -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="../api.js"></script>
+    <script src="../audio-system.js"></script>
+    <style>
+      :root {
+        --surface: #131313;
+        --dim: #0e0e0e;
+        --on: #e5e2e1;
+        --onv: #c1c7cc;
+        --gold: #c5a059;
+        --goldl: #e9c176;
+        --bronze: #cd7f32;
+        --amber: #ffbf00;
+        --petrol: #003344;
+        --ivory: #f5f5dc;
       }
-    });
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--surface);
+        font-family: "Manrope", sans-serif;
+        color: var(--on);
+      }
+      .grain {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9000;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        animation: gs 0.5s steps(4) infinite;
+      }
+      @keyframes gs {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-2%, -1%);
+        }
+        50% {
+          transform: translate(1%, 2%);
+        }
+        75% {
+          transform: translate(-1%, 1%);
+        }
+      }
+      .scan {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 8999;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.025),
+          rgba(0, 0, 0, 0.025) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        opacity: 0.4;
+      }
+      .bf {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        height: 64px;
+        background: rgba(14, 14, 14, 0.92);
+        backdrop-filter: blur(20px);
+        border-bottom: 0.5px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+        flex-shrink: 0;
+        z-index: 40;
+      }
+      .logo {
+        font-family: "Libre Caslon Text", serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--gold);
+        letter-spacing: 0.15em;
+      }
+      .nav {
+        display: flex;
+        gap: 30px;
+      }
+      .nav a {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--onv);
+        text-decoration: none;
+        letter-spacing: 0.1em;
+        position: relative;
+        padding-bottom: 4px;
+        transition: color 0.3s;
+      }
+      .nav a:hover,
+      .nav a.on {
+        color: var(--gold);
+      }
+      .nav a.on::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--amber);
+        box-shadow: 0 0 8px var(--amber);
+      }
+      .icons {
+        display: flex;
+        gap: 14px;
+      }
+      .icons svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--gold);
+        stroke-width: 1.5;
+        fill: none;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .icons svg:hover {
+        stroke: var(--amber);
+      }
+      .body {
+        flex: 1;
+        display: flex;
+        padding: 40px 48px;
+        gap: 40px;
+        overflow: hidden;
+      }
+      .dos {
+        flex: 1;
+        position: relative;
+        background: var(--ivory);
+        background-image:
+          url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),
+          linear-gradient(180deg, #f5f5dc, #ece7c6);
+        padding: 56px 48px;
+        overflow-y: auto;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        clip-path: polygon(
+          14px 0,
+          calc(100% - 14px) 0,
+          100% 14px,
+          100% calc(100% - 14px),
+          calc(100% - 14px) 100%,
+          14px 100%,
+          0 calc(100% - 14px),
+          0 14px
+        );
+        animation: sl 0.8s ease-out;
+      }
+      .dos::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 0.5pt var(--gold);
+        clip-path: polygon(
+          14px 0,
+          calc(100% - 14px) 0,
+          100% 14px,
+          100% calc(100% - 14px),
+          calc(100% - 14px) 100%,
+          14px 100%,
+          0 calc(100% - 14px),
+          0 14px
+        );
+      }
+      @keyframes sl {
+        from {
+          opacity: 0;
+          transform: translateX(-24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .stamp {
+        position: absolute;
+        top: 70px;
+        right: 70px;
+        width: 170px;
+        height: 54px;
+        border: 3px solid var(--bronze);
+        transform: rotate(-15deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.72;
+      }
+      .stamp::before {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border: 1px solid var(--bronze);
+      }
+      .stamp span {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--bronze);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+      .dn {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: #6b6560;
+        letter-spacing: 0.1em;
+        margin-bottom: 14px;
+      }
+      .dt {
+        font-family: "Libre Caslon Text", serif;
+        font-size: 46px;
+        font-weight: 700;
+        color: #1a1a1a;
+        letter-spacing: -0.02em;
+        line-height: 52px;
+        margin-bottom: 22px;
+      }
+      .dd {
+        width: 100%;
+        height: 1px;
+        background: var(--gold);
+        opacity: 0.4;
+        margin-bottom: 28px;
+      }
+      .dtx {
+        font-family: "Manrope", sans-serif;
+        font-size: 15px;
+        line-height: 24px;
+        color: #3a3530;
+        margin-bottom: 20px;
+      }
+      .dtx:first-of-type::first-letter {
+        font-family: "Libre Caslon Text", serif;
+        font-size: 46px;
+        font-weight: 700;
+        color: var(--gold);
+        float: left;
+        line-height: 1;
+        margin-right: 8px;
+        margin-top: 4px;
+      }
+      .pol {
+        display: inline-block;
+        background: #fff;
+        padding: 10px 10px 36px;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+        transform: rotate(-2deg);
+        margin-top: 18px;
+        transition: transform 0.3s;
+      }
+      .pol:hover {
+        transform: rotate(0) translateY(-3px);
+      }
+      .pol .clip {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 34px;
+        height: 50px;
+        border: 2px solid #8a8580;
+        border-radius: 17px 17px 0 0;
+      }
+      .pol .clip::before {
+        content: "";
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 16px;
+        height: 34px;
+        border: 2px solid #8a8580;
+        border-radius: 8px 8px 0 0;
+      }
+      .pol-img {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #2a2520, #1a1510);
+        position: relative;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+      }
+      .pol-img::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 35% 30%,
+            rgba(255, 248, 220, 0.15),
+            transparent 60%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(26, 21, 16, 0.1) 0%,
+            rgba(26, 21, 16, 0.6) 100%
+          );
+        z-index: 1;
+      }
+      .pol-cap {
+        font-family: "Libre Caslon Text", serif;
+        font-style: italic;
+        font-size: 13px;
+        color: #1a1a1a;
+        text-align: center;
+        margin-top: 10px;
+        position: relative;
+        z-index: 2;
+      }
+      .tac {
+        width: 440px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        animation: fr 0.8s ease-out 0.2s both;
+      }
+      @keyframes fr {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .th {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 14px;
+        border-bottom: 0.5px solid rgba(197, 160, 89, 0.3);
+      }
+      .th svg {
+        width: 22px;
+        height: 22px;
+        stroke: var(--gold);
+        stroke-width: 1.5;
+        fill: none;
+      }
+      .tht {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--gold);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+      .ths {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        color: var(--onv);
+        letter-spacing: 0.1em;
+      }
+      .ac {
+        position: relative;
+        padding: 20px;
+        background: rgba(0, 51, 68, 0.15);
+        backdrop-filter: blur(20px);
+        border: 0.5px solid var(--gold);
+      }
+      .ac::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.025),
+          rgba(0, 0, 0, 0.025) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        opacity: 0.5;
+      }
+      .act {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--gold);
+        letter-spacing: 0.1em;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+      }
+      .act::before {
+        content: "";
+        width: 3px;
+        height: 14px;
+        background: var(--amber);
+      }
+      .coord {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 17px;
+        color: var(--on);
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
+        position: relative;
+      }
+      .loc {
+        font-family: "Manrope", sans-serif;
+        font-size: 13px;
+        color: var(--onv);
+        line-height: 18px;
+        position: relative;
+      }
+      .sus {
+        list-style: none;
+        position: relative;
+      }
+      .sus li {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        color: var(--on);
+        margin-bottom: 10px;
+        padding-left: 14px;
+        position: relative;
+      }
+      .sus li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--amber);
+      }
+      .sus li.unk {
+        color: var(--onv);
+        opacity: 0.7;
+      }
+      .clue {
+        font-family: "Manrope", sans-serif;
+        font-size: 13px;
+        line-height: 19px;
+        color: var(--onv);
+        position: relative;
+      }
+      .acc {
+        margin-top: auto;
+        padding: 18px 40px;
+        background: var(--petrol);
+        border: 1px solid var(--petrol);
+        color: var(--ivory);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        clip-path: polygon(
+          8px 0,
+          calc(100% - 8px) 0,
+          100% 8px,
+          100% calc(100% - 8px),
+          calc(100% - 8px) 100%,
+          8px 100%,
+          0 calc(100% - 8px),
+          0 8px
+        );
+      }
+      .acc:hover {
+        background: var(--amber);
+        border-color: var(--amber);
+        color: var(--surface);
+        box-shadow: 0 0 24px rgba(255, 191, 0, 0.4);
+      }
+      .acc .ar {
+        transition: transform 0.3s;
+      }
+      .acc:hover .ar {
+        transform: translateX(4px);
+      }
+      footer {
+        height: 44px;
+        background: rgba(14, 14, 14, 0.92);
+        backdrop-filter: blur(20px);
+        border-top: 0.5px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+        flex-shrink: 0;
+        z-index: 40;
+      }
+      .ft {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--onv);
+        letter-spacing: 0.05em;
+      }
+      .ftc {
+        display: flex;
+        gap: 26px;
+        align-items: center;
+      }
+      .sig {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .sig .d {
+        width: 7px;
+        height: 7px;
+        background: var(--amber);
+        border-radius: 50%;
+        animation: pu 2s ease-in-out infinite;
+      }
+      @keyframes pu {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 0 0 rgba(255, 191, 0, 0.4);
+        }
+        50% {
+          opacity: 0.6;
+          box-shadow: 0 0 0 7px rgba(255, 191, 0, 0);
+        }
+      }
+      @media (max-width: 900px) and (orientation: landscape) {
+        .body {
+          flex-direction: column;
+          padding: 20px;
+        }
+        .tac {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain"></div>
+    <div class="scan"></div>
+    <div class="bf">
+      <header>
+        <div class="logo">ARCHIVE</div>
+        <nav class="nav">
+          <a href="#">Globo</a><a href="#">Banco de Dados</a
+          ><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a>
+        </nav>
+        <div class="icons">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path
+              d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            />
+          </svg>
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+      </header>
+      <div class="body">
+        <div class="dos">
+          <div class="stamp"><span>Confidencial</span></div>
+          <div class="dn" id="dn">DOSSIÊ #---</div>
+          <h1 class="dt" id="dt"></h1>
+          <div class="dd"></div>
+          <p class="dtx" id="desc"></p>
+          <p
+            class="dtx"
+            id="obj"
+            style="font-weight: 600; color: #1a1a1a; margin-top: 30px"
+          >
+            Objetivos da operação:
+          </p>
+          <div class="pol" style="position: relative">
+            <div class="clip"></div>
+            <div class="pol-img" id="pol-img"></div>
+            <div class="pol-cap" id="pol-cap">Exhibit A</div>
+          </div>
+        </div>
+        <div class="tac">
+          <div class="th">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"
+              />
+            </svg>
+            <div>
+              <div class="tht">Análise Tática</div>
+              <div class="ths">SYS.SYNC: ON_LINE</div>
+            </div>
+          </div>
+          <div class="ac">
+            <div class="act">Localização</div>
+            <div class="coord" id="coord">--</div>
+            <div class="loc" id="loc">--</div>
+          </div>
+          <div class="ac">
+            <div class="act">Objetivos da Missão</div>
+            <ul class="sus" id="sus-list"></ul>
+          </div>
+          <button class="acc" id="acc">
+            Aceitar Investigação <span class="ar">→</span>
+          </button>
+        </div>
+      </div>
+      <footer>
+        <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
+        <div class="ftc">
+          <div class="ft">Local: LONDRES <span id="ck">23:45</span></div>
+          <div class="ft">Status: CRIPTOGRAFADO</div>
+          <div class="ft sig">Sinal: FORTE <span class="d"></span></div>
+        </div>
+      </footer>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          // 1. Obter ID da URL ou usar padrão 1
+          const urlParams = new URLSearchParams(window.location.search);
+          const missionId = parseInt(urlParams.get("id")) || 1;
 
-  } catch (err) {
-    console.error('Falha ao inicializar briefing:', err);
-    window.ArchiveAPI.notify('Falha ao carregar dados da missão.', 'error');
-  }
-});
+          // 2. Buscar missões (aguardando a Promise corretamente)
+          const missions = await window.ArchiveAPI.getMissions();
+          const mission =
+            missions.find((m) => m.id === missionId) || missions[0];
 
-// Relógio do rodapé
-setInterval(() => { 
-  const n = new Date(); 
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0'); 
-}, 1000);
-</script>
+          if (!mission) {
+            window.ArchiveAPI.notify("Dados da missão corrompidos.", "error");
+            return;
+          }
 
-  <!-- Service Worker para PWA -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
-    }
-  </script>
-</body>
+          // 3. Atualizações de UI
+          document.getElementById("dn").textContent =
+            "DOSSIÊ #" + mission.codename;
+
+          // Efeito de digitação no título
+          const el = document.getElementById("dt");
+          const orig = mission.title;
+          el.textContent = "";
+          let i = 0;
+          setTimeout(() => {
+            const iv = setInterval(() => {
+              if (i < orig.length) {
+                el.textContent = orig.substring(0, i + 1);
+                i++;
+              } else {
+                clearInterval(iv);
+              }
+            }, 55);
+          }, 700);
+
+          document.getElementById("desc").textContent = mission.description;
+
+          // Imagem dinâmica via Pollinations (com seed fixo por missão para consistência)
+          const prompt = encodeURIComponent(
+            mission.title +
+              ", ancient artifact, cinematic lighting, photorealistic, dark archive aesthetic, highly detailed, 8k",
+          );
+          document.getElementById("pol-img").style.backgroundImage =
+            `url('https://image.pollinations.ai/prompt/${prompt}&width=400&height=300&nologo=true&seed=${mission.id}')`;
+
+          document.getElementById("pol-cap").textContent =
+            "Exhibit A — " + mission.location;
+          document.getElementById("loc").textContent = mission.location;
+
+          // Coordenadas fictícias estilizadas para imersão
+          const lat =
+            Math.floor(Math.random() * 90) +
+            "°" +
+            Math.floor(Math.random() * 60) +
+            "'N";
+          const lon =
+            Math.floor(Math.random() * 180) +
+            "°" +
+            Math.floor(Math.random() * 60) +
+            "'E";
+          document.getElementById("coord").textContent =
+            `LAT: ${lat} // LON: ${lon}`;
+
+          // Lista de objetivos
+          const susList = document.getElementById("sus-list");
+          susList.innerHTML = mission.objectives
+            .map((o) => `<li>${o}</li>`)
+            .join("");
+
+          // 4. Ação do botão
+          document
+            .getElementById("acc")
+            .addEventListener("click", async function () {
+              try {
+                const state = window.ArchiveAPI.getState();
+                if (!state || !state.director) {
+                  if (window.ArchiveAudio) window.ArchiveAudio.playError();
+                  window.ArchiveAPI.notify(
+                    "Faça login primeiro para aceitar missões.",
+                    "error",
+                  );
+                  return;
+                }
+
+                const result = await window.ArchiveAPI.acceptMission(
+                  mission.id,
+                );
+
+                if (result && result.success) {
+                  if (window.ArchiveAudio) window.ArchiveAudio.playSuccess();
+                  window.ArchiveAPI.notify(
+                    "Missão Aceita: " + mission.codename,
+                    "success",
+                  );
+                  this.innerHTML =
+                    'Investigação Aceita <span style="margin-left:8px">✓</span>';
+                  this.style.background = "var(--amber)";
+                  this.style.color = "var(--surface)";
+                  this.style.borderColor = "var(--amber)";
+                } else {
+                  if (window.ArchiveAudio) window.ArchiveAudio.playError();
+                  window.ArchiveAPI.notify(
+                    result.error || "Falha ao processar missão.",
+                    "error",
+                  );
+                }
+              } catch (err) {
+                console.error(err);
+                if (window.ArchiveAudio) window.ArchiveAudio.playError();
+                window.ArchiveAPI.notify(
+                  "Erro de conexão ao aceitar missão.",
+                  "error",
+                );
+              }
+            });
+        } catch (err) {
+          console.error("Falha ao inicializar briefing:", err);
+          window.ArchiveAPI.notify(
+            "Falha ao carregar dados da missão.",
+            "error",
+          );
+        }
+      });
+
+      // Relógio do rodapé
+      setInterval(() => {
+        const n = new Date();
+        document.getElementById("ck").textContent =
+          String(n.getHours()).padStart(2, "0") +
+          ":" +
+          String(n.getMinutes()).padStart(2, "0");
+      }, 1000);
+    </script>
+
+    <!-- Service Worker para PWA -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then(() => console.log("[PWA] Service Worker registrado"))
+          .catch((err) => console.error("[PWA] Falha no registro:", err));
+      }
+    </script>
+  </body>
 </html>
