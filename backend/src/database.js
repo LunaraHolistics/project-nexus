@@ -9,12 +9,15 @@ async function initDatabase() {
   const SQL = await initSqlJs();
   
   try {
+    // Tenta carregar o banco existente
     const fileBuffer = fs.readFileSync(DB_PATH);
     db = new SQL.Database(fileBuffer);
   } catch (err) {
+    // Se não existir, cria um novo em memória
     db = new SQL.Database();
   }
 
+  // Criação das tabelas atualizadas para v2.0
   db.run(`
     CREATE TABLE IF NOT EXISTS players (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,6 +92,7 @@ async function initDatabase() {
 
   seedData();
   saveDatabase();
+  
   return db;
 }
 
@@ -101,6 +105,21 @@ function saveDatabase() {
 }
 
 function seedData() {
+  const missionCount = db.exec("SELECT COUNT(*) as count FROM missions")[0]?.values[0][0] || 0;
+  if (missionCount === 0) {
+    const missions = [
+      ['MERIDIAN', 'O Cálice de Antioquia', 'Viena, Áustria', 'ALTA', '["arqueologia", "historia"]', 'Recuperação de um artefato Classe-4.', '["Localizar cofre", "Neutralizar courier", "Recuperar cálice"]', 500, 1200, 1, 3],
+      ['TYPHON', 'Manuscrito de Voynich', 'Londres, Reino Unido', 'MÉDIA', '["criptografia", "historia"]', 'Estudo de um manuscrito criptografado.', '["Obter acesso", "Escanear páginas", "Traduzir fragmento"]', 300, 800, 0, 2],
+      ['SIGNAL', 'Máscara Dourada Inca', 'Cusco, Peru', 'CRÍTICA', '["arqueologia", "investigacao"]', 'Recuperação urgente antes de leilão.', '["Infiltrar mansão", "Localizar máscara", "Extrair"]', 1000, 2500, 1, 5]
+    ];
+    const stmt = db.prepare(`
+      INSERT INTO missions (codename, title, location, priority, specialty_filter, description, objectives, reward_xp, reward_credits, reward_artifacts, status, phase, total_phases)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'disponivel', ?, ?)
+    `);
+    missions.forEach(m => stmt.run(m));
+    stmt.free();
+  }
+
   const artifactCount = db.exec("SELECT COUNT(*) as count FROM artifacts")[0]?.values[0][0] || 0;
   if (artifactCount === 0) {
     const artifacts = [
@@ -110,17 +129,6 @@ function seedData() {
     ];
     const stmt = db.prepare("INSERT INTO artifacts (name, origin, circa, category, status, location) VALUES (?, ?, ?, ?, ?, ?)");
     artifacts.forEach(a => stmt.run(a));
-    stmt.free();
-  }
-
-  const missionCount = db.exec("SELECT COUNT(*) as count FROM missions")[0]?.values[0][0] || 0;
-  if (missionCount === 0) {
-    const missions = [
-      ['MERIDIAN', 'O Cálice de Antioquia', 'Viena, Áustria', 'ALTA', 'disponivel', 1, 3, '["arqueologia", "historia"]', 'Recuperação de um artefato Classe-4.', '["Localizar cofre", "Neutralizar courier", "Recuperar cálice"]', 500, 1200, 1],
-      ['TYPHON', 'Manuscrito de Voynich', 'Londres, Reino Unido', 'MÉDIA', 'disponivel', 1, 2, '["criptografia", "historia"]', 'Estudo de um manuscrito criptografado.', '["Obter acesso", "Escanear páginas", "Traduzir fragmento"]', 300, 800, 0]
-    ];
-    const stmt = db.prepare(`INSERT INTO missions (codename, title, location, priority, status, phase, total_phases, specialty_filter, description, objectives, reward_xp, reward_credits, reward_artifacts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-    missions.forEach(m => stmt.run(m));
     stmt.free();
   }
 
@@ -138,25 +146,25 @@ function seedData() {
   saveDatabase();
 }
 
+// Wrapper para imitar a API do better-sqlite3
 function getDb() {
   return {
     prepare: (sql) => {
       return {
         run: (params) => {
           const stmt = db.prepare(sql);
-          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (Array.isArray(params) ? params : []);
+          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (params || []);
           stmt.run(values);
+          stmt.free();
           const res = db.exec("SELECT last_insert_rowid() as id");
-          const result = { 
-            lastInsertRowid: res[0]?.values[0][0] || 0, 
+          return { 
+            lastInsertRowid: res[0]?.values[0][0], 
             changes: db.getRowsModified() 
           };
-          stmt.free();
-          return result;
         },
         get: (params) => {
           const stmt = db.prepare(sql);
-          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (Array.isArray(params) ? params : [params]);
+          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (params || []);
           stmt.bind(values);
           let result = null;
           if (stmt.step()) {
@@ -167,7 +175,7 @@ function getDb() {
         },
         all: (params) => {
           const stmt = db.prepare(sql);
-          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (Array.isArray(params) ? params : [params]);
+          const values = params && typeof params === 'object' && !Array.isArray(params) ? Object.values(params) : (params || []);
           stmt.bind(values);
           const results = [];
           while (stmt.step()) {
