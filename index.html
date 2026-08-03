@@ -1762,23 +1762,22 @@
           var dot = document.getElementById("status-dot");
           var text = document.getElementById("status-text");
 
-          // Aguarda o ArchiveAPI inicializar para saber o status real
+          // Agora confiamos na lógica inteligente do api.js
           if (window.ArchiveAPI) {
             await window.ArchiveAPI.init();
-
             if (window.ArchiveAPI.online) {
               dot.classList.add("online");
               text.textContent = "ONLINE";
             } else {
               dot.classList.remove("online");
-              text.textContent = "OFFLINE (MODO STANDALONE)";
+              text.textContent = "OFFLINE (STANDALONE)";
             }
           } else {
-            // Fallback caso o api.js falhe ao carregar
             dot.classList.remove("online");
             text.textContent = "OFFLINE";
           }
         }
+
         /* ==============================================
        SIDEBAR MOBILE
        ============================================== */
