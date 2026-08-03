@@ -14,7 +14,6 @@
   "use strict";
 
   // Detectar ambiente automaticamente
-  // Detectar ambiente automaticamente
   var BASE_URL = (function () {
     // Se estiver rodando localmente, usa o backend local
     if (
