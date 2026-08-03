@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Passaporte do Agente</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Passaporte do Agente</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -33,12 +50,13 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
 .body{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;overflow:hidden;}
 .book{display:flex;max-width:1180px;width:100%;max-height:720px;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(197,160,89,.2);animation:bo 1s ease-out;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);}
 @keyframes bo{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.pg{flex:1;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:44px 52px;position:relative;overflow:hidden;}
+.pg{flex:1;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:44px 52px;position:relative;overflow-y:auto;overflow-x:hidden;}
 .pg::before{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);}
 .spine{width:24px;background:linear-gradient(90deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.1) 30%,rgba(197,160,89,.3) 50%,rgba(0,0,0,.1) 70%,rgba(0,0,0,.4) 100%);flex-shrink:0;position:relative;}
 .spine::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 8px,rgba(197,160,89,.15) 8px,rgba(197,160,89,.15) 9px);}
@@ -62,9 +80,8 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .prt::before{content:'';width:14px;height:1px;background:var(--gold);}
 .prv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);letter-spacing:.05em;}
 .prb{height:4px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-bottom:10px;}
-.prf{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);animation:pg 1.5s ease-out forwards;}
-@keyframes pg{from{width:0}to{width:74%}}
-.prst{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.08em;}
+.prf{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);transition:width 1.5s ease-out;}
+.prst{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.08em;flex-wrap:wrap;gap:8px;}
 .prst .hl{color:var(--gold);font-weight:500;}
 .sg{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;padding:16px 0;}
 .st{position:relative;width:150px;height:112px;border:2px solid var(--bronze);padding:12px;transform:rotate(-8deg);opacity:.85;transition:all .3s;cursor:pointer;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
@@ -84,6 +101,21 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { padding: 20px; }
+  .book { flex-direction: column; max-height: none; }
+  .spine { width: 100%; height: 16px; background: linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,.1) 30%,rgba(197,160,89,.3) 50%,rgba(0,0,0,.1) 70%,rgba(0,0,0,.4) 100%); }
+  .spine::before { background: repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(197,160,89,.15) 8px,rgba(197,160,89,.15) 9px); }
+  .pg { padding: 32px 28px; }
+  .sg { grid-template-columns: 1fr; gap: 20px; }
+  .st { width: 100%; max-width: 200px; margin: 0 auto; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
@@ -91,48 +123,108 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="pass">
   <header>
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO CORRIGIDA - CAMINHOS CORRETOS -->
     <nav class="nav">
       <a href="/telas-individuais/05-globo.html">Globo</a>
-      <a href="/telas-individuais/15-museu.html">Banco de Dados</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
       <a href="/telas-individuais/11-passaporte.html" class="on">Passaporte</a>
-      <a href="/telas-individuais/07-briefing.html">Diário de Bordo</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
   <div class="body">
     <div class="book">
       <div class="pg">
         <div class="ph">
-          <div><div class="pt">Emissão Oficial</div><div class="ps">Inteligência Arquivística</div></div>
-          <div class="seal"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#CD7F32" stroke-width="1.5"/><circle cx="40" cy="40" r="30" fill="none" stroke="#CD7F32" stroke-width=".5" stroke-dasharray="2 2"/><path d="M30 42 L37 49 L52 32" stroke="#CD7F32" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="pt">Emissão Oficial</div>
+            <div class="ps">Inteligência Arquivística</div>
+          </div>
+          <div class="seal">
+            <svg viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="36" fill="none" stroke="#CD7F32" stroke-width="1.5"/>
+              <circle cx="40" cy="40" r="30" fill="none" stroke="#CD7F32" stroke-width=".5" stroke-dasharray="2 2"/>
+              <path d="M30 42 L37 49 L52 32" stroke="#CD7F32" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
         </div>
         <div class="photo">
-          <svg viewBox="0 0 100 120"><path d="M50 20c-12 0-20 10-20 22 0 8 4 14 8 18-12 4-22 15-22 28v8h68v-8c0-13-10-24-22-28 4-4 8-10 8-18 0-12-8-22-20-22z" fill="#0c0a07"/></svg>
-          <div class="pl">ID: <span id="passportId">NEXUS-8942-X</span><br>CLEARANCE: <span id="passportClearance">LEVEL 5</span><br>STATUS: ATIVO</div>
+          <svg viewBox="0 0 100 120">
+            <path d="M50 20c-12 0-20 10-20 22 0 8 4 14 8 18-12 4-22 15-22 28v8h68v-8c0-13-10-24-22-28 4-4 8-10 8-18 0-12-8-22-20-22z" fill="#0c0a07"/>
+          </svg>
+          <div class="pl">
+            ID: <span id="passportId">NEXUS-8942-X</span><br>
+            CLEARANCE: <span id="passportClearance">LEVEL 5</span><br>
+            STATUS: ATIVO
+          </div>
         </div>
         <div class="ad">
-          <div class="df"><div class="dl">Designação</div><div class="dv" id="passportName">OPERATIVO DE CAMPO</div></div>
-          <div class="df"><div class="dl">Número de ID</div><div class="dv" id="passportIdNum">NEXUS-8942-X</div></div>
-          <div class="df"><div class="dl">Clearance</div><div class="dv" id="passportRank">NÍVEL 5 / ÔMEGA</div></div>
+          <div class="df">
+            <div class="dl">Designação</div>
+            <div class="dv" id="passportName">OPERATIVO DE CAMPO</div>
+          </div>
+          <div class="df">
+            <div class="dl">Número de ID</div>
+            <div class="dv" id="passportIdNum">NEXUS-8942-X</div>
+          </div>
+          <div class="df">
+            <div class="dl">Clearance</div>
+            <div class="dv" id="passportRank">NÍVEL 5 / ÔMEGA</div>
+          </div>
         </div>
         <div class="prs">
-          <div class="prh"><div class="prt">Progresso de Exploração</div><div class="prv" id="progressVal">0%</div></div>
-          <div class="prb"><div class="prf" id="progressFill"></div></div>
-          <div class="prst"><span>REGIÕES: <span class="hl" id="regionsVal">0/18</span></span><span>VISTOS COLETADOS: <span class="hl" id="visasVal">0</span></span></div>
+          <div class="prh">
+            <div class="prt">Progresso de Exploração</div>
+            <div class="prv" id="progressVal">0%</div>
+          </div>
+          <div class="prb">
+            <div class="prf" id="progressFill"></div>
+          </div>
+          <div class="prst">
+            <span>REGIÕES: <span class="hl" id="regionsVal">0/18</span></span>
+            <span>VISTOS COLETADOS: <span class="hl" id="visasVal">0</span></span>
+          </div>
         </div>
       </div>
       <div class="spine"></div>
       <div class="pg">
-        <div class="ph"><div class="pt">Vistos e Entradas</div></div>
-        <div class="sg">
-          <div class="st"><svg class="si" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg><div class="sc">Londres</div><div class="sd2">23-OUT-1984</div><div class="ss">Entrada Concedida</div></div>
-          <div class="st"><svg class="si" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><div class="sc">Viena</div><div class="sd2">14-NOV-1984</div><div class="ss">SEC-7A</div></div>
-          <div class="st"><svg class="si" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="sc">Cairo</div><div class="sd2">02-DEZ-1984</div><div class="ss">Operação Ativa</div></div>
-          <div class="st red"><div class="sc">Berlim</div><div class="sd2">—</div><div class="ss">Classificado</div></div>
+        <div class="ph">
+          <div class="pt">Vistos e Entradas</div>
+        </div>
+        <div class="sg" id="stamps-grid">
+          <div class="st" data-city="londres">
+            <svg class="si" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <div class="sc">Londres</div>
+            <div class="sd2">23-OUT-1984</div>
+            <div class="ss">Entrada Concedida</div>
+          </div>
+          <div class="st" data-city="viena">
+            <svg class="si" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div class="sc">Viena</div>
+            <div class="sd2">14-NOV-1984</div>
+            <div class="ss">SEC-7A</div>
+          </div>
+          <div class="st" data-city="cairo">
+            <svg class="si" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div class="sc">Cairo</div>
+            <div class="sd2">02-DEZ-1984</div>
+            <div class="ss">Operação Ativa</div>
+          </div>
+          <div class="st red" data-city="berlim">
+            <div class="sc">Berlim</div>
+            <div class="sd2">—</div>
+            <div class="ss">Classificado</div>
+          </div>
         </div>
       </div>
     </div>
@@ -147,81 +239,167 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await window.ArchiveAPI.init();
-    const state = window.ArchiveAPI.getState();
-    const player = await window.ArchiveAPI.getPlayer();
-    
-    const director = (state && state.director) ? state.director : { name: 'DIRETOR', codename: 'NOVICE', specialty: 'Investigação' };
-    
-    // Atualizar dados do passaporte
-    const nameEl = document.getElementById('passportName');
-    const idNumEl = document.getElementById('passportIdNum');
-    const idPhotoEl = document.getElementById('passportId');
-    const rankEl = document.getElementById('passportRank');
-    const progressValEl = document.getElementById('progressVal');
-    const progressFillEl = document.getElementById('progressFill');
-    const regionsEl = document.getElementById('regionsVal');
-    const visasEl = document.getElementById('visasVal');
+(function() {
+  "use strict";
 
-    if (player && player.name) {
-      nameEl.textContent = (player.name).toUpperCase();
-      const shortCode = (player.codename || 'X').substring(0, 1).toUpperCase();
-      const idStr = `NEXUS-${String(player.id || 8942).padStart(4, '0')}-${shortCode}`;
-      idNumEl.textContent = idStr;
-      idPhotoEl.textContent = idStr;
-      rankEl.textContent = `${(player.rank || 'DIRETOR INTERINO').toUpperCase()} / NÍVEL ${player.level || 1}`;
-      
-      // Calcular progresso (ex: baseado no nível, nível 10 = 100%)
-      const level = player.level || 1;
-      const progress = Math.min(100, (level / 10) * 100);
-      progressValEl.textContent = `${Math.round(progress)}%`;
-      progressFillEl.style.width = `${progress}%`;
-      
-      const missions = player.missionsCompleted || 0;
-      regionsEl.textContent = `${Math.min(18, 12 + Math.floor(missions / 2))}/18`;
-      visasEl.textContent = String(missions * 3).padStart(2, '0');
-    } else {
-      nameEl.textContent = director.name.toUpperCase();
-      idNumEl.textContent = `NEXUS-8942-${director.codename.substring(0, 1).toUpperCase()}`;
-      idPhotoEl.textContent = `NEXUS-8942-${director.codename.substring(0, 1).toUpperCase()}`;
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'select' && typeof window.ArchiveAudio.playSelect === 'function') {
+        window.ArchiveAudio.playSelect();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      }
+    } catch (e) {
+      console.warn('[PASSAPORTE] Erro ao tocar som:', e);
     }
-  } catch (err) {
-    console.warn('Falha ao carregar dados do passaporte', err);
   }
 
-  // Interações
-  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
-    if (a.getAttribute('href') === '#') e.preventDefault();
-    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-    a.classList.add('on');
-  }));
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
 
-  document.querySelectorAll('.st:not(.red)').forEach(s => s.addEventListener('click', function() {
-    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-    this.style.transform = 'rotate(0) scale(1.1)';
-    this.style.opacity = '1';
-    setTimeout(() => {
-      this.style.transform = '';
-      this.style.opacity = '';
-    }, 400);
-  }));
+  /* ============================================
+     INICIALIZAÇÃO
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      // Inicializa API se disponível
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
 
-  setInterval(() => {
-    const n = new Date();
-    document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+      var state = null;
+      var player = null;
+
+      if (window.ArchiveAPI) {
+        if (typeof window.ArchiveAPI.getState === 'function') {
+          state = window.ArchiveAPI.getState();
+        }
+        if (typeof window.ArchiveAPI.getPlayer === 'function') {
+          try {
+            player = await window.ArchiveAPI.getPlayer();
+          } catch (e) {
+            console.warn('[PASSAPORTE] getPlayer falhou:', e);
+          }
+        }
+      }
+
+      var director = (state && state.director) 
+        ? state.director 
+        : { name: 'DIRETOR', codename: 'NOVICE', specialty: 'Investigação' };
+
+      // Elementos do passaporte
+      var nameEl = document.getElementById('passportName');
+      var idNumEl = document.getElementById('passportIdNum');
+      var idPhotoEl = document.getElementById('passportId');
+      var clearanceEl = document.getElementById('passportClearance');
+      var rankEl = document.getElementById('passportRank');
+      var progressValEl = document.getElementById('progressVal');
+      var progressFillEl = document.getElementById('progressFill');
+      var regionsEl = document.getElementById('regionsVal');
+      var visasEl = document.getElementById('visasVal');
+
+      if (player && player.name) {
+        nameEl.textContent = (player.name || 'DIRETOR').toUpperCase();
+        var shortCode = (player.codename || 'X').substring(0, 1).toUpperCase();
+        var idStr = 'NEXUS-' + String(player.id || 8942).padStart(4, '0') + '-' + shortCode;
+        idNumEl.textContent = idStr;
+        idPhotoEl.textContent = idStr;
+        clearanceEl.textContent = 'LEVEL ' + (player.level || 5);
+        rankEl.textContent = ((player.rank || 'DIRETOR INTERINO').toUpperCase()) + ' / NÍVEL ' + (player.level || 1);
+
+        // Progresso baseado no nível (nível 10 = 100%)
+        var level = player.level || 1;
+        var progress = Math.min(100, (level / 10) * 100);
+        progressValEl.textContent = Math.round(progress) + '%';
+        progressFillEl.style.width = progress + '%';
+
+        var missions = player.missionsCompleted || 0;
+        regionsEl.textContent = Math.min(18, 12 + Math.floor(missions / 2)) + '/18';
+        visasEl.textContent = String(missions * 3).padStart(2, '0');
+
+        playSound('success');
+      } else {
+        // Usa dados do diretor do localStorage
+        nameEl.textContent = (director.name || 'DIRETOR').toUpperCase();
+        var directorCode = (director.codename || 'X').substring(0, 1).toUpperCase();
+        var directorIdStr = 'NEXUS-8942-' + directorCode;
+        idNumEl.textContent = directorIdStr;
+        idPhotoEl.textContent = directorIdStr;
+        clearanceEl.textContent = 'LEVEL 5';
+        rankEl.textContent = 'DIRETOR INTERINO / NÍVEL 1';
+        progressValEl.textContent = '0%';
+        progressFillEl.style.width = '0%';
+        regionsEl.textContent = '0/18';
+        visasEl.textContent = '00';
+      }
+    } catch (err) {
+      console.warn('[PASSAPORTE] Falha ao carregar dados:', err);
+      showNotification('Passaporte carregado em modo offline', 'warning');
+    }
+
+    /* ============================================
+     INTERAÇÕES - CARIMBOS (STAMPS)
+     ============================================ */
+    document.querySelectorAll('.st:not(.red)').forEach(function(s) {
+      s.addEventListener('click', function() {
+        playSound('select');
+        
+        // Animação de clique
+        var originalTransform = this.style.transform;
+        var originalOpacity = this.style.opacity;
+        this.style.transform = 'rotate(0) scale(1.1)';
+        this.style.opacity = '1';
+        
+        var city = this.getAttribute('data-city') || 'Local';
+        showNotification('Visto de ' + city.charAt(0).toUpperCase() + city.slice(1) + ' verificado', 'success');
+
+        var stamp = this;
+        setTimeout(function() {
+          stamp.style.transform = originalTransform;
+          stamp.style.opacity = originalOpacity;
+        }, 400);
+      });
+    });
+
+    // Stamp "red" mostra mensagem diferente
+    var redStamp = document.querySelector('.st.red');
+    if (redStamp) {
+      redStamp.addEventListener('click', function() {
+        playSound('click');
+        showNotification('Arquivo classificado - Nível de autorização insuficiente', 'error');
+      });
+    }
+  });
+
+  /* ============================================
+     RELÓGIO DO RODAPÉ
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
   }, 1000);
-});
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Museu da Archive</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
+  <title>ARCHIVE OS — Museu da Archive</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -40,7 +58,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .mt{font-family:'Libre Caslon Text',serif;font-size:42px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:48px;margin-bottom:6px;}
 .ms{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;opacity:.7;}
 .ctrl{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:20px;border-bottom:.5px solid rgba(197,160,89,.3);}
-.flt{display:flex;gap:10px;}
+.flt{display:flex;gap:10px;flex-wrap:wrap;}
 .fb{padding:9px 17px;background:transparent;border:1px solid rgba(197,160,89,.4);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
 .fb:hover{border-color:var(--gold);color:var(--gold);}
 .fb.on{background:var(--gold);border-color:var(--gold);color:var(--surface);}
@@ -54,13 +72,14 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .ac::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
 .ac:hover{transform:translateY(-5px);box-shadow:0 14px 36px rgba(0,0,0,.4),0 0 22px rgba(255,191,0,.22);}
 .ac.sel{box-shadow:0 14px 36px rgba(0,0,0,.4),0 0 0 1.5px var(--amber),0 0 26px rgba(255,191,0,.35);}
-.ai{width:100%;height:200px;position:relative;overflow:hidden;background:linear-gradient(135deg,#2a2520,#1a1510);background-size:cover;background-position:center;}
+.ai{width:100%;height:200px;position:relative;overflow:hidden;background:linear-gradient(135deg,#2a2520,#1a1510);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;}
 .ai::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,248,220,.12),transparent 60%);z-index:1;}
 .ai::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(26,21,16,0.1) 0%, rgba(26,21,16,0.75) 100%);z-index:2;}
+.ai-fallback{color:#c5a059;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;z-index:3;opacity:.6;}
 .seal{position:absolute;top:12px;right:12px;padding:5px 10px;background:rgba(205,127,50,.9);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;color:#fff;letter-spacing:.12em;text-transform:uppercase;transform:rotate(-8deg);z-index:3;box-shadow:0 2px 4px rgba(0,0,0,.5);}
 .ab{padding:20px;}
 .at{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;margin-bottom:12px;}
-.am{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b6560;letter-spacing:.08em;}
+.am{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b6560;letter-spacing:.08em;flex-wrap:wrap;gap:6px;}
 .am .l{color:var(--gold);font-weight:500;}
 .panel{width:360px;flex-shrink:0;background:rgba(0,51,68,.16);backdrop-filter:blur(22px);border-left:.5px solid var(--gold);padding:30px 26px;overflow-y:auto;position:relative;display:flex;flex-direction:column;}
 .panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px 3px);opacity:.5;}
@@ -75,7 +94,8 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .pcl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
 .pcv{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);}
 .btnr{margin-top:auto;padding:14px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:9px;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
-.btnr:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.btnr:hover:not(:disabled){background:var(--amber);border-color:var(--amber);color:var(--surface);}
+.btnr:disabled{opacity:.6;cursor:not-allowed;}
 .btnr svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.5;fill:none;}
 .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;opacity:.7;}
 .empty svg{width:50px;height:50px;stroke:var(--onv);stroke-width:1;fill:none;opacity:.5;}
@@ -84,7 +104,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .filled{display:none;flex-direction:column;gap:4px;flex:1;}
 .filled.show{display:flex;animation:fu .4s ease;}
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.loading{text-align:center;padding:40px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;}
+.loading{text-align:center;padding:40px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;grid-column:1/-1;}
 .loading::after{content:'';display:inline-block;width:12px;height:12px;border:2px solid var(--gold);border-top-color:transparent;border-radius:50%;margin-left:10px;animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
@@ -94,6 +114,24 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+
+/* Responsivo */
+@media (max-width: 1100px) {
+  .agrid { grid-template-columns: repeat(2, 1fr); }
+  .panel { width: 320px; }
+}
+@media (max-width: 768px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { flex-direction: column; overflow-y: auto; }
+  .content { padding: 20px; }
+  .agrid { grid-template-columns: 1fr; }
+  .panel { width: 100%; border-left: none; border-top: .5px solid var(--gold); min-height: 300px; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; font-size: 10px; }
+  .ctrl { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .srch { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -101,16 +139,32 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="mu">
   <header>
     <div class="logo">ARCHIVE</div>
-    <nav class="nav"><a href="#">Globo</a><a href="#" class="on">Banco de Dados</a><a href="#">Passaporte</a><a href="#">Diário de Bordo</a></nav>
+    <!-- ✅ NAVEGAÇÃO CORRIGIDA - CAMINHOS ABSOLUTOS -->
+    <nav class="nav">
+      <a href="/telas-individuais/05-globo.html">Globo</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
+      <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+      <a href="/telas-individuais/15-museu.html" class="on">Museu</a>
+    </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
   <div class="body">
     <main class="content">
-      <div class="mh"><h1 class="mt">Museu da Archive</h1><div class="ms">Acervo Cultural Recuperado</div></div>
+      <div class="mh">
+        <h1 class="mt">Museu da Archive</h1>
+        <div class="ms">Acervo Cultural Recuperado</div>
+      </div>
       <div class="ctrl">
         <div class="flt">
           <button class="fb on" data-f="all">Todos</button>
@@ -119,7 +173,10 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <button class="fb" data-f="africa">África</button>
           <button class="fb" data-f="americas">Américas</button>
         </div>
-        <div class="srch"><input type="text" id="q" placeholder="Buscar artefato..."><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <div class="srch">
+          <input type="text" id="q" placeholder="Buscar artefato...">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
       </div>
       <div class="agrid" id="grid">
         <div class="loading">SINCRONIZANDO ACERVO...</div>
@@ -147,7 +204,10 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <div class="pbox"><div class="pv" id="fHist">—</div></div>
         <div class="pl">Localização Atual</div>
         <div class="pbox"><div class="pv" id="fLoc">—</div></div>
-        <button class="btnr" id="btnr"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Gerar Relatório PDF</button>
+        <button class="btnr" id="btnr">
+          <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Gerar Relatório PDF
+        </button>
       </div>
     </aside>
   </div>
@@ -161,134 +221,324 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-// ============================================================
-// INTEGRAÇÃO COM BACKEND VIA api.js
-// ============================================================
-let artifacts = [];
-let selectedId = null;
+(function() {
+  "use strict";
 
-// Fallback robusto caso a API falhe ou não esteja pronta
-const MOCK_FALLBACK = [
-  { id: 1, name: 'Cálice de Antioquia', origin: 'Bizâncio', circa: 'Século I', category: 'Religioso', status: 'em analise', location: 'Laboratório' },
-  { id: 2, name: 'Manuscrito de Voynich', origin: 'Europa Central', circa: 'Século XV', category: 'Documental', status: 'em restauracao', location: 'Acervo Digital' },
-  { id: 3, name: 'Máscara de Jade Inca', origin: 'Império Inca', circa: 'Século XV', category: 'Arqueologico', status: 'catalogado', location: 'Museu Archive' }
-];
-
-function classifyRegion(origin){
-  if (!origin) return 'europa';
-  const o = origin.toLowerCase();
-  if(o.includes('china') || o.includes('pequim') || o.includes('japão') || o.includes('índia') || o.includes('tailândia') || o.includes('dubai') || o.includes('pérsia') || o.includes('mesopotâmia')) return 'asia';
-  if(o.includes('peru') || o.includes('brasil') || o.includes('méxico') || o.includes('eua') || o.includes('nova york') || o.includes('inca') || o.includes('asteca') || o.includes('maia')) return 'americas';
-  if(o.includes('egito') || o.includes('cairo') || o.includes('luxor')) return 'africa';
-  return 'europa';
-}
-
-async function loadArtifacts(){
-  const grid = document.getElementById('grid');
-  try {
-    const data = await window.ArchiveAPI.getArtifacts();
-    artifacts = (data && data.length > 0 ? data : []).map(a => ({
-      ...a,
-      region: classifyRegion(a.origin || ''),
-      description: a.description || `Artefato classificado como ${a.category}. Origem: ${a.origin}, datado de ${a.circa || 'Séc. Desconhecido'}. Apresenta características únicas de preservação, atualmente sob análise da divisão de acervo da Archive.`,
-      history: a.history || `Recuperado em operação não documentada. O item foi extraído de ${a.origin} e transportado para custódia segura. Status atual de contenção: ${a.status}.`
-    }));
-    
-    if (artifacts.length === 0) {
-        artifacts = MOCK_FALLBACK.map(a => ({
-            ...a, 
-            region: classifyRegion(a.origin),
-            description: `Artefato classificado como ${a.category}. Origem: ${a.origin}.`,
-            history: `Recuperado em operação não documentada.`
-        }));
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'select' && typeof window.ArchiveAudio.playSelect === 'function') {
+        window.ArchiveAudio.playSelect();
+      } else if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      } else if (type === 'artifact' && typeof window.ArchiveAudio.playArtifactFound === 'function') {
+        window.ArchiveAudio.playArtifactFound();
+      }
+    } catch (e) {
+      console.warn('[MUSEU] Erro ao tocar som:', e);
     }
-  } catch(err){
-    console.warn('⚠️ API falhou. Usando fallback.', err);
-    artifacts = MOCK_FALLBACK.map(a => ({
-        ...a, 
-        region: classifyRegion(a.origin),
-        description: `Artefato classificado como ${a.category}.`,
-        history: `Histórico indisponível.`
-    }));
   }
-  renderGrid(artifacts);
-  document.getElementById('artCount').textContent = artifacts.length;
-}
 
-function renderGrid(list){
-  const grid = document.getElementById('grid');
-  if(list.length === 0){
-    grid.innerHTML = '<div class="loading">NENHUM ARTEFATO ENCONTRADO</div>';
-    return;
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+      return;
+    }
+    console.log('[MUSEU] ' + type.toUpperCase() + ': ' + message);
   }
-  grid.innerHTML = list.map(a => `
-    <div class="ac" data-id="${a.id}" data-region="${a.region}" data-name="${(a.name || '').toLowerCase()}">
-      <div class="ai" style="background-image:url('https://image.pollinations.ai/prompt/${encodeURIComponent((a.name || 'ancient artifact') + ', ' + (a.category || 'artifact') + ', cinematic lighting, photorealistic, dark archive museum aesthetic, highly detailed, 8k')}&width=400&height=300&nologo=true&seed=${a.id}')">
-        <div class="seal">Status: ${a.status || 'Recuperado'}</div>
-      </div>
-      <div class="ab">
-        <h3 class="at">${a.name}</h3>
-        <div class="am">
-          <span><span class="l">Origem:</span> ${a.origin}</span>
-          <span><span class="l">Era:</span> ${a.circa || 'Séc. IV'}</span>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  
-  grid.querySelectorAll('.ac').forEach(c => c.addEventListener('click', () => selectArtifact(c.dataset.id)));
-}
 
-function selectArtifact(id){
-  const a = artifacts.find(x => x.id == id);
-  if(!a) return;
-  selectedId = id;
-  document.querySelectorAll('.ac').forEach(c => c.classList.toggle('sel', c.dataset.id == id));
-  document.getElementById('empty').style.display = 'none';
-  document.getElementById('filled').classList.add('show');
-  document.getElementById('fTitle').textContent = a.name;
-  document.getElementById('fDesc').textContent = a.description;
-  document.getElementById('fOrig').textContent = a.origin;
-  document.getElementById('fEra').textContent = a.circa || 'Séc. IV';
-  document.getElementById('fMat').textContent = a.category;
-  document.getElementById('fStat').textContent = a.status;
-  document.getElementById('fHist').textContent = a.history;
-  document.getElementById('fLoc').textContent = a.location;
-}
+  /* ============================================
+     ESTADO
+     ============================================ */
+  var artifacts = [];
+  var selectedId = null;
+  var currentFilter = 'all';
+  var currentSearch = '';
 
-// Filtros
-document.querySelectorAll('.fb').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('.fb').forEach(x => x.classList.remove('on'));
-  b.classList.add('on');
-  const f = b.dataset.f;
-  const filtered = f === 'all' ? artifacts : artifacts.filter(a => a.region === f);
-  renderGrid(filtered);
-}));
+  /* ============================================
+     FALLBACK MOCK (caso API falhe)
+     ============================================ */
+  var MOCK_FALLBACK = [
+    { id: 1, name: 'Cálice de Antioquia', origin: 'Bizâncio', circa: 'Século I', category: 'Religioso', status: 'em analise', location: 'Laboratório' },
+    { id: 2, name: 'Manuscrito de Voynich', origin: 'Europa Central', circa: 'Século XV', category: 'Documental', status: 'em restauracao', location: 'Acervo Digital' },
+    { id: 3, name: 'Máscara de Jade Inca', origin: 'Império Inca', circa: 'Século XV', category: 'Arqueologico', status: 'catalogado', location: 'Museu Archive' },
+    { id: 4, name: 'Adaga de Bronze Pérsica', origin: 'Pérsia', circa: 'Século V a.C.', category: 'Militar', status: 'em analise', location: 'Laboratório' },
+    { id: 5, name: 'Vaso Dinastia Ming', origin: 'China', circa: 'Século XIV', category: 'Artistico', status: 'confidencial', location: 'Cofre Omega' },
+    { id: 6, name: 'Moedas de Ouro Romano', origin: 'Roma', circa: 'Século II', category: 'Numismatico', status: 'catalogado', location: 'Acervo Digital' },
+    { id: 7, name: 'Espada de Samurai', origin: 'Japão', circa: 'Século XVII', category: 'Militar', status: 'em restauracao', location: 'Laboratório' },
+    { id: 8, name: 'Papiro Egípcio', origin: 'Egito', circa: 'Século XII a.C.', category: 'Documental', status: 'em analise', location: 'Acervo Digital' },
+    { id: 9, name: 'Estátua de Shiva', origin: 'Índia', circa: 'Século X', category: 'Artistico', status: 'confidencial', location: 'Célula-47' },
+    { id: 10, name: 'Amuleto de Proteção', origin: 'Egito', circa: 'Século VIII a.C.', category: 'Religioso', status: 'catalogado', location: 'Acervo Digital' }
+  ];
 
-// Busca
-document.getElementById('q').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  const filtered = artifacts.filter(a => (a.name || '').toLowerCase().includes(q) || (a.origin || '').toLowerCase().includes(q));
-  renderGrid(filtered);
-});
+  /* ============================================
+     CLASSIFICAÇÃO DE REGIÃO
+     ============================================ */
+  function classifyRegion(origin) {
+    if (!origin) return 'europa';
+    var o = origin.toLowerCase();
+    if (o.indexOf('china') !== -1 || o.indexOf('pequim') !== -1 || o.indexOf('japão') !== -1 || o.indexOf('japao') !== -1 || o.indexOf('índia') !== -1 || o.indexOf('india') !== -1 || o.indexOf('tailândia') !== -1 || o.indexOf('tailandia') !== -1 || o.indexOf('dubai') !== -1 || o.indexOf('pérsia') !== -1 || o.indexOf('persia') !== -1 || o.indexOf('mesopotâmia') !== -1 || o.indexOf('mesopotamia') !== -1) return 'asia';
+    if (o.indexOf('peru') !== -1 || o.indexOf('brasil') !== -1 || o.indexOf('méxico') !== -1 || o.indexOf('mexico') !== -1 || o.indexOf('eua') !== -1 || o.indexOf('nova york') !== -1 || o.indexOf('inca') !== -1 || o.indexOf('asteca') !== -1 || o.indexOf('maia') !== -1) return 'americas';
+    if (o.indexOf('egito') !== -1 || o.indexOf('cairo') !== -1 || o.indexOf('luxor') !== -1) return 'africa';
+    return 'europa';
+  }
 
-// Botão relatório
-document.getElementById('btnr').addEventListener('click', function(){
-  const o = this.innerHTML;
-  this.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Relatório Gerado ✓';
-  this.style.background = 'var(--amber)';
-  this.style.color = 'var(--surface)';
-  setTimeout(() => { this.innerHTML = o; this.style.background = ''; this.style.color = ''; }, 2000);
-});
+  /* ============================================
+     CARREGAR ARTEFATOS
+     ============================================ */
+  async function loadArtifacts() {
+    var grid = document.getElementById('grid');
 
-// Relógio
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
-}, 1000);
+    try {
+      // Inicializa API se disponível
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
 
-// Carrega ao iniciar
-loadArtifacts();
+      var data = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getArtifacts === 'function') {
+        data = await window.ArchiveAPI.getArtifacts();
+      }
+
+      artifacts = (data && data.length > 0 ? data : []).map(function(a) {
+        return {
+          id: a.id,
+          name: a.name,
+          origin: a.origin,
+          circa: a.circa,
+          category: a.category,
+          status: a.status,
+          location: a.location,
+          region: classifyRegion(a.origin || ''),
+          description: a.description || 'Artefato classificado como ' + a.category + '. Origem: ' + a.origin + ', datado de ' + (a.circa || 'Séc. Desconhecido') + '. Apresenta características únicas de preservação, atualmente sob análise da divisão de acervo da Archive.',
+          history: a.history || 'Recuperado em operação não documentada. O item foi extraído de ' + a.origin + ' e transportado para custódia segura. Status atual de contenção: ' + a.status + '.'
+        };
+      });
+
+      if (artifacts.length === 0) {
+        artifacts = MOCK_FALLBACK.map(function(a) {
+          return {
+            id: a.id,
+            name: a.name,
+            origin: a.origin,
+            circa: a.circa,
+            category: a.category,
+            status: a.status,
+            location: a.location,
+            region: classifyRegion(a.origin),
+            description: 'Artefato classificado como ' + a.category + '. Origem: ' + a.origin + '.',
+            history: 'Recuperado em operação não documentada.'
+          };
+        });
+        showNotification('Usando dados offline do acervo', 'info');
+      }
+    } catch (err) {
+      console.warn('[MUSEU] ⚠️ API falhou. Usando fallback.', err);
+      artifacts = MOCK_FALLBACK.map(function(a) {
+        return {
+          id: a.id,
+          name: a.name,
+          origin: a.origin,
+          circa: a.circa,
+          category: a.category,
+          status: a.status,
+          location: a.location,
+          region: classifyRegion(a.origin),
+          description: 'Artefato classificado como ' + a.category + '.',
+          history: 'Histórico indisponível.'
+        };
+      });
+      showNotification('Modo offline - acervo demonstrativo', 'warning');
+    }
+
+    applyFilters();
+    document.getElementById('artCount').textContent = artifacts.length;
+  }
+
+  /* ============================================
+     RENDERIZAR GRID
+     ============================================ */
+  function renderGrid(list) {
+    var grid = document.getElementById('grid');
+
+    if (list.length === 0) {
+      grid.innerHTML = '<div class="loading">NENHUM ARTEFATO ENCONTRADO</div>';
+      return;
+    }
+
+    var html = '';
+    list.forEach(function(a) {
+      var prompt = encodeURIComponent((a.name || 'ancient artifact') + ', ' + (a.category || 'artifact') + ', cinematic lighting, photorealistic, dark archive museum aesthetic, highly detailed, 8k');
+      var imgUrl = 'https://image.pollinations.ai/prompt/' + prompt + '&width=400&height=300&nologo=true&seed=' + a.id;
+      var safeName = (a.name || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+      html += '<div class="ac" data-id="' + a.id + '" data-region="' + a.region + '" data-name="' + (a.name || '').toLowerCase() + '">';
+      html += '  <div class="ai" id="img-' + a.id + '" data-src="' + imgUrl + '">';
+      html += '    <div class="ai-fallback">CARREGANDO...</div>';
+      html += '    <div class="seal">Status: ' + (a.status || 'Recuperado') + '</div>';
+      html += '  </div>';
+      html += '  <div class="ab">';
+      html += '    <h3 class="at">' + (a.name || 'Sem Nome') + '</h3>';
+      html += '    <div class="am">';
+      html += '      <span><span class="l">Origem:</span> ' + (a.origin || '—') + '</span>';
+      html += '      <span><span class="l">Era:</span> ' + (a.circa || 'Séc. IV') + '</span>';
+      html += '    </div>';
+      html += '  </div>';
+      html += '</div>';
+    });
+
+    grid.innerHTML = html;
+
+    // Carrega imagens com fallback
+    list.forEach(function(a) {
+      var imgDiv = document.getElementById('img-' + a.id);
+      if (!imgDiv) return;
+      var src = imgDiv.getAttribute('data-src');
+
+      var img = new Image();
+      img.onload = function() {
+        imgDiv.style.backgroundImage = "url('" + src + "')";
+        var fallback = imgDiv.querySelector('.ai-fallback');
+        if (fallback) fallback.style.display = 'none';
+      };
+      img.onerror = function() {
+        var fallback = imgDiv.querySelector('.ai-fallback');
+        if (fallback) {
+          fallback.textContent = '📦 ' + (a.category || 'ARTEFATO');
+        }
+      };
+      img.src = src;
+    });
+
+    // Event listeners
+    grid.querySelectorAll('.ac').forEach(function(c) {
+      c.addEventListener('click', function() {
+        playSound('select');
+        selectArtifact(c.dataset.id);
+      });
+    });
+  }
+
+  /* ============================================
+     SELECIONAR ARTEFATO
+     ============================================ */
+  function selectArtifact(id) {
+    var a = artifacts.find(function(x) { return x.id == id; });
+    if (!a) return;
+
+    selectedId = id;
+    document.querySelectorAll('.ac').forEach(function(c) {
+      c.classList.toggle('sel', c.dataset.id == id);
+    });
+    document.getElementById('empty').style.display = 'none';
+    document.getElementById('filled').classList.add('show');
+    document.getElementById('fTitle').textContent = a.name;
+    document.getElementById('fDesc').textContent = a.description;
+    document.getElementById('fOrig').textContent = a.origin;
+    document.getElementById('fEra').textContent = a.circa || 'Séc. IV';
+    document.getElementById('fMat').textContent = a.category;
+    document.getElementById('fStat').textContent = a.status;
+    document.getElementById('fHist').textContent = a.history;
+    document.getElementById('fLoc').textContent = a.location;
+
+    // Toca som de descoberta ao selecionar pela primeira vez
+    playSound('artifact');
+  }
+
+  /* ============================================
+     FILTROS E BUSCA
+     ============================================ */
+  function applyFilters() {
+    var filtered = artifacts;
+
+    // Filtro por região
+    if (currentFilter !== 'all') {
+      filtered = filtered.filter(function(a) { return a.region === currentFilter; });
+    }
+
+    // Filtro por busca
+    if (currentSearch) {
+      var q = currentSearch.toLowerCase();
+      filtered = filtered.filter(function(a) {
+        return (a.name || '').toLowerCase().indexOf(q) !== -1 ||
+               (a.origin || '').toLowerCase().indexOf(q) !== -1 ||
+               (a.category || '').toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
+    renderGrid(filtered);
+  }
+
+  // Botões de filtro
+  document.querySelectorAll('.fb').forEach(function(b) {
+    b.addEventListener('click', function() {
+      playSound('click');
+      document.querySelectorAll('.fb').forEach(function(x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      currentFilter = b.dataset.f;
+      applyFilters();
+    });
+  });
+
+  // Campo de busca
+  document.getElementById('q').addEventListener('input', function(e) {
+    currentSearch = e.target.value;
+    applyFilters();
+  });
+
+  /* ============================================
+     BOTÃO RELATÓRIO
+     ============================================ */
+  document.getElementById('btnr').addEventListener('click', function() {
+    if (!selectedId) {
+      showNotification('Selecione um artefato primeiro', 'warning');
+      return;
+    }
+
+    playSound('success');
+    var original = this.innerHTML;
+    var btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Relatório Gerado ✓';
+    btn.style.background = 'var(--amber)';
+    btn.style.color = 'var(--surface)';
+
+    setTimeout(function() {
+      btn.innerHTML = original;
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.disabled = false;
+    }, 2500);
+
+    showNotification('Relatório do dossiê gerado com sucesso', 'success');
+  });
+
+  /* ============================================
+     RELÓGIO DO RODAPÉ
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
+
+  /* ============================================
+     INICIALIZAÇÃO
+     ============================================ */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadArtifacts);
+  } else {
+    loadArtifacts();
+  }
+})();
 </script>
 
   <!-- Service Worker para PWA -->

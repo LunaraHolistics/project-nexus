@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Banco de Dados</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Banco de Dados</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -33,11 +50,12 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
 .body{flex:1;display:flex;overflow:hidden;}
 .content{flex:1;overflow-y:auto;padding:40px 48px;}
-.sh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;padding-bottom:22px;border-bottom:.5px solid rgba(197,160,89,.3);}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;padding-bottom:22px;border-bottom:.5px solid rgba(197,160,89,.3);gap:20px;flex-wrap:wrap;}
 .si2{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:7px;}
 .st{font-family:'Libre Caslon Text',serif;font-size:46px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:52px;margin-bottom:14px;}
 .sd{font-family:'Manrope',sans-serif;font-size:15px;line-height:23px;color:var(--onv);max-width:560px;}
@@ -51,9 +69,10 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .card::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
 .card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
 .card.wide{grid-column:span 2;display:flex;}
-.cimg{width:100%;height:190px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;}
+.cimg{width:100%;height:190px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;}
 .card.wide .cimg{width:200px;height:auto;flex-shrink:0;}
-.cimg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,248,220,.1),transparent 60%);}
+.cimg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,248,220,.1),transparent 60%);z-index:1;}
+.cimg-fallback{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;opacity:.6;z-index:3;}
 .badge{position:absolute;top:11px;right:11px;padding:5px 11px;background:rgba(14,14,14,.9);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;z-index:3;}
 .badge.vf{border-color:var(--gold);color:var(--gold);}
 .cbody{padding:18px;}
@@ -81,9 +100,10 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .pht svg{width:15px;height:15px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .pcl{width:22px;height:22px;stroke:var(--onv);stroke-width:1.5;fill:none;cursor:pointer;transition:stroke .3s;}
 .pcl:hover{stroke:var(--amber);}
-.pimg{width:100%;height:150px;background:linear-gradient(135deg,#2a2520,#1a1510);margin-bottom:18px;position:relative;background-size:cover;background-position:center;}
+.pimg{width:100%;height:150px;background:linear-gradient(135deg,#2a2520,#1a1510);margin-bottom:18px;position:relative;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;}
 .pimg::before{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 .5pt var(--gold);opacity:.5;}
-.pmeta{display:flex;gap:10px;margin-bottom:14px;position:relative;}
+.pimg-fallback{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;opacity:.6;z-index:3;}
+.pmeta{display:flex;gap:10px;margin-bottom:14px;position:relative;flex-wrap:wrap;}
 .pbadge{padding:4px 9px;background:rgba(205,127,50,.2);border:1px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--bronze);letter-spacing:.1em;}
 .pid{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);}
 .ptt{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:600;color:var(--on);letter-spacing:-.02em;margin-bottom:18px;position:relative;}
@@ -108,6 +128,28 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 @keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .fi{opacity:0;animation:fi .7s ease-out forwards;}
 .d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .card.wide { grid-column: span 2; }
+  .panel { width: 300px; }
+}
+@media (max-width: 768px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { flex-direction: column; overflow-y: auto; }
+  .content { padding: 24px 20px; }
+  .grid { grid-template-columns: 1fr; }
+  .card.wide { grid-column: span 1; flex-direction: column; }
+  .card.wide .cimg { width: 100%; height: 190px; }
+  .panel { width: 100%; border-left: none; border-top: .5px solid var(--gold); }
+  .st { font-size: 32px; line-height: 38px; }
+  .srch { width: 100%; }
+  .sh { flex-direction: column; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; font-size: 10px; }
+}
 </style>
 </head>
 <body>
@@ -115,16 +157,23 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="db">
   <header class="fi">
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO CORRIGIDA - CAMINHOS CORRETOS -->
     <nav class="nav">
       <a href="/telas-individuais/05-globo.html">Globo</a>
-      <a href="/telas-individuais/15-museu.html" class="on">Banco de Dados</a>
+      <a href="/telas-individuais/08-banco-dados.html" class="on">Banco de Dados</a>
       <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
-      <a href="/telas-individuais/07-briefing.html">Diário de Bordo</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
   <div class="body">
@@ -149,7 +198,9 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <div class="pht"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>DOSSIÊ ATIVO</div>
         <svg class="pcl" id="pcl" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </div>
-      <div class="pimg" id="pImg"></div>
+      <div class="pimg" id="pImg">
+        <div class="pimg-fallback">CARREGANDO...</div>
+      </div>
       <div class="pmeta">
         <div class="pbadge" id="pBadge">Não Verificado</div>
         <div class="pid" id="pId">ID: ---</div>
@@ -178,123 +229,265 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-let artifactsData = [];
-const panel = document.getElementById('panel');
+(function() {
+  "use strict";
 
-async function loadDatabase() {
-  const grid = document.getElementById('artifactGrid');
-  try {
-    const data = await ArchiveAPI.getArtifacts();
-    artifactsData = Array.isArray(data) ? data : (data.artifacts || []);
-    
-    grid.innerHTML = artifactsData.map((a, index) => {
-      const isWide = index === 1; 
-      const statusBadge = a.status === 'catalogado' ? 'vf' : '';
-      const statusText = a.status === 'catalogado' ? 'Verificado' : (a.status === 'em analise' ? 'Em Análise' : 'Não Verificado');
-      const imgUrl = `https://via.placeholder.com/300x200/C5A059/1a1a1a?text=${encodeURIComponent(artifact.name)}`;
-
-      return `
-      <div class="card ${isWide ? 'wide' : ''} fi d2" data-id="${a.id}" data-name="${a.name.toLowerCase()}" data-origin="${a.origin.toLowerCase()}">
-        <div class="cimg" style="background-image: url('${imgUrl}')">
-          <div class="badge ${statusBadge}">${statusText}</div>
-        </div>
-        <div class="cbody">
-          <div class="cid">#ART-${String(a.id).padStart(4, '0')}</div>
-          <h3 class="ct">${a.name}</h3>
-          <div class="co">Origem: ${a.origin} (${a.circa || 'Era Desconhecida'})</div>
-          ${isWide ? `<p class="cdesc" style="margin-top:10px;">Artefato de categoria ${a.category}. Atualmente mantido em ${a.location}. Requer análise contínua para determinar propriedades anômalas.</p>` : ''}
-        </div>
-      </div>`;
-    }).join('');
-
-    // Card de descriptografia estático no final para sabor
-    grid.innerHTML += `
-    <div class="card decrypt fi d3">
-      <div class="cimg"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div class="dt2">DESCRIPTOGRAFANDO...</div><div class="bar"></div></div>
-      <div class="cbody"><div class="cid">#UNK-???</div><h3 class="ct" style="color:#6b6560;">Ativo Classificado</h3><div class="co">Nível de Acesso: ÔMEGA</div></div>
-    </div>`;
-
-    attachCardEvents();
-  } catch (err) {
-    console.error('Falha ao carregar banco de dados', err);
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:\'JetBrains Mono\',monospace;color:var(--onv);">Falha na sincronização do Relicário.</div>';
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'select' && typeof window.ArchiveAudio.playSelect === 'function') {
+        window.ArchiveAudio.playSelect();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      } else if (type === 'artifact' && typeof window.ArchiveAudio.playArtifactFound === 'function') {
+        window.ArchiveAudio.playArtifactFound();
+      }
+    } catch (e) {
+      console.warn('[BANCO] Erro ao tocar som:', e);
+    }
   }
-}
 
-function attachCardEvents() {
-  document.querySelectorAll('.card:not(.decrypt)').forEach(c => {
-    c.addEventListener('click', () => {
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      const id = parseInt(c.dataset.id);
-      const artifact = artifactsData.find(a => a.id === id);
-      if (!artifact) return;
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
 
-      // Popula o painel
-      document.getElementById('pTitle').textContent = artifact.name;
-      document.getElementById('pId').textContent = `ID: #ART-${String(artifact.id).padStart(4, '0')}`;
-      document.getElementById('pOrigin').textContent = artifact.origin;
-      document.getElementById('pEra').textContent = artifact.circa || 'Desconhecida';
-      document.getElementById('pMaterial').textContent = artifact.category;
-      document.getElementById('pLocation').textContent = artifact.location;
-      document.getElementById('pDesc').textContent = `Artefato classificado como ${artifact.category}. Origem: ${artifact.origin}, datado de ${artifact.circa || 'período desconhecido'}. Apresenta características únicas de preservação, atualmente sob análise da divisão de acervo da Archive.`;
-      
-      const badgeEl = document.getElementById('pBadge');
-      badgeEl.textContent = artifact.status === 'catalogado' ? 'Verificado' : 'Não Verificado';
-      badgeEl.className = `pbadge ${artifact.status === 'catalogado' ? 'vf' : ''}`;
-      
-      document.getElementById('pImg').style.backgroundImage = `url('https://image.pollinations.ai/prompt/${encodeURIComponent(artifact.name + ', ancient artifact, cinematic')}&width=400&height=200&nologo=true&seed=${artifact.id}')`;
+  /* ============================================
+     ESTADO
+     ============================================ */
+  var artifactsData = [];
+  var panel = document.getElementById('panel');
 
-      panel.classList.add('on');
+  /* ============================================
+     CARREGAR BANCO DE DADOS (BUG CORRIGIDO)
+     ============================================ */
+  async function loadDatabase() {
+    var grid = document.getElementById('artifactGrid');
+
+    try {
+      // Inicializa API se disponível
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      var data = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getArtifacts === 'function') {
+        data = await window.ArchiveAPI.getArtifacts();
+      }
+
+      artifactsData = Array.isArray(data) ? data : (data && data.artifacts ? data.artifacts : []);
+
+      if (artifactsData.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:\'JetBrains Mono\',monospace;color:var(--onv);">Nenhum artefato encontrado no relicário.</div>';
+        return;
+      }
+
+      var html = '';
+      artifactsData.forEach(function(a, index) {
+        var isWide = (index === 1);
+        var statusBadge = (a.status === 'catalogado') ? 'vf' : '';
+        var statusText = 'Não Verificado';
+        if (a.status === 'catalogado') {
+          statusText = 'Verificado';
+        } else if (a.status === 'em analise') {
+          statusText = 'Em Análise';
+        }
+
+        // ✅ BUG CORRIGIDO: Agora usa a.name corretamente dentro do escopo
+        var prompt = encodeURIComponent((a.name || 'ancient artifact') + ', ' + (a.category || 'artifact') + ', cinematic lighting, photorealistic, dark archive museum aesthetic, highly detailed, 8k');
+        var imgUrl = 'https://image.pollinations.ai/prompt/' + prompt + '&width=400&height=300&nologo=true&seed=' + a.id;
+        var safeName = (a.name || '').toLowerCase().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        var safeOrigin = (a.origin || '').toLowerCase().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+        html += '<div class="card ' + (isWide ? 'wide' : '') + ' fi d2" data-id="' + a.id + '" data-name="' + safeName + '" data-origin="' + safeOrigin + '">';
+        html += '  <div class="cimg" id="card-img-' + a.id + '" data-src="' + imgUrl + '">';
+        html += '    <div class="cimg-fallback">CARREGANDO...</div>';
+        html += '    <div class="badge ' + statusBadge + '">' + statusText + '</div>';
+        html += '  </div>';
+        html += '  <div class="cbody">';
+        html += '    <div class="cid">#ART-' + String(a.id).padStart(4, '0') + '</div>';
+        html += '    <h3 class="ct">' + (a.name || 'Sem Nome') + '</h3>';
+        html += '    <div class="co">Origem: ' + (a.origin || 'Desconhecida') + ' (' + (a.circa || 'Era Desconhecida') + ')</div>';
+        if (isWide) {
+          html += '    <p class="cdesc" style="margin-top:10px;">Artefato de categoria ' + (a.category || 'Não Classificado') + '. Atualmente mantido em ' + (a.location || 'Local Desconhecido') + '. Requer análise contínua para determinar propriedades anômalas.</p>';
+        }
+        html += '  </div>';
+        html += '</div>';
+      });
+
+      // Card de descriptografia estático no final
+      html += '<div class="card decrypt fi d3">';
+      html += '  <div class="cimg"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div class="dt2">DESCRIPTOGRAFANDO...</div><div class="bar"></div></div>';
+      html += '  <div class="cbody"><div class="cid">#UNK-???</div><h3 class="ct" style="color:#6b6560;">Ativo Classificado</h3><div class="co">Nível de Acesso: ÔMEGA</div></div>';
+      html += '</div>';
+
+      grid.innerHTML = html;
+
+      // Carrega imagens com fallback
+      artifactsData.forEach(function(a) {
+        var imgDiv = document.getElementById('card-img-' + a.id);
+        if (!imgDiv) return;
+        var src = imgDiv.getAttribute('data-src');
+
+        var img = new Image();
+        img.onload = function() {
+          imgDiv.style.backgroundImage = "url('" + src + "')";
+          var fallback = imgDiv.querySelector('.cimg-fallback');
+          if (fallback) fallback.style.display = 'none';
+        };
+        img.onerror = function() {
+          var fallback = imgDiv.querySelector('.cimg-fallback');
+          if (fallback) {
+            fallback.textContent = '📦 ' + (a.category || 'ARTEFATO');
+          }
+        };
+        img.src = src;
+      });
+
+      attachCardEvents();
+
+    } catch (err) {
+      console.error('[BANCO] Falha ao carregar banco de dados:', err);
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:\'JetBrains Mono\',monospace;color:var(--onv);">Falha na sincronização do Relicário.</div>';
+      showNotification('Banco de dados carregado em modo offline', 'warning');
+    }
+  }
+
+  /* ============================================
+     EVENT LISTENERS DOS CARDS
+     ============================================ */
+  function attachCardEvents() {
+    document.querySelectorAll('.card:not(.decrypt)').forEach(function(c) {
+      c.addEventListener('click', function() {
+        playSound('select');
+        var id = parseInt(c.dataset.id);
+        var artifact = null;
+        for (var i = 0; i < artifactsData.length; i++) {
+          if (artifactsData[i].id === id) {
+            artifact = artifactsData[i];
+            break;
+          }
+        }
+        if (!artifact) return;
+
+        // Popula o painel
+        document.getElementById('pTitle').textContent = artifact.name || 'Sem Nome';
+        document.getElementById('pId').textContent = 'ID: #ART-' + String(artifact.id).padStart(4, '0');
+        document.getElementById('pOrigin').textContent = artifact.origin || 'Desconhecida';
+        document.getElementById('pEra').textContent = artifact.circa || 'Desconhecida';
+        document.getElementById('pMaterial').textContent = artifact.category || 'Não Classificado';
+        document.getElementById('pLocation').textContent = artifact.location || 'Local Desconhecido';
+        document.getElementById('pDesc').textContent = 'Artefato classificado como ' + (artifact.category || 'Não Classificado') + '. Origem: ' + (artifact.origin || 'Desconhecida') + ', datado de ' + (artifact.circa || 'período desconhecido') + '. Apresenta características únicas de preservação, atualmente sob análise da divisão de acervo da Archive.';
+
+        var badgeEl = document.getElementById('pBadge');
+        if (artifact.status === 'catalogado') {
+          badgeEl.textContent = 'Verificado';
+          badgeEl.className = 'pbadge vf';
+        } else {
+          badgeEl.textContent = 'Não Verificado';
+          badgeEl.className = 'pbadge';
+        }
+
+        // Carrega imagem do painel
+        var pImgEl = document.getElementById('pImg');
+        var prompt = encodeURIComponent((artifact.name || 'ancient artifact') + ', ancient artifact, cinematic, dark archive');
+        var imgUrl = 'https://image.pollinations.ai/prompt/' + prompt + '&width=400&height=200&nologo=true&seed=' + artifact.id;
+
+        var fallback = pImgEl.querySelector('.pimg-fallback');
+        if (fallback) fallback.textContent = 'CARREGANDO...';
+
+        var img = new Image();
+        img.onload = function() {
+          pImgEl.style.backgroundImage = "url('" + imgUrl + "')";
+          if (fallback) fallback.style.display = 'none';
+        };
+        img.onerror = function() {
+          if (fallback) {
+            fallback.textContent = '📦 ' + (artifact.category || 'ARTEFATO');
+          }
+        };
+        img.src = imgUrl;
+
+        panel.classList.add('on');
+        playSound('artifact');
+      });
+    });
+  }
+
+  /* ============================================
+     FECHAR PAINEL
+     ============================================ */
+  document.getElementById('pcl').addEventListener('click', function() {
+    playSound('click');
+    panel.classList.remove('on');
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!panel.contains(e.target) && !e.target.closest('.card')) {
+      panel.classList.remove('on');
+    }
+  });
+
+  /* ============================================
+     BUSCA
+     ============================================ */
+  document.getElementById('q').addEventListener('input', function(e) {
+    var q = e.target.value.toLowerCase();
+    document.querySelectorAll('.card:not(.decrypt)').forEach(function(c) {
+      var name = c.dataset.name || '';
+      var origin = c.dataset.origin || '';
+      c.style.display = (name.indexOf(q) !== -1 || origin.indexOf(q) !== -1) ? '' : 'none';
     });
   });
-}
 
-document.getElementById('pcl').addEventListener('click', () => {
-  if(window.ArchiveAudio) ArchiveAudio.playClick();
-  panel.classList.remove('on');
-});
-
-document.addEventListener('click', e => {
-  if (!panel.contains(e.target) && !e.target.closest('.card')) {
-    panel.classList.remove('on');
-  }
-});
-
-document.getElementById('q').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  document.querySelectorAll('.card:not(.decrypt)').forEach(c => {
-    const name = c.dataset.name || '';
-    const origin = c.dataset.origin || '';
-    c.style.display = (name.includes(q) || origin.includes(q)) ? '' : 'none';
+  /* ============================================
+     BOTÕES DE AÇÃO
+     ============================================ */
+  document.getElementById('btnLog').addEventListener('click', function() {
+    playSound('click');
+    showNotification('Log do artefato exportado', 'success');
   });
-});
 
-document.getElementById('btnAssign').addEventListener('click', () => {
-  if(window.ArchiveAudio) ArchiveAudio.playSuccess();
-  ArchiveAPI.notify('Artefato atribuído à missão ativa.', 'success');
-});
+  document.getElementById('btnAssign').addEventListener('click', function() {
+    playSound('success');
+    showNotification('Artefato atribuído à missão ativa', 'success');
+  });
 
-document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
-  if (a.getAttribute('href') === '#') e.preventDefault();
-  if(window.ArchiveAudio) ArchiveAudio.playClick();
-  document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-  a.classList.add('on');
-}));
+  /* ============================================
+     RELÓGIO DO RODAPÉ
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
 
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
-
-window.addEventListener('DOMContentLoaded', loadDatabase);
+  /* ============================================
+     INICIALIZAÇÃO
+     ============================================ */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadDatabase);
+  } else {
+    loadDatabase();
+  }
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

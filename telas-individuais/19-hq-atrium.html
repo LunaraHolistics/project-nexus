@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Sede da Archive · HQ Atrium</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Sede da Archive · HQ Atrium</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -27,6 +44,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .vig{position:fixed;inset:0;pointer-events:none;z-index:8998;background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,.72) 100%);}
 .atrium{position:relative;width:100vw;height:100vh;overflow:hidden;background:linear-gradient(180deg,#0a0d14 0%,#11151f 45%,#0a0d14 100%);}
+
 /* arquitetura */
 .arch{position:absolute;inset:0;}
 .ceiling{position:absolute;top:0;left:0;right:0;height:34%;background:radial-gradient(ellipse at 50% 0%,rgba(197,160,89,.1) 0%,transparent 55%),linear-gradient(180deg,#0c1018,#0a0d14);}
@@ -37,13 +55,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .col::after{content:'';position:absolute;bottom:-12px;left:-9px;right:-9px;height:14px;background:linear-gradient(90deg,#0e121b,#2c3545,#0e121b);}
 .balcony{position:absolute;top:30%;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,#1a212e 10%,#1a212e 90%,transparent);box-shadow:0 4px 12px rgba(0,0,0,.6);}
 .balcony::before{content:'';position:absolute;top:-26px;left:8%;right:8%;height:26px;background:repeating-linear-gradient(90deg,transparent 0,transparent 14px,rgba(40,50,66,.6) 14px,rgba(40,50,66,.6) 16px);}
+
 /* escadaria */
 .stairs{position:absolute;bottom:30%;left:50%;transform:translateX(-50%);width:38%;height:24%;background:linear-gradient(180deg,#161c28,#0c1018);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%);}
 .stairs::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 13px,rgba(197,160,89,.06) 13px,rgba(197,160,89,.06) 15px);}
+
 /* piso reflexivo */
 .floor{position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(180deg,#10141d 0%,#070a10 100%);}
 .floor::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(197,160,89,.1) 0%,transparent 60%);}
 .floor::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 90px,rgba(197,160,89,.03) 90px,rgba(197,160,89,.03) 91px);}
+
 /* agentes caminhando */
 .agent{position:absolute;bottom:14%;width:26px;height:64px;background:linear-gradient(180deg,#05070b,#0a0d14);border-radius:13px 13px 0 0;opacity:.7;}
 .agent::before{content:'';position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:14px;height:14px;background:#05070b;border-radius:50%;}
@@ -53,6 +74,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 @keyframes walk1{0%{left:-5%}100%{left:105%}}
 @keyframes walk2{0%{left:105%}100%{left:-5%}}
 @keyframes walk3{0%{left:30%}50%{left:70%}100%{left:30%}}
+
 /* monitores holo */
 .holo{position:absolute;width:120px;height:78px;background:rgba(0,51,68,.28);border:.5px solid rgba(197,160,89,.4);backdrop-filter:blur(6px);box-shadow:0 0 24px rgba(0,51,68,.4);overflow:hidden;animation:float 7s ease-in-out infinite;}
 .holo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.05),rgba(0,0,0,.05) 1px,transparent 1px,transparent 3px);}
@@ -64,6 +86,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .holo.h2{top:42%;right:13%;animation-delay:2.3s;}
 .holo.h3{top:52%;left:62%;width:96px;height:62px;animation-delay:4.1s;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
 /* header */
 .hdr{position:absolute;top:0;left:0;right:0;height:60px;z-index:40;background:linear-gradient(180deg,rgba(7,10,16,.92) 0%,transparent 100%);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
 .logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
@@ -72,26 +95,29 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
+
 /* sidebar */
-.side{position:absolute;left:32px;top:96px;width:262px;z-index:30;background:rgba(0,51,68,.2);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
+.side{position:absolute;left:32px;top:96px;width:262px;z-index:30;background:rgba(0,51,68,.2);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);overflow-y:auto;max-height:calc(100vh - 160px);}
 .side::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .prof{display:flex;align-items:center;gap:13px;margin-bottom:16px;padding-bottom:14px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
-.av{width:44px;height:44px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av{width:44px;height:44px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
 .av svg{width:24px;height:24px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .prof h3{font-family:'Libre Caslon Text',serif;font-size:15px;color:var(--on);margin-bottom:2px;}
 .prof p{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
-.btni{width:100%;padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;margin-bottom:16px;position:relative;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btni{width:100%;padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;margin-bottom:16px;position:relative;text-decoration:none;text-align:center;display:block;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
 .btni:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
 .snav{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;position:relative;}
-.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;text-decoration:none;}
 .si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
 .si.on{background:rgba(197,160,89,.12);border-left-color:var(--gold);color:var(--gold);}
 .si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;}
 .logout{width:100%;padding:10px;background:transparent;border:.5px solid rgba(197,160,89,.3);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
 .logout:hover{border-color:var(--amber);color:var(--amber);}
 .logout svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.5;fill:none;}
+
 /* monitor HQ */
 .mon{position:absolute;right:32px;top:96px;width:300px;z-index:30;background:rgba(0,51,68,.22);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
 .mon::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.6;}
@@ -102,8 +128,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .mbar{height:4px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-top:6px;position:relative;}
 .mbar .f{height:100%;width:68%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);animation:mp 3s ease-in-out infinite;}
 @keyframes mp{0%,100%{width:62%}50%{width:78%}}
+
 /* cards de destino */
-.dest{position:absolute;bottom:120px;left:50%;transform:translateX(-50%);display:flex;gap:24px;z-index:30;}
+.dest{position:absolute;bottom:120px;left:50%;transform:translateX(-50%);display:flex;gap:24px;z-index:30;flex-wrap:wrap;justify-content:center;}
 .dc{width:248px;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:26px 22px;text-align:center;cursor:pointer;transition:all .4s;box-shadow:0 14px 34px rgba(0,0,0,.45);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);position:relative;}
 .dc::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
 .dc:hover{transform:translateY(-7px);box-shadow:0 20px 46px rgba(0,0,0,.55),0 0 26px rgba(255,191,0,.25);}
@@ -112,19 +139,48 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .dic svg{width:26px;height:26px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .dt{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;margin-bottom:9px;}
 .dd{font-family:'Manrope',sans-serif;font-size:12px;line-height:17px;color:#6b6560;}
+
 /* terminal central */
 .cterm{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);width:600px;max-width:80%;z-index:35;background:rgba(7,10,16,.78);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:15px 22px;display:flex;align-items:center;gap:10px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
 .cterm::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.6;}
 .cterm .pr{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);position:relative;}
-.cterm .tx{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);letter-spacing:.04em;position:relative;}
+.cterm .tx{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);letter-spacing:.04em;position:relative;flex:1;}
 .cterm .cur{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:middle;animation:bk 1s steps(2) infinite;}
 @keyframes bk{0%,50%{opacity:1}51%,100%{opacity:0}}
+
 footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;background:rgba(7,10,16,.94);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
+.ftc{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .side { width: 220px; }
+  .mon { width: 260px; }
+  .dest { gap: 16px; }
+  .dc { width: 220px; padding: 20px; }
+}
+@media (max-width: 900px) {
+  .hdr { padding: 0 20px; }
+  .nav { display: none; }
+  .side { display: none; }
+  .mon { display: none; }
+  .dest { bottom: 90px; left: 20px; right: 20px; transform: none; }
+  .dc { width: 100%; max-width: 300px; }
+  .cterm { width: calc(100% - 40px); left: 20px; transform: none; bottom: 50px; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; font-size: 10px; }
+  .colonnade { display: none; }
+  .stairs { width: 60%; }
+  .agent { display: none; }
+}
+@media (max-width: 600px) {
+  .icons { display: none; }
+  .dest { bottom: 110px; }
+  .dc { max-width: 260px; }
+}
 </style>
 </head>
 <body>
@@ -146,15 +202,21 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
 
   <div class="hdr">
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO HEADER CORRIGIDA -->
     <nav class="nav">
-      <a href="/telas-individuais/05-globo.html" class="on">Globo</a>
-      <a href="/telas-individuais/15-museu.html">Banco de Dados</a>
-      <a href="#">Passaporte</a>
-      <a href="/telas-individuais/07-briefing.html">Diário de Bordo</a>
+      <a href="/telas-individuais/05-globo.html">Globo</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
+      <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+      <a href="/telas-individuais/19-hq-atrium.html" class="on">HQ Atrium</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Sala do Diretor">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>
+      </a>
     </div>
   </div>
 
@@ -171,11 +233,14 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
       <div style="font-family:'Libre Caslon Text',serif;font-size:17px;font-weight:600;color:var(--on);margin-bottom:2px;">PROJECT NEXUS</div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;" id="pSpecialty">Field Operative</div>
     </div>
-    <button class="btni" id="btnIntel">Acessar Intel</button>
+    <!-- ✅ BOTÃO CORRIGIDO - Caminho absoluto para Banco de Dados -->
+    <a href="/telas-individuais/08-banco-dados.html" class="btni" id="btnIntel">Acessar Intel</a>
+    <!-- ✅ SIDEBAR CORRIGIDA -->
     <nav class="snav">
-      <a href="/telas-individuais/05-globo.html" class="si on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
-      <a href="/telas-individuais/15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+      <a href="/telas-individuais/05-globo.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
+      <a href="/telas-individuais/08-banco-dados.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
       <a href="/telas-individuais/07-briefing.html" class="si"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Missões</a>
+      <a href="/telas-individuais/19-hq-atrium.html" class="si on"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>HQ Atrium</a>
     </nav>
     <button class="logout" id="btnLogout"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair do Sistema</button>
   </aside>
@@ -188,18 +253,19 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
     <div class="mbar"><div class="f"></div></div>
   </div>
 
+  <!-- ✅ CARDS CORRIGIDOS - CAMINHOS ABSOLUTOS E DESTINOS CORRETOS -->
   <div class="dest">
-    <div class="dc" data-dest="director" data-msg="Acessando Sala do Diretor. Terminal pessoal liberado.">
+    <div class="dc" data-dest="/telas-individuais/18-sala-diretor.html" data-msg="Acessando Sala do Diretor. Terminal pessoal liberado.">
       <div class="dic"><svg viewBox="0 0 24 24"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0z"/><path d="M4 18v2M20 18v2M12 4v9"/></svg></div>
       <div class="dt">Sala do Diretor</div>
       <div class="dd">Acessar o terminal pessoal e revisar dossiês classificados.</div>
     </div>
-    <div class="dc" data-dest="library" data-msg="Conectando à Biblioteca Central. Índice de arquivos carregado.">
+    <div class="dc" data-dest="/telas-individuais/12-diario.html" data-msg="Conectando ao Diário de Bordo. Registros cronológicos carregados.">
       <div class="dic"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
       <div class="dt">Diário de Bordo</div>
       <div class="dd">Consultar documentos históricos e relatórios de campo.</div>
     </div>
-    <div class="dc" data-dest="museum" data-msg="Entrando no Museu da Archive. Acervo cultural disponível.">
+    <div class="dc" data-dest="/telas-individuais/15-museu.html" data-msg="Entrando no Museu da Archive. Acervo cultural disponível.">
       <div class="dic"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg></div>
       <div class="dt">Museu da Archive</div>
       <div class="dd">Explorar artefatos recuperados e acervo cultural.</div>
@@ -218,133 +284,223 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
   </footer>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  await ArchiveAPI.init();
-  const state = ArchiveAPI.getState();
-  const director = (state && state.director) ? state.director : { name: 'Diretor', codename: 'NOVICE', specialty: 'Investigação' };
-  const player = await ArchiveAPI.getPlayer();
-  const missions = await ArchiveAPI.getMissions();
-  const activeMissionsCount = missions.filter(m => m.status === 'ativa').length;
-  const activeMission = missions.find(m => m.status === 'ativa');
+(function() {
+  "use strict";
 
-  // 1. Atualizar Sidebar com dados do jogador
-  document.getElementById('pName').textContent = (player.name || director.name).toUpperCase();
-  document.getElementById('pCodename').textContent = `${player.codename || director.codename} | ${player.rank || 'Diretor Interino'}`;
-  document.getElementById('pCredits').textContent = `CR ${(player.credits || 0).toLocaleString('pt-BR')}`;
-  document.getElementById('pSpecialty').textContent = player.specialty || director.specialty || 'Field Operative';
-
-  // 2. Atualizar Monitor da HQ
-  const statusEl = document.getElementById('monStatus');
-  statusEl.textContent = ArchiveAPI.online ? 'ONLINE' : 'OFFLINE (MOCK)';
-  statusEl.style.color = ArchiveAPI.online ? 'var(--gold)' : 'var(--bronze)';
-  
-  document.getElementById('agents').textContent = player.agentsRecruited || 3;
-  document.getElementById('activeMissions').textContent = activeMissionsCount;
-
-  // 3. Terminal Central Dinâmico
-  const ctx = document.getElementById('ctx');
-  let typing = false;
-  let ambient = true;
-  
-  const welcomeMsg = `Sistema inicializado. Bem-vindo, Operativo ${player.codename || director.codename}.`;
-  const amb = [
-    welcomeMsg,
-    `Sincronizando sensores do átrio... ${ArchiveAPI.online ? 'Conexão segura estabelecida.' : 'Modo offline ativo.'}`,
-    `${player.agentsRecruited || 3} operativos em campo monitorados.`,
-    activeMission ? `ALERTA: Missão ${activeMission.codename} requer atenção em ${activeMission.location}.` : 'Nenhum alerta de perímetro ativo no momento.',
-    'Aguardando seleção do Diretor...'
-  ];
-  let ai = 0;
-
-  function typeTo(txt, cb) {
-    typing = true;
-    ctx.textContent = '';
-    let k = 0;
-    const iv = setInterval(() => {
-      if (k < txt.length) {
-        ctx.textContent = txt.substring(0, k + 1);
-        k++;
-      } else {
-        clearInterval(iv);
-        typing = false;
-        if (cb) cb();
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      } else if (type === 'transition' && typeof window.ArchiveAudio.playTransition === 'function') {
+        window.ArchiveAudio.playTransition();
+      } else if (type === 'logout' && typeof window.ArchiveAudio.playLogout === 'function') {
+        window.ArchiveAudio.playLogout();
       }
-    }, 24);
+    } catch (e) {
+      console.warn('[HQ] Erro ao tocar som:', e);
+    }
   }
 
-  function runAmbient() {
-    if (!ambient || typing) return;
-    typeTo(amb[ai], () => {
-      ai = (ai + 1) % amb.length;
-      setTimeout(runAmbient, 3200);
-    });
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
   }
-  
-  setTimeout(runAmbient, 1500);
 
-  // 4. Navegação dos Cards de Destino
-  document.querySelectorAll('.dc').forEach(c => c.addEventListener('click', function() {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    ambient = false;
-    document.querySelectorAll('.dc').forEach(x => x.classList.remove('sel'));
-    this.classList.add('sel');
-    
-    const msg = this.dataset.msg;
-    const dest = this.dataset.dest;
-    
-    typeTo(msg, () => {
-      setTimeout(() => {
-        if (dest === 'director') window.location.href = '18-sala-diretor.html';
-        else if (dest === 'library') window.location.href = '07-briefing.html';
-        else if (dest === 'museum') window.location.href = '15-museu.html';
-        else window.location.href = '05-globo.html';
-      }, 1200);
-    });
-  }));
+  /* ============================================
+     INICIALIZAÇÃO PRINCIPAL
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      // Inicializa API
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
 
-  // 5. Logout Funcional
-  document.getElementById('btnLogout').addEventListener('click', () => {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    ArchiveAPI.clearState();
-    ArchiveAPI.notify('Sessão encerrada com sucesso.', 'info');
-    setTimeout(() => {
-      window.location.href = '../index.html'; 
-    }, 1500);
+      var state = (window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function') 
+        ? window.ArchiveAPI.getState() 
+        : null;
+      var director = (state && state.director) 
+        ? state.director 
+        : { name: 'Diretor', codename: 'NOVICE', specialty: 'Investigação' };
+
+      var player = null;
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getPlayer === 'function') {
+        try {
+          player = await window.ArchiveAPI.getPlayer();
+        } catch (e) {
+          console.warn('[HQ] getPlayer falhou:', e);
+          player = {};
+        }
+      } else {
+        player = {};
+      }
+
+      var missions = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getMissions === 'function') {
+        try {
+          missions = await window.ArchiveAPI.getMissions();
+        } catch (e) {
+          console.warn('[HQ] getMissions falhou:', e);
+        }
+      }
+
+      var activeMissionsCount = 0;
+      var activeMission = null;
+      for (var i = 0; i < missions.length; i++) {
+        if (missions[i].status === 'ativa') {
+          activeMissionsCount++;
+          if (!activeMission) activeMission = missions[i];
+        }
+      }
+
+      // 1. Atualizar Sidebar
+      var pNameEl = document.getElementById('pName');
+      var pCodenameEl = document.getElementById('pCodename');
+      var pCreditsEl = document.getElementById('pCredits');
+      var pSpecialtyEl = document.getElementById('pSpecialty');
+
+      var playerName = (player.name || director.name || 'DIRETOR');
+      var playerCodename = (player.codename || director.codename || 'NOVICE');
+      var playerRank = (player.rank || 'Diretor Interino');
+      var playerCredits = (player.credits || 0);
+      var playerSpecialty = (player.specialty || director.specialty || 'Field Operative');
+
+      if (pNameEl) pNameEl.textContent = playerName.toUpperCase();
+      if (pCodenameEl) pCodenameEl.textContent = playerCodename + ' | ' + playerRank;
+      if (pCreditsEl) pCreditsEl.textContent = 'CR ' + playerCredits.toLocaleString('pt-BR');
+      if (pSpecialtyEl) pSpecialtyEl.textContent = playerSpecialty;
+
+      // 2. Monitor da HQ
+      var statusEl = document.getElementById('monStatus');
+      var isOnline = window.ArchiveAPI && window.ArchiveAPI.online;
+      if (statusEl) {
+        statusEl.textContent = isOnline ? 'ONLINE' : 'OFFLINE (MOCK)';
+        statusEl.style.color = isOnline ? 'var(--gold)' : 'var(--bronze)';
+      }
+
+      var agentsEl = document.getElementById('agents');
+      if (agentsEl) agentsEl.textContent = player.agentsRecruited || 3;
+
+      var activeMissionsEl = document.getElementById('activeMissions');
+      if (activeMissionsEl) activeMissionsEl.textContent = activeMissionsCount;
+
+      // 3. Terminal Central Dinâmico
+      var ctx = document.getElementById('ctx');
+      var typing = false;
+      var ambient = true;
+      
+      var welcomeMsg = 'Sistema inicializado. Bem-vindo, Operativo ' + playerCodename + '.';
+      var amb = [
+        welcomeMsg,
+        'Sincronizando sensores do átrio... ' + (isOnline ? 'Conexão segura estabelecida.' : 'Modo offline ativo.'),
+        (player.agentsRecruited || 3) + ' operativos em campo monitorados.',
+        activeMission 
+          ? 'ALERTA: Missão ' + activeMission.codename + ' requer atenção em ' + activeMission.location + '.'
+          : 'Nenhum alerta de perímetro ativo no momento.',
+        'Aguardando seleção do Diretor...'
+      ];
+      var ai = 0;
+
+      function typeTo(txt, cb) {
+        if (!ctx) return;
+        typing = true;
+        ctx.textContent = '';
+        var k = 0;
+        var iv = setInterval(function() {
+          if (k < txt.length) {
+            ctx.textContent = txt.substring(0, k + 1);
+            k++;
+          } else {
+            clearInterval(iv);
+            typing = false;
+            if (cb) cb();
+          }
+        }, 24);
+      }
+
+      function runAmbient() {
+        if (!ambient || typing) return;
+        typeTo(amb[ai], function() {
+          ai = (ai + 1) % amb.length;
+          setTimeout(runAmbient, 3200);
+        });
+      }
+      
+      setTimeout(runAmbient, 1500);
+
+      // 4. Navegação dos Cards de Destino
+      document.querySelectorAll('.dc').forEach(function(c) {
+        c.addEventListener('click', function() {
+          playSound('transition');
+          ambient = false;
+          document.querySelectorAll('.dc').forEach(function(x) { x.classList.remove('sel'); });
+          this.classList.add('sel');
+          
+          var msg = this.dataset.msg;
+          var dest = this.dataset.dest;
+          
+          typeTo(msg, function() {
+            showNotification('Navegando para ' + dest.split('/').pop().replace('.html', ''), 'info');
+            setTimeout(function() {
+              window.location.href = dest;
+            }, 1200);
+          });
+        });
+      });
+
+      // 5. Logout Funcional
+      var logoutBtn = document.getElementById('btnLogout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+          playSound('logout');
+          
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.clearState === 'function') {
+            window.ArchiveAPI.clearState();
+          }
+          
+          showNotification('Sessão encerrada com sucesso', 'info');
+          
+          setTimeout(function() {
+            window.location.href = '/index.html'; 
+          }, 1500);
+        });
+      }
+
+      playSound('success');
+
+    } catch (err) {
+      console.error('[HQ] Erro na inicialização:', err);
+      showNotification('HQ Atrium carregado em modo offline', 'warning');
+    }
   });
 
-  document.getElementById('btnIntel').addEventListener('click', () => {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    window.location.href = '15-museu.html';
-  });
-
-  // 6. Eventos de UI
-  document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
-    i.classList.add('on');
-  }));
-
-  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
-    if (a.getAttribute('href') === '#') e.preventDefault();
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-    a.classList.add('on');
-  }));
-});
-
-// Relógio do sistema
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
+  /* ============================================
+     RELÓGIO DO SISTEMA
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

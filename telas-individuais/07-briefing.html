@@ -1,25 +1,22 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <!-- Mobile Viewport Otimizado -->
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-    />
-
-    <!-- Animações Archive OS -->
-    <link rel="stylesheet" href="../animations.css" />
-    <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
-    `r`n
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <title>ARCHIVE OS — Briefing da Missão</title>
-    <!-- Fontes Confiáveis (Google Fonts) -->
+
+    <!-- ========================================
+         FAVICON (caminho absoluto)
+         ======================================== -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
+
+    <!-- ========================================
+         FONTES CORRETAS (Google Fonts)
+         ======================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -27,15 +24,28 @@
       rel="stylesheet"
     />
 
-    <!-- Font Awesome com atributos para silenciar avisos de privacidade do navegador -->
+    <!-- ========================================
+         FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+         ======================================== -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <script src="../api.js"></script>
-    <script src="../audio-system.js"></script>
+
+    <!-- ========================================
+         SCRIPTS DO SISTEMA (caminhos absolutos)
+         ======================================== -->
+    <script src="/api.js"></script>
+    <script src="/audio-system.js"></script>
+
+    <!-- ========================================
+         ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+         ======================================== -->
+    <link rel="stylesheet" href="/animations.css" />
+    <script src="/animations.js"></script>
+
     <style>
       :root {
         --surface: #131313;
@@ -302,6 +312,7 @@
         transform: rotate(-2deg);
         margin-top: 18px;
         transition: transform 0.3s;
+        position: relative;
       }
       .pol:hover {
         transform: rotate(0) translateY(-3px);
@@ -516,16 +527,20 @@
           0 8px
         );
       }
-      .acc:hover {
+      .acc:hover:not(:disabled) {
         background: var(--amber);
         border-color: var(--amber);
         color: var(--surface);
         box-shadow: 0 0 24px rgba(255, 191, 0, 0.4);
       }
+      .acc:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
       .acc .ar {
         transition: transform 0.3s;
       }
-      .acc:hover .ar {
+      .acc:hover:not(:disabled) .ar {
         transform: translateX(4px);
       }
       footer {
@@ -583,6 +598,45 @@
           width: 100%;
         }
       }
+      /* Correção para dispositivos móveis */
+      @media (max-width: 768px) {
+        header {
+          padding: 0 20px;
+        }
+        .nav {
+          display: none;
+        }
+        .body {
+          flex-direction: column;
+          padding: 20px;
+          overflow-y: auto;
+        }
+        .tac {
+          width: 100%;
+        }
+        .dos {
+          padding: 32px 24px;
+        }
+        .stamp {
+          top: 20px;
+          right: 20px;
+          width: 120px;
+          height: 40px;
+        }
+        .stamp span {
+          font-size: 12px;
+        }
+        .dt {
+          font-size: 32px;
+          line-height: 38px;
+        }
+        footer {
+          padding: 0 20px;
+        }
+        .ftc {
+          gap: 14px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -591,25 +645,34 @@
     <div class="bf">
       <header>
         <div class="logo">ARCHIVE</div>
+        <!-- ✅ NAVEGAÇÃO CORRIGIDA - CAMINHOS ABSOLUTOS -->
         <nav class="nav">
-          <a href="#">Globo</a><a href="#">Banco de Dados</a
-          ><a href="#">Passaporte</a><a href="#" class="on">Diário de Bordo</a>
+          <a href="/telas-individuais/05-globo.html">Globo</a>
+          <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
+          <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
+          <a href="/telas-individuais/07-briefing.html" class="on">Briefing</a>
         </nav>
         <div class="icons">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <path
-              d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-            />
-          </svg>
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 6v6l4 2" />
-          </svg>
-          <svg viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
+          <a href="/telas-individuais/05-globo.html" title="Globo">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path
+                d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+              />
+            </svg>
+          </a>
+          <a href="/telas-individuais/12-diario.html" title="Diário">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+          </a>
+          <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </a>
         </div>
       </header>
       <div class="body">
@@ -641,7 +704,7 @@
             </svg>
             <div>
               <div class="tht">Análise Tática</div>
-              <div class="ths">SYS.SYNC: ON_LINE</div>
+              <div class="ths" id="sync-status">SYS.SYNC: CONECTANDO</div>
             </div>
           </div>
           <div class="ac">
@@ -668,99 +731,241 @@
       </footer>
     </div>
     <script>
-      document.addEventListener("DOMContentLoaded", async function () {
-        try {
-          // 1. Obter ID da URL ou usar padrão 1
-          const urlParams = new URLSearchParams(window.location.search);
-          const missionId = parseInt(urlParams.get("id")) || 1;
+      (function () {
+        "use strict";
 
-          // 2. Buscar missões (aguardando a Promise corretamente)
-          const missions = await window.ArchiveAPI.getMissions();
-          const mission =
-            missions.find((m) => m.id === missionId) || missions[0];
+        // ==============================================
+        // ✅ VARIÁVEIS GLOBAIS
+        // ==============================================
+        let currentMission = null;
 
-          if (!mission) {
-            window.ArchiveAPI.notify("Dados da missão corrompidos.", "error");
+        // ==============================================
+        // UTILITÁRIOS
+        // ==============================================
+        function showNotification(message, type) {
+          type = type || "info";
+          // Tenta usar ArchiveAPI.notify se disponível
+          if (
+            window.ArchiveAPI &&
+            typeof window.ArchiveAPI.notify === "function"
+          ) {
+            window.ArchiveAPI.notify(message, type);
             return;
           }
+          // Fallback para alert
+          alert(message);
+        }
 
-          // 3. Atualizações de UI
-          document.getElementById("dn").textContent =
-            "DOSSIÊ #" + mission.codename;
+        function playSound(type) {
+          if (!window.ArchiveAudio) return;
+          try {
+            if (
+              type === "success" &&
+              typeof window.ArchiveAudio.playSuccess === "function"
+            ) {
+              window.ArchiveAudio.playSuccess();
+            } else if (
+              type === "error" &&
+              typeof window.ArchiveAudio.playError === "function"
+            ) {
+              window.ArchiveAudio.playError();
+            } else if (
+              type === "click" &&
+              typeof window.ArchiveAudio.playClick === "function"
+            ) {
+              window.ArchiveAudio.playClick();
+            }
+          } catch (e) {
+            console.warn("[BRIEFING] Erro ao tocar som:", e);
+          }
+        }
 
-          // Efeito de digitação no título
-          const el = document.getElementById("dt");
-          const orig = mission.title;
-          el.textContent = "";
-          let i = 0;
-          setTimeout(() => {
-            const iv = setInterval(() => {
-              if (i < orig.length) {
-                el.textContent = orig.substring(0, i + 1);
-                i++;
-              } else {
-                clearInterval(iv);
-              }
-            }, 55);
-          }, 700);
+        // ==============================================
+        // ✅ INICIALIZAÇÃO CORRIGIDA
+        // ==============================================
+        document.addEventListener("DOMContentLoaded", async function () {
+          try {
+            // Verificar se ArchiveAPI está disponível
+            if (!window.ArchiveAPI) {
+              console.warn("[BRIEFING] ArchiveAPI não disponível");
+              document.getElementById("sync-status").textContent =
+                "SYS.SYNC: OFFLINE";
+              showNotification(
+                "ArchiveAPI não disponível. Usando dados offline.",
+                "error",
+              );
+              return;
+            }
 
-          document.getElementById("desc").textContent = mission.description;
+            // Inicializa a API
+            if (typeof window.ArchiveAPI.init === "function") {
+              await window.ArchiveAPI.init();
+            }
 
-          // Imagem dinâmica via Pollinations (com seed fixo por missão para consistência)
-          const prompt = encodeURIComponent(
-            mission.title +
-              ", ancient artifact, cinematic lighting, photorealistic, dark archive aesthetic, highly detailed, 8k",
-          );
-          document.getElementById("pol-img").style.backgroundImage =
-            `url('https://image.pollinations.ai/prompt/${prompt}&width=400&height=300&nologo=true&seed=${mission.id}')`;
+            document.getElementById("sync-status").textContent =
+              "SYS.SYNC: ONLINE";
 
-          document.getElementById("pol-cap").textContent =
-            "Exhibit A — " + mission.location;
-          document.getElementById("loc").textContent = mission.location;
+            // Obter ID da URL ou usar padrão 1
+            const urlParams = new URLSearchParams(window.location.search);
+            const missionId = parseInt(urlParams.get("id")) || 1;
 
-          // Coordenadas fictícias estilizadas para imersão
-          const lat =
-            Math.floor(Math.random() * 90) +
-            "°" +
-            Math.floor(Math.random() * 60) +
-            "'N";
-          const lon =
-            Math.floor(Math.random() * 180) +
-            "°" +
-            Math.floor(Math.random() * 60) +
-            "'E";
-          document.getElementById("coord").textContent =
-            `LAT: ${lat} // LON: ${lon}`;
+            // Buscar missões
+            let missions = [];
+            try {
+              missions = await window.ArchiveAPI.getMissions();
+            } catch (err) {
+              console.error("[BRIEFING] Erro ao buscar missões:", err);
+              showNotification(
+                "Falha ao carregar missões. Usando dados de demonstração.",
+                "error",
+              );
+              // Fallback: dados de demonstração
+              missions = [
+                {
+                  id: 1,
+                  codename: "MERIDIAN",
+                  title: "OPERAÇÃO MERIDIAN",
+                  description:
+                    "Um artefato antigo foi localizado em Cairo. Investigação urgente necessária para recuperar antes que caia em mãos erradas. A missão requer infiltração, análise forense e extração segura.",
+                  location: "Cairo, Egito",
+                  objectives: [
+                    "Localizar o artefato no Museu do Cairo",
+                    "Identificar a equipe adversária",
+                    "Recuperar o artefato sem alertar as autoridades",
+                    "Retornar à base com evidências",
+                  ],
+                  phase: 1,
+                  totalPhases: 4,
+                },
+              ];
+            }
 
-          // Lista de objetivos
-          const susList = document.getElementById("sus-list");
-          susList.innerHTML = mission.objectives
-            .map((o) => `<li>${o}</li>`)
-            .join("");
+            const mission =
+              missions.find((m) => m.id === missionId) || missions[0];
 
-          // 4. Ação do botão
-          document
-            .getElementById("acc")
-            .addEventListener("click", async function () {
+            if (!mission) {
+              showNotification("Dados da missão corrompidos.", "error");
+              return;
+            }
+
+            currentMission = mission;
+
+            // ==============================================
+            // PREENCHER UI
+            // ==============================================
+            document.getElementById("dn").textContent =
+              "DOSSIÊ #" + (mission.codename || "UNKNOWN");
+
+            // Efeito de digitação no título
+            const el = document.getElementById("dt");
+            const orig = mission.title || "OPERAÇÃO SEM NOME";
+            el.textContent = "";
+            let i = 0;
+            setTimeout(() => {
+              const iv = setInterval(() => {
+                if (i < orig.length) {
+                  el.textContent = orig.substring(0, i + 1);
+                  i++;
+                } else {
+                  clearInterval(iv);
+                }
+              }, 55);
+            }, 700);
+
+            document.getElementById("desc").textContent =
+              mission.description || "Descrição não disponível.";
+
+            // Imagem dinâmica via Pollinations (com seed fixo por missão)
+            const prompt = encodeURIComponent(
+              (mission.title || "ancient artifact") +
+                ", ancient artifact, cinematic lighting, photorealistic, dark archive aesthetic, highly detailed, 8k",
+            );
+            document.getElementById("pol-img").style.backgroundImage =
+              `url('https://image.pollinations.ai/prompt/${prompt}&width=400&height=300&nologo=true&seed=${mission.id}')`;
+
+            document.getElementById("pol-cap").textContent =
+              "Exhibit A — " + (mission.location || "Local desconhecido");
+            document.getElementById("loc").textContent =
+              mission.location || "Local desconhecido";
+
+            // Coordenadas fictícias estilizadas
+            const lat =
+              Math.floor(Math.random() * 90) +
+              "°" +
+              Math.floor(Math.random() * 60) +
+              "'N";
+            const lon =
+              Math.floor(Math.random() * 180) +
+              "°" +
+              Math.floor(Math.random() * 60) +
+              "'E";
+            document.getElementById("coord").textContent =
+              `LAT: ${lat} // LON: ${lon}`;
+
+            // Lista de objetivos
+            const susList = document.getElementById("sus-list");
+            if (mission.objectives && mission.objectives.length > 0) {
+              susList.innerHTML = mission.objectives
+                .map((o) => `<li>${o}</li>`)
+                .join("");
+            } else {
+              susList.innerHTML = "<li>Objetivos não disponíveis</li>";
+            }
+
+            // ==============================================
+            // ✅ AÇÃO DO BOTÃO - AGORA REDIRECIONA!
+            // ==============================================
+            const accBtn = document.getElementById("acc");
+            accBtn.addEventListener("click", async function () {
+              if (this.disabled) return;
+
               try {
-                const state = window.ArchiveAPI.getState();
+                this.disabled = true;
+                const originalHTML = this.innerHTML;
+                this.innerHTML = 'Processando... <span class="ar">⏳</span>';
+
+                // Verifica se está logado
+                const state =
+                  window.ArchiveAPI &&
+                  typeof window.ArchiveAPI.getState === "function"
+                    ? window.ArchiveAPI.getState()
+                    : null;
+
                 if (!state || !state.director) {
-                  if (window.ArchiveAudio) window.ArchiveAudio.playError();
-                  window.ArchiveAPI.notify(
+                  playSound("error");
+                  showNotification(
                     "Faça login primeiro para aceitar missões.",
                     "error",
                   );
+                  this.disabled = false;
+                  this.innerHTML = originalHTML;
+                  setTimeout(() => {
+                    window.location.href = "/index.html";
+                  }, 1500);
                   return;
                 }
 
-                const result = await window.ArchiveAPI.acceptMission(
-                  mission.id,
-                );
+                // Tenta aceitar a missão via API
+                let result = { success: true };
+                if (
+                  window.ArchiveAPI &&
+                  typeof window.ArchiveAPI.acceptMission === "function"
+                ) {
+                  try {
+                    result = await window.ArchiveAPI.acceptMission(mission.id);
+                  } catch (apiErr) {
+                    console.warn(
+                      "[BRIEFING] API falhou, continuando offline:",
+                      apiErr,
+                    );
+                    result = { success: true }; // Permite continuar offline
+                  }
+                }
 
                 if (result && result.success) {
-                  if (window.ArchiveAudio) window.ArchiveAudio.playSuccess();
-                  window.ArchiveAPI.notify(
-                    "Missão Aceita: " + mission.codename,
+                  playSound("success");
+                  showNotification(
+                    "Missão Aceita: " + (mission.codename || "OPERAÇÃO"),
                     "success",
                   );
                   this.innerHTML =
@@ -768,39 +973,53 @@
                   this.style.background = "var(--amber)";
                   this.style.color = "var(--surface)";
                   this.style.borderColor = "var(--amber)";
+
+                  // ✅ REDIRECIONA PARA A PRÓXIMA TELA APÓS 2 SEGUNDOS
+                  setTimeout(() => {
+                    // Pode redirecionar para Teia de Evidências ou outra tela
+                    window.location.href =
+                      "/telas-individuais/09-teia.html?id=" + mission.id;
+                  }, 2000);
                 } else {
-                  if (window.ArchiveAudio) window.ArchiveAudio.playError();
-                  window.ArchiveAPI.notify(
-                    result.error || "Falha ao processar missão.",
+                  playSound("error");
+                  showNotification(
+                    (result && result.error) || "Falha ao processar missão.",
                     "error",
                   );
+                  this.disabled = false;
+                  this.innerHTML = originalHTML;
                 }
               } catch (err) {
-                console.error(err);
-                if (window.ArchiveAudio) window.ArchiveAudio.playError();
-                window.ArchiveAPI.notify(
-                  "Erro de conexão ao aceitar missão.",
-                  "error",
-                );
+                console.error("[BRIEFING] Erro ao aceitar missão:", err);
+                playSound("error");
+                showNotification("Erro de conexão ao aceitar missão.", "error");
+                this.disabled = false;
+                this.innerHTML =
+                  'Aceitar Investigação <span class="ar">→</span>';
               }
             });
-        } catch (err) {
-          console.error("Falha ao inicializar briefing:", err);
-          window.ArchiveAPI.notify(
-            "Falha ao carregar dados da missão.",
-            "error",
-          );
-        }
-      });
+          } catch (err) {
+            console.error("[BRIEFING] Falha ao inicializar:", err);
+            showNotification("Falha ao carregar dados da missão.", "error");
+            document.getElementById("sync-status").textContent =
+              "SYS.SYNC: ERROR";
+          }
+        });
 
-      // Relógio do rodapé
-      setInterval(() => {
-        const n = new Date();
-        document.getElementById("ck").textContent =
-          String(n.getHours()).padStart(2, "0") +
-          ":" +
-          String(n.getMinutes()).padStart(2, "0");
-      }, 1000);
+        // ==============================================
+        // RELÓGIO DO RODAPÉ
+        // ==============================================
+        setInterval(() => {
+          const n = new Date();
+          const ck = document.getElementById("ck");
+          if (ck) {
+            ck.textContent =
+              String(n.getHours()).padStart(2, "0") +
+              ":" +
+              String(n.getMinutes()).padStart(2, "0");
+          }
+        }, 1000);
+      })();
     </script>
 
     <!-- Service Worker para PWA -->

@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Progressão da Agência</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<!-- Integração com API e Áudio -->
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Progressão da Agência</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{
   --surface:#131313;--dim:#0e0e0e;--bright:#393939;
@@ -46,6 +61,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
 
@@ -57,7 +73,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .ps{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
 
 /* RESOURCES */
-.res{display:flex;gap:0;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:16px 24px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
+.res{display:flex;gap:0;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:16px 24px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);flex-wrap:wrap;}
 .ri{padding:0 22px;border-right:.5px solid rgba(197,160,89,.3);}
 .ri:last-child{border-right:none;}
 .ri:first-child{padding-left:0;}
@@ -110,7 +126,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .mcv.req{color:var(--on);font-size:13px;}
 
 /* BUTTONS */
-.btnu{margin-top:auto;padding:16px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .3s;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);position:relative;}
+.btnu{margin-top:auto;padding:16px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .3s;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);position:relative;width:100%;}
 .btnu:hover:not(:disabled){background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 24px rgba(255,191,0,.4);}
 .btnu:disabled{opacity:.5;cursor:not-allowed;}
 .btnu.done{background:rgba(197,160,89,.12);border-color:var(--gold);color:var(--gold);}
@@ -127,15 +143,36 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 /* FOOTER */
 footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
+.ftc{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 7px rgba(255,191,0,0)}}
-@media (max-width: 900px) and (orientation: landscape) {
-  .body { flex-direction: row; }
-  .content { padding: 15px; }
-  .tree { height: 300px; }
-  .detail { width: 250px; padding: 15px; }
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .detail { width: 320px; padding: 24px 20px; }
+  .tree { height: 420px; }
+}
+@media (max-width: 900px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { flex-direction: column; overflow-y: auto; }
+  .content { padding: 20px; }
+  .tree { height: 360px; }
+  .detail { width: 100%; border-left: none; border-top: .5px solid var(--gold); max-height: 400px; }
+  .pt { font-size: 30px; line-height: 36px; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; font-size: 10px; }
+  .res { padding: 12px 16px; }
+  .ri { padding: 0 12px; }
+  .rv { font-size: 16px; }
+}
+@media (max-width: 600px) {
+  .tree { height: 320px; }
+  .node.center .nc { width: 70px; height: 70px; }
+  .nc { width: 54px; height: 54px; }
+  .nc svg { width: 24px; height: 24px; }
+  .icons { display: none; }
 }
 </style>
 </head>
@@ -144,26 +181,43 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="pg">
   <header>
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO CORRIGIDA - CAMINHOS CORRETOS -->
     <nav class="nav">
       <a href="/telas-individuais/05-globo.html">Globo</a>
-      <a href="/telas-individuais/15-museu.html">Banco de Dados</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
       <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
-      <a href="/telas-individuais/12-diario.html" class="on">Diário de Bordo</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+      <a href="/telas-individuais/17-progressao.html" class="on">Progressão</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
   
   <div class="body">
     <main class="content">
       <div class="ph">
-        <div><h1 class="pt">Progressão da Agência</h1><div class="ps">Status Operacional: Nível <span id="statusLevel">1</span> Liberado</div></div>
+        <div>
+          <h1 class="pt">Progressão da Agência</h1>
+          <div class="ps">Status Operacional: Nível <span id="statusLevel">1</span> Liberado</div>
+        </div>
         <div class="res">
-          <div class="ri"><div class="rl">Recursos Operacionais</div><div class="rv">Créditos: <span id="cred">0</span></div></div>
-          <div class="ri"><div class="rl">Nível de Agência</div><div class="rv">Influência: Nível <span id="infLevel">1</span></div></div>
+          <div class="ri">
+            <div class="rl">Recursos Operacionais</div>
+            <div class="rv">Créditos: <span id="cred">0</span></div>
+          </div>
+          <div class="ri">
+            <div class="rl">Nível de Agência</div>
+            <div class="rv">Influência: Nível <span id="infLevel">1</span></div>
+          </div>
         </div>
       </div>
       
@@ -172,7 +226,7 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <div class="tag">[ SYSTEM_MAP_v2.0 ]<br><b>SYNCING WITH ARCHIVE API...</b></div>
         <svg id="lines"></svg>
         
-        <!-- Os nós serão atualizados dinamicamente via JS, mas mantemos a estrutura base -->
+        <!-- Os nós serão atualizados dinamicamente via JS -->
         <div class="node center unlocked" data-u="nexus" data-id="0" style="left:50%;top:50%;animation-delay:.1s">
           <div class="nc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/></svg></div>
           <div class="nl">Nexus Core</div>
@@ -227,277 +281,420 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 </div>
 
 <script>
-// ============================================================
-// ESTADO GLOBAL
-// ============================================================
-let playerData = {};
-let upgradesData = [];
-let selectedUpgradeId = null;
+(function() {
+  "use strict";
 
-const tree = document.getElementById('tree');
-const svg = document.getElementById('lines');
-// Mapeamento das conexões visuais da árvore
-const links = [['nexus','tech'],['nexus','informants'],['nexus','analysis'],['nexus','resources']];
-
-// ============================================================
-// FUNÇÕES DE RENDERIZAÇÃO
-// ============================================================
-function ctr(u){
-  const n = tree.querySelector(`[data-u="${u}"]`);
-  if (!n) return {x:0, y:0};
-  const c = n.querySelector('.nc');
-  const tr = tree.getBoundingClientRect();
-  const r = c.getBoundingClientRect();
-  return {x: r.left - tr.left + r.width/2, y: r.top - tr.top + r.height/2};
-}
-
-function drawLines(){
-  svg.innerHTML = '';
-  links.forEach(([a,b]) => {
-    const p1 = ctr(a);
-    const p2 = ctr(b);
-    if (p1.x === 0 && p1.y === 0) return; // Segurança caso o nó não exista
-    
-    // Verifica se ambos os nós estão desbloqueados para animar a linha
-    const nodeA = tree.querySelector(`[data-u="${a}"]`);
-    const nodeB = tree.querySelector(`[data-u="${b}"]`);
-    const isFlow = nodeA && nodeB && nodeA.classList.contains('unlocked') && nodeB.classList.contains('unlocked');
-    
-    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
-    ln.setAttribute('x1', p1.x); 
-    ln.setAttribute('y1', p1.y);
-    ln.setAttribute('x2', p2.x); 
-    ln.setAttribute('y2', p2.y);
-    ln.setAttribute('class', 'll' + (isFlow ? ' flow' : ''));
-    svg.appendChild(ln);
-  });
-}
-
-function updatePlayerDisplay(){
-  document.getElementById('cred').textContent = (playerData.credits || 0).toLocaleString('pt-BR');
-  const level = playerData.level || playerData.influence_level || 1;
-  document.getElementById('infLevel').textContent = level;
-  document.getElementById('statusLevel').textContent = level;
-}
-
-function refreshTreeNodes() {
-  // O nó 'nexus' é sempre base (unlocked)
-  // Os outros nós são mapeados pelos IDs do upgrade (1, 2, 3)
-  document.querySelectorAll('.node[data-id]').forEach(node => {
-    const id = parseInt(node.dataset.id);
-    if (id === 0) return; // Nexus
-
-    const upgrade = upgradesData.find(u => u.id === id);
-    const isPurchased = playerData.upgrades && playerData.upgrades.some(u => u.id === id);
-    
-    if (upgrade) {
-      // Atualiza texto
-      node.querySelector('.nl').textContent = upgrade.name;
-      
-      // Atualiza classes de estado
-      node.classList.remove('locked', 'avail', 'unlocked');
-      if (isPurchased) {
-        node.classList.add('unlocked');
-      } else if (playerData.credits >= upgrade.cost) {
-        node.classList.add('avail');
-      } else {
-        node.classList.add('locked');
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'hover' && typeof window.ArchiveAudio.playHover === 'function') {
+        window.ArchiveAudio.playHover();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      } else if (type === 'error' && typeof window.ArchiveAudio.playError === 'function') {
+        window.ArchiveAudio.playError();
       }
+    } catch (e) {
+      console.warn('[PROGRESSAO] Erro ao tocar som:', e);
     }
-  });
-  
-  drawLines();
-  
-  // Se houver um upgrade selecionado, atualiza o painel lateral
-  if (selectedUpgradeId) {
-    selectUpgrade(selectedUpgradeId);
   }
-}
 
-// ============================================================
-// LÓGICA DE SELEÇÃO E COMPRA
-// ============================================================
-function selectUpgrade(id) {
-  selectedUpgradeId = id;
-  
-  if (id === 0) {
-    // Nexus Core (sempre desbloqueado, info estática)
-    document.getElementById('empty').style.display = 'none';
-    document.getElementById('filled').classList.add('show');
-    document.getElementById('fTitle').textContent = 'Nexus Core';
-    document.getElementById('fDesc').textContent = 'Sistema central de processamento e coordenação de todas as operações da ARCHIVE. Permite acesso a missões de alto nível e integração de dados globais em tempo real.';
-    document.getElementById('fCost').textContent = '—';
-    document.getElementById('fReq').textContent = 'Base';
-    
-    const btn = document.getElementById('btnu');
-    btn.textContent = 'Sistema Base';
-    btn.className = 'btnu done';
-    btn.disabled = true;
-    btn.onclick = null;
-  } else if (id === 99) {
-    // Placeholder futuro
-    document.getElementById('empty').style.display = 'none';
-    document.getElementById('filled').classList.add('show');
-    document.getElementById('fTitle').textContent = 'Em Desenvolvimento';
-    document.getElementById('fDesc').textContent = 'Este módulo de progressão está sendo desenvolvido pelos engenheiros da Archive. Verifique novamente após a próxima atualização de firmware.';
-    document.getElementById('fCost').textContent = '???';
-    document.getElementById('fReq').textContent = 'Classificado';
-    
-    const btn = document.getElementById('btnu');
-    btn.textContent = 'Indisponível';
-    btn.className = 'btnu';
-    btn.disabled = true;
-    btn.onclick = null;
-  } else {
-    const upgrade = upgradesData.find(u => u.id === id);
-    if (!upgrade) return;
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
 
-    const isPurchased = playerData.upgrades && playerData.upgrades.some(u => u.id === id);
-    const canAfford = playerData.credits >= upgrade.cost;
+  /* ============================================
+     ESTADO GLOBAL
+     ============================================ */
+  var playerData = {};
+  var upgradesData = [];
+  var selectedUpgradeId = null;
 
-    document.getElementById('empty').style.display = 'none';
-    const filled = document.getElementById('filled');
-    filled.classList.remove('show');
-    void filled.offsetWidth; // Força reflow para reiniciar animação
-    filled.classList.add('show');
+  var tree = document.getElementById('tree');
+  var svg = document.getElementById('lines');
+  // Mapeamento das conexões visuais da árvore
+  var links = [['nexus','tech'],['nexus','informants'],['nexus','analysis'],['nexus','resources']];
+
+  /* ============================================
+     FUNÇÕES DE RENDERIZAÇÃO
+     ============================================ */
+  function ctr(u) {
+    var n = tree.querySelector('[data-u="' + u + '"]');
+    if (!n) return {x:0, y:0};
+    var c = n.querySelector('.nc');
+    var tr = tree.getBoundingClientRect();
+    var r = c.getBoundingClientRect();
+    return {x: r.left - tr.left + r.width/2, y: r.top - tr.top + r.height/2};
+  }
+
+  function drawLines() {
+    if (!svg) return;
+    svg.innerHTML = '';
+    links.forEach(function(pair) {
+      var a = pair[0], b = pair[1];
+      var p1 = ctr(a);
+      var p2 = ctr(b);
+      if (p1.x === 0 && p1.y === 0) return;
+      
+      var nodeA = tree.querySelector('[data-u="' + a + '"]');
+      var nodeB = tree.querySelector('[data-u="' + b + '"]');
+      var isFlow = nodeA && nodeB && nodeA.classList.contains('unlocked') && nodeB.classList.contains('unlocked');
+      
+      var ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+      ln.setAttribute('x1', p1.x); 
+      ln.setAttribute('y1', p1.y);
+      ln.setAttribute('x2', p2.x); 
+      ln.setAttribute('y2', p2.y);
+      ln.setAttribute('class', 'll' + (isFlow ? ' flow' : ''));
+      svg.appendChild(ln);
+    });
+  }
+
+  function updatePlayerDisplay() {
+    var credEl = document.getElementById('cred');
+    var infEl = document.getElementById('infLevel');
+    var statusEl = document.getElementById('statusLevel');
     
-    document.getElementById('fTitle').textContent = upgrade.name;
-    document.getElementById('fDesc').textContent = upgrade.description;
-    document.getElementById('fCost').textContent = `${upgrade.cost.toLocaleString('pt-BR')} CR`;
-    document.getElementById('fReq').textContent = upgrade.requirement;
+    if (credEl) credEl.textContent = (playerData.credits || 0).toLocaleString('pt-BR');
+    var level = playerData.level || playerData.influence_level || 1;
+    if (infEl) infEl.textContent = level;
+    if (statusEl) statusEl.textContent = level;
+  }
+
+  function refreshTreeNodes() {
+    document.querySelectorAll('.node[data-id]').forEach(function(node) {
+      var id = parseInt(node.dataset.id);
+      if (id === 0) return; // Nexus
+
+      var upgrade = null;
+      for (var i = 0; i < upgradesData.length; i++) {
+        if (upgradesData[i].id === id) {
+          upgrade = upgradesData[i];
+          break;
+        }
+      }
+
+      var isPurchased = false;
+      if (playerData.upgrades && Array.isArray(playerData.upgrades)) {
+        for (var j = 0; j < playerData.upgrades.length; j++) {
+          if (playerData.upgrades[j].id === id) {
+            isPurchased = true;
+            break;
+          }
+        }
+      }
+      
+      if (upgrade) {
+        var nlEl = node.querySelector('.nl');
+        if (nlEl) nlEl.textContent = upgrade.name;
+        
+        node.classList.remove('locked', 'avail', 'unlocked');
+        if (isPurchased) {
+          node.classList.add('unlocked');
+        } else if ((playerData.credits || 0) >= upgrade.cost) {
+          node.classList.add('avail');
+        } else {
+          node.classList.add('locked');
+        }
+      }
+    });
     
-    const btn = document.getElementById('btnu');
-    btn.className = 'btnu';
-    btn.disabled = false;
-    btn.onclick = null;
+    drawLines();
     
-    if (isPurchased) {
-      btn.textContent = 'Já Adquirido ✓';
-      btn.classList.add('done');
+    if (selectedUpgradeId !== null) {
+      selectUpgrade(selectedUpgradeId);
+    }
+  }
+
+  /* ============================================
+     LÓGICA DE SELEÇÃO E COMPRA
+     ============================================ */
+  function selectUpgrade(id) {
+    selectedUpgradeId = id;
+    
+    var fTitle = document.getElementById('fTitle');
+    var fDesc = document.getElementById('fDesc');
+    var fCost = document.getElementById('fCost');
+    var fReq = document.getElementById('fReq');
+    var btn = document.getElementById('btnu');
+    var empty = document.getElementById('empty');
+    var filled = document.getElementById('filled');
+
+    if (!fTitle || !btn) return;
+
+    if (id === 0) {
+      // Nexus Core (sempre desbloqueado)
+      if (empty) empty.style.display = 'none';
+      if (filled) filled.classList.add('show');
+      fTitle.textContent = 'Nexus Core';
+      fDesc.textContent = 'Sistema central de processamento e coordenação de todas as operações da ARCHIVE. Permite acesso a missões de alto nível e integração de dados globais em tempo real.';
+      fCost.textContent = '—';
+      fReq.textContent = 'Base';
+      
+      btn.textContent = 'Sistema Base';
+      btn.className = 'btnu done';
       btn.disabled = true;
-    } else if (!canAfford) {
-      btn.textContent = 'Créditos Insuficientes';
+      btn.onclick = null;
+    } else if (id === 99) {
+      // Placeholder futuro
+      if (empty) empty.style.display = 'none';
+      if (filled) filled.classList.add('show');
+      fTitle.textContent = 'Em Desenvolvimento';
+      fDesc.textContent = 'Este módulo de progressão está sendo desenvolvido pelos engenheiros da Archive. Verifique novamente após a próxima atualização de firmware.';
+      fCost.textContent = '???';
+      fReq.textContent = 'Classificado';
+      
+      btn.textContent = 'Indisponível';
+      btn.className = 'btnu';
       btn.disabled = true;
+      btn.onclick = null;
     } else {
-      btn.textContent = 'Desbloquear';
-      btn.onclick = () => purchaseUpgrade(id);
-    }
-  }
-  
-  // Highlight visual no nó
-  document.querySelectorAll('.node').forEach(n => {
-    n.classList.toggle('sel', parseInt(n.dataset.id) === id);
-  });
-}
+      var upgrade = null;
+      for (var i = 0; i < upgradesData.length; i++) {
+        if (upgradesData[i].id === id) {
+          upgrade = upgradesData[i];
+          break;
+        }
+      }
+      if (!upgrade) return;
 
-async function purchaseUpgrade(id) {
-  const btn = document.getElementById('btnu');
-  btn.disabled = true;
-  btn.textContent = 'PROCESSANDO...';
-  
-  try {
-    // Garante que o jogador está registrado no backend
-    await ArchiveAPI.init();
-    if (!ArchiveAPI.playerId) {
-      const state = ArchiveAPI.getState();
-      if (state && state.director) {
-        await ArchiveAPI.createPlayer(state.director.name, state.director.codename || state.director.code, state.director.specialty);
+      var isPurchased = false;
+      if (playerData.upgrades && Array.isArray(playerData.upgrades)) {
+        for (var j = 0; j < playerData.upgrades.length; j++) {
+          if (playerData.upgrades[j].id === id) {
+            isPurchased = true;
+            break;
+          }
+        }
+      }
+      var canAfford = (playerData.credits || 0) >= upgrade.cost;
+
+      if (empty) empty.style.display = 'none';
+      if (filled) {
+        filled.classList.remove('show');
+        void filled.offsetWidth;
+        filled.classList.add('show');
+      }
+      
+      fTitle.textContent = upgrade.name;
+      fDesc.textContent = upgrade.description;
+      fCost.textContent = (upgrade.cost || 0).toLocaleString('pt-BR') + ' CR';
+      fReq.textContent = upgrade.requirement;
+      
+      btn.className = 'btnu';
+      btn.disabled = false;
+      btn.onclick = null;
+      
+      if (isPurchased) {
+        btn.textContent = 'Já Adquirido ✓';
+        btn.classList.add('done');
+        btn.disabled = true;
+      } else if (!canAfford) {
+        btn.textContent = 'Créditos Insuficientes';
+        btn.disabled = true;
       } else {
-        throw new Error('Nenhum diretor cadastrado. Faça login primeiro.');
+        btn.textContent = 'Desbloquear';
+        btn.onclick = function() { purchaseUpgrade(id); };
       }
     }
-
-    const result = await ArchiveAPI.buyUpgrade(id);
     
-    if (result && result.success) {
-      if (window.ArchiveAudio) window.ArchiveAudio.playSuccess();
-      ArchiveAPI.notify('Upgrade adquirido com sucesso!', 'success');
+    // Highlight visual no nó
+    document.querySelectorAll('.node').forEach(function(n) {
+      n.classList.toggle('sel', parseInt(n.dataset.id) === id);
+    });
+  }
+
+  async function purchaseUpgrade(id) {
+    var btn = document.getElementById('btnu');
+    if (!btn) return;
+    
+    btn.disabled = true;
+    btn.textContent = 'PROCESSANDO...';
+    
+    try {
+      // Garante que o jogador está registrado no backend
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      if (window.ArchiveAPI) {
+        if (!window.ArchiveAPI.playerId) {
+          var state = (typeof window.ArchiveAPI.getState === 'function') ? window.ArchiveAPI.getState() : null;
+          if (state && state.director) {
+            if (typeof window.ArchiveAPI.createPlayer === 'function') {
+              await window.ArchiveAPI.createPlayer(
+                state.director.name, 
+                state.director.codename || state.director.code, 
+                state.director.specialty
+              );
+            }
+          } else {
+            throw new Error('Nenhum diretor cadastrado. Faça login primeiro.');
+          }
+        }
+
+        var result = null;
+        if (typeof window.ArchiveAPI.buyUpgrade === 'function') {
+          result = await window.ArchiveAPI.buyUpgrade(id);
+        }
+        
+        if (result && result.success) {
+          playSound('success');
+          showNotification('Upgrade adquirido com sucesso!', 'success');
+          
+          // Recarrega dados do jogador
+          if (typeof window.ArchiveAPI.getPlayer === 'function') {
+            playerData = await window.ArchiveAPI.getPlayer();
+          }
+          updatePlayerDisplay();
+          refreshTreeNodes();
+          
+          btn.textContent = '✓ Desbloqueado';
+          btn.classList.add('done');
+        } else {
+          throw new Error((result && result.error) || 'Falha na transação.');
+        }
+      } else {
+        // Modo offline - simula compra local
+        var upgrade = null;
+        for (var i = 0; i < upgradesData.length; i++) {
+          if (upgradesData[i].id === id) {
+            upgrade = upgradesData[i];
+            break;
+          }
+        }
+
+        if (upgrade && (playerData.credits || 0) >= upgrade.cost) {
+          playerData.credits = (playerData.credits || 0) - upgrade.cost;
+          if (!playerData.upgrades) playerData.upgrades = [];
+          playerData.upgrades.push(upgrade);
+          
+          // Salva no localStorage via ArchiveAPI se disponível
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.setState === 'function') {
+            window.ArchiveAPI.setState({ player: playerData });
+          }
+          
+          playSound('success');
+          showNotification('Upgrade adquirido (modo offline)!', 'success');
+          updatePlayerDisplay();
+          refreshTreeNodes();
+          
+          btn.textContent = '✓ Desbloqueado';
+          btn.classList.add('done');
+        } else {
+          throw new Error('Créditos insuficientes ou upgrade inválido.');
+        }
+      }
+    } catch (err) {
+      console.error('[PROGRESSAO] Erro na compra:', err);
+      playSound('error');
+      showNotification(err.message || 'Erro na transação.', 'error');
       
-      // Recarrega dados do jogador para atualizar créditos e lista de upgrades
-      playerData = await ArchiveAPI.getPlayer();
+      btn.textContent = '⚠ Falha';
+      btn.classList.add('error');
+      
+      setTimeout(function() {
+        selectUpgrade(id);
+      }, 2500);
+    }
+  }
+
+  /* ============================================
+     INICIALIZAÇÃO E EVENTOS
+     ============================================ */
+  async function loadData() {
+    try {
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      if (window.ArchiveAPI) {
+        if (typeof window.ArchiveAPI.getPlayer === 'function') {
+          try {
+            playerData = await window.ArchiveAPI.getPlayer();
+          } catch (e) {
+            console.warn('[PROGRESSAO] getPlayer falhou:', e);
+            playerData = {};
+          }
+        }
+        
+        if (typeof window.ArchiveAPI.getUpgrades === 'function') {
+          try {
+            upgradesData = await window.ArchiveAPI.getUpgrades();
+          } catch (e) {
+            console.warn('[PROGRESSAO] getUpgrades falhou:', e);
+            upgradesData = [];
+          }
+        }
+      }
+      
       updatePlayerDisplay();
       refreshTreeNodes();
       
-      btn.textContent = '✓ Desbloqueado';
-      btn.classList.add('done');
-    } else {
-      throw new Error(result?.error || 'Falha na transação.');
+      // Atualiza a tag de sistema
+      var tag = document.querySelector('.tree .tag');
+      if (tag) {
+        tag.innerHTML = '[ SYSTEM_MAP_v2.0 ]<br><b>SYNC COMPLETE. ' + upgradesData.length + ' MODULES LOADED.</b>';
+      }
+    } catch (err) {
+      console.error('[PROGRESSAO] Falha ao carregar dados:', err);
+      showNotification('Falha ao sincronizar com a Archive.', 'error');
     }
-  } catch (err) {
-    if (window.ArchiveAudio) window.ArchiveAudio.playError();
-    ArchiveAPI.notify(err.message || 'Erro na transação.', 'error');
-    
-    btn.textContent = '⚠ Falha';
-    btn.classList.add('error');
-    
-    setTimeout(() => {
-      selectUpgrade(id); // Restaura o estado do botão
-    }, 2500);
   }
-}
 
-// ============================================================
-// INICIALIZAÇÃO E EVENTOS
-// ============================================================
-async function loadData() {
-  try {
-    await ArchiveAPI.init();
-    playerData = await ArchiveAPI.getPlayer();
-    upgradesData = await ArchiveAPI.getUpgrades();
-    
-    updatePlayerDisplay();
-    refreshTreeNodes();
-    
-    // Atualiza a tag de sistema
-    const tag = document.querySelector('.tree .tag');
-    if (tag) tag.innerHTML = `[ SYSTEM_MAP_v2.0 ]<br><b>SYNC COMPLETE. ${upgradesData.length} MODULES LOADED.</b>`;
-  } catch (err) {
-    console.error('Falha ao carregar dados de progressão:', err);
-    ArchiveAPI.notify('Falha ao sincronizar com a Archive.', 'error');
+  // Event Listeners dos nós
+  document.querySelectorAll('.node').forEach(function(n) {
+    n.addEventListener('mouseenter', function() { 
+      playSound('hover'); 
+    });
+    n.addEventListener('click', function() { 
+      playSound('click'); 
+      selectUpgrade(parseInt(n.dataset.id)); 
+    });
+  });
+
+  // Hover no botão
+  var btnu = document.getElementById('btnu');
+  if (btnu) {
+    btnu.addEventListener('mouseenter', function() { 
+      playSound('hover'); 
+    });
   }
-}
 
-// Event Listeners
-document.querySelectorAll('.node').forEach(n => {
-  n.addEventListener('mouseenter', () => { if (window.ArchiveAudio) window.ArchiveAudio.playHover(); });
-  n.addEventListener('click', () => { 
-    if (window.ArchiveAudio) window.ArchiveAudio.playClick(); 
-    selectUpgrade(parseInt(n.dataset.id)); 
-  });
-});
+  // Resize handler
+  window.addEventListener('resize', drawLines);
+  
+  // Inicialização
+  setTimeout(function() {
+    loadData();
+    setTimeout(drawLines, 100);
+  }, 100);
 
-document.querySelectorAll('.nav a').forEach(a => {
-  a.addEventListener('mouseenter', () => { if (window.ArchiveAudio) window.ArchiveAudio.playHover(); });
-  a.addEventListener('click', e => {
-    if (a.getAttribute('href') === '#') e.preventDefault();
-    if (window.ArchiveAudio) window.ArchiveAudio.playClick();
-    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-    a.classList.add('on');
-  });
-});
-
-document.getElementById('btnu').addEventListener('mouseenter', () => { if (window.ArchiveAudio) window.ArchiveAudio.playHover(); });
-
-// Inicialização
-window.addEventListener('resize', drawLines);
-setTimeout(() => {
-  loadData();
-  setTimeout(drawLines, 100); // Garante desenho após o CSS aplicar posições
-}, 100);
-
-// Relógio
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
-}, 1000);
+  // Relógio
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+    }
+  }, 1000);
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

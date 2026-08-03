@@ -7,22 +7,39 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <title>ARCHIVE OS — Project Nexus</title>
-    <link rel="icon" type="image/png" href="favicon.png" />
-    />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- ========================================
+         FONTES CORRETAS (Google Fonts)
+         ======================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <!-- Fontes Corretas -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- ========================================
+         FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+         ======================================== -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
 
-    <!-- Animações Archive OS -->
-    <link rel="stylesheet" href="animations.css" />
-    <script src="animations.js"></script>
+    <!-- ========================================
+         SCRIPTS DO SISTEMA (API + Audio)
+         ======================================== -->
+    <script src="/api.js"></script>
+    <script src="/audio-system.js"></script>
+
+    <!-- ========================================
+         ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+         ======================================== -->
+    <link rel="stylesheet" href="/animations.css" />
+    <script src="/animations.js"></script>
 
     <style>
       /* ============================================
@@ -210,7 +227,6 @@
           height: -webkit-fill-available;
         }
 
-        /* Esconder barra de endereço em iOS */
         @supports (-webkit-touch-callout: none) {
           .height-fix {
             height: -webkit-fill-available;
@@ -735,7 +751,7 @@
           transform: rotate(360deg);
         }
       }
-
+      
       /* -- Home Dashboard -- */
       .dash-welcome {
         margin-bottom: 32px;
@@ -1000,7 +1016,7 @@
       }
     </style>
   </head>
-  <body class="height-fix">
+    <body class="height-fix">
     <!-- Camadas ambientais -->
     <div class="ambient ambient-1"></div>
     <div class="ambient ambient-2"></div>
@@ -1131,6 +1147,7 @@
 
         /* ==============================================
        CONFIGURAÇÃO DE NAVEGAÇÃO
+       ⚠️ TODOS OS CAMINHOS AGORA SÃO ABSOLUTOS
        ============================================== */
         var NAV_CONFIG = [
           {
@@ -1141,7 +1158,7 @@
                 id: "globe",
                 icon: "fa-earth-americas",
                 label: "Globo Interativo",
-                file: "telas-individuais/05-globo.html",
+                file: "/telas-individuais/05-globo.html",
               },
             ],
           },
@@ -1152,13 +1169,13 @@
                 id: "missions",
                 icon: "fa-crosshairs",
                 label: "Missões Ativas",
-                file: "telas-individuais/07-briefing.html",
+                file: "/telas-individuais/07-briefing.html",
               },
               {
                 id: "evidence",
                 icon: "fa-diagram-project",
                 label: "Teia de Evidências",
-                file: "telas-individuais/09-teia.html",
+                file: "/telas-individuais/09-teia.html",
               },
             ],
           },
@@ -1169,19 +1186,19 @@
                 id: "database",
                 icon: "fa-database",
                 label: "Banco de Dados",
-                file: "telas-individuais/08-banco-dados.html",
+                file: "/telas-individuais/08-banco-dados.html",
               },
               {
                 id: "museum",
                 icon: "fa-landmark",
                 label: "Museu da Archive",
-                file: "telas-individuais/15-museu.html",
+                file: "/telas-individuais/15-museu.html",
               },
               {
                 id: "library",
                 icon: "fa-book-open",
                 label: "Biblioteca Central",
-                file: "telas-individuais/16-biblioteca.html",
+                file: "/telas-individuais/16-biblioteca.html",
               },
             ],
           },
@@ -1192,19 +1209,19 @@
                 id: "passport",
                 icon: "fa-id-card",
                 label: "Passaporte",
-                file: "telas-individuais/11-passaporte.html",
+                file: "/telas-individuais/11-passaporte.html",
               },
               {
                 id: "journal",
                 icon: "fa-pen-nib",
                 label: "Diário de Bordo",
-                file: "telas-individuais/12-diario.html",
+                file: "/telas-individuais/12-diario.html",
               },
               {
                 id: "progress",
                 icon: "fa-chart-line",
                 label: "Progressão",
-                file: "telas-individuais/17-progressao.html",
+                file: "/telas-individuais/17-progressao.html",
               },
             ],
           },
@@ -1215,19 +1232,19 @@
                 id: "hq",
                 icon: "fa-building",
                 label: "Status da Sede",
-                file: "telas-individuais/13-status-sede.html",
+                file: "/telas-individuais/13-status-sede.html",
               },
               {
                 id: "director",
                 icon: "fa-user-shield",
                 label: "Sala do Diretor",
-                file: "telas-individuais/18-sala-diretor.html",
+                file: "/telas-individuais/18-sala-diretor.html",
               },
               {
                 id: "atrium",
                 icon: "fa-archway",
                 label: "HQ Atrium",
-                file: "telas-individuais/19-hq-atrium.html",
+                file: "/telas-individuais/19-hq-atrium.html",
               },
             ],
           },
@@ -1238,7 +1255,7 @@
                 id: "settings",
                 icon: "fa-gear",
                 label: "Configurações",
-                file: "telas-individuais/04-config.html",
+                file: "/telas-individuais/04-config.html",
               },
             ],
           },
@@ -1260,7 +1277,7 @@
           progress: 50,
         };
         var DASH_ACTIVITY = [
-          { time: "14:32", text: "Agente ORACLE reportou posição em Cairo" },
+          { time: "14:32", text: "Agente Oráculo reportou posição em Cairo" },
           { time: "14:15", text: "Artefato #47 adicionado ao acervo digital" },
           {
             time: "13:58",
@@ -1758,23 +1775,39 @@
           }
         }
 
+        /* ==============================================
+       ✅ CHECK API STATUS CORRIGIDO
+       - Usa ArchiveAPI.online (não faz fetch direto)
+       - Try/catch robusto para evitar erros
+       ============================================== */
         async function checkAPIStatus() {
           var dot = document.getElementById("status-dot");
           var text = document.getElementById("status-text");
 
-          // Agora confiamos na lógica inteligente do api.js
-          if (window.ArchiveAPI) {
-            await window.ArchiveAPI.init();
-            if (window.ArchiveAPI.online) {
-              dot.classList.add("online");
-              text.textContent = "ONLINE";
+          try {
+            if (window.ArchiveAPI) {
+              // Inicializa a API (detecta produção vs localhost)
+              if (typeof window.ArchiveAPI.init === "function") {
+                await window.ArchiveAPI.init();
+              }
+              // Verifica status via propriedade online
+              if (window.ArchiveAPI.online === true) {
+                dot.classList.add("online");
+                text.textContent = "ONLINE";
+              } else {
+                dot.classList.remove("online");
+                text.textContent = "OFFLINE (STANDALONE)";
+              }
             } else {
+              // ArchiveAPI não carregou (provavelmente offline ou arquivo ausente)
               dot.classList.remove("online");
-              text.textContent = "OFFLINE (STANDALONE)";
+              text.textContent = "OFFLINE";
+              console.warn("[API] window.ArchiveAPI não está disponível");
             }
-          } else {
+          } catch (err) {
             dot.classList.remove("online");
             text.textContent = "OFFLINE";
+            console.warn("[API] Falha na verificação de status:", err);
           }
         }
 
@@ -1884,7 +1917,9 @@
       })();
     </script>
 
-    <!-- Service Worker para PWA -->
+    <!-- ========================================
+       SERVICE WORKER (PWA)
+       ======================================== -->
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker

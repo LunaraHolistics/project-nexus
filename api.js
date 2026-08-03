@@ -4,7 +4,7 @@
  * Resiliente: retorna dados mock se o backend estiver offline.
  *
  * Uso nas telas individuais:
- * <script src="../api.js"></script>
+ * <script src="/api.js"></script>
  * <script>
  *   await window.ArchiveAPI.init();
  *   var missions = await window.ArchiveAPI.getMissions();
@@ -13,21 +13,29 @@
 (function () {
   "use strict";
 
-  // Detectar ambiente automaticamente
+  /* ===========================================
+     DETECÇÃO DE AMBIENTE
+     =========================================== */
   var BASE_URL = (function () {
-    // Se estiver rodando localmente, usa o backend local
-    if (
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1"
-    ) {
+    var hostname = window.location.hostname;
+    // Ambiente local
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
       return "http://localhost:3000/api";
     }
-    // Se estiver em produção (Netlify), usa o backend do Render
+    // Ambiente de preview (Netlify deploy previews)
+    if (
+      hostname.indexOf("netlify.app") !== -1 ||
+      hostname.indexOf("netlify.com") !== -1
+    ) {
+      return "https://project-nexus-15sj.onrender.com/api";
+    }
+    // Produção (Netlify ou domínio customizado)
     return "https://project-nexus-15sj.onrender.com/api";
   })();
 
   var _isOnline = false;
   var _playerId = null;
+  var _initPromise = null;
 
   var STATE_KEY = "nexus_state_v1";
   var LEGACY_STATE_KEY = "project_nexus_state_v1";
@@ -630,72 +638,143 @@
       },
     ],
   };
+  /* ===========================================
+     UTILITÁRIOS DE FETCH (COMPATÍVEL COM TODOS OS BROWSERS)
+     =========================================== */
+  function fetchWithTimeout(url, options, timeout) {
+    options = options || {};
+    timeout = timeout || 5000;
+
+    // Usa AbortController se disponível
+    if (typeof AbortController !== "undefined") {
+      var controller = new AbortController();
+      options.signal = controller.signal;
+      var timeoutId = setTimeout(function () {
+        controller.abort();
+      }, timeout);
+
+      return fetch(url, options).finally(function () {
+        clearTimeout(timeoutId);
+      });
+    }
+
+    // Fallback para browsers antigos (sem AbortController)
+    return Promise.race([
+      fetch(url, options),
+      new Promise(function (_, reject) {
+        setTimeout(function () {
+          reject(new Error("Timeout"));
+        }, timeout);
+      }),
+    ]);
+  }
 
   /* ===========================================
      API PÚBLICA
      =========================================== */
   var API = {
+    /**
+     * Inicializa a API - verifica conexão com backend
+     * Retorna Promise<boolean> (true se online, false se offline)
+     */
     init: function () {
-      return fetch(BASE_URL + "/health", { signal: AbortSignal.timeout(3000) })
+      // Evita múltiplas chamadas simultâneas
+      if (_initPromise) return _initPromise;
+
+      _initPromise = fetchWithTimeout(BASE_URL + "/health", {}, 3000)
         .then(function (res) {
           if (res.ok) {
             _isOnline = true;
-            console.log("[ARCHIVE API] Backend conectado em " + BASE_URL);
+            console.log("[ARCHIVE API] ✅ Backend conectado em " + BASE_URL);
             var saved = localStorage.getItem("nexus_player_id");
             if (saved) _playerId = saved;
             return true;
           }
           throw new Error("HTTP " + res.status);
         })
-        .catch(function () {
+        .catch(function (err) {
           _isOnline = false;
           console.warn(
-            "[ARCHIVE API] Backend offline — MODO STANDALONE ativado",
+            "[ARCHIVE API] ⚠️ Backend offline — MODO STANDALONE ativado",
+            err.message || "",
           );
           var state = API.getState();
           if (state && state.director) {
             console.log(
-              "[ARCHIVE API] Diretor carregado:",
+              "[ARCHIVE API] Diretor carregado do localStorage:",
               state.director.codename,
             );
           }
           return false;
         });
+
+      return _initPromise;
     },
 
+    /**
+     * Propriedade: está online?
+     */
     get online() {
       return _isOnline;
     },
+
+    /**
+     * Propriedade: ID do jogador
+     */
     get playerId() {
       return _playerId;
     },
     set playerId(id) {
       _playerId = id;
-      if (id) localStorage.setItem("nexus_player_id", id);
+      if (id) {
+        localStorage.setItem("nexus_player_id", id);
+      } else {
+        localStorage.removeItem("nexus_player_id");
+      }
     },
 
+    /**
+     * Requisição GET genérica
+     */
     _request: function (endpoint) {
       if (!_isOnline) return Promise.resolve(null);
-      return fetch(BASE_URL + endpoint, {
-        headers: { Accept: "application/json" },
-      })
+      return fetchWithTimeout(
+        BASE_URL + endpoint,
+        {
+          headers: { Accept: "application/json" },
+        },
+        8000,
+      )
         .then(function (res) {
           if (!res.ok) throw new Error("HTTP " + res.status);
           return res.json();
         })
         .catch(function (err) {
-          console.warn("[ARCHIVE API] Falha em " + endpoint + ":", err.message);
+          console.warn(
+            "[ARCHIVE API] Falha em GET " + endpoint + ":",
+            err.message,
+          );
           return null;
         });
     },
 
+    /**
+     * Requisição POST genérica
+     */
     _post: function (endpoint, data) {
       if (!_isOnline) return Promise.resolve(null);
-      return fetch(BASE_URL + endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
+      return fetchWithTimeout(
+        BASE_URL + endpoint,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+        8000,
+      )
         .then(function (res) {
           if (!res.ok) throw new Error("HTTP " + res.status);
           return res.json();
@@ -709,9 +788,50 @@
         });
     },
 
+    /**
+     * Requisição PUT genérica
+     */
+    _put: function (endpoint, data) {
+      if (!_isOnline) return Promise.resolve(null);
+      return fetchWithTimeout(
+        BASE_URL + endpoint,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+        8000,
+      )
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .catch(function (err) {
+          console.warn(
+            "[ARCHIVE API] Falha PUT em " + endpoint + ":",
+            err.message,
+          );
+          return null;
+        });
+    },
+
+    /* ===========================================
+       MISSÕES
+       =========================================== */
     getMissions: function (specialty) {
       return this._request("/missions").then(function (data) {
-        var missions = data && data.missions ? data.missions : MOCK.missions;
+        var missions;
+        if (data && data.missions) {
+          missions = data.missions;
+        } else if (Array.isArray(data)) {
+          missions = data;
+        } else {
+          missions = MOCK.missions;
+        }
+
         if (specialty) {
           return missions.filter(function (m) {
             return (
@@ -724,12 +844,28 @@
       });
     },
 
+    /**
+     * Busca missão específica por ID (útil para telas individuais)
+     */
+    getMissionById: function (missionId) {
+      return this.getMissions().then(function (missions) {
+        return (
+          missions.find(function (m) {
+            return m.id === missionId;
+          }) || null
+        );
+      });
+    },
+
     generateMission: function () {
       return this._post("/missions/generate", {}).then(function (data) {
         return data || MOCK.missions[0];
       });
     },
 
+    /**
+     * Aceita missão - salva estado localmente em modo offline
+     */
     acceptMission: function (missionId) {
       // PRIORIDADE 1: Backend online
       if (_playerId && _isOnline) {
@@ -737,45 +873,161 @@
           player_id: _playerId,
         });
       }
+
       // PRIORIDADE 2: Modo offline com localStorage
       var state = this.getState();
       if (state && state.director && state.director.name) {
-        console.log("[ARCHIVE API] Missão aceita localmente (offline)");
+        console.log(
+          "[ARCHIVE API] Missão aceita localmente (offline):",
+          missionId,
+        );
+
+        // Busca dados da missão
+        var mission = MOCK.missions.find(function (m) {
+          return m.id === missionId;
+        });
+
+        // Atualiza estado local
+        var updatedState = this.setState({
+          currentMission: {
+            id: missionId,
+            codename: mission ? mission.codename : "UNKNOWN",
+            title: mission ? mission.title : "Missão",
+            acceptedAt: new Date().toISOString(),
+            status: "accepted",
+          },
+          acceptedMissions: (state.acceptedMissions || []).concat([missionId]),
+        });
+
         return Promise.resolve({
           success: true,
           message: "Missão aceita (modo offline)",
           offline: true,
+          state: updatedState,
         });
       }
+
       // PRIORIDADE 3: Sem cadastro
+      return Promise.resolve({
+        success: false,
+        error: "Jogador não cadastrado. Faça login primeiro.",
+      });
+    },
+
+    /**
+     * Completa missão - salva estado localmente em modo offline
+     */
+    completeMission: function (missionId) {
+      if (_playerId && _isOnline) {
+        return this._post("/missions/" + missionId + "/complete", {
+          player_id: _playerId,
+        });
+      }
+
+      // Modo offline
+      var state = this.getState();
+      if (state && state.director) {
+        var mission = MOCK.missions.find(function (m) {
+          return m.id === missionId;
+        });
+
+        var completed = state.completedMissions || [];
+        if (completed.indexOf(missionId) === -1) {
+          completed.push(missionId);
+        }
+
+        var xp = mission ? mission.reward.xp : 100;
+        var credits = mission ? mission.reward.credits : 500;
+
+        this.setState({
+          completedMissions: completed,
+          currentMission: null,
+          stats: {
+            missionsCompleted: completed.length,
+            totalXP: (state.stats ? state.stats.totalXP || 0 : 0) + xp,
+            totalCredits:
+              (state.stats ? state.stats.totalCredits || 0 : 0) + credits,
+          },
+        });
+
+        return Promise.resolve({
+          success: true,
+          message: "Missão completada (modo offline)",
+          offline: true,
+          reward: mission ? mission.reward : { xp: xp, credits: credits },
+        });
+      }
+
       return Promise.resolve({
         success: false,
         error: "Jogador não cadastrado",
       });
     },
 
-    completeMission: function (missionId) {
-      return this._post("/missions/" + missionId + "/complete", {});
-    },
-
+    /* ===========================================
+       JOGADOR
+       =========================================== */
     getPlayer: function () {
+      if (!_playerId && !_isOnline) {
+        return Promise.resolve(MOCK.player);
+      }
       if (!_playerId) return Promise.resolve(MOCK.player);
+
       return this._request("/player/" + _playerId).then(function (data) {
         return data || MOCK.player;
       });
     },
 
+    /**
+     * Cria jogador - salva localmente também
+     */
     createPlayer: function (name, codename, specialty) {
-      return this._post("/player", {
-        name: name,
-        codename: codename,
-        specialty: specialty,
-      }).then(function (data) {
-        if (data && data.id) {
-          _playerId = data.id;
-          localStorage.setItem("nexus_player_id", _playerId);
-        }
-        return data;
+      var self = this;
+
+      // Tenta criar no backend
+      if (_isOnline) {
+        return this._post("/player", {
+          name: name,
+          codename: codename,
+          specialty: specialty,
+        }).then(function (data) {
+          if (data && data.id) {
+            _playerId = data.id;
+            localStorage.setItem("nexus_player_id", _playerId);
+          }
+          // Salva dados localmente também
+          self.setState({
+            director: {
+              name: name,
+              codename: codename,
+              specialty: specialty,
+            },
+            player: data || { name: name, codename: codename },
+          });
+          return data;
+        });
+      }
+
+      // Modo offline - salva apenas localmente
+      this.setState({
+        director: {
+          name: name,
+          codename: codename,
+          specialty: specialty,
+        },
+        player: {
+          name: name,
+          codename: codename,
+          specialty: specialty,
+          level: 1,
+          xp: 0,
+        },
+      });
+
+      return Promise.resolve({
+        success: true,
+        offline: true,
+        director: { name: name, codename: codename, specialty: specialty },
       });
     },
 
@@ -790,6 +1042,9 @@
       });
     },
 
+    /* ===========================================
+       ARQUIVO / ACERVO
+       =========================================== */
     getArtifacts: function () {
       return this._request("/archive/artifacts").then(function (data) {
         if (data && data.artifacts) return data.artifacts;
@@ -814,17 +1069,11 @@
 
     savePlayer: function (playerData) {
       if (!_isOnline || !_playerId) return Promise.resolve(false);
-      return fetch(BASE_URL + "/player/" + _playerId, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(playerData),
-      })
-        .then(function (res) {
-          return res.ok;
-        })
-        .catch(function () {
-          return false;
-        });
+      return this._put("/player/" + _playerId, playerData).then(
+        function (data) {
+          return !!data;
+        },
+      );
     },
 
     /* ===========================================
@@ -843,15 +1092,21 @@
         }
         return saved ? JSON.parse(saved) : null;
       } catch (e) {
+        console.error("[ARCHIVE API] Erro ao ler state:", e);
         return null;
       }
     },
 
     setState: function (partial) {
-      var current = this.getState() || {};
-      var merged = Object.assign({}, current, partial);
-      localStorage.setItem(STATE_KEY, JSON.stringify(merged));
-      return merged;
+      try {
+        var current = this.getState() || {};
+        var merged = Object.assign({}, current, partial);
+        localStorage.setItem(STATE_KEY, JSON.stringify(merged));
+        return merged;
+      } catch (e) {
+        console.error("[ARCHIVE API] Erro ao salvar state:", e);
+        return null;
+      }
     },
 
     clearState: function () {
@@ -859,6 +1114,20 @@
       localStorage.removeItem(LEGACY_STATE_KEY);
       localStorage.removeItem("nexus_player_id");
       _playerId = null;
+      _initPromise = null;
+    },
+
+    /* ===========================================
+       HELPERS - INFORMAÇÕES DO DIRETOR
+       =========================================== */
+    isDirectorLoggedIn: function () {
+      var s = this.getState();
+      return !!(s && s.director && s.director.name);
+    },
+
+    getDirector: function () {
+      var s = this.getState();
+      return s && s.director ? s.director : null;
     },
 
     getDirectorName: function () {
@@ -879,34 +1148,106 @@
         ? s.director.specialty
         : null;
     },
+
+    /* ===========================================
+       NOTIFICAÇÕES (TOAST)
+       =========================================== */
     notify: function (message, type) {
       type = type || "info";
+
+      // Tenta usar o sistema de toast do index.html se disponível
+      if (window.parent && window.parent !== window) {
+        // Estamos dentro de um iframe - tenta comunicar com o pai
+        try {
+          window.parent.postMessage(
+            {
+              type: "ARCHIVE_NOTIFY",
+              message: message,
+              notifyType: type,
+            },
+            "*",
+          );
+          return;
+        } catch (e) {
+          // Continua para fallback
+        }
+      }
+
+      // Fallback: criar toast inline
       var toast = document.createElement("div");
-      toast.className = "archive-notify " + type;
+      toast.className = "archive-notify archive-notify-" + type;
       toast.textContent = message;
+
+      // Estilos
+      toast.style.cssText = [
+        "position: fixed",
+        "bottom: 20px",
+        "right: 20px",
+        "padding: 15px 25px",
+        "z-index: 99999",
+        "border-radius: 4px",
+        "font-family: 'JetBrains Mono', monospace",
+        "font-size: 12px",
+        "letter-spacing: 0.1em",
+        "text-transform: uppercase",
+        "color: #FFBF00",
+        "border: 1px solid #C5A059",
+        "box-shadow: 0 8px 24px rgba(0,0,0,0.5)",
+        "transition: opacity 0.5s ease",
+        "max-width: 400px",
+      ].join(";");
+
+      // Cor de fundo por tipo
+      if (type === "error") {
+        toast.style.background = "#8B0000";
+      } else if (type === "success") {
+        toast.style.background = "#004400";
+      } else if (type === "warning") {
+        toast.style.background = "#664400";
+      } else {
+        toast.style.background = "#003344";
+      }
+
       document.body.appendChild(toast);
-      toast.style.position = "fixed";
-      toast.style.bottom = "20px";
-      toast.style.right = "20px";
-      toast.style.padding = "15px 25px";
-      if (type === "error") toast.style.background = "#8B0000";
-      else if (type === "success") toast.style.background = "#004400";
-      else toast.style.background = "#003344";
-      toast.style.color = "#FFBF00";
-      toast.style.border = "1px solid #C5A059";
-      toast.style.zIndex = "9999";
-      toast.style.borderRadius = "4px";
-      toast.style.fontFamily = "JetBrains Mono, monospace";
-      toast.style.textTransform = "uppercase";
+
+      // Remove após 3 segundos
       setTimeout(function () {
         toast.style.opacity = "0";
         setTimeout(function () {
-          toast.remove();
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
         }, 500);
       }, 3000);
     },
+
+    /* ===========================================
+       DADOS MOCK (acesso direto para debugging)
+       =========================================== */
+    getMockData: function () {
+      return MOCK;
+    },
+
+    /* ===========================================
+       BASE URL (para debugging)
+       =========================================== */
+    getBaseUrl: function () {
+      return BASE_URL;
+    },
   };
+
+  /* ===========================================
+     LISTENER PARA MENSAGENS DE IFRAMES
+     (permite que telas individuais enviem notificações)
+     =========================================== */
+  window.addEventListener("message", function (event) {
+    if (event.data && event.data.type === "ARCHIVE_NOTIFY") {
+      API.notify(event.data.message, event.data.notifyType);
+    }
+  });
 
   /* Expor globalmente */
   window.ArchiveAPI = API;
+
+  console.log("[ARCHIVE API] 📦 Cliente carregado - BASE_URL:", BASE_URL);
 })();

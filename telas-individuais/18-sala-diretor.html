@@ -6,38 +6,45 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
+    <title>ARCHIVE OS — Sala do Diretor</title>
 
-    <!-- Animações Archive OS -->
-    <link rel="stylesheet" href="/animations.css" />
-    <script src="/animations.js"></script>
-
-    <!-- Favicon -->
+    <!-- ========================================
+         FAVICON (caminho absoluto)
+         ======================================== -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
 
-    <title>ARCHIVE OS — Sala do Diretor</title>
+    <!-- ========================================
+         FONTES CORRETAS (Google Fonts)
+         ======================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- ========================================
+         FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+         ======================================== -->
     <link
-      href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
-    <link
-      href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css"
-      rel="stylesheet"
-    />
+
+    <!-- ========================================
+         SCRIPTS DO SISTEMA (caminhos absolutos)
+         ======================================== -->
     <script src="/api.js"></script>
     <script src="/audio-system.js"></script>
+
+    <!-- ========================================
+         ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+         ======================================== -->
+    <link rel="stylesheet" href="/animations.css" />
+    <script src="/animations.js"></script>
 
     <style>
       :root {
@@ -544,6 +551,10 @@
         display: flex;
         gap: 14px;
       }
+      .icons a {
+        display: inline-flex;
+        text-decoration: none;
+      }
       .icons svg {
         width: 20px;
         height: 20px;
@@ -699,6 +710,7 @@
         cursor: pointer;
         transition: all 0.3s;
         text-align: left;
+        text-decoration: none;
       }
       .si:hover {
         background: rgba(197, 160, 89, 0.05);
@@ -729,6 +741,9 @@
         cursor: pointer;
         transition: all 0.3s;
         position: relative;
+        text-decoration: none;
+        text-align: center;
+        display: block;
         clip-path: polygon(
           7px 0,
           calc(100% - 7px) 0,
@@ -827,6 +842,8 @@
       .tbody {
         position: relative;
         min-height: 120px;
+        max-height: 200px;
+        overflow-y: auto;
       }
       .tl {
         font-family: "JetBrains Mono", monospace;
@@ -934,6 +951,7 @@
         justify-content: space-between;
         align-items: flex-start;
         margin-bottom: 14px;
+        gap: 12px;
       }
       .dlab {
         font-family: "JetBrains Mono", monospace;
@@ -959,6 +977,7 @@
         font-weight: 700;
         color: var(--bronze);
         letter-spacing: 0.12em;
+        white-space: nowrap;
       }
       .dtx {
         font-family: "Manrope", sans-serif;
@@ -1010,11 +1029,15 @@
           0 10px
         );
       }
-      .journey:hover {
+      .journey:hover:not(:disabled) {
         background: var(--amber);
         border-color: var(--amber);
         color: var(--surface);
         box-shadow: 0 0 30px rgba(255, 191, 0, 0.5);
+      }
+      .journey:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
       }
       .journey svg {
         width: 20px;
@@ -1024,7 +1047,7 @@
         fill: none;
         transition: transform 0.3s;
       }
-      .journey:hover svg {
+      .journey:hover:not(:disabled) svg {
         transform: rotate(45deg);
       }
 
@@ -1066,9 +1089,28 @@
         border-radius: 50%;
         animation: pu 2s ease-in-out infinite;
       }
+
+      /* Responsivo */
+      @media (max-width: 1200px) {
+        .side { width: 220px; }
+        .term { width: 300px; }
+        .doss { width: 320px; }
+      }
+      @media (max-width: 900px) {
+        .hdr { padding: 0 20px; }
+        .nav { display: none; }
+        .side { display: none; }
+        .term { right: 20px; width: calc(100% - 40px); top: 120px; }
+        .doss { display: none; }
+        .journey { left: 20px; right: 20px; bottom: 60px; justify-content: center; }
+        .globed { left: 50%; transform: translateX(-50%); }
+        footer { padding: 0 20px; }
+        .ftc { gap: 12px; font-size: 10px; }
+        .loc { font-size: 10px; padding: 7px 14px; }
+      }
     </style>
   </head>
-  <body>
+    <body>
     <div class="grain"></div>
     <div class="scan"></div>
     <div class="vig"></div>
@@ -1106,31 +1148,38 @@
 
       <div class="hdr">
         <div class="logo">ARCHIVE</div>
+        <!-- ✅ NAVEGAÇÃO HEADER CORRIGIDA -->
         <nav class="nav">
           <a href="/telas-individuais/05-globo.html">Globo</a>
-          <a href="/telas-individuais/15-museu.html" class="on">Banco de Dados</a>
+          <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
           <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
-          <a href="/telas-individuais/07-briefing.html">Diário de Bordo</a>
+          <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+          <a href="/telas-individuais/18-sala-diretor.html" class="on">Sala do Diretor</a>
         </nav>
         <div class="icons">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <path
-              d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-            />
-          </svg>
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 6v6l4 2" />
-          </svg>
+          <a href="/telas-individuais/05-globo.html" title="Globo">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path
+                d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+              />
+            </svg>
+          </a>
+          <a href="/telas-individuais/12-diario.html" title="Diário">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+          </a>
         </div>
       </div>
 
       <div class="loc">
         <svg viewBox="0 0 24 24">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" /></svg
-        >LOC: TELA 06 // SALA DO DIRETOR
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+        LOC: TELA 18 // SALA DO DIRETOR
       </div>
 
       <aside class="side">
@@ -1149,40 +1198,53 @@
             </p>
           </div>
         </div>
+        <!-- ✅ SIDEBAR CORRIGIDA - CAMINHOS CORRETOS -->
         <nav class="snav">
-          <a href="/telas-individuais/15-museu.html" class="si on"
-            ><svg viewBox="0 0 24 24">
+          <a href="/telas-individuais/08-banco-dados.html" class="si">
+            <svg viewBox="0 0 24 24">
               <path
                 d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
-              /></svg
-            >Banco de Dados</a
-          >
-          <a href="/telas-individuais/05-globo.html" class="si"
-            ><svg viewBox="0 0 24 24">
+              />
+            </svg>
+            Banco de Dados
+          </a>
+          <a href="/telas-individuais/05-globo.html" class="si">
+            <svg viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" />
               <path
                 d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-              /></svg
-            >Globo Terrestre</a
-          >
-          <a href="/telas-individuais/11-passaporte.html" class="si"
-            ><svg viewBox="0 0 24 24">
+              />
+            </svg>
+            Globo Terrestre
+          </a>
+          <a href="/telas-individuais/11-passaporte.html" class="si">
+            <svg viewBox="0 0 24 24">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path
                 d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
-              /></svg
-            >Passaporte</a
-          >
-          <a href="/telas-individuais/07-briefing.html" class="si"
-            ><svg viewBox="0 0 24 24">
+              />
+            </svg>
+            Passaporte
+          </a>
+          <a href="/telas-individuais/12-diario.html" class="si">
+            <svg viewBox="0 0 24 24">
               <path
                 d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
               />
-              <polyline points="14 2 14 8 20 8" /></svg
-            >Logbook</a
-          >
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            Diário de Bordo
+          </a>
+          <a href="/telas-individuais/18-sala-diretor.html" class="si on">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Sala do Diretor
+          </a>
         </nav>
-        <button class="btni" id="btnIntel">Acessar Intel</button>
+        <!-- ✅ BOTÃO CORRIGIDO - Caminho absoluto para Banco de Dados -->
+        <a href="/telas-individuais/08-banco-dados.html" class="btni" id="btnIntel">Acessar Intel</a>
       </aside>
 
       <div class="term">
@@ -1219,8 +1281,9 @@
           <circle cx="12" cy="12" r="10" />
           <polygon
             points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
-          /></svg
-        >Iniciar Viagem
+          />
+        </svg>
+        Iniciar Viagem
       </button>
 
       <footer>
@@ -1234,183 +1297,255 @@
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        // 1. Inicializar API e buscar dados
-        await ArchiveAPI.init();
-        const state = ArchiveAPI.getState();
-        const director =
-          state && state.director
-            ? state.director
-            : {
-                name: "Diretor",
-                codename: "NOVICE",
-                specialty: "Investigação",
-              };
-        const player = await ArchiveAPI.getPlayer();
+      (function() {
+        "use strict";
 
-        // Atualizar Perfil
-        document.getElementById("pName").textContent = (
-          player.name || director.name
-        ).toUpperCase();
-        document.getElementById("pCodename").textContent =
-          `${player.codename || director.codename} | ${player.rank || "Diretor Interino"}`;
-        document.getElementById("pCredits").textContent =
-          `CR ${(player.credits || 0).toLocaleString("pt-BR")}`;
-        document.getElementById("termId").textContent =
-          `ID: ${(player.codename || "NOVICE").toUpperCase()}-${Math.floor(Math.random() * 900) + 100}`;
-
-        // 2. Buscar Missão Ativa para o Dossiê
-        const missions = await ArchiveAPI.getMissions();
-        const activeMission =
-          missions.find((m) => m.status === "ativa") || missions[0];
-
-        if (activeMission) {
-          document.getElementById("dossierTitle").textContent =
-            `Dossiê: ${activeMission.codename}`;
-          document.getElementById("dossierText1").textContent =
-            `Relatório de Inteligência localizado em ${activeMission.location}. Alvo principal: ${activeMission.title}.`;
-          document.getElementById("dossierText2").textContent =
-            `Status da Missão: ${activeMission.status.toUpperCase()}. Prioridade: ${activeMission.priority}. Recomenda-se ação imediata.`;
-          const city = activeMission.location
-            .split(",")[0]
-            .trim()
-            .toUpperCase();
-          document.getElementById("dossierRef").textContent =
-            `REF: ${String(activeMission.id).padStart(3, "0")}-${city}-A`;
-        }
-
-        // 3. Terminal Dinâmico
-        const initLogs = [
-          `Inicializando ARCHIVE OS v2.0...`,
-          `Autenticando Operativo: ${player.codename || "NOVICE"}...`,
-          `Conexão com Backend: ${ArchiveAPI.online ? "ESTABELECIDA" : "MODO OFFLINE (MOCK ATIVO)"}`,
-          `Carregando módulos de inteligência...`,
-          `Sistema pronto. Aguardando input.`,
-        ];
-
-        const liveLogs = [
-          `Varredura do Setor ${Math.floor(Math.random() * 9) + 1} concluída.`,
-          `Pacote criptografado recebido de ${activeMission ? activeMission.location.split(",")[0] : "Viena"}.`,
-          `Assinatura de ${activeMission ? activeMission.codename : "ALVO DESCONHECIDO"} detectada.`,
-          `Nó_44 respondeu ao handshake.`,
-          `Cache de dossiês sincronizado.`,
-          `Intercepto de áudio arquivado.`,
-          `Contramedidas em modo passivo.`,
-        ];
-
-        const tb = document.getElementById("tbody");
-        let li = 0;
-
-        function addLine(txt, hi, cur) {
-          const el = document.createElement("div");
-          el.className = "tl" + (hi ? " hi" : "");
-          el.style.animationDelay = "0s";
-          tb.appendChild(el);
-
-          let k = 0;
-          const iv = setInterval(() => {
-            if (k < txt.length) {
-              el.textContent = txt.substring(0, k + 1);
-              k++;
-            } else {
-              clearInterval(iv);
-              if (cur) el.innerHTML = txt + '<span class="tcur"></span>';
+        /* ============================================
+           UTILITÁRIOS
+           ============================================ */
+        function playSound(type) {
+          if (!window.ArchiveAudio) return;
+          try {
+            if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+              window.ArchiveAudio.playClick();
+            } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+              window.ArchiveAudio.playSuccess();
+            } else if (type === 'mission' && typeof window.ArchiveAudio.playMissionAccept === 'function') {
+              window.ArchiveAudio.playMissionAccept();
             }
-          }, 26);
-
-          while (tb.children.length > 6) tb.removeChild(tb.firstChild);
-          tb.scrollTop = tb.scrollHeight;
-        }
-
-        function runInit() {
-          if (li < initLogs.length) {
-            addLine(initLogs[li], li === 2, li === initLogs.length - 1);
-            li++;
-            setTimeout(runInit, 620);
-          } else {
-            setTimeout(runLive, 4000);
+          } catch (e) {
+            console.warn('[SALA] Erro ao tocar som:', e);
           }
         }
 
-        function runLive() {
-          const m = liveLogs[Math.floor(Math.random() * liveLogs.length)];
-          const last = tb.lastChild;
-          if (last) {
-            const c = last.querySelector(".tcur");
-            if (c) c.remove();
+        function showNotification(message, type) {
+          type = type || 'info';
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+            window.ArchiveAPI.notify(message, type);
           }
-          addLine(m, false, true);
-          setTimeout(runLive, 4200 + Math.random() * 2500);
         }
 
-        runInit();
+        /* ============================================
+           INICIALIZAÇÃO PRINCIPAL
+           ============================================ */
+        document.addEventListener("DOMContentLoaded", async function() {
+          try {
+            // 1. Inicializar API e buscar dados
+            if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+              await window.ArchiveAPI.init();
+            }
 
-        // 4. Interações (Caminhos absolutos corrigidos)
-        document.getElementById("deskGlobe").addEventListener("click", () => {
-          if (window.ArchiveAudio) ArchiveAudio.playClick();
-          window.location.href = "/telas-individuais/05-globo.html";
+            var state = window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function'
+              ? window.ArchiveAPI.getState()
+              : null;
+            var director = (state && state.director)
+              ? state.director
+              : { name: "Diretor", codename: "NOVICE", specialty: "Investigação" };
+
+            var player = null;
+            if (window.ArchiveAPI && typeof window.ArchiveAPI.getPlayer === 'function') {
+              try {
+                player = await window.ArchiveAPI.getPlayer();
+              } catch (e) {
+                console.warn('[SALA] getPlayer falhou:', e);
+              }
+            }
+
+            // Atualizar Perfil
+            var pNameEl = document.getElementById("pName");
+            var pCodenameEl = document.getElementById("pCodename");
+            var pCreditsEl = document.getElementById("pCredits");
+            var termIdEl = document.getElementById("termId");
+
+            var playerName = (player && player.name) ? player.name : (director.name || 'DIRETOR');
+            var playerCodename = (player && player.codename) ? player.codename : (director.codename || 'NOVICE');
+            var playerRank = (player && player.rank) ? player.rank : 'Diretor Interino';
+            var playerCredits = (player && player.credits) ? player.credits : 0;
+
+            if (pNameEl) pNameEl.textContent = playerName.toUpperCase();
+            if (pCodenameEl) pCodenameEl.textContent = playerCodename + ' | ' + playerRank;
+            if (pCreditsEl) pCreditsEl.textContent = 'CR ' + playerCredits.toLocaleString('pt-BR');
+            if (termIdEl) termIdEl.textContent = 'ID: ' + playerCodename.toUpperCase() + '-' + (Math.floor(Math.random() * 900) + 100);
+
+            // 2. Buscar Missão Ativa para o Dossiê
+            var missions = [];
+            if (window.ArchiveAPI && typeof window.ArchiveAPI.getMissions === 'function') {
+              try {
+                missions = await window.ArchiveAPI.getMissions();
+              } catch (e) {
+                console.warn('[SALA] getMissions falhou:', e);
+              }
+            }
+
+            var activeMission = null;
+            for (var i = 0; i < missions.length; i++) {
+              if (missions[i].status === 'ativa') {
+                activeMission = missions[i];
+                break;
+              }
+            }
+            if (!activeMission && missions.length > 0) {
+              activeMission = missions[0];
+            }
+
+            if (activeMission) {
+              var dossierTitleEl = document.getElementById("dossierTitle");
+              var dossierText1El = document.getElementById("dossierText1");
+              var dossierText2El = document.getElementById("dossierText2");
+              var dossierRefEl = document.getElementById("dossierRef");
+
+              if (dossierTitleEl) dossierTitleEl.textContent = 'Dossiê: ' + activeMission.codename;
+              if (dossierText1El) dossierText1El.textContent = 'Relatório de Inteligência localizado em ' + activeMission.location + '. Alvo principal: ' + activeMission.title + '.';
+              if (dossierText2El) dossierText2El.textContent = 'Status da Missão: ' + activeMission.status.toUpperCase() + '. Prioridade: ' + activeMission.priority + '. Recomenda-se ação imediata.';
+              if (dossierRefEl) {
+                var city = activeMission.location.split(',')[0].trim().toUpperCase();
+                dossierRefEl.textContent = 'REF: ' + String(activeMission.id).padStart(3, '0') + '-' + city + '-A';
+              }
+            }
+
+            // 3. Terminal Dinâmico
+            var initLogs = [
+              'Inicializando ARCHIVE OS v2.0...',
+              'Autenticando Operativo: ' + playerCodename + '...',
+              'Conexão com Backend: ' + (window.ArchiveAPI && window.ArchiveAPI.online ? 'ESTABELECIDA' : 'MODO OFFLINE (MOCK ATIVO)'),
+              'Carregando módulos de inteligência...',
+              'Sistema pronto. Aguardando input.',
+            ];
+
+            var liveLogs = [
+              'Varredura do Setor ' + (Math.floor(Math.random() * 9) + 1) + ' concluída.',
+              'Pacote criptografado recebido de ' + (activeMission ? activeMission.location.split(',')[0] : 'Viena') + '.',
+              'Assinatura de ' + (activeMission ? activeMission.codename : 'ALVO DESCONHECIDO') + ' detectada.',
+              'Nó_44 respondeu ao handshake.',
+              'Cache de dossiês sincronizado.',
+              'Intercepto de áudio arquivado.',
+              'Contramedidas em modo passivo.',
+            ];
+
+            var tb = document.getElementById("tbody");
+            var li = 0;
+
+            function addLine(txt, hi, cur) {
+              if (!tb) return;
+              var el = document.createElement("div");
+              el.className = "tl" + (hi ? " hi" : "");
+              el.style.animationDelay = "0s";
+              tb.appendChild(el);
+
+              var k = 0;
+              var iv = setInterval(function() {
+                if (k < txt.length) {
+                  el.textContent = txt.substring(0, k + 1);
+                  k++;
+                } else {
+                  clearInterval(iv);
+                  if (cur) el.innerHTML = txt + '<span class="tcur"></span>';
+                }
+              }, 26);
+
+              while (tb.children.length > 6) tb.removeChild(tb.firstChild);
+              tb.scrollTop = tb.scrollHeight;
+            }
+
+            function runInit() {
+              if (li < initLogs.length) {
+                addLine(initLogs[li], li === 2, li === initLogs.length - 1);
+                li++;
+                setTimeout(runInit, 620);
+              } else {
+                setTimeout(runLive, 4000);
+              }
+            }
+
+            function runLive() {
+              var m = liveLogs[Math.floor(Math.random() * liveLogs.length)];
+              var last = tb.lastChild;
+              if (last) {
+                var c = last.querySelector(".tcur");
+                if (c) c.remove();
+              }
+              addLine(m, false, true);
+              setTimeout(runLive, 4200 + Math.random() * 2500);
+            }
+
+            runInit();
+
+            // 4. Interações
+            var deskGlobe = document.getElementById("deskGlobe");
+            if (deskGlobe) {
+              deskGlobe.addEventListener("click", function() {
+                playSound('click');
+                window.location.href = "/telas-individuais/05-globo.html";
+              });
+            }
+
+            var journeyBtn = document.getElementById("journey");
+            if (journeyBtn) {
+              journeyBtn.addEventListener("click", function() {
+                if (this.disabled) return;
+                playSound('mission');
+
+                // Caminho absoluto para garantir que o Netlify encontre o arquivo
+                var target = activeMission
+                  ? '/telas-individuais/07-briefing.html?id=' + activeMission.id
+                  : '/telas-individuais/05-globo.html';
+
+                this.disabled = true;
+                this.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Redirecionando...';
+                this.style.background = "var(--amber)";
+                this.style.color = "var(--surface)";
+
+                addLine(
+                  'Protocolo de viagem iniciado. Destino: ' + (activeMission ? activeMission.location : 'Globo Terrestre') + '.',
+                  true,
+                  true
+                );
+
+                showNotification('Iniciando viagem para ' + (activeMission ? activeMission.location : 'Globo'), 'success');
+
+                setTimeout(function() {
+                  window.location.href = target;
+                }, 1500);
+              });
+            }
+
+            // Nota: Removidos event listeners de .si que apenas mudavam classe .on
+            // pois conflitam com navegação natural dos <a href="...">
+
+            // 5. Efeitos Visuais (Poeira)
+            var dustContainer = document.getElementById("dust");
+            if (dustContainer) {
+              for (var i = 0; i < 22; i++) {
+                var d = document.createElement("div");
+                d.className = "dust";
+                d.style.left = (30 + Math.random() * 40) + "%";
+                d.style.animationDuration = (9 + Math.random() * 10) + "s";
+                d.style.animationDelay = (Math.random() * 10) + "s";
+                d.style.opacity = (0.3 + Math.random() * 0.5).toString();
+                dustContainer.appendChild(d);
+              }
+            }
+
+            playSound('success');
+
+          } catch (err) {
+            console.error('[SALA] Erro na inicialização:', err);
+            showNotification('Sala do Diretor carregada em modo offline', 'warning');
+          }
         });
 
-        document
-          .getElementById("journey")
-          .addEventListener("click", function () {
-            if (window.ArchiveAudio) ArchiveAudio.playClick();
-            // Caminho absoluto para garantir que o Netlify encontre o arquivo
-            const target = activeMission
-              ? `/telas-individuais/07-briefing.html?id=${activeMission.id}`
-              : "/telas-individuais/05-globo.html";
-
-            this.innerHTML =
-              '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M9 11l3 3L22 4"/></svg> Redirecionando...';
-            this.style.background = "var(--amber)";
-            this.style.color = "var(--surface)";
-            addLine(
-              `Protocolo de viagem iniciado. Destino: ${activeMission ? activeMission.location : "Globo Terrestre"}.`,
-              true,
-              true,
-            );
-
-            setTimeout(() => {
-              window.location.href = target;
-            }, 1500);
-          });
-
-        document.getElementById("btnIntel").addEventListener("click", () => {
-          if (window.ArchiveAudio) ArchiveAudio.playClick();
-          window.location.href = "/telas-individuais/15-museu.html";
-        });
-
-        document.querySelectorAll(".si").forEach((i) =>
-          i.addEventListener("click", () => {
-            if (window.ArchiveAudio) ArchiveAudio.playClick();
-            document
-              .querySelectorAll(".si")
-              .forEach((x) => x.classList.remove("on"));
-            i.classList.add("on");
-          }),
-        );
-
-        // 5. Efeitos Visuais (Poeira)
-        const dustContainer = document.getElementById("dust");
-        for (let i = 0; i < 22; i++) {
-          const d = document.createElement("div");
-          d.className = "dust";
-          d.style.left = 30 + Math.random() * 40 + "%";
-          d.style.animationDuration = 9 + Math.random() * 10 + "s";
-          d.style.animationDelay = Math.random() * 10 + "s";
-          d.style.opacity = 0.3 + Math.random() * 0.5;
-          dustContainer.appendChild(d);
-        }
-      });
-
-      // Relógio do sistema
-      setInterval(() => {
-        const n = new Date();
-        document.getElementById("ck").textContent =
-          String(n.getHours()).padStart(2, "0") +
-          ":" +
-          String(n.getMinutes()).padStart(2, "0");
-      }, 1000);
+        // Relógio do sistema
+        setInterval(function() {
+          var n = new Date();
+          var ck = document.getElementById("ck");
+          if (ck) {
+            ck.textContent =
+              String(n.getHours()).padStart(2, "0") +
+              ":" +
+              String(n.getMinutes()).padStart(2, "0");
+          }
+        }, 1000);
+      })();
     </script>
 
     <!-- Service Worker para PWA -->
@@ -1418,8 +1553,8 @@
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("/sw.js")
-          .then(() => console.log("[PWA] Service Worker registrado"))
-          .catch((err) => console.error("[PWA] Falha no registro:", err));
+          .then(function() { console.log("[PWA] Service Worker registrado"); })
+          .catch(function(err) { console.error("[PWA] Falha no registro:", err); });
       }
     </script>
   </body>

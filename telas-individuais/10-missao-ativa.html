@@ -1,32 +1,55 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Missão Ativa</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Missão Ativa</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Manrope',sans-serif;color:var(--on);}
+
+/* OVERLAYS */
 .grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.04;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
 @keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
 .scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.03),rgba(0,0,0,.03) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .vig{position:fixed;inset:0;pointer-events:none;z-index:8998;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%);}
+
+/* CONTAINER */
 .mis{position:relative;width:100vw;height:100vh;overflow:hidden;background:linear-gradient(180deg,#0a0d12 0%,#151a22 30%,#1e2530 55%,#0f1318 100%);}
+
+/* AMBIENTE */
 .sky{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(197,160,89,.08) 0%,transparent 50%),radial-gradient(ellipse at 30% 60%,rgba(0,51,68,.15) 0%,transparent 60%);animation:sp 8s ease-in-out infinite;}
 @keyframes sp{0%,100%{opacity:.7}50%{opacity:1}}
 .blds{position:absolute;bottom:30%;left:0;right:0;height:42%;display:flex;align-items:flex-end;gap:2px;}
@@ -44,7 +67,47 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .neon{position:absolute;bottom:42%;right:8%;font-family:'JetBrains Mono',monospace;font-size:22px;color:#7fd4d4;letter-spacing:.1em;text-shadow:0 0 12px #7fd4d4,0 0 24px rgba(127,212,212,.5);opacity:.7;animation:nf 3s ease-in-out infinite;}
 @keyframes nf{0%,100%{opacity:.7}45%{opacity:.4}50%{opacity:.8}}
 .fog{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(20,25,32,.3) 40%,rgba(20,25,32,.7) 80%,rgba(10,13,18,.95) 100%);}
-.hud{position:absolute;top:0;left:0;right:0;height:80px;z-index:40;background:linear-gradient(180deg,rgba(10,13,18,.95) 0%,transparent 100%);display:flex;align-items:flex-start;justify-content:space-between;padding:20px 48px;}
+
+/* ✅ BOTÃO DE SAIR DA MISSÃO (FIXO) */
+.exit-btn {
+  position: absolute;
+  top: 20px;
+  right: 48px;
+  z-index: 50;
+  padding: 10px 18px;
+  background: rgba(10, 13, 18, 0.85);
+  border: 0.5px solid var(--gold);
+  color: var(--onv);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+}
+.exit-btn:hover {
+  background: var(--amber);
+  color: var(--surface);
+  border-color: var(--amber);
+  box-shadow: 0 0 15px rgba(255, 191, 0, 0.4);
+}
+.exit-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+/* HUD */
+.hud{position:absolute;top:0;left:0;right:180px;height:80px;z-index:40;background:linear-gradient(180deg,rgba(10,13,18,.95) 0%,transparent 100%);display:flex;align-items:flex-start;justify-content:space-between;padding:20px 48px;}
 .mn{font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-shadow:0 0 20px rgba(197,160,89,.3);}
 .ms{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.15em;margin-top:4px;}
 .hc{display:flex;flex-direction:column;align-items:center;gap:8px;}
@@ -52,22 +115,28 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .obj::before{content:'';width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 8px rgba(255,191,0,0)}}
 .tmr{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;color:var(--on);letter-spacing:.05em;text-shadow:0 0 10px rgba(229,226,225,.2);}
+
+/* ALERTA */
 .alert{position:absolute;top:100px;left:48px;z-index:35;background:rgba(255,191,0,.12);border:.5px solid var(--amber);padding:10px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--amber);text-transform:uppercase;display:flex;align-items:center;gap:10px;backdrop-filter:blur(8px);animation:ap 3s ease-in-out infinite;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);}
 @keyframes ap{0%,100%{opacity:.8}50%{opacity:1}}
 .alert .d{width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pu 1.5s ease-in-out infinite;}
-.intel{position:absolute;left:48px;top:180px;width:320px;z-index:30;background:rgba(0,51,68,.18);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:24px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
+
+/* INTEL */
+.intel{position:absolute;left:48px;top:180px;width:320px;z-index:30;background:rgba(0,51,68,.18);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:24px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);max-height:calc(100vh - 340px);overflow-y:auto;}
 .intel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .ih{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
 .ih svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .it{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
 .ii{margin-bottom:20px;position:relative;}
 .il{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
-.iv{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--on);letter-spacing:.05em;display:flex;align-items:center;gap:8px;}
+.iv{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--on);letter-spacing:.05em;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .iv .lv{color:var(--amber);font-size:10px;letter-spacing:.1em;}
 .iv .lv::before{content:'';width:6px;height:6px;background:var(--amber);border-radius:50%;animation:pu 1.5s ease-in-out infinite;}
 .iimg{width:100%;height:96px;background:linear-gradient(135deg,#2a2520,#1a1510);margin-top:8px;position:relative;overflow:hidden;background-size:cover;background-position:center;}
 .iimg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(255,248,220,.1),transparent 60%);}
 .iimg .lab{position:absolute;bottom:7px;left:7px;font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:.1em;background:rgba(10,13,18,.8);padding:3px 7px;}
+
+/* OBJETIVOS */
 .objs{position:absolute;left:48px;top:560px;width:320px;z-index:30;background:rgba(0,51,68,.18);backdrop-filter:blur(22px);border:.5px solid var(--gold);padding:20px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
 .objs::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .ot{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px;position:relative;}
@@ -78,28 +147,85 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Ma
 .or.done .bx svg{opacity:1;}
 .or .tx{font-family:'Manrope',sans-serif;font-size:13px;color:var(--onv);transition:all .3s;}
 .or.done .tx{color:var(--on);text-decoration:line-through;opacity:.6;}
+
+/* MARCADORES */
 .mk{position:absolute;z-index:25;cursor:pointer;transition:transform .3s;}
 .mk:hover{transform:scale(1.15);}
 .mk .ic{width:48px;height:48px;background:rgba(255,191,0,.2);border:1.5px solid var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(255,191,0,.4);animation:mp 2s ease-in-out infinite;}
 @keyframes mp{0%,100%{box-shadow:0 0 20px rgba(255,191,0,.4)}50%{box-shadow:0 0 30px rgba(255,191,0,.7)}}
 .mk .ic svg{width:24px;height:24px;stroke:var(--amber);stroke-width:1.5;fill:none;}
 .mk .lb{position:absolute;top:56px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.1em;white-space:nowrap;text-shadow:0 0 8px rgba(0,0,0,.8);}
+
+/* INVENTÁRIO */
 .inv{position:absolute;bottom:100px;left:48px;z-index:35;display:flex;flex-direction:column;gap:8px;}
 .inv .il2{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
-.slots{display:flex;gap:12px;}
+.slots{display:flex;gap:12px;flex-wrap:wrap;}
 .sl{width:56px;height:56px;background:rgba(10,13,18,.7);border:1px solid var(--bronze);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;position:relative;}
 .sl:hover{border-color:var(--amber);box-shadow:0 0 15px rgba(255,191,0,.3);}
 .sl svg{width:28px;height:28px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .sl .n{position:absolute;bottom:2px;right:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);}
+
+/* AÇÃO */
 .an{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);z-index:35;padding:18px 48px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .3s;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
-.an:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 30px rgba(255,191,0,.5);}
+.an:hover:not(:disabled){background:var(--amber);border-color:var(--amber);color:var(--surface);box-shadow:0 0 30px rgba(255,191,0,.5);}
+.an:disabled{opacity:0.6;cursor:not-allowed;}
+
+/* MINIMAP */
 .mm{position:absolute;bottom:100px;right:48px;z-index:35;width:160px;height:160px;background:rgba(10,13,18,.8);border:1px solid var(--gold);overflow:hidden;}
 .mm .lab{position:absolute;top:8px;left:8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;z-index:2;pointer-events:none;}
+
+/* FOOTER */
 footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;background:rgba(10,13,18,.95);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
+.ftc{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+
+/* RESPONSIVO */
+@media (max-width: 1200px) {
+  .intel { width: 280px; }
+  .objs { width: 280px; top: 520px; }
+  .mm { width: 140px; height: 140px; }
+  .mn { font-size: 26px; }
+  .tmr { font-size: 24px; }
+  .hud { right: 160px; padding: 18px 32px; }
+  .exit-btn { right: 32px; }
+  .intel, .objs, .alert, .inv { left: 32px; }
+  .mm { right: 32px; }
+}
+
+@media (max-width: 900px) {
+  .hud { right: 0; flex-wrap: wrap; padding: 16px 20px; height: auto; min-height: 80px; gap: 12px; }
+  .hc { align-items: flex-end; }
+  .mn { font-size: 22px; }
+  .tmr { font-size: 20px; }
+  .exit-btn { top: 16px; right: 20px; padding: 8px 14px; font-size: 9px; }
+  .intel { left: 20px; width: calc(100% - 40px); top: 140px; max-height: 200px; position: relative; margin: 0 20px; }
+  .objs { left: 20px; width: calc(100% - 40px); top: auto; position: relative; margin: 10px 20px; }
+  .alert { left: 20px; top: 100px; font-size: 10px; padding: 8px 14px; }
+  .inv { left: 20px; bottom: 80px; }
+  .mm { display: none; }
+  .an { bottom: 60px; padding: 14px 32px; font-size: 12px; }
+  .mk { display: none; }
+  footer { padding: 0 20px; height: auto; min-height: 44px; flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+  .ftc { gap: 12px; font-size: 10px; }
+  .blds { display: none; }
+  .lamp { display: none; }
+  .neon { font-size: 16px; right: 4%; bottom: 38%; }
+}
+
+@media (max-width: 600px) {
+  .hud { padding: 12px 16px; }
+  .mn { font-size: 18px; }
+  .ms { font-size: 9px; }
+  .tmr { font-size: 18px; }
+  .obj { font-size: 10px; }
+  .intel { top: 120px; max-height: 180px; }
+  .inv .il2 { font-size: 9px; }
+  .sl { width: 48px; height: 48px; }
+  .sl svg { width: 24px; height: 24px; }
+  .an { bottom: 50px; padding: 12px 24px; font-size: 11px; width: calc(100% - 40px); left: 20px; transform: none; }
+}
 </style>
 </head>
 <body>
@@ -121,18 +247,45 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
   <div class="street"></div>
   <div class="fog"></div>
 
+  <!-- ✅ BOTÃO DE SAIR DA MISSÃO -->
+  <a href="/telas-individuais/05-globo.html" class="exit-btn" id="exitBtn">
+    <svg viewBox="0 0 24 24">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    <span>Abandonar Missão</span>
+  </a>
+
   <div class="hud">
-    <div><div class="mn" id="missionName">OP: NIGHTFALL</div><div class="ms" id="missionSector">SECTOR_7_G // ARCHIVE_OS</div></div>
-    <div class="hc"><div class="obj" id="mainObj">Objetivo: Aguardando Dados</div><div class="tmr" id="tmr">45:00:00</div></div>
+    <div>
+      <div class="mn" id="missionName">OP: NIGHTFALL</div>
+      <div class="ms" id="missionSector">SECTOR_7_G // ARCHIVE_OS</div>
+    </div>
+    <div class="hc">
+      <div class="obj" id="mainObj">Objetivo: Aguardando Dados</div>
+      <div class="tmr" id="tmr">45:00:00</div>
+    </div>
     <div></div>
   </div>
+  
   <div class="alert"><span class="d"></span>Atividade Suspeita Detectada</div>
 
   <div class="intel">
-    <div class="ih"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><div class="it">Inteligência Coletada</div></div>
-    <div class="ii"><div class="il">Frequência de Rádio</div><div class="iv">142.5 MHz <span class="lv">LIVE</span></div></div>
-    <div class="ii"><div class="il">Documento ID</div><div class="iv" id="docId">VX-99: CLASSIFICADO</div></div>
-    <div class="ii"><div class="il">Arquivo Visual</div><div class="iimg" id="intelImg"><div class="lab">SUJEITO_ALVO</div></div></div>
+    <div class="ih">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <div class="it">Inteligência Coletada</div>
+    </div>
+    <div class="ii">
+      <div class="il">Frequência de Rádio</div>
+      <div class="iv">142.5 MHz <span class="lv">LIVE</span></div>
+    </div>
+    <div class="ii">
+      <div class="il">Documento ID</div>
+      <div class="iv" id="docId">VX-99: CLASSIFICADO</div>
+    </div>
+    <div class="ii">
+      <div class="il">Arquivo Visual</div>
+      <div class="iimg" id="intelImg"><div class="lab">SUJEITO_ALVO</div></div>
+    </div>
   </div>
 
   <div class="objs">
@@ -140,9 +293,18 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
     <!-- Objetivos injetados via JS -->
   </div>
 
-  <div class="mk" style="left:35%;top:55%"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><div class="lb">Inspecionar</div></div>
-  <div class="mk" style="left:58%;top:62%"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="lb">Entrar</div></div>
-  <div class="mk" style="left:78%;top:48%"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="lb">Sujeito</div></div>
+  <div class="mk" style="left:35%;top:55%">
+    <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+    <div class="lb">Inspecionar</div>
+  </div>
+  <div class="mk" style="left:58%;top:62%">
+    <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="lb">Entrar</div>
+  </div>
+  <div class="mk" style="left:78%;top:48%">
+    <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="lb">Sujeito</div>
+  </div>
 
   <div class="inv">
     <div class="il2">Inventário Rápido</div>
@@ -170,221 +332,368 @@ footer{position:absolute;bottom:0;left:0;right:0;height:44px;z-index:40;backgrou
     </div>
   </footer>
 </div>
+
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Obter ID da missão da URL ou usar padrão 1
-  const urlParams = new URLSearchParams(window.location.search);
-  const missionId = parseInt(urlParams.get('id')) || 1;
-  
-  try {
-    const missions = await ArchiveAPI.getMissions();
-    const mission = missions.find(m => m.id === missionId) || missions[0];
+(function() {
+  "use strict";
+
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      } else if (type === 'error' && typeof window.ArchiveAudio.playError === 'function') {
+        window.ArchiveAudio.playError();
+      } else if (type === 'mission' && typeof window.ArchiveAudio.playMissionAccept === 'function') {
+        window.ArchiveAudio.playMissionAccept();
+      }
+    } catch (e) {
+      console.warn('[MISSAO] Erro ao tocar som:', e);
+    }
+  }
+
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
+
+  /* ============================================
+     ESTADO DA MISSÃO
+     ============================================ */
+  var currentMission = null;
+  var missionStartTime = Date.now();
+
+  /* ============================================
+     INICIALIZAÇÃO
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    // 1. Obter ID da missão da URL ou usar padrão 1
+    var urlParams = new URLSearchParams(window.location.search);
+    var missionId = parseInt(urlParams.get('id')) || 1;
     
-    if (!mission) {
-      ArchiveAPI.notify('Dados da missão corrompidos.', 'error');
-      return;
+    try {
+      // Inicializa API
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      var missions = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getMissions === 'function') {
+        missions = await window.ArchiveAPI.getMissions();
+      }
+
+      var mission = null;
+      for (var i = 0; i < missions.length; i++) {
+        if (missions[i].id === missionId) {
+          mission = missions[i];
+          break;
+        }
+      }
+      if (!mission && missions.length > 0) {
+        mission = missions[0];
+      }
+      
+      if (!mission) {
+        showNotification('Dados da missão corrompidos', 'error');
+        return;
+      }
+
+      currentMission = mission;
+
+      // 2. Atualizar HUD
+      var nameEl = document.getElementById('missionName');
+      var sectorEl = document.getElementById('missionSector');
+      var objEl = document.getElementById('mainObj');
+      var docEl = document.getElementById('docId');
+      var locEl = document.getElementById('locFooter');
+
+      if (nameEl) nameEl.textContent = 'OP: ' + (mission.codename || 'DESCONHECIDA');
+      if (sectorEl) sectorEl.textContent = (mission.location || 'SETOR DESCONHECIDO').toUpperCase() + ' // ARCHIVE_OS';
+      if (objEl && mission.objectives && mission.objectives.length > 0) {
+        objEl.textContent = 'Objetivo: ' + mission.objectives[0];
+      }
+      if (docEl) docEl.textContent = (mission.codename || 'VX-99') + ': CLASSIFICADO';
+      if (locEl && mission.location) {
+        locEl.textContent = mission.location.split(',')[0].trim().toUpperCase();
+      }
+
+      // 3. Imagem de Inteligência Dinâmica (Pollinations)
+      var intelImg = document.getElementById('intelImg');
+      if (intelImg && mission.title) {
+        var prompt = encodeURIComponent(mission.title + ', tactical surveillance, night, cinematic, dark archive aesthetic, highly detailed');
+        var imgUrl = 'https://image.pollinations.ai/prompt/' + prompt + '&width=320&height=96&nologo=true&seed=' + mission.id;
+        
+        var img = new Image();
+        img.onload = function() {
+          intelImg.style.backgroundImage = "url('" + imgUrl + "')";
+        };
+        img.onerror = function() {
+          var lab = intelImg.querySelector('.lab');
+          if (lab) lab.textContent = '📦 ' + (mission.category || 'INTEL');
+        };
+        img.src = imgUrl;
+      }
+
+      // 4. Renderizar Objetivos Dinamicamente
+      var objsContainer = document.querySelector('.objs');
+      if (objsContainer && mission.objectives) {
+        var title = objsContainer.querySelector('.ot');
+        objsContainer.innerHTML = '';
+        objsContainer.appendChild(title);
+        
+        mission.objectives.forEach(function(obj, idx) {
+          var div = document.createElement('div');
+          div.className = 'or' + (idx === 0 ? ' done' : '');
+          div.dataset.o = idx;
+          div.innerHTML = '<div class="bx"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="tx">' + obj + '</div>';
+          div.addEventListener('click', function() {
+            div.classList.toggle('done');
+            playSound('click');
+          });
+          objsContainer.appendChild(div);
+        });
+      }
+
+      // 5. Gerar Mapa SVG Tático
+      var mm = document.querySelector('.mm');
+      if (mm) {
+        var lab = mm.querySelector('.lab');
+        mm.innerHTML = '';
+        mm.appendChild(lab);
+        
+        var svgNS = "http://www.w3.org/2000/svg";
+        var svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("width", "100%");
+        svg.setAttribute("height", "100%");
+        svg.setAttribute("viewBox", "0 0 160 160");
+        
+        // Grid
+        var pattern = document.createElementNS(svgNS, "pattern");
+        pattern.setAttribute("id", "grid");
+        pattern.setAttribute("width", "20");
+        pattern.setAttribute("height", "20");
+        pattern.setAttribute("patternUnits", "userSpaceOnUse");
+        var pathEl = document.createElementNS(svgNS, "path");
+        pathEl.setAttribute("d", "M 20 0 L 0 0 0 20");
+        pathEl.setAttribute("fill", "none");
+        pathEl.setAttribute("stroke", "rgba(197,160,89,0.2)");
+        pathEl.setAttribute("stroke-width", "1");
+        pattern.appendChild(pathEl);
+        svg.appendChild(pattern);
+        
+        var rect = document.createElementNS(svgNS, "rect");
+        rect.setAttribute("width", "160");
+        rect.setAttribute("height", "160");
+        rect.setAttribute("fill", "url(#grid)");
+        svg.appendChild(rect);
+        
+        // Rota e Nós
+        var phases = mission.totalPhases || 3;
+        var currentPhase = mission.phase || 1;
+        var d = "";
+        var points = [];
+        
+        for (var i = 0; i < phases; i++) {
+          var x = 30 + (i * (100 / (phases > 1 ? phases - 1 : 1)));
+          var y = 130 - (i * (90 / (phases > 1 ? phases - 1 : 1))) + (Math.random() * 20 - 10);
+          points.push({x: x, y: y, phase: i + 1});
+          if (i === 0) d += 'M ' + x + ' ' + y;
+          else d += ' L ' + x + ' ' + y;
+        }
+        
+        var pathLine = document.createElementNS(svgNS, "path");
+        pathLine.setAttribute("d", d);
+        pathLine.setAttribute("fill", "none");
+        pathLine.setAttribute("stroke", "#C5A059");
+        pathLine.setAttribute("stroke-width", "2");
+        pathLine.setAttribute("stroke-dasharray", "4,4");
+        svg.appendChild(pathLine);
+        
+        points.forEach(function(p, idx) {
+          var circle = document.createElementNS(svgNS, "circle");
+          circle.setAttribute("cx", p.x);
+          circle.setAttribute("cy", p.y);
+          circle.setAttribute("r", idx + 1 <= currentPhase ? "5" : "3");
+          circle.setAttribute("fill", idx + 1 <= currentPhase ? "#FFBF00" : "#555");
+          if (idx + 1 === currentPhase) {
+            circle.style.animation = "pu 2s ease-in-out infinite";
+          }
+          svg.appendChild(circle);
+          
+          var text = document.createElementNS(svgNS, "text");
+          text.setAttribute("x", p.x + 8);
+          text.setAttribute("y", p.y + 3);
+          text.setAttribute("fill", "#C5A059");
+          text.setAttribute("font-family", "JetBrains Mono, monospace");
+          text.setAttribute("font-size", "8");
+          text.textContent = 'F' + p.phase;
+          svg.appendChild(text);
+        });
+        
+        mm.appendChild(svg);
+      }
+
+      playSound('mission');
+
+    } catch (err) {
+      console.error('[MISSAO] Falha ao carregar missão:', err);
+      showNotification('Falha crítica ao carregar dados da operação', 'error');
     }
 
-    // 2. Atualizar HUD
-    document.getElementById('missionName').textContent = `OP: ${mission.codename}`;
-    document.getElementById('missionSector').textContent = `${mission.location.toUpperCase()} // ARCHIVE_OS`;
-    document.getElementById('mainObj').textContent = `Objetivo: ${mission.objectives[0]}`;
-    document.getElementById('docId').textContent = `${mission.codename}: CLASSIFICADO`;
-    document.getElementById('locFooter').textContent = mission.location.split(',')[0].trim().toUpperCase();
-
-    // 3. Imagem de Inteligência Dinâmica (Pollinations)
-    const intelImg = document.getElementById('intelImg');
-    const prompt = encodeURIComponent(mission.title + ', tactical surveillance, night, cinematic, dark archive aesthetic, highly detailed');
-    intelImg.style.backgroundImage = `url('https://image.pollinations.ai/prompt/${prompt}&width=320&height=96&nologo=true&seed=${mission.id}')`;
-
-    // 4. Renderizar Objetivos Dinamicamente
-    const objsContainer = document.querySelector('.objs');
-    const title = objsContainer.querySelector('.ot');
-    objsContainer.innerHTML = '';
-    objsContainer.appendChild(title);
-    
-    mission.objectives.forEach((obj, idx) => {
-      const div = document.createElement('div');
-      div.className = `or ${idx === 0 ? 'done' : ''}`;
-      div.dataset.o = idx;
-      div.innerHTML = `
-        <div class="bx"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="tx">${obj}</div>
-      `;
-      div.addEventListener('click', () => {
-        div.classList.toggle('done');
-        if(window.ArchiveAudio) ArchiveAudio.playClick();
+    /* ============================================
+       BOTÃO SINCRONIZAR
+       ============================================ */
+    var anBtn = document.getElementById('an');
+    if (anBtn) {
+      anBtn.addEventListener('click', async function() {
+        if (this.disabled) return;
+        
+        playSound('click');
+        this.textContent = 'SINCRONIZANDO...';
+        this.style.background = 'var(--amber)';
+        this.style.color = 'var(--surface)';
+        this.disabled = true;
+        
+        try {
+          var result = null;
+          if (currentMission && window.ArchiveAPI && typeof window.ArchiveAPI.completeMission === 'function') {
+            result = await window.ArchiveAPI.completeMission(currentMission.id);
+          }
+          
+          showNotification('Progresso da missão atualizado no banco de dados', 'success');
+          playSound('success');
+          this.textContent = 'ATUALIZADO ✓';
+          
+          var btn = this;
+          setTimeout(function() {
+            btn.textContent = 'Sincronizar Progresso';
+            btn.style.background = '';
+            btn.style.color = '';
+            btn.disabled = false;
+          }, 2500);
+        } catch(e) {
+          showNotification('Erro de sincronização com o backend', 'error');
+          playSound('error');
+          this.textContent = 'FALHA';
+          
+          var btn = this;
+          setTimeout(function() {
+            btn.textContent = 'Sincronizar Progresso';
+            btn.style.background = '';
+            btn.style.color = '';
+            btn.disabled = false;
+          }, 2500);
+        }
       });
-      objsContainer.appendChild(div);
+    }
+
+    /* ============================================
+       MARCADORES
+       ============================================ */
+    document.querySelectorAll('.mk').forEach(function(m) {
+      m.addEventListener('click', function() {
+        var l = this.querySelector('.lb').textContent;
+        this.style.transform = 'scale(1.3)';
+        playSound('click');
+        var self = this;
+        setTimeout(function() { self.style.transform = ''; }, 300);
+        showNotification('Analisando ponto: ' + l, 'info');
+      });
     });
 
-    // 5. Gerar Mapa SVG Tático Dinâmico baseado nas fases
-    const mm = document.querySelector('.mm');
-    const lab = mm.querySelector('.lab');
-    mm.innerHTML = '';
-    mm.appendChild(lab);
-    
-    const svgNS = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", "100%");
-    svg.setAttribute("height", "100%");
-    svg.setAttribute("viewBox", "0 0 160 160");
-    
-    // Grid
-    const pattern = document.createElementNS(svgNS, "pattern");
-    pattern.setAttribute("id", "grid");
-    pattern.setAttribute("width", "20");
-    pattern.setAttribute("height", "20");
-    pattern.setAttribute("patternUnits", "userSpaceOnUse");
-    const pathEl = document.createElementNS(svgNS, "path");
-    pathEl.setAttribute("d", "M 20 0 L 0 0 0 20");
-    pathEl.setAttribute("fill", "none");
-    pathEl.setAttribute("stroke", "rgba(197,160,89,0.2)");
-    pathEl.setAttribute("stroke-width", "1");
-    pattern.appendChild(pathEl);
-    svg.appendChild(pattern);
-    
-    const rect = document.createElementNS(svgNS, "rect");
-    rect.setAttribute("width", "160");
-    rect.setAttribute("height", "160");
-    rect.setAttribute("fill", "url(#grid)");
-    svg.appendChild(rect);
-    
-    // Rota e Nós baseados nas fases
-    const phases = mission.totalPhases || 3;
-    const currentPhase = mission.phase || 1;
-    let d = "";
-    const points = [];
-    
-    for(let i = 0; i < phases; i++) {
-      const x = 30 + (i * (100 / (phases > 1 ? phases - 1 : 1)));
-      const y = 130 - (i * (90 / (phases > 1 ? phases - 1 : 1))) + (Math.random() * 20 - 10);
-      points.push({x, y, phase: i + 1});
-      if (i === 0) d += `M ${x} ${y}`;
-      else d += ` L ${x} ${y}`;
+    /* ============================================
+       INVENTÁRIO
+       ============================================ */
+    document.querySelectorAll('.sl').forEach(function(s) {
+      s.addEventListener('click', function() {
+        this.style.borderColor = 'var(--amber)';
+        this.style.boxShadow = '0 0 20px rgba(255,191,0,.5)';
+        playSound('click');
+        var self = this;
+        setTimeout(function() {
+          self.style.borderColor = '';
+          self.style.boxShadow = '';
+        }, 500);
+      });
+    });
+
+    /* ============================================
+       BOTÃO DE SAIR (com confirmação)
+       ============================================ */
+    var exitBtn = document.getElementById('exitBtn');
+    if (exitBtn) {
+      exitBtn.addEventListener('click', function(e) {
+        if (confirm('Tem certeza que deseja abandonar a missão?\n\nO progresso não salvo será perdido.')) {
+          playSound('click');
+          // Redireciona após confirmação
+        } else {
+          e.preventDefault();
+        }
+      });
+    }
+  });
+
+  /* ============================================
+     CRONÔMETRO DE TENSÃO
+     ============================================ */
+  var sec = 2700; // 45 minutos
+  var te = document.getElementById('tmr');
+  
+  setInterval(function() {
+    if (sec > 0) sec--;
+    var h = Math.floor(sec / 3600);
+    var m = Math.floor((sec % 3600) / 60);
+    var s = sec % 60;
+    if (te) {
+      te.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     }
     
-    const pathLine = document.createElementNS(svgNS, "path");
-    pathLine.setAttribute("d", d);
-    pathLine.setAttribute("fill", "none");
-    pathLine.setAttribute("stroke", "#C5A059");
-    pathLine.setAttribute("stroke-width", "2");
-    pathLine.setAttribute("stroke-dasharray", "4,4");
-    svg.appendChild(pathLine);
-    
-    points.forEach((p, idx) => {
-      const circle = document.createElementNS(svgNS, "circle");
-      circle.setAttribute("cx", p.x);
-      circle.setAttribute("cy", p.y);
-      circle.setAttribute("r", idx + 1 <= currentPhase ? "5" : "3");
-      circle.setAttribute("fill", idx + 1 <= currentPhase ? "#FFBF00" : "#555");
-      if (idx + 1 === currentPhase) {
-        circle.style.animation = "pu 2s ease-in-out infinite";
-      }
-      svg.appendChild(circle);
-      
-      const text = document.createElementNS(svgNS, "text");
-      text.setAttribute("x", p.x + 8);
-      text.setAttribute("y", p.y + 3);
-      text.setAttribute("fill", "#C5A059");
-      text.setAttribute("font-family", "JetBrains Mono, monospace");
-      text.setAttribute("font-size", "8");
-      text.textContent = `F${p.phase}`;
-      svg.appendChild(text);
-    });
-    
-    mm.appendChild(svg);
+    if (sec <= 300 && te) { // Últimos 5 minutos
+      te.style.color = '#ff3333';
+      te.style.textShadow = '0 0 10px rgba(255, 51, 51, 0.5)';
+    }
+    if (sec === 0) {
+      playSound('error');
+      showNotification('TEMPO ESGOTADO. A MISSÃO FALHOU.', 'error');
+    }
+  }, 1000);
 
-    // 6. Ação do Botão
-    const anBtn = document.getElementById('an');
-    anBtn.addEventListener('click', async function() {
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      this.textContent = 'SINCRONIZANDO...';
-      this.style.background = 'var(--amber)';
-      this.style.color = 'var(--surface)';
-      
-      try {
-        const result = await ArchiveAPI.completeMission(mission.id);
-        // Se offline, result é null, mas consideramos sucesso local para o mock
-        ArchiveAPI.notify('Progresso da missão atualizado no banco de dados.', 'success');
-        if(window.ArchiveAudio) ArchiveAudio.playSuccess();
-        this.textContent = 'ATUALIZADO ✓';
-        setTimeout(() => {
-          this.textContent = 'Sincronizar Progresso';
-          this.style.background = '';
-          this.style.color = '';
-        }, 2500);
-      } catch(e) {
-        ArchiveAPI.notify('Erro de sincronização com o backend.', 'error');
-        if(window.ArchiveAudio) ArchiveAudio.playError();
-        this.textContent = 'FALHA';
-        setTimeout(() => {
-          this.textContent = 'Sincronizar Progresso';
-          this.style.background = '';
-          this.style.color = '';
-        }, 2500);
-      }
-    });
+  /* ============================================
+     RELÓGIO DO SISTEMA
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
 
-    // 7. Interações dos Marcadores
-    document.querySelectorAll('.mk').forEach(m => m.addEventListener('click', function() {
-      const l = this.querySelector('.lb').textContent;
-      this.style.transform = 'scale(1.3)';
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      setTimeout(() => this.style.transform = '', 300);
-      ArchiveAPI.notify(`Analisando ponto: ${l}`, 'info');
-    }));
-
-    // 8. Interações do Inventário
-    document.querySelectorAll('.sl').forEach(s => s.addEventListener('click', function() {
-      this.style.borderColor = 'var(--amber)';
-      this.style.boxShadow = '0 0 20px rgba(255,191,0,.5)';
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      setTimeout(() => {
-        this.style.borderColor = '';
-        this.style.boxShadow = '';
-      }, 500);
-    }));
-
-  } catch (err) {
-    console.error("Falha ao carregar missão", err);
-    ArchiveAPI.notify('Falha crítica ao carregar dados da operação.', 'error');
-  }
-});
-
-// Cronômetro de Tensão (Contagem Regressiva de 45 minutos)
-let sec = 2700; 
-const te = document.getElementById('tmr');
-setInterval(() => {
-  if (sec > 0) sec--;
-  const h = Math.floor(sec / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  const s = sec % 60;
-  te.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-  
-  if (sec <= 300) { // Últimos 5 minutos
-    te.style.color = '#ff3333';
-    te.style.textShadow = '0 0 10px rgba(255, 51, 51, 0.5)';
-  }
-  if (sec === 0) {
-    if(window.ArchiveAudio) ArchiveAudio.playError();
-    ArchiveAPI.notify('TEMPO ESGOTADO. A MISSÃO FALHOU.', 'error');
-  }
-}, 1000);
-
-// Relógio do sistema
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
+  /* ============================================
+     ATALHO ESC PARA SAIR
+     ============================================ */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var exitBtn = document.getElementById('exitBtn');
+      if (exitBtn) exitBtn.click();
+    }
+  });
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

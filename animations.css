@@ -1,6 +1,9 @@
 /**
  * ARCHIVE OS — Sistema de Animações
- * Project Nexus v2.0
+ * Project Nexus v3.0 (corrigido e aprimorado)
+ * 
+ * Compatível com animations.js v3.0
+ * Performance otimizada com will-change e backface-visibility
  */
 
 /* ============================================
@@ -41,6 +44,28 @@
   }
 }
 
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Scale Pulse */
 @keyframes scalePulse {
   0%, 100% { transform: scale(1); }
@@ -56,8 +81,24 @@
 
 /* Glow Effect */
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px var(--gold); }
-  50% { box-shadow: 0 0 20px var(--gold), 0 0 30px var(--amber); }
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--gold, #C5A059); 
+  }
+  50% { 
+    box-shadow: 0 0 20px var(--gold, #C5A059), 0 0 30px var(--amber, #FFBF00); 
+  }
+}
+
+/* ✅ NOVO: Pulse simples (usado pelo animations.js) */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ✅ NOVO: Spin (loading) */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* ============================================
@@ -87,6 +128,16 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ✅ CORRIGIDO: Nome alinhado com animations.js */
+@keyframes captureZoom {
+  0% { transform: scale(1); }
+  50% { 
+    transform: scale(1.1); 
+    filter: brightness(1.5); 
+  }
+  100% { transform: scale(1); }
 }
 
 @keyframes handcuffsLock {
@@ -129,10 +180,10 @@
 
 @keyframes artifactGlow {
   0%, 100% {
-    box-shadow: 0 0 10px var(--gold), 0 0 20px var(--gold);
+    box-shadow: 0 0 10px var(--gold, #C5A059), 0 0 20px var(--gold, #C5A059);
   }
   50% {
-    box-shadow: 0 0 30px var(--amber), 0 0 50px var(--amber);
+    box-shadow: 0 0 30px var(--amber, #FFBF00), 0 0 50px var(--amber, #FFBF00);
   }
 }
 
@@ -155,6 +206,12 @@
     top: 100%;
     opacity: 0;
   }
+}
+
+/* ✅ NOVO: Usado pelo animations.js (inline fallback) */
+@keyframes scanMove {
+  0% { top: 0; }
+  100% { top: 100%; }
 }
 
 @keyframes decryptScramble {
@@ -187,6 +244,18 @@
   }
 }
 
+/* ✅ APRIMORADO: Partículas com mais variações */
+@keyframes particleFall {
+  0% { 
+    transform: translateY(0) rotate(0deg) scale(1); 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateY(100vh) rotate(720deg) scale(0.5); 
+    opacity: 0; 
+  }
+}
+
 /* ============================================
    ANIMAÇÃO DE MISSÃO COMPLETA
    ============================================ */
@@ -203,67 +272,129 @@
   }
 }
 
+/* ✅ APRIMORADO: Versão mais dramática */
+@keyframes missionComplete {
+  0%, 100% { 
+    transform: scale(1); 
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.05); 
+    filter: brightness(1.3);
+    box-shadow: 0 0 40px rgba(255, 191, 0, 0.6);
+  }
+}
+
 /* ============================================
    CLASSES UTILITÁRIAS
    ============================================ */
 
+/* ✅ CORRIGIDO: Adicionadas classes que o animations.js espera */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+  will-change: opacity;
+}
+
+.fade-out {
+  animation: fadeOut 0.4s ease-out forwards;
+  will-change: opacity;
+}
+
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out;
+  will-change: opacity;
 }
 
 .animate-fade-out {
-  animation: fadeOut 0.5s ease-out;
+  animation: fadeOut 0.5s ease-out forwards;
+  will-change: opacity;
 }
 
 .animate-slide-in-right {
   animation: slideInRight 0.5s ease-out;
+  will-change: transform, opacity;
 }
 
 .animate-slide-in-left {
   animation: slideInLeft 0.5s ease-out;
+  will-change: transform, opacity;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s ease-out;
+  will-change: transform, opacity;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.5s ease-out;
+  will-change: transform, opacity;
 }
 
 .animate-scale-pulse {
   animation: scalePulse 2s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-shake {
   animation: shake 0.5s ease-in-out;
+  will-change: transform;
 }
 
 .animate-glow {
   animation: glow 2s ease-in-out infinite;
+  will-change: box-shadow;
+}
+
+/* ✅ NOVO: Pulse simples */
+.animate-pulse {
+  animation: pulse 0.6s ease;
+  will-change: transform;
+}
+
+/* ✅ NOVO: Spin (loading) */
+.animate-spin {
+  animation: spin 1s linear infinite;
+  will-change: transform;
 }
 
 /* Animação de Captura */
 .animate-capture {
-  animation: captureSequence 1.5s ease-out;
+  animation: captureZoom 1.5s ease-out;
+  will-change: transform, filter;
+  backface-visibility: hidden;
 }
 
 .animate-handcuffs {
   animation: handcuffsLock 1s ease-in-out;
+  will-change: transform;
 }
 
 .animate-evidence-stamp {
   animation: evidenceStamp 0.6s ease-out;
+  will-change: transform, opacity;
 }
 
 /* Animação de Artefato */
 .animate-artifact-reveal {
   animation: artifactReveal 1s ease-out;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .animate-artifact-glow {
   animation: artifactGlow 2s ease-in-out infinite;
+  will-change: box-shadow;
 }
 
 /* Animação de Scan */
 .animate-scan-line {
-  animation: scanLine 2s linear infinite;
+  animation: scanMove 2s linear;
+  will-change: top;
 }
 
 .animate-decrypt {
   animation: decryptScramble 0.5s ease-out;
+  will-change: filter;
 }
 
 /* Animação de Sucesso */
@@ -273,7 +404,9 @@
 
 /* Animação de Missão Completa */
 .animate-mission-complete {
-  animation: missionCompletePulse 2s ease-out;
+  animation: missionComplete 2.5s ease-out;
+  will-change: transform, filter, box-shadow;
+  backface-visibility: hidden;
 }
 
 /* ============================================
@@ -282,6 +415,7 @@
 
 .transition-screen {
   transition: opacity 0.4s ease, transform 0.4s ease;
+  will-change: opacity, transform;
 }
 
 .transition-screen.fade-out {
@@ -301,23 +435,103 @@
 .particle {
   position: absolute;
   pointer-events: none;
-  animation: confetti 1s ease-out forwards;
+  animation: particleFall linear forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .particle.gold {
-  background: var(--gold);
+  background: var(--gold, #C5A059);
 }
 
 .particle.amber {
-  background: var(--amber);
+  background: var(--amber, #FFBF00);
 }
 
 .particle.bronze {
-  background: var(--bronze);
+  background: var(--bronze, #CD7F32);
+}
+
+.particle.ivory {
+  background: var(--ivory, #F5F5DC);
+}
+
+/* Variações de partículas */
+.particle.small {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+.particle.large {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.particle.blur {
+  filter: blur(2px);
 }
 
 /* ============================================
-   RESPONSIVO
+   LOADING STATES
+   ============================================ */
+
+/* ✅ NOVO: Spinner de loading */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(197, 160, 89, 0.3);
+  border-top-color: var(--gold, #C5A059);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-spinner.large {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(197, 160, 89, 0.1) 0%,
+    rgba(197, 160, 89, 0.2) 50%,
+    rgba(197, 160, 89, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   UTILITÁRIOS DE PERFORMANCE
+   ============================================ */
+
+/* Força aceleração GPU */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Previne flicker em animações 3D */
+.preserve-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* ============================================
+   RESPONSIVO E ACESSIBILIDADE
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
@@ -325,5 +539,44 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+  
+  .particle {
+    display: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .animate-glow,
+  .animate-artifact-glow {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--gold, #C5A059);
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+}
+
+/* ============================================
+   DEBUG (apenas para desenvolvimento)
+   ============================================ */
+
+.debug-animations * {
+  outline: 1px solid red !important;
+}
+
+.debug-animations .animate-fade-in,
+.debug-animations .animate-fade-out,
+.debug-animations .animate-slide-in-right,
+.debug-animations .animate-slide-in-left,
+.debug-animations .animate-capture,
+.debug-animations .animate-artifact-reveal,
+.debug-animations .animate-mission-complete {
+  outline: 2px solid lime !important;
 }

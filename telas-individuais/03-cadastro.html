@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE — Dossier de Admissão</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<!-- Integração com API e Sistema de Áudio -->
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE — Dossier de Admissão</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
   :root {
     --surface: #131313;
@@ -55,9 +70,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: 
-      radial-gradient(ellipse at center, #1a1a1a 0%, #0e0e0e 70%, #000000 100%);
+    background: radial-gradient(ellipse at center, #1a1a1a 0%, #0e0e0e 70%, #000000 100%);
     padding: 40px;
+    overflow-y: auto;
   }
 
   /* ============ FILM GRAIN ============ */
@@ -117,6 +132,7 @@
       calc(100% - 16px) 100%, 16px 100%,
       0 calc(100% - 16px), 0 16px
     );
+    margin: auto;
   }
 
   @keyframes cardReveal {
@@ -263,6 +279,11 @@
     border-bottom-color: var(--amber);
     box-shadow: 0 2px 8px rgba(255, 191, 0, 0.3);
     padding-left: 8px;
+  }
+
+  .field-input.invalid {
+    border-bottom-color: #c44;
+    box-shadow: 0 2px 8px rgba(204, 68, 68, 0.2);
   }
 
   .field-line {
@@ -449,7 +470,28 @@
     text-transform: uppercase;
   }
 
+  /* ============ ANIMAÇÃO SHAKE (DINÂMICA) ============ */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
   /* ============ RESPONSIVO ============ */
+  @media (max-width: 900px) and (orientation: landscape) {
+    .admission { padding: 20px; }
+    .dossier-card { padding: 32px 28px; }
+    .title { font-size: 32px; line-height: 40px; margin-bottom: 12px; }
+    .subtitle { font-size: 10px; }
+    .header { margin-bottom: 24px; margin-top: 8px; }
+    .form { gap: 20px; margin-bottom: 24px; }
+    .authenticate-btn { width: 110px; height: 110px; }
+    .lock-icon { width: 26px; height: 26px; }
+    .footer-note { margin-top: 16px; padding-top: 12px; }
+    .seal { width: 64px; height: 64px; top: -32px; }
+  }
   @media (max-width: 768px) {
     .admission { padding: 20px; }
     .dossier-card { padding: 48px 32px; }
@@ -457,11 +499,12 @@
     .authenticate-btn { width: 120px; height: 120px; }
     .lock-icon { width: 28px; height: 28px; }
   }
-
   @media (max-width: 480px) {
     .title { font-size: 28px; line-height: 36px; }
     .field-input { font-size: 18px; }
     .dossier-card { padding: 40px 24px; }
+    .subtitle { font-size: 10px; letter-spacing: 0.1em; }
+    .authenticate-btn { width: 110px; height: 110px; }
   }
 </style>
 </head>
@@ -496,7 +539,7 @@
       </div>
 
       <!-- Formulário -->
-      <form class="form" id="admissionForm">
+      <form class="form" id="admissionForm" novalidate>
         <div class="field">
           <label class="field-label" for="directorName">Nome do Diretor</label>
           <input 
@@ -504,7 +547,9 @@
             id="directorName" 
             class="field-input" 
             placeholder="[Insira o nome completo]"
-            autocomplete="off"
+            autocomplete="name"
+            maxlength="60"
+            minlength="2"
             required
           >
           <div class="field-line"></div>
@@ -518,6 +563,8 @@
             class="field-input" 
             placeholder="[Insira a designação operacional]"
             autocomplete="off"
+            maxlength="30"
+            minlength="2"
             required
           >
           <div class="field-line"></div>
@@ -531,6 +578,8 @@
             class="field-input" 
             placeholder="[Área de atuação primária]"
             autocomplete="off"
+            maxlength="40"
+            minlength="2"
             required
           >
           <div class="field-line"></div>
@@ -567,111 +616,235 @@
   </div>
 
   <script>
-    const form = document.getElementById('admissionForm');
-    const authBtn = document.getElementById('authBtn');
-    const successOverlay = document.getElementById('successOverlay');
-    const inputs = document.querySelectorAll('.field-input');
+  (function() {
+    "use strict";
 
-    // Validação visual dos campos
-    inputs.forEach(input => {
-      input.addEventListener('input', () => {
-        if (input.value.trim().length > 0) {
-          input.style.borderBottomColor = '#C5A059';
+    /* ============================================
+       UTILITÁRIOS
+       ============================================ */
+    function playSound(type) {
+      if (!window.ArchiveAudio) return;
+      try {
+        if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+          window.ArchiveAudio.playClick();
+        } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+          window.ArchiveAudio.playSuccess();
+        } else if (type === 'error' && typeof window.ArchiveAudio.playError === 'function') {
+          window.ArchiveAudio.playError();
+        } else if (type === 'type' && typeof window.ArchiveAudio.playType === 'function') {
+          window.ArchiveAudio.playType();
+        }
+      } catch (e) {
+        console.warn('[CADASTRO] Erro ao tocar som:', e);
+      }
+    }
+
+    function showNotification(message, type) {
+      type = type || 'info';
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+        window.ArchiveAPI.notify(message, type);
+        return;
+      }
+      console.log('[CADASTRO] ' + type.toUpperCase() + ': ' + message);
+    }
+
+    /**
+     * Sanitiza entrada removendo HTML e caracteres perigosos
+     */
+    function sanitizeInput(str) {
+      if (typeof str !== 'string') return '';
+      return str
+        .replace(/[<>]/g, '')
+        .replace(/javascript:/gi, '')
+        .replace(/on\w+=/gi, '')
+        .trim();
+    }
+
+    /**
+     * Valida comprimento e conteúdo mínimo
+     */
+    function validateField(value, min, max) {
+      var clean = sanitizeInput(value);
+      if (clean.length < min) return { valid: false, error: 'Mínimo ' + min + ' caracteres' };
+      if (clean.length > max) return { valid: false, error: 'Máximo ' + max + ' caracteres' };
+      return { valid: true, value: clean };
+    }
+
+    /* ============================================
+       ELEMENTOS
+       ============================================ */
+    var form = document.getElementById('admissionForm');
+    var authBtn = document.getElementById('authBtn');
+    var successOverlay = document.getElementById('successOverlay');
+    var inputs = document.querySelectorAll('.field-input');
+    var btnLabel = authBtn ? authBtn.querySelector('.btn-label') : null;
+    var originalLabel = btnLabel ? btnLabel.textContent : 'Autenticar';
+
+    /* ============================================
+       VALIDAÇÃO VISUAL DOS CAMPOS
+       ============================================ */
+    inputs.forEach(function(input) {
+      // Validação em tempo real
+      input.addEventListener('input', function() {
+        var val = this.value.trim();
+        var min = parseInt(this.getAttribute('minlength')) || 2;
+        
+        if (val.length === 0) {
+          this.style.borderBottomColor = '';
+          this.classList.remove('invalid');
+        } else if (val.length < min) {
+          this.style.borderBottomColor = '#c44';
+          this.classList.add('invalid');
         } else {
-          input.style.borderBottomColor = '';
+          this.style.borderBottomColor = '#C5A059';
+          this.classList.remove('invalid');
         }
       });
       
-      // Feedback sonoro ao focar
-      input.addEventListener('focus', () => {
-        if(window.ArchiveAudio) window.ArchiveAudio.playClick();
+      // Som ao focar
+      input.addEventListener('focus', function() {
+        playSound('click');
+      });
+
+      // Som sutil ao digitar (opcional - throttled)
+      var lastTypeSound = 0;
+      input.addEventListener('keydown', function() {
+        var now = Date.now();
+        if (now - lastTypeSound > 80) {
+          playSound('type');
+          lastTypeSound = now;
+        }
       });
     });
 
-    // Submissão do formulário
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    /* ============================================
+       SUBMISSÃO DO FORMULÁRIO
+       ============================================ */
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-      const directorName = document.getElementById('directorName').value.trim();
-      const codename = document.getElementById('codename').value.trim();
-      const specialty = document.getElementById('specialty').value.trim();
+        var directorNameRaw = document.getElementById('directorName').value;
+        var codenameRaw = document.getElementById('codename').value;
+        var specialtyRaw = document.getElementById('specialty').value;
 
-      // Validação básica
-      if (!directorName || !codename || !specialty) {
-        if(window.ArchiveAudio) window.ArchiveAudio.playError();
-        authBtn.style.animation = 'shake 0.4s ease';
-        setTimeout(() => { authBtn.style.animation = ''; }, 400);
-        return;
-      }
+        // Validação com sanitização
+        var vName = validateField(directorNameRaw, 2, 60);
+        var vCode = validateField(codenameRaw, 2, 30);
+        var vSpec = validateField(specialtyRaw, 2, 40);
 
-      // Estado de processamento
-      authBtn.disabled = true;
-      const btnLabel = authBtn.querySelector('.btn-label');
-      const originalLabel = btnLabel.textContent;
-      btnLabel.textContent = 'PROCESSANDO';
-
-      try {
-        // 1. Salvar estado local imediatamente para resiliência
-        window.ArchiveAPI.setState({
-          director: {
-            name: directorName,
-            codename: codename,
-            specialty: specialty
-          }
-        });
-
-        // 2. Tentar registrar no backend (ou mock)
-        const result = await window.ArchiveAPI.createPlayer(directorName, codename, specialty);
-
-        if (result && result.id) {
-          // Sucesso!
-          if(window.ArchiveAudio) window.ArchiveAudio.playSuccess();
-          successOverlay.classList.add('active');
-
-          // Redirecionar para a introdução cinemática após 2 segundos
-          setTimeout(() => {
-            window.location.href = '02-intro.html';
-          }, 2000);
-        } else {
-          throw new Error(result?.error || 'Falha desconhecida no cadastro.');
-        }
-      } catch (err) {
-        if(window.ArchiveAudio) window.ArchiveAudio.playError();
-        
-        const errorMsg = err.message.includes('uso') 
-          ? 'Codinome já em uso. Escolha outro.' 
-          : 'Erro de conexão com a Archive. Tente novamente.';
+        if (!vName.valid || !vCode.valid || !vSpec.valid) {
+          playSound('error');
           
-        window.ArchiveAPI.notify(errorMsg, 'error');
-        
-        btnLabel.textContent = 'FALHA';
-        setTimeout(() => {
-          authBtn.disabled = false;
-          btnLabel.textContent = originalLabel;
-        }, 2000);
+          // Marca campos inválidos
+          if (!vName.valid) document.getElementById('directorName').classList.add('invalid');
+          if (!vCode.valid) document.getElementById('codename').classList.add('invalid');
+          if (!vSpec.valid) document.getElementById('specialty').classList.add('invalid');
+          
+          authBtn.style.animation = 'shake 0.4s ease';
+          setTimeout(function() { authBtn.style.animation = ''; }, 400);
+          
+          var errorMsg = vName.error || vCode.error || vSpec.error || 'Preencha todos os campos';
+          showNotification(errorMsg, 'error');
+          return;
+        }
+
+        var directorName = vName.value;
+        var codename = vCode.value;
+        var specialty = vSpec.value;
+
+        // Estado de processamento
+        authBtn.disabled = true;
+        if (btnLabel) btnLabel.textContent = 'PROCESSANDO';
+
+        try {
+          // 1. Salvar estado local imediatamente (resiliência)
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.setState === 'function') {
+            window.ArchiveAPI.setState({
+              director: {
+                name: directorName,
+                codename: codename,
+                specialty: specialty,
+                createdAt: new Date().toISOString()
+              }
+            });
+          }
+
+          // 2. Tentar registrar no backend (ou mock)
+          var result = null;
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.createPlayer === 'function') {
+            result = await window.ArchiveAPI.createPlayer(directorName, codename, specialty);
+          } else {
+            // Fallback se API não existir
+            result = { success: true, offline: true };
+          }
+
+          // Sucesso! (createPlayer retorna {id} ou {success, offline})
+          if (result && (result.id || result.success || result.offline)) {
+            playSound('success');
+            if (successOverlay) successOverlay.classList.add('active');
+            
+            showNotification(
+              'Bem-vindo, Diretor ' + codename + '!',
+              'success'
+            );
+
+            // Redireciona para introdução cinemática após 2 segundos
+            setTimeout(function() {
+              window.location.href = '/02-intro.html';
+            }, 2000);
+          } else {
+            throw new Error((result && result.error) || 'Falha desconhecida no cadastro.');
+          }
+        } catch (err) {
+          console.error('[CADASTRO] Erro:', err);
+          playSound('error');
+          
+          var errorMsg = 'Erro de conexão com a Archive. Tente novamente.';
+          if (err && err.message) {
+            if (err.message.indexOf('uso') !== -1 || err.message.indexOf('exists') !== -1) {
+              errorMsg = 'Codinome já em uso. Escolha outro.';
+            }
+          }
+          
+          showNotification(errorMsg, 'error');
+          
+          if (btnLabel) btnLabel.textContent = 'FALHA';
+          setTimeout(function() {
+            authBtn.disabled = false;
+            if (btnLabel) btnLabel.textContent = originalLabel;
+          }, 2000);
+        }
+      });
+    }
+
+    /* ============================================
+       ENTER SUBMETE FORMULÁRIO
+       ============================================ */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !authBtn.disabled) {
+        var active = document.activeElement;
+        if (active && active.classList.contains('field-input')) {
+          // Avança para próximo campo ou submete
+          var fields = Array.from(inputs);
+          var idx = fields.indexOf(active);
+          if (idx < fields.length - 1) {
+            e.preventDefault();
+            fields[idx + 1].focus();
+          }
+          // Se for o último, deixa o form submeter naturalmente
+        }
       }
     });
-
-    // Adicionar animação de shake dinamicamente
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-8px); }
-        40% { transform: translateX(8px); }
-        60% { transform: translateX(-4px); }
-        80% { transform: translateX(4px); }
-      }
-    `;
-    document.head.appendChild(style);
+  })();
   </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

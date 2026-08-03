@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Biblioteca Central</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Biblioteca Central</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -25,11 +42,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-
 .grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
 @keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
 .scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
-.bi{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;}
-.top{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
+
+/* ✅ HEADER DE NAVEGAÇÃO ADICIONADO */
+.nav-header{height:56px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:50;}
+.nav-logo{font-family:'Libre Caslon Text',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:.15em;text-decoration:none;}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);text-decoration:none;letter-spacing:.1em;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav-links a:hover,.nav-links a.on{color:var(--gold);}
+.nav-links a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.nav-icons{display:flex;gap:12px;}
+.nav-icons a{display:inline-flex;text-decoration:none;}
+.nav-icons svg{width:18px;height:18px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
+.nav-icons svg:hover{stroke:var(--amber);}
+
+.bi{position:relative;width:100vw;height:calc(100vh - 56px);display:flex;flex-direction:column;}
+.top{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;gap:20px;flex-wrap:wrap;}
 .ttl{font-family:'Libre Caslon Text',serif;font-size:30px;font-weight:700;color:var(--gold);letter-spacing:.02em;line-height:1;}
 .tsub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;margin-top:4px;}
-.tsrch{position:relative;width:340px;}
+.tsrch{position:relative;width:340px;flex-shrink:0;}
 .tsrch input{width:100%;padding:10px 38px 10px 38px;background:transparent;border:none;border-bottom:1px solid var(--bronze);color:var(--on);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;outline:none;transition:all .3s;}
 .tsrch input::placeholder{color:var(--onv);opacity:.5;}
 .tsrch input:focus{border-bottom-color:var(--amber);}
@@ -41,7 +71,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-
 .tic button:hover svg{stroke:var(--surface);}
 .tic svg{width:18px;height:18px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .body{flex:1;display:flex;overflow:hidden;}
-.side{width:248px;flex-shrink:0;background:rgba(14,14,14,.6);backdrop-filter:blur(20px);border-right:.5px solid rgba(197,160,89,.3);padding:26px 20px;display:flex;flex-direction:column;gap:18px;z-index:20;}
+.side{width:248px;flex-shrink:0;background:rgba(14,14,14,.6);backdrop-filter:blur(20px);border-right:.5px solid rgba(197,160,89,.3);padding:26px 20px;display:flex;flex-direction:column;gap:18px;z-index:20;overflow-y:auto;}
 .stl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;padding-bottom:10px;border-bottom:.5px solid rgba(197,160,89,.3);}
 .snav{display:flex;flex-direction:column;gap:5px;}
 .si2{display:flex;align-items:center;gap:11px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;cursor:pointer;transition:all .3s;text-align:left;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
@@ -56,9 +86,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-
 .tact::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(197,160,89,.4)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(197,160,89,0)}}
 .content{flex:1;overflow-y:auto;padding:32px 44px;position:relative;}
-.bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;margin-bottom:20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .bc .cur{color:var(--gold);}
-.crow{display:flex;justify-content:flex-end;gap:10px;margin-bottom:24px;}
+.crow{display:flex;justify-content:flex-end;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
 .cb{padding:8px 16px;background:transparent;border:1px solid rgba(197,160,89,.4);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:7px;clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
 .cb:hover{border-color:var(--gold);color:var(--gold);}
 .cb svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.5;fill:none;}
@@ -80,12 +110,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-
 .prv{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);}
 .prb{height:3px;background:rgba(197,160,89,.2);border-radius:2px;overflow:hidden;margin-bottom:12px;}
 .prf{height:100%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 6px var(--amber);}
-.dcm{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:.5px solid rgba(197,160,89,.3);font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.06em;}
+.dcm{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:.5px solid rgba(197,160,89,.3);font-family:'JetBrains Mono',monospace;font-size:9px;color:#6b6560;letter-spacing:.06em;gap:8px;flex-wrap:wrap;}
 .dcm .ref{color:var(--gold);font-weight:500;}
 .dcm .al{color:var(--amber);font-weight:500;}
 .sync{position:relative;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:28px;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
 .sync::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
-.synch{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.synch{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:12px;flex-wrap:wrap;}
 .synct{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;}
 .synci{width:44px;height:44px;stroke:var(--gold);stroke-width:1.2;fill:none;opacity:.6;animation:rot 12s linear infinite;}
 @keyframes rot{to{transform:rotate(360deg)}}
@@ -104,16 +134,70 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-
 .tst .t{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
 footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
+.ftc{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .dgrid { grid-template-columns: repeat(2, 1fr); }
+  .syngrid { grid-template-columns: repeat(2, 1fr); }
+  .side { width: 220px; }
+}
+@media (max-width: 900px) {
+  .nav-header { padding: 0 20px; }
+  .nav-links { display: none; }
+  .top { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 12px; height: auto; padding-top: 12px; padding-bottom: 12px; }
+  .tsrch { width: 100%; }
+  .body { flex-direction: column; overflow-y: auto; }
+  .side { width: 100%; border-right: none; border-bottom: .5px solid rgba(197,160,89,.3); padding: 16px 20px; max-height: 200px; }
+  .snav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .si2 { flex: 1; min-width: 120px; padding: 8px; font-size: 9px; }
+  .content { padding: 20px; }
+  .term { display: none; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; font-size: 10px; }
+  .ttl { font-size: 22px; }
+}
+@media (max-width: 600px) {
+  .dgrid { grid-template-columns: 1fr; }
+  .syngrid { grid-template-columns: 1fr 1fr; }
+  .tic { display: none; }
+}
 </style>
 </head>
 <body>
 <div class="grain"></div><div class="scan"></div>
+
+<!-- ✅ HEADER DE NAVEGAÇÃO ADICIONADO -->
+<header class="nav-header">
+  <a href="/telas-individuais/18-sala-diretor.html" class="nav-logo">ARCHIVE</a>
+  <nav class="nav-links">
+    <a href="/telas-individuais/05-globo.html">Globo</a>
+    <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
+    <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
+    <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+    <a href="/telas-individuais/16-biblioteca.html" class="on">Biblioteca</a>
+  </nav>
+  <div class="nav-icons">
+    <a href="/telas-individuais/05-globo.html" title="Globo">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </a>
+    <a href="/telas-individuais/12-diario.html" title="Diário">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </a>
+    <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </a>
+  </div>
+</header>
+
 <div class="bi">
   <div class="top">
-    <div><div class="ttl">BIBLIOTECA CENTRAL</div><div class="tsub">Base de Conhecimento Classificada</div></div>
+    <div>
+      <div class="ttl">BIBLIOTECA CENTRAL</div>
+      <div class="tsub">Base de Conhecimento Classificada</div>
+    </div>
     <div class="tsrch">
       <svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" id="q" placeholder="Buscar documentos, perfis, relatórios...">
@@ -140,7 +224,9 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
       </div>
     </aside>
     <main class="content">
-      <div class="bc"><span>NEXUS</span><span>›</span><span>ARCHIVE</span><span>›</span><span class="cur">BIBLIOTECA</span></div>
+      <div class="bc">
+        <span>NEXUS</span><span>›</span><span>ARCHIVE</span><span>›</span><span class="cur">BIBLIOTECA</span>
+      </div>
       <div class="crow">
         <button class="cb"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>Filtrar</button>
         <button class="cb"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>Ordenar</button>
@@ -149,7 +235,10 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <div style="grid-column:1/-1;text-align:center;padding:40px;font-family:'JetBrains Mono',monospace;color:var(--gold);">SINCRONIZANDO ARQUIVOS...</div>
       </div>
       <div class="sync">
-        <div class="synch"><div class="synct">Sincronização da Rede Archive</div><svg class="synci" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/></svg></div>
+        <div class="synch">
+          <div class="synct">Sincronização da Rede Archive</div>
+          <svg class="synci" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6m-2.5-5.5l-4.2 4.2m-4.2 4.2l-4.2 4.2m0-12.4l4.2 4.2m4.2 4.2l4.2 4.2"/></svg>
+        </div>
         <div class="syngrid">
           <div class="syni"><div class="synl">Arquivos Totais</div><div class="synv" id="statTotal">0</div></div>
           <div class="syni"><div class="synl">Classificados</div><div class="synv hl" id="statClass">0</div></div>
@@ -174,190 +263,271 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     </div>
   </footer>
 </div>
+
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  const grid = document.getElementById('grid');
-  
-  // Itens estáticos de fallback para categorias não cobertas totalmente pela API
-  const staticItems = [
-    { c: 'rep', n: 'relatório de campo sibéria', title: 'Relatórios de Campo: Sibéria', desc: 'Observações meteorológicas anômalas e leituras de radiação não catalogadas perto de instalações abandonadas.', date: 'ATUALIZAÇÃO RECENTE', ref: 'REF: S-505', badge: 'un', badgeText: 'Não Lido', icon: 'report', progress: 0 },
-    { c: 'aud', n: 'transcrições operação echo', title: 'Transcrições — Operação Echo', desc: 'Áudios descriptografados de comunicações via rádio interceptadas no Triângulo do Pacífico.', date: 'PROCESSANDO', ref: 'REF: AUD-99', badge: '', badgeText: '', icon: 'audio' },
-    { c: 'map', n: 'relatório de berlim 1983', title: 'Relatório de Berlim — 1983', desc: 'Mapas de vigilância e registros de movimentos diplomáticos suspeitos no Setor Leste durante a crise de inverno.', date: '11.DEZ.1983', ref: 'REF: B-08', badge: 'un', badgeText: 'Não Lido', icon: 'map', progress: 12 }
-  ];
+(function() {
+  "use strict";
 
-  try {
-    // 1. Buscar dados dinâmicos
-    const artifactsData = await ArchiveAPI.getArtifacts();
-    const artifacts = Array.isArray(artifactsData) ? artifactsData : (artifactsData.artifacts || []);
-    
-    let suspects = [];
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
     try {
-      const susData = await ArchiveAPI._request('/archive/suspects');
-      suspects = (susData && susData.suspects) ? susData.suspects : [];
-    } catch(e) {
-      suspects = [
-        { alias: 'O Relojoeiro', status: 'Foragido', last_location: 'Londres', notes: 'Especialista em dispositivos mecânicos.' },
-        { alias: 'Agente V', status: 'Desaparecido', last_location: 'Genebra', notes: 'Ex-operador de inteligência russa.' },
-        { alias: 'Victor Volkov', status: 'Vigilância', last_location: 'Tóquio', notes: 'Suspeito de lavagem de artefatos.' }
-      ];
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'select' && typeof window.ArchiveAudio.playSelect === 'function') {
+        window.ArchiveAudio.playSelect();
+      }
+    } catch (e) {
+      console.warn('[BIBLIOTECA] Erro ao tocar som:', e);
     }
-
-    const allItems = [];
-
-    // 2. Mapear artefatos para 'hist' (Documentos Históricos)
-    artifacts.forEach(a => {
-      allItems.push({
-        c: 'hist',
-        n: (a.name + ' ' + a.origin + ' ' + a.category).toLowerCase(),
-        title: `Registro: ${a.name}`,
-        desc: `Origem: ${a.origin}. Era: ${a.circa || 'Desconhecida'}. Categoria: ${a.category}.`,
-        date: a.circa || 'DATA DESCONHECIDA',
-        ref: `REF: ART-${String(a.id).padStart(3, '0')}`,
-        badge: a.status === 'catalogado' ? 'rd' : 'un',
-        badgeText: a.status === 'catalogado' ? 'Catalogado' : 'Em Análise',
-        icon: 'artifact',
-        progress: a.status === 'catalogado' ? 100 : Math.floor(Math.random() * 60)
-      });
-    });
-
-    // 3. Mapear suspeitos para 'sus' (Perfis de Suspeitos)
-    suspects.forEach((s, idx) => {
-      allItems.push({
-        c: 'sus',
-        n: (s.alias + ' ' + (s.last_location || '')).toLowerCase(),
-        title: `Perfil: ${s.alias}`,
-        desc: s.notes || 'Informações limitadas disponíveis no banco de dados.',
-        date: `ÚLTIMA LOCALIZAÇÃO: ${(s.last_location || 'Desconhecida').toUpperCase()}`,
-        ref: `STATUS: ${s.status.toUpperCase()}`,
-        badge: (s.status === 'Foragido' || s.status === 'Desaparecido') ? 'un' : 'rd',
-        badgeText: s.status,
-        icon: 'suspect',
-        isSuspect: true
-      });
-    });
-
-    // 4. Adicionar itens estáticos
-    staticItems.forEach(item => allItems.push(item));
-
-    // 5. Função de renderização
-    function renderGrid(items) {
-      grid.innerHTML = items.map(item => {
-        let iconSvg = '';
-        if (item.icon === 'artifact') iconSvg = '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
-        else if (item.icon === 'suspect') iconSvg = '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>';
-        else if (item.icon === 'report') iconSvg = '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>';
-        else if (item.icon === 'map') iconSvg = '<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>';
-        else if (item.icon === 'audio') iconSvg = '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>';
-        else iconSvg = '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>';
-
-        const badgeHtml = item.badge ? `<div class="badge ${item.badge}">${item.badgeText}</div>` : '';
-        const progressHtml = item.progress !== undefined ? `
-          <div class="prh"><div class="prl">Progresso de Leitura</div><div class="prv">${item.progress}%</div></div>
-          <div class="prb"><div class="prf" style="width:${item.progress}%"></div></div>
-        ` : '';
-        
-        const bottomMeta = item.isSuspect ? 
-          `<div class="dcm" style="border-top:none;padding-top:0;margin-top:14px;"><span>${item.date}</span><span class="${item.badge === 'un' ? 'al' : 'ref'}">${item.ref}</span></div>` :
-          `<div class="dcm"><span>DATA: ${item.date}</span><span class="${item.badge === 'un' ? 'al' : 'ref'}">${item.ref}</span></div>`;
-
-        return `
-          <div class="dc ${item.c === 'hist' && item.progress < 100 ? 'clas' : ''}" data-c="${item.c}" data-n="${item.n}">
-            <div class="dch">
-              <svg class="dci" viewBox="0 0 24 24">${iconSvg}</svg>
-              ${badgeHtml}
-            </div>
-            <h3 class="dct">${item.title}</h3>
-            <p class="dcd">${item.desc}</p>
-            ${progressHtml}
-            ${bottomMeta}
-          </div>
-        `;
-      }).join('');
-
-      // Reatribuir listeners de clique
-      document.querySelectorAll('.dc').forEach(d => d.addEventListener('click', function() {
-        if(window.ArchiveAudio) ArchiveAudio.playClick();
-        document.querySelectorAll('.dc').forEach(x => { x.style.outline = ''; x.style.outlineOffset = ''; });
-        this.style.outline = '1.5px solid var(--amber)';
-        this.style.outlineOffset = '-2px';
-        setTimeout(() => { this.style.outline = ''; this.style.outlineOffset = ''; }, 600);
-      }));
-    }
-
-    renderGrid(allItems);
-
-    // Atualizar estatísticas do painel inferior
-    document.getElementById('statTotal').textContent = String(allItems.length).padStart(4, '0');
-    document.getElementById('statClass').textContent = String(allItems.filter(i => i.badge === 'rd').length).padStart(4, '0');
-
-    // 6. Filtros da Sidebar
-    document.querySelectorAll('.si2').forEach(i => i.addEventListener('click', () => {
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      document.querySelectorAll('.si2').forEach(x => x.classList.remove('on'));
-      i.classList.add('on');
-      const c = i.dataset.c;
-      document.querySelectorAll('.dc').forEach(d => {
-        d.style.display = (d.dataset.c === c) ? '' : 'none';
-      });
-    }));
-
-    // 7. Busca em Tempo Real
-    document.getElementById('q').addEventListener('input', e => {
-      const q = e.target.value.toLowerCase();
-      document.querySelectorAll('.dc').forEach(d => {
-        d.style.display = d.dataset.n.includes(q) ? '' : 'none';
-      });
-    });
-
-  } catch (err) {
-    console.error('Falha ao carregar biblioteca', err);
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:\'JetBrains Mono\',monospace;color:var(--onv);">Falha na sincronização dos arquivos. Verifique a conexão.</div>';
   }
-});
 
-// Efeito de digitação do terminal
-const cmds = ['Aguardando comando...', 'Varredura de índice...', 'Nó sincronizado.', 'Cache validado.'];
-let ci = 0;
-const th = document.getElementById('th');
-
-function typeCmd() {
-  const m = cmds[ci];
-  th.textContent = '';
-  let k = 0;
-  const iv = setInterval(() => {
-    if (k < m.length) {
-      th.textContent = m.substring(0, k + 1);
-      k++;
-    } else {
-      clearInterval(iv);
-      ci = (ci + 1) % cmds.length;
-      setTimeout(typeCmd, 2200);
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
     }
-  }, 45);
-}
-typeCmd();
+  }
 
-// Rotação de texto do terminal
-const msgs = ['TERMINAL', 'NODE_04', 'ONLINE', 'ARCHIVE_OS'];
-let mi = 0;
-setInterval(() => {
-  mi = (mi + 1) % msgs.length;
-  document.getElementById('tt').textContent = msgs[mi];
-}, 3000);
+  /* ============================================
+     INICIALIZAÇÃO PRINCIPAL
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    var grid = document.getElementById('grid');
+    
+    // Itens estáticos de fallback
+    var staticItems = [
+      { c: 'rep', n: 'relatório de campo sibéria', title: 'Relatórios de Campo: Sibéria', desc: 'Observações meteorológicas anômalas e leituras de radiação não catalogadas perto de instalações abandonadas.', date: 'ATUALIZAÇÃO RECENTE', ref: 'REF: S-505', badge: 'un', badgeText: 'Não Lido', icon: 'report', progress: 0 },
+      { c: 'aud', n: 'transcrições operação echo', title: 'Transcrições — Operação Echo', desc: 'Áudios descriptografados de comunicações via rádio interceptadas no Triângulo do Pacífico.', date: 'PROCESSANDO', ref: 'REF: AUD-99', badge: '', badgeText: '', icon: 'audio' },
+      { c: 'map', n: 'relatório de berlim 1983', title: 'Relatório de Berlim — 1983', desc: 'Mapas de vigilância e registros de movimentos diplomáticos suspeitos no Setor Leste durante a crise de inverno.', date: '11.DEZ.1983', ref: 'REF: B-08', badge: 'un', badgeText: 'Não Lido', icon: 'map', progress: 12 }
+    ];
 
-// Relógio do sistema
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
+    try {
+      // Inicializa API se disponível
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      // 1. Buscar dados dinâmicos
+      var artifactsData = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getArtifacts === 'function') {
+        artifactsData = await window.ArchiveAPI.getArtifacts();
+      }
+      var artifacts = Array.isArray(artifactsData) ? artifactsData : (artifactsData && artifactsData.artifacts ? artifactsData.artifacts : []);
+      
+      var suspects = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI._request === 'function') {
+        try {
+          var susData = await window.ArchiveAPI._request('/archive/suspects');
+          suspects = (susData && susData.suspects) ? susData.suspects : [];
+        } catch(e) {
+          suspects = [
+            { alias: 'O Relojoeiro', status: 'Foragido', last_location: 'Londres', notes: 'Especialista em dispositivos mecânicos.' },
+            { alias: 'Agente V', status: 'Desaparecido', last_location: 'Genebra', notes: 'Ex-operador de inteligência russa.' },
+            { alias: 'Victor Volkov', status: 'Vigilância', last_location: 'Tóquio', notes: 'Suspeito de lavagem de artefatos.' }
+          ];
+        }
+      } else {
+        suspects = [
+          { alias: 'O Relojoeiro', status: 'Foragido', last_location: 'Londres', notes: 'Especialista em dispositivos mecânicos.' },
+          { alias: 'Agente V', status: 'Desaparecido', last_location: 'Genebra', notes: 'Ex-operador de inteligência russa.' },
+          { alias: 'Victor Volkov', status: 'Vigilância', last_location: 'Tóquio', notes: 'Suspeito de lavagem de artefatos.' }
+        ];
+      }
+
+      var allItems = [];
+
+      // 2. Mapear artefatos para 'hist' (Documentos Históricos)
+      artifacts.forEach(function(a) {
+        allItems.push({
+          c: 'hist',
+          n: ((a.name || '') + ' ' + (a.origin || '') + ' ' + (a.category || '')).toLowerCase(),
+          title: 'Registro: ' + (a.name || 'Sem Nome'),
+          desc: 'Origem: ' + (a.origin || 'Desconhecida') + '. Era: ' + (a.circa || 'Desconhecida') + '. Categoria: ' + (a.category || 'Não Classificado') + '.',
+          date: a.circa || 'DATA DESCONHECIDA',
+          ref: 'REF: ART-' + String(a.id).padStart(3, '0'),
+          badge: a.status === 'catalogado' ? 'rd' : 'un',
+          badgeText: a.status === 'catalogado' ? 'Catalogado' : 'Em Análise',
+          icon: 'artifact',
+          progress: a.status === 'catalogado' ? 100 : Math.floor(Math.random() * 60)
+        });
+      });
+
+      // 3. Mapear suspeitos para 'sus' (Perfis de Suspeitos)
+      suspects.forEach(function(s) {
+        allItems.push({
+          c: 'sus',
+          n: ((s.alias || '') + ' ' + (s.last_location || '')).toLowerCase(),
+          title: 'Perfil: ' + (s.alias || 'Desconhecido'),
+          desc: s.notes || 'Informações limitadas disponíveis no banco de dados.',
+          date: 'ÚLTIMA LOCALIZAÇÃO: ' + (s.last_location || 'Desconhecida').toUpperCase(),
+          ref: 'STATUS: ' + (s.status || 'Desconhecido').toUpperCase(),
+          badge: (s.status === 'Foragido' || s.status === 'Desaparecido') ? 'un' : 'rd',
+          badgeText: s.status || 'Desconhecido',
+          icon: 'suspect',
+          isSuspect: true
+        });
+      });
+
+      // 4. Adicionar itens estáticos
+      staticItems.forEach(function(item) { allItems.push(item); });
+
+      // 5. Função de renderização
+      function renderGrid(items) {
+        var html = '';
+        items.forEach(function(item) {
+          var iconSvg = '';
+          if (item.icon === 'artifact') iconSvg = '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
+          else if (item.icon === 'suspect') iconSvg = '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>';
+          else if (item.icon === 'report') iconSvg = '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>';
+          else if (item.icon === 'map') iconSvg = '<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>';
+          else if (item.icon === 'audio') iconSvg = '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>';
+          else iconSvg = '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>';
+
+          var badgeHtml = item.badge ? '<div class="badge ' + item.badge + '">' + item.badgeText + '</div>' : '';
+          var progressHtml = '';
+          if (item.progress !== undefined) {
+            progressHtml = '<div class="prh"><div class="prl">Progresso de Leitura</div><div class="prv">' + item.progress + '%</div></div><div class="prb"><div class="prf" style="width:' + item.progress + '%"></div></div>';
+          }
+          
+          var bottomMeta = item.isSuspect ? 
+            '<div class="dcm" style="border-top:none;padding-top:0;margin-top:14px;"><span>' + item.date + '</span><span class="' + (item.badge === 'un' ? 'al' : 'ref') + '">' + item.ref + '</span></div>' :
+            '<div class="dcm"><span>DATA: ' + item.date + '</span><span class="' + (item.badge === 'un' ? 'al' : 'ref') + '">' + item.ref + '</span></div>';
+
+          var clasClass = (item.c === 'hist' && item.progress < 100) ? ' clas' : '';
+
+          html += '<div class="dc' + clasClass + '" data-c="' + item.c + '" data-n="' + item.n + '">';
+          html += '  <div class="dch">';
+          html += '    <svg class="dci" viewBox="0 0 24 24">' + iconSvg + '</svg>';
+          html += '    ' + badgeHtml;
+          html += '  </div>';
+          html += '  <h3 class="dct">' + item.title + '</h3>';
+          html += '  <p class="dcd">' + item.desc + '</p>';
+          html += '  ' + progressHtml;
+          html += '  ' + bottomMeta;
+          html += '</div>';
+        });
+
+        grid.innerHTML = html;
+
+        // Reatribuir listeners de clique
+        document.querySelectorAll('.dc').forEach(function(d) {
+          d.addEventListener('click', function() {
+            playSound('click');
+            document.querySelectorAll('.dc').forEach(function(x) { 
+              x.style.outline = ''; 
+              x.style.outlineOffset = ''; 
+            });
+            this.style.outline = '1.5px solid var(--amber)';
+            this.style.outlineOffset = '-2px';
+            setTimeout(function() { 
+              d.style.outline = ''; 
+              d.style.outlineOffset = ''; 
+            }, 600);
+          });
+        });
+      }
+
+      renderGrid(allItems);
+
+      // Atualizar estatísticas do painel inferior
+      var statTotalEl = document.getElementById('statTotal');
+      var statClassEl = document.getElementById('statClass');
+      if (statTotalEl) statTotalEl.textContent = String(allItems.length).padStart(4, '0');
+      if (statClassEl) {
+        var classCount = allItems.filter(function(i) { return i.badge === 'rd'; }).length;
+        statClassEl.textContent = String(classCount).padStart(4, '0');
+      }
+
+      // 6. Filtros da Sidebar
+      document.querySelectorAll('.si2').forEach(function(i) {
+        i.addEventListener('click', function() {
+          playSound('click');
+          document.querySelectorAll('.si2').forEach(function(x) { x.classList.remove('on'); });
+          i.classList.add('on');
+          var c = i.dataset.c;
+          document.querySelectorAll('.dc').forEach(function(d) {
+            d.style.display = (d.dataset.c === c) ? '' : 'none';
+          });
+        });
+      });
+
+      // 7. Busca em Tempo Real
+      var qInput = document.getElementById('q');
+      if (qInput) {
+        qInput.addEventListener('input', function(e) {
+          var q = e.target.value.toLowerCase();
+          document.querySelectorAll('.dc').forEach(function(d) {
+            var n = d.dataset.n || '';
+            d.style.display = n.indexOf(q) !== -1 ? '' : 'none';
+          });
+        });
+      }
+
+    } catch (err) {
+      console.error('[BIBLIOTECA] Falha ao carregar:', err);
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:\'JetBrains Mono\',monospace;color:var(--onv);">Falha na sincronização dos arquivos. Verifique a conexão.</div>';
+      showNotification('Biblioteca carregada em modo offline', 'warning');
+    }
+  });
+
+  /* ============================================
+     EFEITO DE DIGITAÇÃO DO TERMINAL
+     ============================================ */
+  var cmds = ['Aguardando comando...', 'Varredura de índice...', 'Nó sincronizado.', 'Cache validado.'];
+  var ci = 0;
+  var th = document.getElementById('th');
+
+  function typeCmd() {
+    if (!th) return;
+    var m = cmds[ci];
+    th.textContent = '';
+    var k = 0;
+    var iv = setInterval(function() {
+      if (k < m.length) {
+        th.textContent = m.substring(0, k + 1);
+        k++;
+      } else {
+        clearInterval(iv);
+        ci = (ci + 1) % cmds.length;
+        setTimeout(typeCmd, 2200);
+      }
+    }, 45);
+  }
+  typeCmd();
+
+  /* ============================================
+     ROTAÇÃO DE TEXTO DO TERMINAL
+     ============================================ */
+  var msgs = ['TERMINAL', 'NODE_04', 'ONLINE', 'ARCHIVE_OS'];
+  var mi = 0;
+  setInterval(function() {
+    mi = (mi + 1) % msgs.length;
+    var tt = document.getElementById('tt');
+    if (tt) tt.textContent = msgs[mi];
+  }, 3000);
+
+  /* ============================================
+     RELÓGIO DO SISTEMA
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

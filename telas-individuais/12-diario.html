@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Diário de Bordo</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Diário de Bordo</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -33,6 +50,7 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
 .body{flex:1;display:flex;overflow:hidden;}
@@ -43,14 +61,14 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .prof h3{font-family:'Libre Caslon Text',serif;font-size:15px;color:var(--on);margin-bottom:2px;}
 .prof p{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
 .snav{display:flex;flex-direction:column;gap:5px;}
-.si{display:flex;align-items:center;gap:11px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si{display:flex;align-items:center;gap:11px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;text-decoration:none;}
 .si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
 .si.on{background:rgba(197,160,89,.1);border-left-color:var(--gold);color:var(--gold);}
 .si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;}
-.btni{margin-top:auto;padding:13px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .3s;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btni{margin-top:auto;padding:13px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .3s;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);text-decoration:none;text-align:center;display:block;}
 .btni:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
 .content{flex:1;overflow-y:auto;padding:40px 56px;position:relative;}
-.phd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;}
+.phd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;gap:20px;flex-wrap:wrap;}
 .pt2{font-family:'Libre Caslon Text',serif;font-size:44px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:50px;margin-bottom:10px;}
 .pd2{font-family:'Manrope',sans-serif;font-size:15px;line-height:23px;color:var(--onv);max-width:560px;}
 .coords{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;padding:10px 16px;border:.5px solid var(--gold);clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
@@ -66,14 +84,15 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .ec{background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);padding:26px;box-shadow:0 14px 34px rgba(0,0,0,.4);transition:all .4s;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);position:relative;}
 .ec::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);}
 .ec:hover{transform:translateY(-4px);box-shadow:0 18px 42px rgba(0,0,0,.5),0 0 20px rgba(255,191,0,.2);}
-.eh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+.eh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:12px;flex-wrap:wrap;}
 .et{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em;line-height:26px;}
-.eb{padding:5px 10px;background:rgba(205,127,50,.15);border:.5px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;}
+.eb{padding:5px 10px;background:rgba(205,127,50,.15);border:.5px solid var(--bronze);font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;color:var(--bronze);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
 .ebd{font-family:'Manrope',sans-serif;font-size:14px;line-height:21px;color:#3a3530;margin-bottom:14px;}
 .pol{display:inline-block;background:#fff;padding:10px 10px 32px;box-shadow:0 6px 18px rgba(0,0,0,.2);transform:rotate(-2deg);margin-top:14px;transition:transform .3s;}
 .pol:hover{transform:rotate(0) translateY(-2px);}
-.pol .pi{width:190px;height:130px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;}
-.pol .pi::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,248,220,.12),transparent 60%);}
+.pol .pi{width:190px;height:130px;background:linear-gradient(135deg,#2a2520,#1a1510);position:relative;overflow:hidden;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;}
+.pol .pi-fallback{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;opacity:.6;z-index:3;}
+.pol .pi::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,248,220,.12),transparent 60%);z-index:1;}
 .pol .pc{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:12px;color:#1a1a1a;text-align:center;margin-top:10px;}
 .decrypt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#6b6560;margin-top:18px;padding:10px 12px;background:rgba(197,160,89,.08);border-left:2px solid var(--gold);}
 .acard{background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:18px;margin-top:14px;position:relative;overflow:hidden;}
@@ -90,17 +109,17 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .ap:hover{background:var(--amber);border-color:var(--amber);}
 .ap svg{width:13px;height:13px;stroke:var(--ivory);stroke-width:1.5;fill:none;}
 .ap:hover svg{stroke:var(--surface);}
-.srow{display:flex;gap:18px;margin-top:14px;}
+.srow{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap;}
 .sph{width:96px;height:116px;background:linear-gradient(135deg,#2a2520,#1a1510);border:.5px solid var(--gold);flex-shrink:0;position:relative;overflow:hidden;}
 .sph svg{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:78px;height:96px;opacity:.8;}
-.sda{flex:1;display:flex;flex-direction:column;gap:9px;}
+.sda{flex:1;display:flex;flex-direction:column;gap:9px;min-width:200px;}
 .sf{display:flex;gap:12px;align-items:baseline;padding-bottom:7px;border-bottom:.5px solid rgba(197,160,89,.2);}
 .sfl{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;min-width:64px;}
 .sfv{font-family:'JetBrains Mono',monospace;font-size:11px;color:#1a1a1a;letter-spacing:.05em;}
 .sfv.al{color:var(--amber);font-weight:500;}
-.tbar{height:60px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;padding:0 48px;gap:22px;flex-shrink:0;z-index:40;}
+.tbar{height:60px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;padding:0 48px;gap:22px;flex-shrink:0;z-index:40;flex-wrap:wrap;}
 .tbl{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;color:var(--onv);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;}
-.ttr{flex:1;height:2px;background:rgba(197,160,89,.2);position:relative;cursor:pointer;}
+.ttr{flex:1;height:2px;background:rgba(197,160,89,.2);position:relative;cursor:pointer;min-width:150px;}
 .tpr{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold),var(--amber));box-shadow:0 0 8px var(--amber);width:65%;}
 .tmk{position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:var(--gold);border-radius:50%;border:2px solid var(--surface);cursor:pointer;transition:all .3s;}
 .tmk:hover{background:var(--amber);transform:translate(-50%,-50%) scale(1.3);}
@@ -110,6 +129,22 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .ftc{display:flex;gap:26px;align-items:center;}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { flex-direction: column; overflow-y: auto; }
+  .side { width: 100%; border-right: none; border-bottom: .5px solid rgba(197,160,89,.3); padding: 20px; }
+  .snav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .si { flex: 1; min-width: 120px; padding: 8px; font-size: 9px; }
+  .content { padding: 24px 20px; }
+  .tbar { padding: 0 20px; height: auto; min-height: 60px; gap: 10px; }
+  .tbl { font-size: 8px; }
+  footer { padding: 0 20px; }
+  .ftc { gap: 12px; font-size: 10px; }
+  .pt2 { font-size: 32px; line-height: 38px; }
+}
 </style>
 </head>
 <body>
@@ -117,16 +152,23 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="lb">
   <header>
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO CORRIGIDA - CAMINHOS CORRETOS -->
     <nav class="nav">
       <a href="/telas-individuais/05-globo.html">Globo</a>
-      <a href="/telas-individuais/15-museu.html">Banco de Dados</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
       <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
       <a href="/telas-individuais/12-diario.html" class="on">Diário de Bordo</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
   <div class="body">
@@ -138,17 +180,22 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <p id="pCodename">Field Operative</p>
         </div>
       </div>
+      <!-- ✅ SIDEBAR CORRIGIDA - CAMINHOS ABSOLUTOS CORRETOS -->
       <nav class="snav">
         <a href="/telas-individuais/05-globo.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
-        <a href="/telas-individuais/15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+        <a href="/telas-individuais/08-banco-dados.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
         <a href="/telas-individuais/11-passaporte.html" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
-        <a href="#" class="si on"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
+        <a href="/telas-individuais/12-diario.html" class="si on"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
       </nav>
-      <button class="btni" id="btnIntel">Acessar Intel</button>
+      <!-- ✅ BOTÃO CORRIGIDO - Caminho absoluto para Banco de Dados (Intel) -->
+      <a href="/telas-individuais/08-banco-dados.html" class="btni" id="btnIntel">Acessar Intel</a>
     </aside>
     <main class="content">
       <div class="phd">
-        <div><h1 class="pt2">Diário de Bordo</h1><p class="pd2">Registro cronológico de atividades de campo, artefatos recuperados e comunicações interceptadas. Nível de classificação: V.</p></div>
+        <div>
+          <h1 class="pt2">Diário de Bordo</h1>
+          <p class="pd2">Registro cronológico de atividades de campo, artefatos recuperados e comunicações interceptadas. Nível de classificação: V.</p>
+        </div>
         <div class="coords">LAT: 51.5074° N | LON: 0.1278° W</div>
       </div>
       <div class="tl">
@@ -157,9 +204,17 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <div class="td"></div>
           <div class="ed" id="date1">--.--.---- --:--</div>
           <div class="ec">
-            <div class="eh"><h3 class="et" id="title1">Registro Recuperado</h3><div class="eb" id="badge1">Categoria: ---</div></div>
+            <div class="eh">
+              <h3 class="et" id="title1">Registro Recuperado</h3>
+              <div class="eb" id="badge1">Categoria: ---</div>
+            </div>
             <p class="ebd" id="desc1">Carregando dados do acervo...</p>
-            <div class="pol"><div class="pi" id="img1"></div><div class="pc" id="cap1">Exhibit A</div></div>
+            <div class="pol">
+              <div class="pi" id="img1">
+                <div class="pi-fallback">CARREGANDO...</div>
+              </div>
+              <div class="pc" id="cap1">Exhibit A</div>
+            </div>
             <div class="decrypt" id="decrypt1">Descriptografia em andamento... Tempo estimado: 48h.</div>
           </div>
         </div>
@@ -169,9 +224,14 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <div class="td act"></div>
           <div class="ed" id="date2">--.--.---- --:--</div>
           <div class="ec">
-            <div class="eh"><h3 class="et" id="title2">Intercepto de Áudio</h3></div>
+            <div class="eh">
+              <h3 class="et" id="title2">Intercepto de Áudio</h3>
+            </div>
             <div class="acard">
-              <div class="ah"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg><div class="at">Intercepto de Áudio</div></div>
+              <div class="ah">
+                <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                <div class="at">Intercepto de Áudio</div>
+              </div>
               <div class="am" id="am2">FREQ: --- MHz | MISSÃO: ---</div>
               <div class="aq" id="aq2">"Aguardando sincronização da missão..."</div>
               <div style="display:flex;align-items:center;">
@@ -187,9 +247,14 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <div class="td"></div>
           <div class="ed" id="date3">--.--.---- --:--</div>
           <div class="ec">
-            <div class="eh"><h3 class="et">Suspeito Identificado</h3><div class="eb" id="badge3">Alias: ---</div></div>
+            <div class="eh">
+              <h3 class="et">Suspeito Identificado</h3>
+              <div class="eb" id="badge3">Alias: ---</div>
+            </div>
             <div class="srow">
-              <div class="sph"><svg viewBox="0 0 100 120"><path d="M50 20c-12 0-20 10-20 22 0 8 4 14 8 18-12 4-22 15-22 28v8h68v-8c0-13-10-24-22-28 4-4 8-10 8-18 0-12-8-22-20-22z" fill="#0c0a07"/></svg></div>
+              <div class="sph">
+                <svg viewBox="0 0 100 120"><path d="M50 20c-12 0-20 10-20 22 0 8 4 14 8 18-12 4-22 15-22 28v8h68v-8c0-13-10-24-22-28 4-4 8-10 8-18 0-12-8-22-20-22z" fill="#0c0a07"/></svg>
+              </div>
               <div class="sda">
                 <div class="sf"><div class="sfl">Status</div><div class="sfv al" id="status3">---</div></div>
                 <div class="sf"><div class="sfl">Local</div><div class="sfv" id="loc3">Carregando...</div></div>
@@ -203,7 +268,13 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </div>
   <div class="tbar">
     <div class="tbl">Início: <span id="startDate">--.--.----</span></div>
-    <div class="ttr"><div class="tpr"></div><div class="tmk" style="left:10%"></div><div class="tmk" style="left:35%"></div><div class="tmk act" style="left:65%"></div><div class="tmk" style="left:90%"></div></div>
+    <div class="ttr">
+      <div class="tpr"></div>
+      <div class="tmk" style="left:10%"></div>
+      <div class="tmk" style="left:35%"></div>
+      <div class="tmk act" style="left:65%"></div>
+      <div class="tmk" style="left:90%"></div>
+    </div>
     <div class="tbl">Atual: <span id="currentDate">--.--.----</span></div>
     <div class="tbl">Fim: Classificado</div>
   </div>
@@ -217,115 +288,225 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
   </footer>
 </div>
 <script>
-// Inicialização das ondas de áudio
-const aw = document.getElementById('aw');
-for(let i = 0; i < 24; i++) {
-  const b = document.createElement('div');
-  b.className = 'b';
-  b.style.animationDelay = (i * 0.06) + 's';
-  aw.appendChild(b);
-}
+(function() {
+  "use strict";
 
-let playing = true;
-document.getElementById('ap').addEventListener('click', function() {
-  playing = !playing;
-  aw.querySelectorAll('.b').forEach(b => b.style.animationPlayState = playing ? 'running' : 'paused');
-  this.querySelector('svg').innerHTML = playing ? '<polygon points="5 3 19 12 5 21 5 3"/>' : '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-  if(window.ArchiveAudio) ArchiveAudio.playClick();
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await ArchiveAPI.init();
-    const player = await ArchiveAPI.getPlayer();
-    const artifacts = await ArchiveAPI.getArtifacts();
-    const missions = await ArchiveAPI.getMissions();
-    
-    // Atualizar Perfil
-    document.getElementById('pName').textContent = (player.name || 'DIRETOR').toUpperCase();
-    document.getElementById('pCodename').textContent = `${player.codename || 'NOVICE'} | ${player.rank || 'Diretor Interino'}`;
-
-    // Datas Relativas
-    const now = new Date();
-    const format = (d) => `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`;
-    const d1 = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
-    const d2 = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
-    const d3 = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
-    
-    document.getElementById('date1').textContent = `${format(d1)} — 23:45`;
-    document.getElementById('date2').textContent = `${format(d2)} — 04:12`;
-    document.getElementById('date3').textContent = `${format(d3)} — 18:00`;
-    document.getElementById('startDate').textContent = format(d1);
-    document.getElementById('currentDate').textContent = format(now);
-
-    // Bloco 1: Artefato
-    const artifact = artifacts[0] || { name: 'Artefato Desconhecido', origin: 'Desconhecida', category: 'Não Catalogado', id: 1 };
-    document.getElementById('title1').textContent = `Registro: ${artifact.name}`;
-    document.getElementById('badge1').textContent = `Categoria: ${artifact.category}`;
-    document.getElementById('desc1').textContent = `Recuperado em ${artifact.origin}. Apresenta anomalias estruturais que exigem análise profunda no laboratório da Archive. Várias páginas do relatório original estão faltando.`;
-    document.getElementById('img1').style.backgroundImage = `url('https://image.pollinations.ai/prompt/${encodeURIComponent(artifact.name + ', polaroid photo, cinematic, dark archive')}&width=200&height=150&nologo=true&seed=${artifact.id}')`;
-    document.getElementById('cap1').textContent = `Exhibit A — ${artifact.origin}`;
-
-    // Bloco 2: Áudio (Missão)
-    const mission = missions[0] || { codename: 'OP', description: 'Sem dados' };
-    document.getElementById('title2').textContent = `Intercepto: ${mission.codename}`;
-    document.getElementById('am2').textContent = `FREQ: ${100 + Math.floor(Math.random()*50)}.${Math.floor(Math.random()*9)} MHz | MISSÃO: ${mission.codename}`;
-    document.getElementById('aq2').textContent = `"${mission.description}"`;
-
-    // Bloco 3: Suspeito
-    const suspects = [
-      { alias: 'O Relojoeiro', status: 'Foragido', last_location: 'Londres', notes: 'Especialista em dispositivos mecânicos. Provavelmente carrega a chave primária.' },
-      { alias: 'Agente V', status: 'Desaparecido', last_location: 'Genebra', notes: 'Ex-operador de inteligência russa.' },
-      { alias: 'Victor Volkov', status: 'Vigilância', last_location: 'Tóquio', notes: 'Suspeito de lavagem de artefatos.' }
-    ];
-    const suspect = suspects[0];
-    document.getElementById('badge3').textContent = `Alias: ${suspect.alias}`;
-    document.getElementById('status3').textContent = suspect.status.toUpperCase();
-    document.getElementById('loc3').textContent = `Visto pela última vez em ${suspect.last_location}.`;
-    document.getElementById('notes3').textContent = suspect.notes;
-
-  } catch (err) {
-    console.warn('Falha ao carregar diário', err);
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'select' && typeof window.ArchiveAudio.playSelect === 'function') {
+        window.ArchiveAudio.playSelect();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      }
+    } catch (e) {
+      console.warn('[DIARIO] Erro ao tocar som:', e);
+    }
   }
 
-  // Event Listeners de UI
-  document.getElementById('btnIntel').addEventListener('click', () => {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    window.location.href = '15-museu.html';
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
+
+  /* ============================================
+     INICIALIZAÇÃO DAS ONDAS DE ÁUDIO
+     ============================================ */
+  var aw = document.getElementById('aw');
+  if (aw) {
+    for (var i = 0; i < 24; i++) {
+      var b = document.createElement('div');
+      b.className = 'b';
+      b.style.animationDelay = (i * 0.06) + 's';
+      aw.appendChild(b);
+    }
+  }
+
+  var playing = true;
+  var apBtn = document.getElementById('ap');
+  if (apBtn) {
+    apBtn.addEventListener('click', function() {
+      playing = !playing;
+      aw.querySelectorAll('.b').forEach(function(bar) {
+        bar.style.animationPlayState = playing ? 'running' : 'paused';
+      });
+      this.querySelector('svg').innerHTML = playing 
+        ? '<polygon points="5 3 19 12 5 21 5 3"/>' 
+        : '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      playSound('click');
+    });
+  }
+
+  /* ============================================
+     INICIALIZAÇÃO PRINCIPAL
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      // Inicializa API se disponível
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      var player = null;
+      var artifacts = [];
+      var missions = [];
+
+      if (window.ArchiveAPI) {
+        if (typeof window.ArchiveAPI.getPlayer === 'function') {
+          try {
+            player = await window.ArchiveAPI.getPlayer();
+          } catch (e) {
+            console.warn('[DIARIO] getPlayer falhou:', e);
+          }
+        }
+        if (typeof window.ArchiveAPI.getArtifacts === 'function') {
+          try {
+            artifacts = await window.ArchiveAPI.getArtifacts();
+          } catch (e) {
+            console.warn('[DIARIO] getArtifacts falhou:', e);
+          }
+        }
+        if (typeof window.ArchiveAPI.getMissions === 'function') {
+          try {
+            missions = await window.ArchiveAPI.getMissions();
+          } catch (e) {
+            console.warn('[DIARIO] getMissions falhou:', e);
+          }
+        }
+      }
+
+      // Atualizar Perfil
+      var pNameEl = document.getElementById('pName');
+      var pCodenameEl = document.getElementById('pCodename');
+      
+      if (player && player.name) {
+        pNameEl.textContent = (player.name || 'DIRETOR').toUpperCase();
+        pCodenameEl.textContent = (player.codename || 'NOVICE') + ' | ' + (player.rank || 'Diretor Interino');
+      } else {
+        // Fallback: buscar do localStorage
+        var state = window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function'
+          ? window.ArchiveAPI.getState()
+          : null;
+        var director = (state && state.director) ? state.director : { name: 'DIRETOR', codename: 'NOVICE' };
+        pNameEl.textContent = (director.name || 'DIRETOR').toUpperCase();
+        pCodenameEl.textContent = (director.codename || 'NOVICE') + ' | DIRETOR INTERINO';
+      }
+
+      // Datas Relativas
+      var now = new Date();
+      var format = function(d) {
+        return String(d.getDate()).padStart(2, '0') + '.' + 
+               String(d.getMonth() + 1).padStart(2, '0') + '.' + 
+               d.getFullYear();
+      };
+      var d1 = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+      var d2 = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+      var d3 = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
+
+      document.getElementById('date1').textContent = format(d1) + ' — 23:45';
+      document.getElementById('date2').textContent = format(d2) + ' — 04:12';
+      document.getElementById('date3').textContent = format(d3) + ' — 18:00';
+      document.getElementById('startDate').textContent = format(d1);
+      document.getElementById('currentDate').textContent = format(now);
+
+      // Bloco 1: Artefato
+      var artifact = artifacts && artifacts[0] ? artifacts[0] : { 
+        name: 'Artefato Desconhecido', 
+        origin: 'Desconhecida', 
+        category: 'Não Catalogado', 
+        id: 1 
+      };
+      document.getElementById('title1').textContent = 'Registro: ' + artifact.name;
+      document.getElementById('badge1').textContent = 'Categoria: ' + artifact.category;
+      document.getElementById('desc1').textContent = 'Recuperado em ' + artifact.origin + '. Apresenta anomalias estruturais que exigem análise profunda no laboratório da Archive. Várias páginas do relatório original estão faltando.';
+      
+      var img1El = document.getElementById('img1');
+      var prompt = encodeURIComponent(artifact.name + ', polaroid photo, cinematic, dark archive');
+      var imgUrl = 'https://image.pollinations.ai/prompt/' + prompt + '&width=200&height=150&nologo=true&seed=' + artifact.id;
+      
+      var img = new Image();
+      img.onload = function() {
+        img1El.style.backgroundImage = "url('" + imgUrl + "')";
+        var fallback = img1El.querySelector('.pi-fallback');
+        if (fallback) fallback.style.display = 'none';
+      };
+      img.onerror = function() {
+        var fallback = img1El.querySelector('.pi-fallback');
+        if (fallback) {
+          fallback.textContent = '📦 ' + (artifact.category || 'ARTEFATO');
+        }
+      };
+      img.src = imgUrl;
+      
+      document.getElementById('cap1').textContent = 'Exhibit A — ' + artifact.origin;
+
+      // Bloco 2: Áudio (Missão)
+      var mission = missions && missions[0] ? missions[0] : { codename: 'OP', description: 'Sem dados' };
+      document.getElementById('title2').textContent = 'Intercepto: ' + mission.codename;
+      document.getElementById('am2').textContent = 'FREQ: ' + (100 + Math.floor(Math.random() * 50)) + '.' + Math.floor(Math.random() * 9) + ' MHz | MISSÃO: ' + mission.codename;
+      document.getElementById('aq2').textContent = '"' + mission.description + '"';
+
+      // Bloco 3: Suspeito
+      var suspects = [
+        { alias: 'O Relojoeiro', status: 'Foragido', last_location: 'Londres', notes: 'Especialista em dispositivos mecânicos. Provavelmente carrega a chave primária.' },
+        { alias: 'Agente V', status: 'Desaparecido', last_location: 'Genebra', notes: 'Ex-operador de inteligência russa.' },
+        { alias: 'Victor Volkov', status: 'Vigilância', last_location: 'Tóquio', notes: 'Suspeito de lavagem de artefatos.' }
+      ];
+      var suspect = suspects[0];
+      document.getElementById('badge3').textContent = 'Alias: ' + suspect.alias;
+      document.getElementById('status3').textContent = suspect.status.toUpperCase();
+      document.getElementById('loc3').textContent = 'Visto pela última vez em ' + suspect.last_location + '.';
+      document.getElementById('notes3').textContent = suspect.notes;
+
+      playSound('success');
+
+    } catch (err) {
+      console.warn('[DIARIO] Falha ao carregar diário:', err);
+      showNotification('Diário carregado em modo offline', 'warning');
+    }
+
+    /* ============================================
+     MARCADORES DA TIMELINE
+     ============================================ */
+    document.querySelectorAll('.tmk').forEach(function(m) {
+      m.addEventListener('click', function() {
+        playSound('click');
+        document.querySelectorAll('.tmk').forEach(function(x) { x.classList.remove('act'); });
+        this.classList.add('act');
+      });
+    });
+
+    // Nota: Removidos os event listeners que apenas mudavam .on em .nav a e .si
+    // porque eles conflitam com a navegação natural dos links <a href="...">
+    // Os links já têm os caminhos absolutos corretos e navegando naturalmente
   });
 
-  document.querySelectorAll('.tmk').forEach(m => m.addEventListener('click', function() {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    document.querySelectorAll('.tmk').forEach(x => x.classList.remove('act'));
-    this.classList.add('act');
-  }));
-
-  document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
-    i.classList.add('on');
-  }));
-
-  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
-    if (a.getAttribute('href') === '#') e.preventDefault();
-    if(window.ArchiveAudio) ArchiveAudio.playClick();
-    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-    a.classList.add('on');
-  }));
-});
-
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
+  /* ============================================
+     RELÓGIO DO RODAPÉ
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

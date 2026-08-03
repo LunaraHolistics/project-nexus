@@ -1,26 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE — Protocolo de Conexão</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<!-- Integração com a API e Sistema de Áudio -->
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE — Protocolo de Conexão</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
   :root {
     --graphite: #131313;
@@ -56,6 +70,7 @@
     align-items: center;
     justify-content: center;
     background: radial-gradient(ellipse at center, #1a1a1a 0%, #0e0e0e 70%, #000000 100%);
+    cursor: pointer;
   }
 
   /* ============ VINHETA ============ */
@@ -119,7 +134,6 @@
     to { opacity: 1; transform: scale(1); }
   }
 
-  /* Moldura dupla chanfrada */
   .frame-outer {
     position: absolute;
     inset: 0;
@@ -146,7 +160,6 @@
     );
   }
 
-  /* Glow do emblema */
   .emblem::before {
     content: '';
     position: absolute;
@@ -161,7 +174,6 @@
     50% { opacity: 1; transform: scale(1.05); }
   }
 
-  /* Digital SVG */
   .fingerprint {
     width: 140px;
     height: 140px;
@@ -189,7 +201,6 @@
     to { stroke-dashoffset: 0; }
   }
 
-  /* Linha de scan */
   .scan-line {
     position: absolute;
     left: 20px;
@@ -262,6 +273,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 480px;
+    max-width: 85%;
     z-index: 5;
     opacity: 0;
     animation: fadeIn 1s ease-out 2.5s forwards;
@@ -306,6 +318,7 @@
     z-index: 5;
     opacity: 0;
     animation: fadeIn 1s ease-out 3s forwards;
+    white-space: nowrap;
   }
 
   .status-icon {
@@ -314,6 +327,7 @@
     border: 1.5px solid var(--aged-gold);
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     animation: iconPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
   }
 
   @keyframes iconPulse {
@@ -326,6 +340,7 @@
     font-size: 12px;
     color: var(--aged-gold);
     letter-spacing: 0.15em;
+    animation: flicker 4s infinite;
   }
 
   .cursor {
@@ -343,11 +358,6 @@
     51%, 100% { opacity: 0; }
   }
 
-  /* Flicker sutil no texto */
-  .status-text {
-    animation: flicker 4s infinite;
-  }
-
   @keyframes flicker {
     0%, 100% { opacity: 1; }
     92% { opacity: 1; }
@@ -355,6 +365,25 @@
     94% { opacity: 1; }
     96% { opacity: 0.8; }
     97% { opacity: 1; }
+  }
+
+  /* ============ HINT DE CLIQUE ============ */
+  .click-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--on-surface-variant);
+    letter-spacing: 0.2em;
+    opacity: 0;
+    animation: hintFadeIn 1s ease-out 4s forwards;
+    z-index: 5;
+  }
+
+  @keyframes hintFadeIn {
+    to { opacity: 0.4; }
   }
 
   /* ============ CANTOS DECORATIVOS ============ */
@@ -398,12 +427,38 @@
   }
 
   /* ============ RESPONSIVO ============ */
+  @media (max-width: 900px) and (orientation: landscape) {
+    .title { font-size: 42px; margin-top: 32px; }
+    .emblem { width: 200px; height: 200px; }
+    .fingerprint { width: 100px; height: 100px; }
+    .tech-data { gap: 32px; }
+    .progress-container { bottom: 60px; }
+    .status-message { bottom: 28px; }
+    .click-hint { bottom: 8px; }
+  }
   @media (max-width: 768px) {
-    .title { font-size: 42px; }
+    .title { font-size: 42px; margin-top: 36px; }
     .emblem { width: 220px; height: 220px; }
     .fingerprint { width: 110px; height: 110px; }
-    .tech-data { gap: 32px; }
-    .progress-container { width: 320px; }
+    .tech-data { gap: 32px; font-size: 10px; }
+    .progress-container { width: 320px; bottom: 70px; }
+    .status-message { bottom: 32px; gap: 8px; }
+    .status-text { font-size: 10px; letter-spacing: 0.1em; }
+    .corner { width: 18px; height: 18px; }
+    .corner-tl, .corner-tr { top: 20px; }
+    .corner-bl, .corner-br { bottom: 20px; }
+    .corner-tl, .corner-bl { left: 20px; }
+    .corner-tr, .corner-br { right: 20px; }
+  }
+  @media (max-width: 480px) {
+    .title { font-size: 32px; letter-spacing: 0.15em; margin-top: 28px; }
+    .emblem { width: 180px; height: 180px; }
+    .fingerprint { width: 90px; height: 90px; }
+    .tech-data { gap: 20px; font-size: 9px; }
+    .progress-container { width: 260px; bottom: 60px; }
+    .status-message { bottom: 24px; gap: 6px; }
+    .status-text { font-size: 9px; }
+    .cursor { width: 6px; height: 11px; }
   }
 </style>
 </head>
@@ -483,11 +538,45 @@
       <span class="status-text" id="statusText">INICIANDO PROTOCOLO DE CONEXÃO</span>
       <span class="cursor"></span>
     </div>
+
+    <!-- Hint de clique -->
+    <div class="click-hint">CLIQUE PARA CONTINUAR</div>
   </div>
 
   <script>
-    // Sequência de mensagens de status vinculadas a ações reais da API
-    const statusMessages = [
+  (function() {
+    "use strict";
+
+    /* ============================================
+       UTILITÁRIOS
+       ============================================ */
+    function playSound(type) {
+      if (!window.ArchiveAudio) return;
+      try {
+        // ✅ CORRIGIDO: playBoot() em vez de playStartup() (que não existia)
+        if (type === 'boot' && typeof window.ArchiveAudio.playBoot === 'function') {
+          window.ArchiveAudio.playBoot();
+        } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+          window.ArchiveAudio.playSuccess();
+        } else if (type === 'transition' && typeof window.ArchiveAudio.playTransition === 'function') {
+          window.ArchiveAudio.playTransition();
+        } else if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+          window.ArchiveAudio.playClick();
+        }
+      } catch (e) {
+        console.warn('[SPLASH] Erro ao tocar som:', e);
+      }
+    }
+
+    /* ============================================
+       ESTADO
+       ============================================ */
+    var messageIndex = 0;
+    var isExiting = false;
+    var statusText = document.getElementById('statusText');
+    var splash = document.getElementById('splash');
+
+    var statusMessages = [
       { text: 'INICIANDO PROTOCOLO DE CONEXÃO', delay: 800 },
       { text: 'VERIFICANDO CREDENCIAIS LOCAIS', delay: 600 },
       { text: 'ESTABELECENDO CANAL SEGURO (PORTA 3000)', delay: 1200 },
@@ -495,14 +584,14 @@
       { text: 'ACESSO AUTORIZADO', delay: 800 }
     ];
 
-    let messageIndex = 0;
-    const statusText = document.getElementById('statusText');
-    const splash = document.getElementById('splash');
-
+    /* ============================================
+       EFEITO DE DIGITAÇÃO
+       ============================================ */
     function typeMessage(message, callback) {
+      if (!statusText) return;
       statusText.textContent = '';
-      let charIndex = 0;
-      const typeInterval = setInterval(() => {
+      var charIndex = 0;
+      var typeInterval = setInterval(function() {
         statusText.textContent = message.substring(0, charIndex + 1);
         charIndex++;
         if (charIndex >= message.length) {
@@ -512,77 +601,114 @@
       }, 35);
     }
 
+    /* ============================================
+       ROTEAMENTO INTELIGENTE
+       ============================================ */
+    function getTargetUrl() {
+      try {
+        if (window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function') {
+          var state = window.ArchiveAPI.getState();
+          if (state && state.director && state.director.codename) {
+            // Jogador existente vai direto para HQ Atrium
+            return '/telas-individuais/19-hq-atrium.html';
+          }
+        }
+      } catch (e) {
+        console.warn('[SPLASH] Falha ao verificar estado:', e);
+      }
+      // Novo jogador vai para tela de login
+      return '/index.html';
+    }
+
+    /* ============================================
+       SAÍDA DA SPLASH
+       ============================================ */
+    function exitSplash() {
+      if (isExiting) return; // ✅ Proteção contra duplo-clique
+      isExiting = true;
+
+      playSound('success');
+      splash.classList.add('exiting');
+
+      setTimeout(function() {
+        var targetUrl = getTargetUrl();
+        window.location.href = targetUrl;
+      }, 1200);
+    }
+
+    /* ============================================
+       PROCESSAR PRÓXIMA MENSAGEM
+       ============================================ */
     async function processStep() {
       if (messageIndex < statusMessages.length) {
-        const step = statusMessages[messageIndex];
-        
+        var step = statusMessages[messageIndex];
+
         // Ações reais disparadas durante mensagens específicas
         if (messageIndex === 1) {
           // Verifica se já existe um jogador salvo
-          window.ArchiveAPI.getState();
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function') {
+            window.ArchiveAPI.getState();
+          }
         }
         if (messageIndex === 2) {
-          // Tenta conectar ao backend (se falhar, o api.js usa o MOCK automaticamente)
-          await window.ArchiveAPI.init();
-          if(window.ArchiveAudio && window.ArchiveAudio.playStartup) {
-             window.ArchiveAudio.playStartup();
+          // Tenta conectar ao backend (se falhar, o api.js usa MOCK)
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+            await window.ArchiveAPI.init();
           }
+          // ✅ CORRIGIDO: playBoot() em vez de playStartup()
+          playSound('boot');
         }
         if (messageIndex === 3) {
           // Se houver jogador, pré-carrega os dados
-          if (window.ArchiveAPI.playerId) {
-            await window.ArchiveAPI.getPlayer();
+          if (window.ArchiveAPI && window.ArchiveAPI.playerId) {
+            if (typeof window.ArchiveAPI.getPlayer === 'function') {
+              await window.ArchiveAPI.getPlayer();
+            }
           }
         }
 
-        typeMessage(step.text, () => {
+        typeMessage(step.text, function() {
           messageIndex++;
           setTimeout(processStep, step.delay);
         });
       } else {
-        // Transição de saída e redirecionamento inteligente
-        setTimeout(() => {
-          splash.classList.add('exiting');
-          
-          setTimeout(() => {
-            // Lógica de roteamento baseada no estado do jogador
-            const state = window.ArchiveAPI.getState();
-            let targetUrl = 'index.html'; // Padrão para novos jogadores (tela de criação/login)
-            
-            if (state && state.director && state.director.codename) {
-              // Jogador existente vai direto para a ação (Globo ou HQ)
-              targetUrl = '19-hq-atrium.html'; 
-            }
-            
-            window.location.href = targetUrl;
-          }, 1200);
-        }, 500);
+        // Todas as mensagens exibidas - sai automaticamente
+        setTimeout(exitSplash, 500);
       }
     }
 
+    /* ============================================
+       INICIALIZAÇÃO
+       ============================================ */
     // Iniciar sequência após animações iniciais de CSS
-    setTimeout(() => {
+    setTimeout(function() {
       processStep();
     }, 2500);
 
-    // Permitir pular com clique (acelera o processo)
-    splash.addEventListener('click', () => {
-      if (!splash.classList.contains('exiting')) {
-        splash.classList.add('exiting');
-        setTimeout(() => {
-          const state = window.ArchiveAPI.getState();
-          window.location.href = (state && state.director) ? '19-hq-atrium.html' : 'index.html';
-        }, 1200);
+    /* ============================================
+       EVENT LISTENERS
+       ============================================ */
+    // Permitir pular com clique
+    splash.addEventListener('click', function() {
+      exitSplash();
+    });
+
+    // Permitir pular com tecla ESC, Enter ou Espaço
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        exitSplash();
       }
     });
+  })();
   </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

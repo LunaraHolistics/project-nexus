@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARCHIVE OS — Audio System Dev Console</title>
+  
+  <!-- Robô: não indexar página de dev -->
+  <meta name="robots" content="noindex, nofollow">
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  
+  <!-- Fontes Google (não fontsource) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Scripts do sistema (caminhos absolutos) -->
+  <script src="/audio-system.js"></script>
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+  
+<style>
+:root{
+  --surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;
+  --gold:#C5A059;--bronze:#CD7F32;--amber:#FFBF00;
+  --petrol:#003344;--ivory:#F5F5DC;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--surface);color:var(--on);
+  font-family:'Manrope',sans-serif;
+  min-height:100vh;overflow-x:hidden;
+}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  animation:gr .42s steps(3) infinite;}
+@keyframes gr{0%{transform:translate(0,0)}33%{transform:translate(-1.5%,-1%)}66%{transform:translate(1%,1.5%)}100%{transform:translate(0,0)}}
+
+.container{max-width:1200px;margin:0 auto;padding:40px 48px;}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;padding-bottom:24px;border-bottom:.5px solid rgba(197,160,89,.3);flex-wrap:wrap;gap:20px;}
+.logo{font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
+.dev-badge{background:#c44;color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:2px;letter-spacing:.1em;}
+.status{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.1em;display:flex;align-items:center;gap:10px;}
+.status .dot{width:8px;height:8px;border-radius:50%;background:var(--onv);transition:.3s;}
+.status.active .dot{background:var(--amber);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{box-shadow:0 0 0 8px rgba(255,191,0,0)}}
+
+/* VISUALIZER */
+.visualizer{position:relative;height:200px;background:rgba(10,13,18,.6);border:.5px solid rgba(197,160,89,.3);border-radius:4px;margin-bottom:32px;overflow:hidden;}
+#vizCanvas{width:100%;height:100%;}
+.viz-label{position:absolute;top:12px;left:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+.viz-status{position:absolute;bottom:12px;right:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;}
+
+/* SECTIONS */
+.section{margin-bottom:40px;}
+.section-title{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-title::before{content:'';width:20px;height:1px;background:var(--gold);}
+
+/* LAYERS */
+.layers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.layer{position:relative;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);border-radius:4px;padding:20px;transition:.3s;}
+.layer:hover{box-shadow:0 0 20px rgba(197,160,89,.15);}
+.layer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.layer-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--on);letter-spacing:.05em;}
+.layer-toggle{width:40px;height:20px;background:rgba(197,160,89,.2);border-radius:10px;position:relative;cursor:pointer;transition:.3s;}
+.layer-toggle.active{background:var(--gold);}
+.layer-toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--on);border-radius:50%;transition:.3s;}
+.layer-toggle.active::after{left:22px;background:var(--surface);}
+.layer-desc{font-family:'Manrope',sans-serif;font-size:12px;color:var(--onv);line-height:16px;margin-bottom:12px;}
+.layer-volume{display:flex;align-items:center;gap:10px;}
+.volume-slider{flex:1;height:4px;background:rgba(197,160,89,.2);border-radius:2px;position:relative;cursor:pointer;}
+.volume-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--amber));border-radius:2px;transition:width .2s;}
+.volume-value{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);min-width:35px;text-align:right;}
+
+/* STATES */
+.states{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.state-btn{padding:16px;background:transparent;border:1px solid rgba(197,160,89,.3);color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.3s;text-align:center;}
+.state-btn:hover{border-color:var(--gold);color:var(--gold);}
+.state-btn.active{background:var(--gold);border-color:var(--gold);color:var(--surface);}
+
+/* SFX */
+.sfx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sfx-btn{padding:14px;background:rgba(10,13,18,.5);border:.5px solid rgba(197,160,89,.2);color:var(--on);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;cursor:pointer;transition:.3s;text-align:center;}
+.sfx-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--surface);transform:translateY(-2px);}
+.sfx-btn:active{transform:translateY(0);}
+
+/* FOOTER */
+footer{margin-top:60px;padding-top:24px;border-top:.5px solid rgba(197,160,89,.3);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .layers, .states { grid-template-columns: 1fr; }
+  .sfx-grid { grid-template-columns: repeat(2, 1fr); }
+  .container { padding: 20px; }
+  .logo { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="container">
+  <header>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="logo">ARCHIVE</div>
+      <span class="dev-badge">DEV CONSOLE</span>
+    </div>
+    <div class="status" id="audioStatus">
+      <span class="dot"></span>
+      <span>Áudio: INATIVO — Clique para ativar</span>
+    </div>
+  </header>
+
+  <!-- VISUALIZER -->
+  <div class="visualizer">
+    <canvas id="vizCanvas"></canvas>
+    <div class="viz-label">Frequency Domain</div>
+    <div class="viz-status" id="vizStatus">INACTIVE</div>
+  </div>
+
+  <!-- LAYERS -->
+  <div class="section">
+    <div class="section-title">Camadas de Áudio</div>
+    <div class="layers">
+      <div class="layer" data-layer="drone">
+        <div class="layer-header">
+          <div class="layer-name">Drone Ambiente</div>
+          <div class="layer-toggle active" data-active="true"></div>
+        </div>
+        <div class="layer-desc">Frequência grave contínua com modulação de filtro (Respiração)</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="40">
+            <div class="volume-fill" style="width:40%"></div>
+          </div>
+          <div class="volume-value">40%</div>
+        </div>
+      </div>
+
+      <div class="layer" data-layer="pulse">
+        <div class="layer-header">
+          <div class="layer-name">Pulsação Eletrônica</div>
+          <div class="layer-toggle" data-active="false"></div>
+        </div>
+        <div class="layer-desc">Ritmo de urgência estilo sonar (120 BPM)</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="30">
+            <div class="volume-fill" style="width:30%"></div>
+          </div>
+          <div class="volume-value">30%</div>
+        </div>
+      </div>
+
+      <div class="layer" data-layer="tension">
+        <div class="layer-header">
+          <div class="layer-name">Silêncio Tenso</div>
+          <div class="layer-toggle" data-active="false"></div>
+        </div>
+        <div class="layer-desc">Pausas dramáticas e frequências de alerta para dedução</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="25">
+            <div class="volume-fill" style="width:25%"></div>
+          </div>
+          <div class="volume-value">25%</div>
+        </div>
+      </div>
+
+      <div class="layer" data-layer="sfx">
+        <div class="layer-header">
+          <div class="layer-name">Efeitos Sonoros (SFX)</div>
+          <div class="layer-toggle active" data-active="true"></div>
+        </div>
+        <div class="layer-desc">UI, transições, interações e feedback tático</div>
+        <div class="layer-volume">
+          <div class="volume-slider" data-volume="70">
+            <div class="volume-fill" style="width:70%"></div>
+          </div>
+          <div class="volume-value">70%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATES -->
+  <div class="section">
+    <div class="section-title">Estados de Gameplay</div>
+    <div class="states">
+      <button class="state-btn active" data-state="exploration">Exploração</button>
+      <button class="state-btn" data-state="investigation">Investigação</button>
+      <button class="state-btn" data-state="tension">Tensão</button>
+      <button class="state-btn" data-state="discovery">Descoberta</button>
+      <button class="state-btn" data-state="conclusion">Conclusão</button>
+      <button class="state-btn" data-state="silence">Silêncio</button>
+    </div>
+  </div>
+
+  <!-- SFX -->
+  <div class="section">
+    <div class="section-title">Efeitos Sonoros (SFX)</div>
+    <div class="sfx-grid">
+      <button class="sfx-btn" data-sfx="click">Click</button>
+      <button class="sfx-btn" data-sfx="hover">Hover</button>
+      <button class="sfx-btn" data-sfx="scan">Scan</button>
+      <button class="sfx-btn" data-sfx="decrypt">Decrypt</button>
+      <button class="sfx-btn" data-sfx="alert">Alert</button>
+      <button class="sfx-btn" data-sfx="success">Success</button>
+      <button class="sfx-btn" data-sfx="typewriter">Typewriter</button>
+      <button class="sfx-btn" data-sfx="transition">Transition</button>
+      <button class="sfx-btn" data-sfx="pulse">Pulse</button>
+      <button class="sfx-btn" data-sfx="artifact">Artifact Found</button>
+      <button class="sfx-btn" data-sfx="mission">Mission Complete</button>
+      <button class="sfx-btn" data-sfx="error">Error</button>
+    </div>
+  </div>
+
+  <footer>
+    <div>© 1984 ARCHIVE GLOBAL INTELLIGENCE — DEV CONSOLE</div>
+    <div id="footerStatus">Áudio: INATIVO — Clique para ativar</div>
+  </footer>
+</div>
+
+<script>
+/**
+ * DEV CONSOLE — Interface de controle do audio-system.js
+ * Este script APENAS controla o ArchiveAudio já exposto globalmente.
+ * A lógica de áudio está em /audio-system.js (não duplicada aqui).
+ */
+(function() {
+  'use strict';
+
+  // Aguarda audio-system.js carregar
+  function waitForAudio(cb, attempts) {
+    attempts = attempts || 0;
+    if (window.ArchiveAudio) {
+      cb();
+    } else if (attempts < 50) {
+      setTimeout(function() { waitForAudio(cb, attempts + 1); }, 100);
+    } else {
+      console.error('[DEV] ArchiveAudio não carregou após 5s');
+    }
+  }
+
+  waitForAudio(function() {
+    console.log('[DEV CONSOLE] ArchiveAudio disponível, iniciando controles');
+
+    // Inicializa audio no primeiro clique
+    document.addEventListener('click', function initAudio() {
+      if (window.ArchiveAudio.init) window.ArchiveAudio.init();
+      updateStatus(true);
+      document.removeEventListener('click', initAudio);
+    }, { once: true });
+
+    // Layer toggles
+    document.querySelectorAll('.layer-toggle').forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        var layer = this.closest('.layer').dataset.layer;
+        var active = this.dataset.active === 'true';
+        this.dataset.active = String(!active);
+        this.classList.toggle('active', !active);
+        console.log('[DEV] Layer', layer, '→', !active ? 'ON' : 'OFF');
+      });
+    });
+
+    // Volume sliders
+    document.querySelectorAll('.volume-slider').forEach(function(slider) {
+      slider.addEventListener('click', function(e) {
+        var rect = this.getBoundingClientRect();
+        var percent = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+        var layer = this.closest('.layer').dataset.layer;
+        this.querySelector('.volume-fill').style.width = percent + '%';
+        this.nextElementSibling.textContent = Math.round(percent) + '%';
+        
+        // Ajusta volume global baseado no SFX (camada principal)
+        if (layer === 'sfx' && window.ArchiveAudio.setVolume) {
+          window.ArchiveAudio.setVolume(percent / 100);
+        }
+        console.log('[DEV]', layer, 'volume:', Math.round(percent) + '%');
+      });
+    });
+
+    // State buttons
+    document.querySelectorAll('.state-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.state-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        if (window.ArchiveAudio.setState) {
+          window.ArchiveAudio.setState(this.dataset.state);
+        }
+        console.log('[DEV] State:', this.dataset.state);
+      });
+    });
+
+    // SFX buttons
+    document.querySelectorAll('.sfx-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var sfx = this.dataset.sfx;
+        var methodName = 'play' + sfx.charAt(0).toUpperCase() + sfx.slice(1);
+        
+        if (window.ArchiveAudio[methodName]) {
+          window.ArchiveAudio[methodName]();
+          console.log('[DEV] SFX:', sfx);
+        } else {
+          console.warn('[DEV] Método não existe:', methodName);
+        }
+      });
+    });
+
+    // Visualizer (simplificado)
+    var canvas = document.getElementById('vizCanvas');
+    if (canvas) {
+      var ctx2d = canvas.getContext('2d');
+      function drawVisualizer() {
+        requestAnimationFrame(drawVisualizer);
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        
+        ctx2d.fillStyle = 'rgba(10, 13, 18, 0.3)';
+        ctx2d.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Visualização simulada (já que não temos acesso direto ao analyser)
+        var barCount = 64;
+        var barWidth = canvas.width / barCount;
+        for (var i = 0; i < barCount; i++) {
+          var height = Math.random() * canvas.height * 0.7;
+          var gradient = ctx2d.createLinearGradient(0, canvas.height - height, 0, canvas.height);
+          gradient.addColorStop(0, '#FFBF00');
+          gradient.addColorStop(1, '#C5A059');
+          ctx2d.fillStyle = gradient;
+          ctx2d.fillRect(i * barWidth, canvas.height - height, barWidth - 1, height);
+        }
+      }
+      drawVisualizer();
+      document.getElementById('vizStatus').textContent = 'SIMULATED';
+    }
+  });
+
+  function updateStatus(active) {
+    var statusEl = document.getElementById('audioStatus');
+    var footerEl = document.getElementById('footerStatus');
+    var text = active ? 'Áudio: ATIVO' : 'Áudio: INATIVO';
+    
+    if (active) {
+      statusEl.classList.add('active');
+      statusEl.querySelector('span:last-child').textContent = text;
+    } else {
+      statusEl.classList.remove('active');
+      statusEl.querySelector('span:last-child').textContent = text + ' — Clique para ativar';
+    }
+    
+    footerEl.textContent = text;
+  }
+})();
+</script>
+</body>
+</html>

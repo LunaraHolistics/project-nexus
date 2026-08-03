@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Terminal Alpha</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Terminal Alpha</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -26,6 +43,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-
 @keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
 .scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
 .home{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 20% 50%,rgba(0,51,68,.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(197,160,89,.07) 0%,transparent 50%),var(--surface);}
+
+/* HEADER */
 header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
 .nav{display:flex;gap:30px;}
@@ -33,25 +52,30 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
+
+/* BODY LAYOUT */
 .body{flex:1;display:flex;padding:40px 48px;gap:40px;overflow:hidden;}
-.left{width:280px;display:flex;flex-direction:column;gap:24px;}
+.left{width:280px;display:flex;flex-direction:column;gap:24px;flex-shrink:0;overflow-y:auto;}
 .prof{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:.5px solid rgba(197,160,89,.3);}
-.av{width:52px;height:52px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av{width:52px;height:52px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
 .av svg{width:28px;height:28px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .prof h3{font-family:'Libre Caslon Text',serif;font-size:17px;color:var(--on);margin-bottom:2px;}
 .prof p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--onv);letter-spacing:.1em;}
-.btnp{width:100%;padding:14px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.btnp{width:100%;padding:14px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
 .btnp:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
 .btnp .ar{transition:transform .3s;}
 .btnp:hover .ar{transform:translateX(4px);}
 .snav{display:flex;flex-direction:column;gap:6px;}
-.si{display:flex;align-items:center;gap:12px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;text-decoration:none;}
 .si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
 .si.on{background:rgba(197,160,89,.1);border-left-color:var(--gold);color:var(--gold);}
-.si svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none;}
-.center{flex:1;display:flex;flex-direction:column;gap:28px;overflow-y:auto;}
+.si svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0;}
+
+/* CENTER */
+.center{flex:1;display:flex;flex-direction:column;gap:28px;overflow-y:auto;min-width:0;}
 .wel{position:relative;padding:40px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);}
 .wel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .wl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:14px;display:flex;align-items:center;gap:10px;position:relative;}
@@ -60,15 +84,17 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .wt .hl{color:var(--gold);font-style:italic;}
 .wd{font-family:'Manrope',sans-serif;font-size:17px;line-height:26px;color:var(--onv);max-width:620px;position:relative;}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
-.ac{position:relative;padding:28px;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);cursor:pointer;transition:all .4s;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
+.ac{position:relative;padding:28px;background:var(--ivory);background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.77 0 0 0 0 0.63 0 0 0 0 0.35 0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>"),linear-gradient(180deg,#f5f5dc,#ece7c6);cursor:pointer;transition:all .4s;box-shadow:0 8px 24px rgba(0,0,0,.25);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);text-decoration:none;display:block;}
 .ac::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 .5pt var(--gold);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);}
 .ac:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 20px rgba(255,191,0,.2);}
 .ach{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
-.aci{width:40px;height:40px;background:var(--petrol);display:flex;align-items:center;justify-content:center;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
+.aci{width:40px;height:40px;background:var(--petrol);display:flex;align-items:center;justify-content:center;flex-shrink:0;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);}
 .aci svg{width:22px;height:22px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .act{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:600;color:#1a1a1a;letter-spacing:-.01em;}
 .acd{font-family:'Manrope',sans-serif;font-size:14px;line-height:20px;color:#6b6560;}
-.right{width:260px;display:flex;flex-direction:column;gap:20px;}
+
+/* RIGHT */
+.right{width:260px;display:flex;flex-direction:column;gap:20px;flex-shrink:0;overflow-y:auto;}
 .sc{position:relative;padding:20px;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);}
 .sc::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
 .sch{display:flex;align-items:center;gap:8px;margin-bottom:14px;position:relative;}
@@ -80,15 +106,54 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .srl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
 .srv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--on);letter-spacing:.05em;}
 .srv.al{color:var(--amber);}
+
+/* FOOTER */
 footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
+.ftc{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
 .ft .q{font-family:'Libre Caslon Text',serif;font-style:italic;color:var(--gold);}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+
+/* ANIMAÇÕES */
 @keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .fi{opacity:0;animation:fi .7s ease-out forwards;}
 .d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}
+
+/* RESPONSIVO */
+@media (max-width: 1200px) {
+  .body { padding: 30px 32px; gap: 28px; }
+  .left { width: 240px; }
+  .right { width: 220px; }
+  .wt { font-size: 38px; line-height: 46px; }
+}
+@media (max-width: 900px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { flex-direction: column; padding: 20px; gap: 20px; overflow-y: auto; }
+  .left { width: 100%; flex-direction: row; flex-wrap: wrap; gap: 16px; overflow: visible; }
+  .prof { flex: 1; min-width: 200px; border-bottom: none; padding-bottom: 0; }
+  .btnp { flex: 1; min-width: 140px; }
+  .snav { flex-direction: row; flex-wrap: wrap; gap: 4px; width: 100%; }
+  .si { flex: 1; min-width: 110px; padding: 8px; font-size: 10px; border-left: none; border-bottom: 2px solid transparent; }
+  .si.on { border-left: none; border-bottom-color: var(--gold); }
+  .center { min-height: auto; }
+  .cards { grid-template-columns: 1fr; }
+  .right { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .sc { flex: 1; min-width: 200px; }
+  .wt { font-size: 30px; line-height: 38px; }
+  .wd { font-size: 15px; line-height: 22px; }
+  footer { padding: 0 20px; height: auto; min-height: 44px; flex-wrap: wrap; gap: 8px; padding-top: 10px; padding-bottom: 10px; }
+  .ftc { gap: 12px; font-size: 10px; }
+}
+@media (max-width: 600px) {
+  .icons { display: none; }
+  .wt { font-size: 26px; line-height: 32px; }
+  .wel { padding: 24px; }
+  .ac { padding: 20px; }
+  .act { font-size: 18px; }
+  .acd { font-size: 13px; }
+}
 </style>
 </head>
 <body>
@@ -96,18 +161,27 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="home">
   <header class="fi">
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO HEADER CORRIGIDA -->
     <nav class="nav">
       <a href="/telas-individuais/05-globo.html">Globo</a>
-      <a href="/telas-individuais/15-museu.html">Banco de Dados</a>
-      <a href="/telas-individuais/16-passaporte.html">Passaporte</a>
-      <a href="/telas-individuais/07-briefing.html" class="on">Diário de Bordo</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
+      <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+      <a href="/telas-individuais/06-tela-inicial.html" class="on">Terminal</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/04-config.html" title="Configurações">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
+
   <div class="body">
     <aside class="left fi d1">
       <div class="prof">
@@ -117,14 +191,31 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <p id="pCodename">Field Operative</p>
         </div>
       </div>
-      <button class="btnp" id="btnIntel">Acessar Intel <span class="ar">→</span></button>
+      <!-- ✅ BOTÃO CORRIGIDO - Caminho absoluto para Banco de Dados -->
+      <a href="/telas-individuais/08-banco-dados.html" class="btnp" id="btnIntel">Acessar Intel <span class="ar">→</span></a>
+      <!-- ✅ SIDEBAR CORRIGIDA -->
       <nav class="snav">
-        <a href="/telas-individuais/05-globo.html" class="si on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
-        <a href="/telas-individuais/15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
-        <a href="/telas-individuais/16-passaporte.html" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
-        <a href="/telas-individuais/07-briefing.html" class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0_0 2-2V8z"/><polyline points="14 2_14_8_20_8"/></svg>Diário de Bordo</a>
+        <a href="/telas-individuais/05-globo.html" class="si">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo
+        </a>
+        <a href="/telas-individuais/08-banco-dados.html" class="si">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados
+        </a>
+        <a href="/telas-individuais/11-passaporte.html" class="si">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte
+        </a>
+        <a href="/telas-individuais/12-diario.html" class="si">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo
+        </a>
+        <a href="/telas-individuais/19-hq-atrium.html" class="si">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>HQ Atrium
+        </a>
+        <a href="/telas-individuais/06-tela-inicial.html" class="si on">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v2M15 1v2M9 21v2M15 21v2M1 9h2M1 15h2M21 9h2M21 15h2"/></svg>Terminal
+        </a>
       </nav>
     </aside>
+
     <main class="center">
       <div class="wel fi d2">
         <div class="wl">TERMINAL ALPHA</div>
@@ -132,28 +223,57 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
         <p class="wd">O relicário digital foi sincronizado. Todas as conexões históricas estão online. Proceda com cautela ao iniciar nova investigação.</p>
       </div>
       <div class="cards">
-        <div class="ac fi d3" data-action="globe">
-          <div class="ach"><div class="aci"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="act">Iniciar Nova Missão</div></div>
+        <a href="/telas-individuais/05-globo.html" class="ac fi d3">
+          <div class="ach">
+            <div class="aci"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+            <div class="act">Iniciar Nova Missão</div>
+          </div>
           <div class="acd">Estabelecer novo ponto de entrada na linha do tempo.</div>
-        </div>
-        <div class="ac fi d3" data-action="museum">
-          <div class="ach"><div class="aci"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="act">Museu da Archive</div></div>
+        </a>
+        <a href="/telas-individuais/15-museu.html" class="ac fi d3">
+          <div class="ach">
+            <div class="aci"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <div class="act">Museu da Archive</div>
+          </div>
           <div class="acd">Acessar artefatos recuperados e relatórios passados.</div>
-        </div>
+        </a>
+        <a href="/telas-individuais/09-teia.html" class="ac fi d3">
+          <div class="ach">
+            <div class="aci"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg></div>
+            <div class="act">Teia de Evidências</div>
+          </div>
+          <div class="acd">Conectar artefatos e estabelecer relações históricas.</div>
+        </a>
+        <a href="/telas-individuais/17-progressao.html" class="ac fi d3">
+          <div class="ach">
+            <div class="aci"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <div class="act">Progressão da Agência</div>
+          </div>
+          <div class="acd">Desbloquear novos módulos e ampliar capacidade operacional.</div>
+        </a>
       </div>
     </main>
+
     <aside class="right fi d2">
       <div class="sc">
         <div class="sch"><span class="d"></span><span class="sct">Global Feed: Ativo</span></div>
-        <div class="sr"><div class="srl">Sync Rate</div><div class="srv">99.8% // SEGURO</div></div>
+        <div class="sr"><div class="srl">Sync Rate</div><div class="srv" id="syncRate">99.8% // SEGURO</div></div>
+        <div class="sr"><div class="srl">Conexão</div><div class="srv" id="connectionStatus">ONLINE</div></div>
       </div>
       <div class="sc">
         <div class="sch"><span class="sct">Inteligência Ativa</span></div>
         <div class="sr"><div class="srl">Operações em Andamento</div><div class="srv" id="activeOps">00</div></div>
         <div class="sr"><div class="srl">Nível de Ameaça</div><div class="srv al" id="threatLevel">⚠ BAIXO</div></div>
+        <div class="sr"><div class="srl">Artefatos Catalogados</div><div class="srv" id="artifactsCount">00</div></div>
+      </div>
+      <div class="sc">
+        <div class="sch"><span class="sct">Diretor</span></div>
+        <div class="sr"><div class="srl">Créditos</div><div class="srv" id="credits">0</div></div>
+        <div class="sr"><div class="srl">Nível</div><div class="srv" id="level">1</div></div>
       </div>
     </aside>
   </div>
+
   <footer class="fi d3">
     <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
     <div class="ftc"><div class="ft q">"Protetores da História Humana"</div></div>
@@ -164,99 +284,184 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     </div>
   </footer>
 </div>
+
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Inicializar API e buscar dados do jogador
-  await window.ArchiveAPI.init();
-  const state = window.ArchiveAPI.getState();
-  const player = await window.ArchiveAPI.getPlayer();
-  
-  const director = (state && state.director) ? state.director : { name: 'Diretor', codename: 'NOVICE', rank: 'Diretor Interino' };
-  
-  // 2. Atualizar Perfil na Sidebar
-  document.getElementById('pName').textContent = (player.name || director.name).toUpperCase();
-  document.getElementById('pCodename').textContent = `${player.codename || director.codename} | ${player.rank || director.rank}`;
-  
-  // 3. Atualizar Mensagem de Boas-vindas
-  const welcomeName = player.codename || director.codename || 'Operativo';
-  document.getElementById('welcomeText').innerHTML = `Bem-vindo de volta,<br><span class="hl">${welcomeName}</span>.`;
-  
-  // 4. Atualizar Painel de Inteligência com dados reais
-  try {
-    const missions = await window.ArchiveAPI.getMissions();
-    const activeMissions = missions.filter(m => m.status === 'ativa').length;
-    document.getElementById('activeOps').textContent = String(activeMissions).padStart(2, '0');
-    
-    // Calcular nível de ameaça com base nas missões ativas
-    const hasCritical = missions.some(m => m.priority === 'CRÍTICA' && m.status === 'ativa');
-    const hasHigh = missions.some(m => m.priority === 'ALTA' && m.status === 'ativa');
-    
-    const threatEl = document.getElementById('threatLevel');
-    if (hasCritical) {
-      threatEl.textContent = '⚠ CRÍTICO';
-      threatEl.style.color = '#ff6464';
-    } else if (hasHigh) {
-      threatEl.textContent = '⚠ ELEVADO';
-      threatEl.style.color = 'var(--bronze)';
-    } else if (activeMissions > 0) {
-      threatEl.textContent = '⚠ MODERADO';
-      threatEl.style.color = 'var(--amber)';
-    } else {
-      threatEl.textContent = '✓ BAIXO';
-      threatEl.style.color = '#8fd6a0';
+(function() {
+  "use strict";
+
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      }
+    } catch (e) {
+      console.warn('[TERMINAL] Erro ao tocar som:', e);
     }
-  } catch (e) {
-    console.warn('Falha ao carregar missões para o dashboard', e);
   }
 
-  // 5. Ações dos Cards Centrais
-  document.querySelectorAll('.ac').forEach(c => {
-    c.addEventListener('click', () => {
-      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-      const action = c.dataset.action;
-      if (action === 'globe') {
-        window.location.href = '05-globo.html';
-      } else if (action === 'museum') {
-        window.location.href = '15-museu.html';
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
+
+  /* ============================================
+     INICIALIZAÇÃO PRINCIPAL
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      // 1. Inicializar API
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
       }
-    });
+
+      // Estado e jogador
+      var state = (window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function')
+        ? window.ArchiveAPI.getState()
+        : null;
+
+      var player = null;
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getPlayer === 'function') {
+        try {
+          player = await window.ArchiveAPI.getPlayer();
+        } catch (e) {
+          console.warn('[TERMINAL] getPlayer falhou:', e);
+        }
+      }
+
+      var director = (state && state.director) 
+        ? state.director 
+        : { name: 'Diretor', codename: 'NOVICE', rank: 'Diretor Interino' };
+
+      // 2. Atualizar Perfil na Sidebar
+      var pNameEl = document.getElementById('pName');
+      var pCodenameEl = document.getElementById('pCodename');
+      
+      var playerName = (player && player.name) ? player.name : (director.name || 'DIRETOR');
+      var playerCodename = (player && player.codename) ? player.codename : (director.codename || 'NOVICE');
+      var playerRank = (player && player.rank) ? player.rank : (director.rank || 'Diretor Interino');
+      
+      if (pNameEl) pNameEl.textContent = playerName.toUpperCase();
+      if (pCodenameEl) pCodenameEl.textContent = playerCodename + ' | ' + playerRank;
+
+      // 3. Atualizar Mensagem de Boas-vindas
+      var welcomeName = playerCodename || 'Operativo';
+      var welcomeEl = document.getElementById('welcomeText');
+      if (welcomeEl) {
+        welcomeEl.innerHTML = 'Bem-vindo de volta,<br><span class="hl">' + welcomeName + '</span>.';
+      }
+
+      // 4. Painel de Status de Conexão
+      var connStatusEl = document.getElementById('connectionStatus');
+      var syncRateEl = document.getElementById('syncRate');
+      if (connStatusEl && window.ArchiveAPI) {
+        if (window.ArchiveAPI.online) {
+          connStatusEl.textContent = 'ONLINE';
+          connStatusEl.style.color = '#8fd6a0';
+          if (syncRateEl) syncRateEl.textContent = '99.8% // SEGURO';
+        } else {
+          connStatusEl.textContent = 'OFFLINE';
+          connStatusEl.style.color = '#c44';
+          if (syncRateEl) syncRateEl.textContent = '— // LOCAL';
+        }
+      }
+
+      // 5. Painel de Inteligência com dados reais
+      var missions = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getMissions === 'function') {
+        try {
+          missions = await window.ArchiveAPI.getMissions();
+        } catch (e) {
+          console.warn('[TERMINAL] getMissions falhou:', e);
+        }
+      }
+
+      var activeMissions = 0;
+      for (var i = 0; i < missions.length; i++) {
+        if (missions[i].status === 'ativa') activeMissions++;
+      }
+      var activeOpsEl = document.getElementById('activeOps');
+      if (activeOpsEl) activeOpsEl.textContent = String(activeMissions).padStart(2, '0');
+
+      // Calcular nível de ameaça
+      var hasCritical = false, hasHigh = false;
+      for (var j = 0; j < missions.length; j++) {
+        if (missions[j].status === 'ativa') {
+          if (missions[j].priority === 'CRÍTICA') hasCritical = true;
+          if (missions[j].priority === 'ALTA') hasHigh = true;
+        }
+      }
+
+      var threatEl = document.getElementById('threatLevel');
+      if (threatEl) {
+        if (hasCritical) {
+          threatEl.textContent = '⚠ CRÍTICO';
+          threatEl.style.color = '#ff6464';
+        } else if (hasHigh) {
+          threatEl.textContent = '⚠ ELEVADO';
+          threatEl.style.color = 'var(--bronze)';
+        } else if (activeMissions > 0) {
+          threatEl.textContent = '⚠ MODERADO';
+          threatEl.style.color = 'var(--amber)';
+        } else {
+          threatEl.textContent = '✓ BAIXO';
+          threatEl.style.color = '#8fd6a0';
+        }
+      }
+
+      // 6. Artefatos catalogados
+      var artifacts = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getArtifacts === 'function') {
+        try {
+          var artData = await window.ArchiveAPI.getArtifacts();
+          artifacts = Array.isArray(artData) ? artData : (artData && artData.artifacts ? artData.artifacts : []);
+        } catch (e) {
+          console.warn('[TERMINAL] getArtifacts falhou:', e);
+        }
+      }
+      var artifactsCountEl = document.getElementById('artifactsCount');
+      if (artifactsCountEl) artifactsCountEl.textContent = String(artifacts.length).padStart(2, '0');
+
+      // 7. Créditos e Nível
+      var creditsEl = document.getElementById('credits');
+      var levelEl = document.getElementById('level');
+      if (creditsEl) creditsEl.textContent = (player && player.credits ? player.credits : 0).toLocaleString('pt-BR');
+      if (levelEl) levelEl.textContent = (player && player.level ? player.level : 1);
+
+      playSound('success');
+
+    } catch (err) {
+      console.error('[TERMINAL] Erro na inicialização:', err);
+      showNotification('Terminal carregado em modo offline', 'warning');
+    }
   });
 
-  // 6. Botão Acessar Intel
-  document.getElementById('btnIntel').addEventListener('click', () => {
-    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-    window.location.href = '15-museu.html';
-  });
-
-  // 7. Navegação da Sidebar (manter estado visual)
-  document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
-    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-    document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
-    i.classList.add('on');
-  }));
-
-  // 8. Navegação do Header
-  document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
-    if (a.getAttribute('href') === '#') e.preventDefault();
-    if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-    a.classList.add('on');
-  }));
-});
-
-// Relógio do sistema
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
+  /* ============================================
+     RELÓGIO DO SISTEMA
+     ============================================ */
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

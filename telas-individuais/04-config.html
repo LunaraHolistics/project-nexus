@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE — Configurações</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-600-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<!-- Integração com API e Sistema de Áudio -->
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE — Configurações</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
   :root {
     --surface: #131313;
@@ -33,6 +48,10 @@
     --amber: #FFBF00;
     --petrol: #003344;
     --ivory: #F5F5DC;
+    
+    /* ✅ NOVAS VARIÁVEIS PARA CALIBRAÇÃO VISUAL */
+    --gamma-value: 1;
+    --contrast-value: 1;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,6 +63,11 @@
     background: var(--surface);
     font-family: 'Manrope', sans-serif;
     color: var(--on-surface);
+  }
+
+  /* ✅ FILTRO GLOBAL DE CALIBRAÇÃO VISUAL */
+  body.visual-calibrated {
+    filter: brightness(var(--gamma-value)) contrast(var(--contrast-value));
   }
 
   /* ============ CONTAINER PRINCIPAL ============ */
@@ -84,6 +108,7 @@
     align-items: center;
     padding: 0 64px;
     z-index: 10;
+    flex-shrink: 0;
   }
 
   .back-btn {
@@ -99,11 +124,10 @@
     letter-spacing: 0.1em;
     cursor: pointer;
     transition: color 0.3s ease;
+    text-decoration: none;
   }
 
-  .back-btn:hover {
-    color: var(--amber);
-  }
+  .back-btn:hover { color: var(--amber); }
 
   .back-icon {
     width: 20px;
@@ -151,6 +175,7 @@
     border-right: 0.5px solid rgba(197, 160, 89, 0.3);
     padding: 32px 0;
     overflow-y: auto;
+    flex-shrink: 0;
   }
 
   .nav-item {
@@ -164,18 +189,9 @@
     border-left: 3px solid transparent;
   }
 
-  .nav-item:hover {
-    background: rgba(197, 160, 89, 0.05);
-  }
-
-  .nav-item.active {
-    background: rgba(197, 160, 89, 0.1);
-    border-left-color: var(--aged-gold);
-  }
-
-  .nav-item.active .nav-label {
-    color: var(--aged-gold);
-  }
+  .nav-item:hover { background: rgba(197, 160, 89, 0.05); }
+  .nav-item.active { background: rgba(197, 160, 89, 0.1); border-left-color: var(--aged-gold); }
+  .nav-item.active .nav-label { color: var(--aged-gold); }
 
   .nav-icon {
     width: 20px;
@@ -184,11 +200,10 @@
     stroke-width: 1.5;
     fill: none;
     transition: stroke 0.3s ease;
+    flex-shrink: 0;
   }
 
-  .nav-item.active .nav-icon {
-    stroke: var(--aged-gold);
-  }
+  .nav-item.active .nav-icon { stroke: var(--aged-gold); }
 
   .nav-label {
     font-family: 'JetBrains Mono', monospace;
@@ -243,14 +258,8 @@
     letter-spacing: 0.05em;
   }
 
-  .status-item:last-child {
-    margin-bottom: 0;
-  }
-
-  .status-value {
-    color: #1a1a1a;
-    font-weight: 500;
-  }
+  .status-item:last-child { margin-bottom: 0; }
+  .status-value { color: #1a1a1a; font-weight: 500; }
 
   /* ============ MAIN CONTENT ============ */
   .main-content {
@@ -258,10 +267,17 @@
     padding: 48px 64px;
     overflow-y: auto;
     background: var(--surface);
+    scroll-behavior: smooth;
   }
 
   .section {
     margin-bottom: 48px;
+    scroll-margin-top: 20px;
+    transition: opacity 0.3s ease;
+  }
+
+  .section.hidden-section {
+    display: none;
   }
 
   .section-header {
@@ -288,9 +304,7 @@
   }
 
   /* ============ SLIDERS ============ */
-  .slider-group {
-    margin-bottom: 32px;
-  }
+  .slider-group { margin-bottom: 32px; }
 
   .slider-label {
     display: flex;
@@ -348,9 +362,10 @@
     box-shadow: 0 0 12px rgba(255, 191, 0, 0.4);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     transform: translateX(-50%);
+    pointer-events: none;
   }
 
-  .slider-thumb:hover {
+  .slider-container:hover .slider-thumb {
     transform: translateX(-50%) scale(1.2);
     box-shadow: 0 0 20px rgba(255, 191, 0, 0.6);
   }
@@ -365,9 +380,7 @@
   }
 
   /* ============ DROPDOWN ============ */
-  .dropdown-group {
-    margin-bottom: 32px;
-  }
+  .dropdown-group { margin-bottom: 32px; }
 
   .dropdown-label {
     font-family: 'JetBrains Mono', monospace;
@@ -377,11 +390,10 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin-bottom: 12px;
+    display: block;
   }
 
-  .dropdown-container {
-    position: relative;
-  }
+  .dropdown-container { position: relative; }
 
   .dropdown-select {
     width: 100%;
@@ -423,11 +435,10 @@
     align-items: center;
     padding: 24px 0;
     border-top: 0.5px solid rgba(197, 160, 89, 0.2);
+    gap: 16px;
   }
 
-  .toggle-info {
-    flex: 1;
-  }
+  .toggle-info { flex: 1; }
 
   .toggle-label {
     font-family: 'JetBrains Mono', monospace;
@@ -455,11 +466,10 @@
     cursor: pointer;
     transition: background 0.3s ease;
     margin-left: 32px;
+    flex-shrink: 0;
   }
 
-  .toggle-switch.active {
-    background: var(--amber);
-  }
+  .toggle-switch.active { background: var(--amber); }
 
   .toggle-thumb {
     position: absolute;
@@ -472,9 +482,7 @@
     transition: transform 0.3s ease;
   }
 
-  .toggle-switch.active .toggle-thumb {
-    transform: translateX(28px);
-  }
+  .toggle-switch.active .toggle-thumb { transform: translateX(28px); }
 
   /* ============ BOTÕES DE AÇÃO ============ */
   .action-buttons {
@@ -483,6 +491,7 @@
     justify-content: flex-end;
     padding-top: 32px;
     border-top: 0.5px solid rgba(197, 160, 89, 0.2);
+    flex-wrap: wrap;
   }
 
   .btn {
@@ -497,13 +506,18 @@
     border-radius: 4px;
   }
 
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .btn-secondary {
     background: transparent;
     border: 1px solid var(--bronze);
     color: var(--bronze);
   }
 
-  .btn-secondary:hover {
+  .btn-secondary:hover:not(:disabled) {
     background: var(--bronze);
     color: var(--surface);
   }
@@ -514,23 +528,117 @@
     color: var(--ivory);
   }
 
-  .btn-primary:hover {
+  .btn-primary:hover:not(:disabled) {
     background: var(--amber);
     border-color: var(--amber);
     color: var(--surface);
+  }
+
+  /* ============ PRIVACY SECTION ============ */
+  .privacy-card {
+    background: var(--surface-dim);
+    border: 0.5px solid rgba(197, 160, 89, 0.3);
+    padding: 24px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+
+  .privacy-card h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--aged-gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .privacy-card p {
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    line-height: 20px;
+    margin-bottom: 12px;
+  }
+
+  .btn-danger {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid #c44;
+    color: #c44;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+  }
+
+  .btn-danger:hover {
+    background: #c44;
+    color: var(--surface);
+  }
+
+  /* ============ TACTICAL HINT OVERLAY ============ */
+  body.tactical-hints-enabled .hint-overlay {
+    display: block;
+  }
+
+  .hint-overlay {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 51, 68, 0.9);
+    border: 0.5px solid var(--aged-gold);
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--aged-gold);
+    letter-spacing: 0.1em;
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+    max-width: 280px;
+    animation: hintPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
   }
 
   /* ============ RESPONSIVO ============ */
   @media (max-width: 1024px) {
     .sidebar { width: 280px; }
     .main-content { padding: 32px 48px; }
+    .header { padding: 0 32px; }
   }
 
   @media (max-width: 768px) {
     .content { flex-direction: column; }
-    .sidebar { width: 100%; border-right: none; border-bottom: 0.5px solid rgba(197, 160, 89, 0.3); }
-    .main-content { padding: 24px 32px; }
-    .header { padding: 0 32px; }
+    .sidebar { 
+      width: 100%; 
+      border-right: none; 
+      border-bottom: 0.5px solid rgba(197, 160, 89, 0.3);
+      max-height: 200px;
+      padding: 16px 0;
+    }
+    .nav-item { padding: 12px 20px; }
+    .system-status-card { margin: 16px; padding: 16px; }
+    .main-content { padding: 24px 20px; }
+    .header { padding: 0 20px; }
+    .header-title { font-size: 18px; margin-left: 16px; }
+    .action-buttons { justify-content: stretch; }
+    .btn { flex: 1; padding: 12px 16px; font-size: 11px; }
+    .section-title { font-size: 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .header-title { display: none; }
+    .settings-icon { display: none; }
+    .slider-name { font-size: 10px; }
+    .slider-value { font-size: 12px; }
   }
 </style>
 </head>
@@ -540,12 +648,12 @@
 
     <!-- Header -->
     <header class="header">
-      <button class="back-btn" id="backBtn">
+      <a href="/telas-individuais/19-hq-atrium.html" class="back-btn" id="backBtn">
         <svg class="back-icon" viewBox="0 0 24 24">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
         <span data-i18n="back">Voltar</span>
-      </button>
+      </a>
       <h1 class="header-title" data-i18n="pageTitle">Configurações</h1>
       <svg class="settings-icon" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="3"/>
@@ -598,16 +706,17 @@
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
           </div>
-          <div class="status-item">Versão: <span class="status-value">2.4.1_b</span></div>
-          <div class="status-item">Conexão: <span class="status-value">SEGURA</span></div>
-          <div class="status-item">Hora Local: <span class="status-value" id="localTime">23:45 UTC</span></div>
+          <div class="status-item"><span data-i18n="version">Versão</span>: <span class="status-value">2.4.1_b</span></div>
+          <div class="status-item"><span data-i18n="connection">Conexão</span>: <span class="status-value" id="connectionStatus" data-i18n="secure">SEGURA</span></div>
+          <div class="status-item"><span data-i18n="localTime">Hora Local</span>: <span class="status-value" id="localTime">23:45 UTC</span></div>
+          <div class="status-item"><span data-i18n="director">Diretor</span>: <span class="status-value" id="directorName">---</span></div>
         </div>
       </aside>
 
       <!-- Main Content -->
-      <main class="main-content">
+      <main class="main-content" id="mainContent">
         <!-- Audio Parameters -->
-        <div class="section">
+        <div class="section" id="section-system">
           <div class="section-header">
             <svg class="section-icon" viewBox="0 0 24 24">
               <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
@@ -640,10 +749,20 @@
               <input type="range" class="slider-input" id="sfxSlider" min="0" max="100" value="42">
             </div>
           </div>
+
+          <div class="toggle-group" style="border-top: 0.5px solid rgba(197, 160, 89, 0.2);">
+            <div class="toggle-info">
+              <div class="toggle-label" data-i18n="muteAll">Mudo Total</div>
+              <div class="toggle-description" data-i18n="muteDesc">Silenciar completamente o sistema de áudio.</div>
+            </div>
+            <div class="toggle-switch" id="muteToggle">
+              <div class="toggle-thumb"></div>
+            </div>
+          </div>
         </div>
 
         <!-- Visual Calibration -->
-        <div class="section">
+        <div class="section" id="section-display">
           <div class="section-header">
             <svg class="section-icon" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
@@ -677,32 +796,6 @@
               <input type="range" class="slider-input" id="contrastSlider" min="0" max="100" value="68">
             </div>
           </div>
-        </div>
-
-        <!-- Operative Preferences -->
-        <div class="section">
-          <div class="section-header">
-            <svg class="section-icon" viewBox="0 0 24 24">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-            <h2 class="section-title" data-i18n="operativePref">Preferências do Operativo</h2>
-          </div>
-
-          <div class="dropdown-group">
-            <div class="dropdown-label" data-i18n="locationProfile">Perfil de Localização</div>
-            <div class="dropdown-container">
-              <select class="dropdown-select" id="languageSelect">
-                <option value="pt-BR">Português (BR)</option>
-                <option value="en-US">English (US)</option>
-                <option value="fr-FR">Français (FR)</option>
-                <option value="de-DE">Deutsch (DE)</option>
-              </select>
-              <svg class="dropdown-arrow" viewBox="0 0 24 24">
-                <path d="M6 9l6 6 6-6"/>
-              </svg>
-            </div>
-          </div>
 
           <div class="toggle-group">
             <div class="toggle-info">
@@ -715,6 +808,53 @@
           </div>
         </div>
 
+        <!-- Localization -->
+        <div class="section" id="section-language">
+          <div class="section-header">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <h2 class="section-title" data-i18n="operativePref">Preferências do Operativo</h2>
+          </div>
+
+          <div class="dropdown-group">
+            <label class="dropdown-label" for="languageSelect" data-i18n="locationProfile">Perfil de Localização</label>
+            <div class="dropdown-container">
+              <select class="dropdown-select" id="languageSelect">
+                <option value="pt-BR">Português (BR)</option>
+                <option value="en-US">English (US)</option>
+                <option value="fr-FR">Français (FR)</option>
+                <option value="de-DE">Deutsch (DE)</option>
+              </select>
+              <svg class="dropdown-arrow" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="section" id="section-privacy">
+          <div class="section-header">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <h2 class="section-title" data-i18n="privacy">Privacidade de Dados</h2>
+          </div>
+
+          <div class="privacy-card">
+            <h4 data-i18n="localStorage">Armazenamento Local</h4>
+            <p data-i18n="localStorageDesc">Seus dados de progresso, preferências e estado do diretor são armazenados localmente neste dispositivo.</p>
+            <button class="btn-danger" id="clearDataBtn" data-i18n="clearData">Limpar Todos os Dados</button>
+          </div>
+
+          <div class="privacy-card">
+            <h4 data-i18n="telemetry">Telemetria</h4>
+            <p data-i18n="telemetryDesc">Nenhum dado é enviado para servidores externos. Toda operação é local-first.</p>
+          </div>
+        </div>
+
         <!-- Action Buttons -->
         <div class="action-buttons">
           <button class="btn btn-secondary" id="resetBtn" data-i18n="reset">Restaurar Padrões</button>
@@ -724,291 +864,563 @@
     </div>
   </div>
 
+  <!-- ✅ HINT TÁTICO (mostrado quando habilitado) -->
+  <div class="hint-overlay" id="hintOverlay">
+    <span data-i18n="hintText">💡 DICA: Pressione ESC para voltar rapidamente</span>
+  </div>
+
   <script>
-    // Dicionário de Traduções
-    const translations = {
+  (function() {
+    "use strict";
+
+    /* ============================================
+       UTILITÁRIOS
+       ============================================ */
+    function playSound(type) {
+      if (!window.ArchiveAudio) return;
+      try {
+        if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+          window.ArchiveAudio.playClick();
+        } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+          window.ArchiveAudio.playSuccess();
+        } else if (type === 'error' && typeof window.ArchiveAudio.playError === 'function') {
+          window.ArchiveAudio.playError();
+        }
+      } catch (e) {
+        console.warn('[CONFIG] Erro ao tocar som:', e);
+      }
+    }
+
+    function showNotification(message, type) {
+      type = type || 'info';
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+        window.ArchiveAPI.notify(message, type);
+        return;
+      }
+      console.log('[CONFIG] ' + type.toUpperCase() + ': ' + message);
+    }
+
+    /* ============================================
+       ✅ TRADUÇÕES COMPLETAS (i18n)
+       ============================================ */
+    var translations = {
       'pt-BR': {
-        back: 'Voltar',
-        pageTitle: 'Configurações',
-        system: 'Sistema & Áudio',
-        display: 'Exibição & Óptica',
-        language: 'Localização',
-        privacy: 'Privacidade de Dados',
-        systemStatus: 'Status do Sistema',
+        back: 'Voltar', pageTitle: 'Configurações',
+        system: 'Sistema & Áudio', display: 'Exibição & Óptica',
+        language: 'Localização', privacy: 'Privacidade de Dados',
+        systemStatus: 'Status do Sistema', version: 'Versão',
+        connection: 'Conexão', secure: 'SEGURA', offline: 'OFFLINE',
+        localTime: 'Hora Local', director: 'Diretor',
         audioParams: 'Parâmetros de Áudio',
-        music: 'Música Atmosférica',
-        sfx: 'Diagnósticos SFX',
+        music: 'Música Atmosférica', sfx: 'Diagnósticos SFX',
+        muteAll: 'Mudo Total', muteDesc: 'Silenciar completamente o sistema de áudio.',
         visualCal: 'Calibração Visual',
-        gamma: 'Gama / Brilho',
-        contrast: 'Taxa de Contraste',
+        gamma: 'Gama / Brilho', contrast: 'Taxa de Contraste',
         operativePref: 'Preferências do Operativo',
         locationProfile: 'Perfil de Localização',
         tacticalHints: 'Dicas Táticas de UI',
         tacticalDesc: 'Ativar sobreposições contextuais durante operações de campo.',
-        reset: 'Restaurar Padrões',
-        apply: 'Aplicar Configuração',
-        applied: 'Aplicado ✓'
+        localStorage: 'Armazenamento Local',
+        localStorageDesc: 'Seus dados de progresso, preferências e estado do diretor são armazenados localmente neste dispositivo.',
+        clearData: 'Limpar Todos os Dados',
+        telemetry: 'Telemetria',
+        telemetryDesc: 'Nenhum dado é enviado para servidores externos. Toda operação é local-first.',
+        reset: 'Restaurar Padrões', apply: 'Aplicar Configuração',
+        applied: 'Aplicado ✓',
+        hintText: '💡 DICA: Pressione ESC para voltar rapidamente',
+        confirmClear: 'Tem certeza? Isso apagará todo seu progresso.',
+        dataCleared: 'Dados limpos. Recarregando...',
+        settingsApplied: 'Configurações aplicadas com sucesso',
+        settingsReset: 'Configurações restauradas aos padrões'
       },
       'en-US': {
-        back: 'Back',
-        pageTitle: 'Settings',
-        system: 'System & Audio',
-        display: 'Display & Optics',
-        language: 'Localization',
-        privacy: 'Data Privacy',
-        systemStatus: 'System Status',
+        back: 'Back', pageTitle: 'Settings',
+        system: 'System & Audio', display: 'Display & Optics',
+        language: 'Localization', privacy: 'Data Privacy',
+        systemStatus: 'System Status', version: 'Version',
+        connection: 'Connection', secure: 'SECURE', offline: 'OFFLINE',
+        localTime: 'Local Time', director: 'Director',
         audioParams: 'Audio Parameters',
-        music: 'Atmospheric Music',
-        sfx: 'Diagnostics SFX',
+        music: 'Atmospheric Music', sfx: 'Diagnostics SFX',
+        muteAll: 'Mute All', muteDesc: 'Completely silence the audio system.',
         visualCal: 'Visual Calibration',
-        gamma: 'Gamma / Brightness',
-        contrast: 'Contrast Rate',
+        gamma: 'Gamma / Brightness', contrast: 'Contrast Rate',
         operativePref: 'Operative Preferences',
         locationProfile: 'Location Profile',
         tacticalHints: 'UI Tactical Hints',
         tacticalDesc: 'Enable contextual overlays during field operations.',
-        reset: 'Restore Defaults',
-        apply: 'Apply Configuration',
-        applied: 'Applied ✓'
+        localStorage: 'Local Storage',
+        localStorageDesc: 'Your progress data, preferences, and director state are stored locally on this device.',
+        clearData: 'Clear All Data',
+        telemetry: 'Telemetry',
+        telemetryDesc: 'No data is sent to external servers. All operations are local-first.',
+        reset: 'Restore Defaults', apply: 'Apply Configuration',
+        applied: 'Applied ✓',
+        hintText: '💡 TIP: Press ESC to go back quickly',
+        confirmClear: 'Are you sure? This will erase all your progress.',
+        dataCleared: 'Data cleared. Reloading...',
+        settingsApplied: 'Settings applied successfully',
+        settingsReset: 'Settings restored to defaults'
       },
       'fr-FR': {
-        back: 'Retour',
-        pageTitle: 'Paramètres',
-        system: 'Système & Audio',
-        display: 'Affichage & Optique',
-        language: 'Localisation',
-        privacy: 'Confidentialité des Données',
-        systemStatus: 'État du Système',
+        back: 'Retour', pageTitle: 'Paramètres',
+        system: 'Système & Audio', display: 'Affichage & Optique',
+        language: 'Localisation', privacy: 'Confidentialité des Données',
+        systemStatus: 'État du Système', version: 'Version',
+        connection: 'Connexion', secure: 'SÉCURISÉE', offline: 'HORS LIGNE',
+        localTime: 'Heure Locale', director: 'Directeur',
         audioParams: 'Paramètres Audio',
-        music: 'Musique Atmosphérique',
-        sfx: 'Diagnostics SFX',
+        music: 'Musique Atmosphérique', sfx: 'Diagnostics SFX',
+        muteAll: 'Muet Total', muteDesc: 'Silencer complètement le système audio.',
         visualCal: 'Calibrage Visuel',
-        gamma: 'Gamma / Luminosité',
-        contrast: 'Taux de Contraste',
-        operativePref: 'Préférences de l\'Operatif',
+        gamma: 'Gamma / Luminosité', contrast: 'Taux de Contraste',
+        operativePref: 'Préférences de l\'Opératif',
         locationProfile: 'Profil de Localisation',
         tacticalHints: 'Indices Tactiques UI',
         tacticalDesc: 'Activer les superpositions contextuelles pendant les opérations.',
-        reset: 'Restaurer les Paramètres',
-        apply: 'Appliquer la Configuration',
-        applied: 'Appliqué ✓'
+        localStorage: 'Stockage Local',
+        localStorageDesc: 'Vos données de progression, préférences et état du directeur sont stockés localement.',
+        clearData: 'Effacer Toutes les Données',
+        telemetry: 'Télémétrie',
+        telemetryDesc: 'Aucune donnée n\'est envoyée à des serveurs externes. Opérations locales.',
+        reset: 'Restaurer les Paramètres', apply: 'Appliquer la Configuration',
+        applied: 'Appliqué ✓',
+        hintText: '💡 ASTUCE: Appuyez sur ESC pour revenir rapidement',
+        confirmClear: 'Êtes-vous sûr? Cela effacera toute votre progression.',
+        dataCleared: 'Données effacées. Rechargement...',
+        settingsApplied: 'Paramètres appliqués avec succès',
+        settingsReset: 'Paramètres restaurés par défaut'
       },
       'de-DE': {
-        back: 'Zurück',
-        pageTitle: 'Einstellungen',
-        system: 'System & Audio',
-        display: 'Anzeige & Optik',
-        language: 'Lokalisierung',
-        privacy: 'Datenschutz',
-        systemStatus: 'Systemstatus',
+        back: 'Zurück', pageTitle: 'Einstellungen',
+        system: 'System & Audio', display: 'Anzeige & Optik',
+        language: 'Lokalisierung', privacy: 'Datenschutz',
+        systemStatus: 'Systemstatus', version: 'Version',
+        connection: 'Verbindung', secure: 'SICHER', offline: 'OFFLINE',
+        localTime: 'Ortszeit', director: 'Direktor',
         audioParams: 'Audioparameter',
-        music: 'Atmosphärische Musik',
-        sfx: 'Diagnose-SFX',
+        music: 'Atmosphärische Musik', sfx: 'Diagnose-SFX',
+        muteAll: 'Stumm Schalten', muteDesc: 'Audiosystem vollständig stumm schalten.',
         visualCal: 'Visuelle Kalibrierung',
-        gamma: 'Gamma / Helligkeit',
-        contrast: 'Kontrastverhältnis',
+        gamma: 'Gamma / Helligkeit', contrast: 'Kontrastverhältnis',
         operativePref: 'Operative Präferenzen',
         locationProfile: 'Standortprofil',
         tacticalHints: 'Taktische UI-Hinweise',
         tacticalDesc: 'Kontextbezogene Overlays während Feldeinsätzen aktivieren.',
-        reset: 'Standardeinstellungen',
-        apply: 'Konfiguration Anwenden',
-        applied: 'Angewendet ✓'
+        localStorage: 'Lokaler Speicher',
+        localStorageDesc: 'Ihre Fortschrittsdaten, Präferenzen und Direktor-Status werden lokal gespeichert.',
+        clearData: 'Alle Daten Löschen',
+        telemetry: 'Telemetrie',
+        telemetryDesc: 'Keine Daten werden an externe Server gesendet. Lokale Operationen.',
+        reset: 'Standardeinstellungen', apply: 'Konfiguration Anwenden',
+        applied: 'Angewendet ✓',
+        hintText: '💡 TIPP: Drücken Sie ESC, um schnell zurückzugehen',
+        confirmClear: 'Sind Sie sicher? Dies löscht Ihren gesamten Fortschritt.',
+        dataCleared: 'Daten gelöscht. Wird neu geladen...',
+        settingsApplied: 'Einstellungen erfolgreich angewendet',
+        settingsReset: 'Einstellungen auf Standard zurückgesetzt'
       }
     };
 
-    // Função para atualizar o idioma da interface
+    /* ============================================
+       ✅ ESTADO E CONFIGURAÇÃO
+       ============================================ */
+    var DEFAULTS = {
+      music: 75,
+      sfx: 42,
+      gamma: 50,
+      contrast: 68,
+      language: 'pt-BR',
+      tacticalHints: true,
+      muted: false
+    };
+
+    var currentConfig = Object.assign({}, DEFAULTS);
+    var applying = false;
+
+    /* ============================================
+       FUNÇÃO updateLanguage COMPLETA
+       ============================================ */
     function updateLanguage(lang) {
-      const t = translations[lang] || translations['pt-BR'];
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
+      var t = translations[lang] || translations['pt-BR'];
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
         if (t[key]) {
-          // Preserva o texto "Aplicado ✓" se o botão já tiver sido clicado
-          if (el.id === 'applyBtn' && el.textContent.includes('✓')) return;
+          // Preserva estado "Aplicado ✓" no botão
+          if (el.id === 'applyBtn' && el.textContent.indexOf('✓') !== -1) return;
           el.textContent = t[key];
+        }
+      });
+      // Atualiza atributo lang do html
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    /* ============================================
+       ✅ APLICAR CALIBRAÇÃO VISUAL (gamma/contrast)
+       ============================================ */
+    function applyVisualCalibration(gamma, contrast) {
+      // Converte 0-100 para valores CSS filter
+      // gamma: 0 = 0.5x, 50 = 1.0x, 100 = 1.5x
+      var gammaValue = 0.5 + (gamma / 100);
+      // contrast: 0 = 0.5x, 50 = 1.0x, 100 = 1.5x
+      var contrastValue = 0.5 + (contrast / 100);
+      
+      document.documentElement.style.setProperty('--gamma-value', gammaValue);
+      document.documentElement.style.setProperty('--contrast-value', contrastValue);
+      document.body.classList.add('visual-calibrated');
+    }
+
+    /* ============================================
+       ✅ APLICAR VOLUME AO AUDIO-SYSTEM
+       ============================================ */
+    function applyAudioSettings(music, sfx, muted) {
+      if (!window.ArchiveAudio) return;
+      
+      try {
+        // Volume master = média entre music e sfx
+        var masterVolume = ((parseInt(music) + parseInt(sfx)) / 2) / 100;
+        
+        if (typeof window.ArchiveAudio.setVolume === 'function') {
+          window.ArchiveAudio.setVolume(masterVolume);
+        }
+        if (typeof window.ArchiveAudio.setMuted === 'function') {
+          window.ArchiveAudio.setMuted(muted);
+        }
+      } catch (e) {
+        console.warn('[CONFIG] Erro ao aplicar áudio:', e);
+      }
+    }
+
+    /* ============================================
+       ✅ APLICAR TACTICAL HINTS
+       ============================================ */
+    function applyTacticalHints(enabled) {
+      if (enabled) {
+        document.body.classList.add('tactical-hints-enabled');
+      } else {
+        document.body.classList.remove('tactical-hints-enabled');
+      }
+    }
+
+    /* ============================================
+       ✅ CARREGAR CONFIGURAÇÕES SALVAS
+       ============================================ */
+    function loadSettings() {
+      try {
+        if (window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function') {
+          var state = window.ArchiveAPI.getState() || {};
+          if (state.settings) {
+            // Garante números
+            currentConfig = {
+              music: parseInt(state.settings.music) || DEFAULTS.music,
+              sfx: parseInt(state.settings.sfx) || DEFAULTS.sfx,
+              gamma: parseInt(state.settings.gamma) || DEFAULTS.gamma,
+              contrast: parseInt(state.settings.contrast) || DEFAULTS.contrast,
+              language: state.settings.language || DEFAULTS.language,
+              tacticalHints: state.settings.tacticalHints !== false,
+              muted: state.settings.muted === true
+            };
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('[CONFIG] Falha ao carregar configurações:', e);
+      }
+      currentConfig = Object.assign({}, DEFAULTS);
+    }
+
+    /* ============================================
+       ✅ SALVAR CONFIGURAÇÕES
+       ============================================ */
+    function saveSettings() {
+      try {
+        if (window.ArchiveAPI && typeof window.ArchiveAPI.setState === 'function') {
+          window.ArchiveAPI.setState({ settings: currentConfig });
+          return true;
+        }
+      } catch (e) {
+        console.error('[CONFIG] Falha ao salvar:', e);
+      }
+      return false;
+    }
+
+    /* ============================================
+       APLICAR CONFIG À UI
+       ============================================ */
+    function applyConfigToUI() {
+      var c = currentConfig;
+      
+      // Sliders
+      setSlider('music', c.music);
+      setSlider('sfx', c.sfx);
+      setSlider('gamma', c.gamma);
+      setSlider('contrast', c.contrast);
+      
+      // Dropdown
+      var langSelect = document.getElementById('languageSelect');
+      if (langSelect) langSelect.value = c.language;
+      
+      // Toggles
+      var tacticalToggle = document.getElementById('tacticalToggle');
+      var muteToggle = document.getElementById('muteToggle');
+      if (tacticalToggle) {
+        tacticalToggle.classList.toggle('active', c.tacticalHints);
+      }
+      if (muteToggle) {
+        muteToggle.classList.toggle('active', c.muted);
+      }
+      
+      // Aplicar efeitos reais
+      applyVisualCalibration(c.gamma, c.contrast);
+      applyAudioSettings(c.music, c.sfx, c.muted);
+      applyTacticalHints(c.tacticalHints);
+      updateLanguage(c.language);
+    }
+
+    function setSlider(name, value) {
+      var input = document.getElementById(name + 'Slider');
+      var fill = document.getElementById(name + 'Fill');
+      var thumb = document.getElementById(name + 'Thumb');
+      var display = document.getElementById(name + 'Value');
+      
+      if (input) input.value = value;
+      if (fill) fill.style.width = value + '%';
+      if (thumb) thumb.style.left = value + '%';
+      if (display) display.textContent = value + '%';
+    }
+
+    /* ============================================
+       INIT
+       ============================================ */
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Carrega configurações
+      loadSettings();
+      
+      // 2. Aplica à UI
+      applyConfigToUI();
+      
+      // 3. Mostra status da conexão
+      var connStatus = document.getElementById('connectionStatus');
+      if (connStatus && window.ArchiveAPI) {
+        var t = translations[currentConfig.language] || translations['pt-BR'];
+        if (window.ArchiveAPI.online) {
+          connStatus.textContent = t.secure;
+          connStatus.style.color = '#1a8a3a';
+        } else {
+          connStatus.textContent = t.offline;
+          connStatus.style.color = '#c44';
+        }
+      }
+      
+      // 4. Mostra nome do diretor
+      var directorEl = document.getElementById('directorName');
+      if (directorEl && window.ArchiveAPI && typeof window.ArchiveAPI.getState === 'function') {
+        var state = window.ArchiveAPI.getState();
+        if (state && state.director && state.director.codename) {
+          directorEl.textContent = state.director.codename;
+        } else {
+          directorEl.textContent = '---';
+        }
+      }
+      
+      // 5. Relógio em tempo real
+      setInterval(function() {
+        var n = new Date();
+        var el = document.getElementById('localTime');
+        if (el) {
+          el.textContent = String(n.getHours()).padStart(2, '0') + ':' + 
+                          String(n.getMinutes()).padStart(2, '0') + ' UTC';
+        }
+      }, 1000);
+    });
+
+    /* ============================================
+       SLIDERS - ATUALIZAÇÃO EM TEMPO REAL
+       ============================================ */
+    var sliders = ['music', 'sfx', 'gamma', 'contrast'];
+    sliders.forEach(function(name) {
+      var input = document.getElementById(name + 'Slider');
+      if (!input) return;
+      
+      input.addEventListener('input', function(e) {
+        var val = parseInt(e.target.value);
+        setSlider(name, val);
+        
+        // Preview em tempo real para gamma/contrast
+        if (name === 'gamma' || name === 'contrast') {
+          var g = name === 'gamma' ? val : parseInt(document.getElementById('gammaSlider').value);
+          var c = name === 'contrast' ? val : parseInt(document.getElementById('contrastSlider').value);
+          applyVisualCalibration(g, c);
+        }
+        
+        // Preview de áudio em tempo real
+        if (name === 'music' || name === 'sfx') {
+          var m = name === 'music' ? val : parseInt(document.getElementById('musicSlider').value);
+          var s = name === 'sfx' ? val : parseInt(document.getElementById('sfxSlider').value);
+          var muted = document.getElementById('muteToggle').classList.contains('active');
+          applyAudioSettings(m, s, muted);
+        }
+      });
+    });
+
+    /* ============================================
+       TOGGLES
+       ============================================ */
+    var tacticalToggle = document.getElementById('tacticalToggle');
+    if (tacticalToggle) {
+      tacticalToggle.addEventListener('click', function() {
+        playSound('click');
+        this.classList.toggle('active');
+        applyTacticalHints(this.classList.contains('active'));
+      });
+    }
+
+    var muteToggle = document.getElementById('muteToggle');
+    if (muteToggle) {
+      muteToggle.addEventListener('click', function() {
+        playSound('click');
+        this.classList.toggle('active');
+        var muted = this.classList.contains('active');
+        var m = parseInt(document.getElementById('musicSlider').value);
+        var s = parseInt(document.getElementById('sfxSlider').value);
+        applyAudioSettings(m, s, muted);
+      });
+    }
+
+    /* ============================================
+       SIDEBAR NAVIGATION (scroll suave)
+       ============================================ */
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        playSound('click');
+        document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+        this.classList.add('active');
+        
+        var section = this.getAttribute('data-section');
+        var target = document.getElementById('section-' + section);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ============================================
+       ✅ BOTÃO RESET
+       ============================================ */
+    var resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        playSound('click');
+        currentConfig = Object.assign({}, DEFAULTS);
+        applyConfigToUI();
+        saveSettings();
+        showNotification(
+          (translations[currentConfig.language] || translations['pt-BR']).settingsReset,
+          'info'
+        );
+      });
+    }
+
+    /* ============================================
+       ✅ BOTÃO APPLY (com proteção contra duplo-click)
+       ============================================ */
+    var applyBtn = document.getElementById('applyBtn');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function() {
+        if (applying) return;
+        applying = true;
+        
+        playSound('click');
+        
+        // Coleta valores como NÚMEROS
+        currentConfig = {
+          music: parseInt(document.getElementById('musicSlider').value),
+          sfx: parseInt(document.getElementById('sfxSlider').value),
+          gamma: parseInt(document.getElementById('gammaSlider').value),
+          contrast: parseInt(document.getElementById('contrastSlider').value),
+          language: document.getElementById('languageSelect').value,
+          tacticalHints: document.getElementById('tacticalToggle').classList.contains('active'),
+          muted: document.getElementById('muteToggle').classList.contains('active')
+        };
+        
+        // Salva no ArchiveAPI
+        saveSettings();
+        
+        // Aplica efeitos
+        applyVisualCalibration(currentConfig.gamma, currentConfig.contrast);
+        applyAudioSettings(currentConfig.music, currentConfig.sfx, currentConfig.muted);
+        applyTacticalHints(currentConfig.tacticalHints);
+        updateLanguage(currentConfig.language);
+        
+        // Feedback
+        playSound('success');
+        var t = translations[currentConfig.language] || translations['pt-BR'];
+        
+        applyBtn.textContent = t.applied;
+        applyBtn.style.background = 'var(--amber)';
+        applyBtn.style.color = 'var(--surface)';
+        applyBtn.disabled = true;
+        
+        showNotification(t.settingsApplied, 'success');
+        
+        setTimeout(function() {
+          applyBtn.textContent = t.apply;
+          applyBtn.style.background = '';
+          applyBtn.style.color = '';
+          applyBtn.disabled = false;
+          applying = false;
+        }, 2000);
+      });
+    }
+
+    /* ============================================
+       ✅ BOTÃO LIMPAR DADOS
+       ============================================ */
+    var clearBtn = document.getElementById('clearDataBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function() {
+        var t = translations[currentConfig.language] || translations['pt-BR'];
+        if (confirm(t.confirmClear)) {
+          playSound('error');
+          if (window.ArchiveAPI && typeof window.ArchiveAPI.clearState === 'function') {
+            window.ArchiveAPI.clearState();
+          }
+          showNotification(t.dataCleared, 'warning');
+          setTimeout(function() {
+            window.location.href = '/index.html';
+          }, 1500);
         }
       });
     }
 
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Carregar configurações salvas ou usar padrões
-      const state = ArchiveAPI.getState() || {};
-      const settings = state.settings || {
-        music: 75,
-        sfx: 42,
-        gamma: 50,
-        contrast: 68,
-        language: 'pt-BR',
-        tacticalHints: true
-      };
+    /* ============================================
+       ✅ DROPDOWN LANGUAGE (aplica em tempo real)
+       ============================================ */
+    var langSelect = document.getElementById('languageSelect');
+    if (langSelect) {
+      langSelect.addEventListener('change', function(e) {
+        playSound('click');
+        updateLanguage(e.target.value);
+      });
+    }
 
-      // Aplicar configurações aos elementos da UI
-      document.getElementById('musicSlider').value = settings.music;
-      document.getElementById('musicFill').style.width = settings.music + '%';
-      document.getElementById('musicThumb').style.left = settings.music + '%';
-      document.getElementById('musicValue').textContent = settings.music + '%';
-
-      document.getElementById('sfxSlider').value = settings.sfx;
-      document.getElementById('sfxFill').style.width = settings.sfx + '%';
-      document.getElementById('sfxThumb').style.left = settings.sfx + '%';
-      document.getElementById('sfxValue').textContent = settings.sfx + '%';
-
-      document.getElementById('gammaSlider').value = settings.gamma;
-      document.getElementById('gammaFill').style.width = settings.gamma + '%';
-      document.getElementById('gammaThumb').style.left = settings.gamma + '%';
-      document.getElementById('gammaValue').textContent = settings.gamma + '%';
-
-      document.getElementById('contrastSlider').value = settings.contrast;
-      document.getElementById('contrastFill').style.width = settings.contrast + '%';
-      document.getElementById('contrastThumb').style.left = settings.contrast + '%';
-      document.getElementById('contrastValue').textContent = settings.contrast + '%';
-
-      document.getElementById('languageSelect').value = settings.language;
-      
-      if (settings.tacticalHints) {
-        document.getElementById('tacticalToggle').classList.add('active');
-      } else {
-        document.getElementById('tacticalToggle').classList.remove('active');
+    /* ============================================
+       ✅ ATALHO ESC PARA VOLTAR
+       ============================================ */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        window.location.href = '/telas-individuais/19-hq-atrium.html';
       }
-
-      // Aplicar idioma inicial
-      updateLanguage(settings.language);
-
-      // Relógio em tempo real
-      setInterval(() => {
-        const n = new Date();
-        document.getElementById('localTime').textContent = 
-          String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0') + ' UTC';
-      }, 1000);
     });
-
-    // Lógica dos Sliders
-    const sliders = [
-      { input: 'musicSlider', fill: 'musicFill', thumb: 'musicThumb', value: 'musicValue' },
-      { input: 'sfxSlider', fill: 'sfxFill', thumb: 'sfxThumb', value: 'sfxValue' },
-      { input: 'gammaSlider', fill: 'gammaFill', thumb: 'gammaThumb', value: 'gammaValue' },
-      { input: 'contrastSlider', fill: 'contrastFill', thumb: 'contrastThumb', value: 'contrastValue' }
-    ];
-
-    sliders.forEach(({ input, fill, thumb, value }) => {
-      const sliderInput = document.getElementById(input);
-      const sliderFill = document.getElementById(fill);
-      const sliderThumb = document.getElementById(thumb);
-      const sliderValue = document.getElementById(value);
-
-      sliderInput.addEventListener('input', (e) => {
-        const val = e.target.value;
-        sliderFill.style.width = val + '%';
-        sliderThumb.style.left = val + '%';
-        sliderValue.textContent = val + '%';
-      });
-    });
-
-    // Toggle switch
-    const tacticalToggle = document.getElementById('tacticalToggle');
-    tacticalToggle.addEventListener('click', () => {
-      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-      tacticalToggle.classList.toggle('active');
-    });
-
-    // Navegação da sidebar (visual apenas nesta demo)
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-        navItems.forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
-      });
-    });
-
-    // Botão Reset
-    const resetBtn = document.getElementById('resetBtn');
-    resetBtn.addEventListener('click', () => {
-      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-      const defaults = {
-        music: 75, sfx: 42, gamma: 50, contrast: 68, language: 'pt-BR', tacticalHints: true
-      };
-      
-      // Atualiza UI
-      document.getElementById('musicSlider').value = defaults.music;
-      document.getElementById('musicFill').style.width = defaults.music + '%';
-      document.getElementById('musicThumb').style.left = defaults.music + '%';
-      document.getElementById('musicValue').textContent = defaults.music + '%';
-      
-      document.getElementById('sfxSlider').value = defaults.sfx;
-      document.getElementById('sfxFill').style.width = defaults.sfx + '%';
-      document.getElementById('sfxThumb').style.left = defaults.sfx + '%';
-      document.getElementById('sfxValue').textContent = defaults.sfx + '%';
-      
-      document.getElementById('gammaSlider').value = defaults.gamma;
-      document.getElementById('gammaFill').style.width = defaults.gamma + '%';
-      document.getElementById('gammaThumb').style.left = defaults.gamma + '%';
-      document.getElementById('gammaValue').textContent = defaults.gamma + '%';
-      
-      document.getElementById('contrastSlider').value = defaults.contrast;
-      document.getElementById('contrastFill').style.width = defaults.contrast + '%';
-      document.getElementById('contrastThumb').style.left = defaults.contrast + '%';
-      document.getElementById('contrastValue').textContent = defaults.contrast + '%';
-      
-      document.getElementById('languageSelect').value = defaults.language;
-      document.getElementById('tacticalToggle').classList.add('active');
-      
-      updateLanguage(defaults.language);
-      ArchiveAPI.setState({ settings: defaults });
-    });
-
-    // Botão Apply
-    const applyBtn = document.getElementById('applyBtn');
-    applyBtn.addEventListener('click', () => {
-      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-      
-      const config = {
-        music: document.getElementById('musicSlider').value,
-        sfx: document.getElementById('sfxSlider').value,
-        gamma: document.getElementById('gammaSlider').value,
-        contrast: document.getElementById('contrastSlider').value,
-        language: document.getElementById('languageSelect').value,
-        tacticalHints: document.getElementById('tacticalToggle').classList.contains('active')
-      };
-
-      // Salva no ArchiveAPI
-      ArchiveAPI.setState({ settings: config });
-      
-      // Aplica o idioma imediatamente
-      updateLanguage(config.language);
-
-      // Feedback visual
-      const t = translations[config.language] || translations['pt-BR'];
-      const originalText = t.apply;
-      const appliedText = t.applied;
-      
-      applyBtn.textContent = appliedText;
-      applyBtn.style.background = 'var(--amber)';
-      applyBtn.style.color = 'var(--surface)';
-      
-      if(window.ArchiveAudio) window.ArchiveAudio.playSuccess();
-      
-      setTimeout(() => {
-        applyBtn.textContent = originalText;
-        applyBtn.style.background = '';
-        applyBtn.style.color = '';
-      }, 2000);
-    });
-
-    // Botão Voltar
-    document.getElementById('backBtn').addEventListener('click', () => {
-      if(window.ArchiveAudio) window.ArchiveAudio.playClick();
-      window.location.href = '19-hq-atrium.html';
-    });
+  })();
   </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>

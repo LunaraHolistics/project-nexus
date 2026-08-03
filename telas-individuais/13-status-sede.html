@@ -1,31 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Mobile Viewport Otimizado -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Animações Archive OS -->
-  <link rel="stylesheet" href="../animations.css">
-  <script src="../animations.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">`r`n<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ARCHIVE OS — Status da Sede</title>
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/libre-caslon-text@latest/latin-700-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-500-normal.css" rel="stylesheet">
-<script src="../api.js"></script>
-<script src="../audio-system.js"></script>
+  <title>ARCHIVE OS — Status da Sede</title>
+
+  <!-- ========================================
+       FAVICON (caminho absoluto)
+       ======================================== -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+  <!-- ========================================
+       FONTES CORRETAS (Google Fonts)
+       ======================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ========================================
+       FONT AWESOME COM ATRIBUTOS DE SEGURANÇA
+       ======================================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- ========================================
+       SCRIPTS DO SISTEMA (caminhos absolutos)
+       ======================================== -->
+  <script src="/api.js"></script>
+  <script src="/audio-system.js"></script>
+
+  <!-- ========================================
+       ANIMAÇÕES ARCHIVE OS (caminhos absolutos)
+       ======================================== -->
+  <link rel="stylesheet" href="/animations.css">
+  <script src="/animations.js"></script>
+
 <style>
 :root{--surface:#131313;--dim:#0e0e0e;--on:#e5e2e1;--onv:#c1c7cc;--gold:#C5A059;--goldl:#e9c176;--bronze:#CD7F32;--amber:#FFBF00;--petrol:#003344;--ivory:#F5F5DC;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--surface);font-family:'Manrope',sans-serif;color:var(--on);}
+
 .grain{position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");animation:gs .5s steps(4) infinite;}
 @keyframes gs{0%,100%{transform:translate(0,0)}25%{transform:translate(-2%,-1%)}50%{transform:translate(1%,2%)}75%{transform:translate(-1%,1%)}}
 .scan{position:fixed;inset:0;pointer-events:none;z-index:8999;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.4;}
+
 .hq{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse at 20% 30%,rgba(0,51,68,.12) 0%,transparent 55%),radial-gradient(ellipse at 80% 70%,rgba(197,160,89,.06) 0%,transparent 55%),var(--surface);}
+
+/* HEADER */
 header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-bottom:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .logo{font-family:'Libre Caslon Text',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:.15em;}
 .nav{display:flex;gap:30px;}
@@ -33,29 +54,38 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .nav a:hover,.nav a.on{color:var(--gold);}
 .nav a.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);box-shadow:0 0 8px var(--amber);}
 .icons{display:flex;gap:14px;}
+.icons a{display:inline-flex;text-decoration:none;}
 .icons svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.5;fill:none;cursor:pointer;transition:all .3s;}
 .icons svg:hover{stroke:var(--amber);}
+
+/* BODY */
 .body{flex:1;display:flex;overflow:hidden;}
-.side{width:248px;flex-shrink:0;background:rgba(14,14,14,.6);backdrop-filter:blur(20px);border-right:.5px solid rgba(197,160,89,.3);padding:26px 20px;display:flex;flex-direction:column;gap:20px;z-index:20;}
+
+/* SIDEBAR */
+.side{width:248px;flex-shrink:0;background:rgba(14,14,14,.6);backdrop-filter:blur(20px);border-right:.5px solid rgba(197,160,89,.3);padding:26px 20px;display:flex;flex-direction:column;gap:20px;z-index:20;overflow-y:auto;max-height:calc(100vh - 64px - 44px);}
 .prof{display:flex;align-items:center;gap:13px;padding-bottom:16px;border-bottom:.5px solid rgba(197,160,89,.3);}
-.av{width:44px;height:44px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.av{width:44px;height:44px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
 .av svg{width:24px;height:24px;stroke:var(--gold);stroke-width:1.5;fill:none;}
 .prof h3{font-family:'Libre Caslon Text',serif;font-size:15px;color:var(--on);margin-bottom:2px;}
 .prof p{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.1em;}
 .snav{display:flex;flex-direction:column;gap:5px;}
-.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;}
+.si{display:flex;align-items:center;gap:11px;padding:9px 12px;background:transparent;border:none;border-left:3px solid transparent;color:var(--onv);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-align:left;text-decoration:none;}
 .si:hover{background:rgba(197,160,89,.05);color:var(--gold);}
 .si.on{background:rgba(197,160,89,.1);border-left-color:var(--gold);color:var(--gold);}
-.si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;}
-.btni{margin-top:auto;padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .3s;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);}
+.si svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0;}
+.btni{margin-top:auto;padding:12px;background:var(--petrol);border:1px solid var(--petrol);color:var(--ivory);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .3s;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);text-decoration:none;text-align:center;display:block;}
 .btni:hover{background:var(--amber);border-color:var(--amber);color:var(--surface);}
+
+/* CONTENT */
 .content{flex:1;overflow-y:auto;padding:36px 48px;}
-.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:34px;}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:34px;gap:20px;flex-wrap:wrap;}
 .pt{font-family:'Libre Caslon Text',serif;font-size:44px;font-weight:700;color:var(--gold);letter-spacing:-.02em;line-height:50px;margin-bottom:6px;}
 .ps{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--onv);letter-spacing:.15em;text-transform:uppercase;}
 .live{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;}
 .live .d{width:8px;height:8px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
 @keyframes pu{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,191,0,.4)}50%{opacity:.6;box-shadow:0 0 0 8px rgba(255,191,0,0)}}
+
+/* GRID */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
 .pnl{position:relative;background:rgba(0,51,68,.15);backdrop-filter:blur(20px);border:.5px solid var(--gold);padding:24px;overflow:hidden;transition:box-shadow .3s;}
 .pnl::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 3px);opacity:.5;}
@@ -63,13 +93,17 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .pnlh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:13px;border-bottom:.5px solid rgba(197,160,89,.3);position:relative;}
 .pnlt{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;display:flex;align-items:center;gap:9px;}
 .pnlt svg{width:17px;height:17px;stroke:var(--gold);stroke-width:1.5;fill:none;}
-.mrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:.5px solid rgba(197,160,89,.15);position:relative;}
+
+/* ROWS */
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:.5px solid rgba(197,160,89,.15);position:relative;gap:10px;}
 .mrow:last-child{border-bottom:none;}
 .ml2{font-family:'Manrope',sans-serif;font-size:13px;color:var(--onv);}
 .mv2{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--on);letter-spacing:.05em;}
 .mv2.hl{color:var(--gold);}
 .mv2.al{color:var(--amber);font-weight:600;animation:fl 3s infinite;}
 @keyframes fl{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.55}94%{opacity:1}96%{opacity:.8}97%{opacity:1}}
+
+/* MAP */
 .map{position:relative;height:200px;background:rgba(14,14,14,.4);border:.5px solid rgba(197,160,89,.2);overflow:hidden;}
 .map .g{position:absolute;inset:0;background-image:linear-gradient(rgba(197,160,89,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(197,160,89,.08) 1px,transparent 1px);background-size:40px 40px;}
 .mk{position:absolute;transform:translate(-50%,-50%);cursor:pointer;}
@@ -78,18 +112,22 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .mk:nth-child(3) .dt{background:var(--gold);box-shadow:0 0 12px var(--gold);}
 .mk .ring{position:absolute;top:50%;left:50%;width:11px;height:11px;border:1px solid var(--amber);border-radius:50%;transform:translate(-50%,-50%);animation:rg 2s ease-out infinite;}
 @keyframes rg{0%{width:11px;height:11px;opacity:.8}100%{width:42px;height:42px;opacity:0}}
+
+/* AGENTS */
 .orow{display:flex;align-items:center;gap:13px;padding:11px;background:rgba(14,14,14,.3);border:.5px solid rgba(197,160,89,.15);margin-bottom:9px;transition:all .3s;cursor:pointer;}
 .orow:hover{border-color:rgba(197,160,89,.4);}
 .orow.al{border-left:3px solid var(--amber);background:rgba(255,191,0,.05);}
-.oav{width:38px;height:38px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);}
-.oinfo{flex:1;}
-.onm{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--on);letter-spacing:.05em;margin-bottom:2px;}
+.oav{width:38px;height:38px;background:var(--petrol);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--gold);clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px),0 5px);flex-shrink:0;}
+.oinfo{flex:1;min-width:0;}
+.onm{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--on);letter-spacing:.05em;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .osc{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.08em;}
 .ost{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.08em;text-align:right;}
 .ost.tr{color:var(--gold);}
 .ost.st{color:var(--onv);}
 .ost.lo{color:var(--amber);animation:fl 2s infinite;}
 .opg{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--onv);letter-spacing:.05em;margin-top:2px;text-align:right;}
+
+/* LOGS */
 .logs{display:flex;flex-direction:column;gap:13px;max-height:300px;overflow-y:auto;}
 .le{padding-left:13px;border-left:2px solid var(--gold);position:relative;opacity:0;transform:translateX(-8px);animation:li .5s ease-out forwards;}
 @keyframes li{to{opacity:1;transform:translateX(0)}}
@@ -99,14 +137,51 @@ header{height:64px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 .lt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.08em;margin-bottom:3px;}
 .ltx{font-family:'Manrope',sans-serif;font-size:12px;line-height:17px;color:var(--onv);}
 .ltx strong{color:var(--on);font-weight:600;}
+
+/* FOOTER */
 footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);border-top:.5px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 48px;flex-shrink:0;z-index:40;}
 .ft{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--onv);letter-spacing:.05em;}
-.ftc{display:flex;gap:26px;align-items:center;}
+.ftc{display:flex;gap:26px;align-items:center;flex-wrap:wrap;}
 .sig{display:flex;align-items:center;gap:7px;}
 .sig .d{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pu 2s ease-in-out infinite;}
+
+/* ANIMAÇÕES */
 @keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .fi{opacity:0;animation:fi .7s ease-out forwards;}
 .d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}
+
+/* RESPONSIVO */
+@media (max-width: 1200px) {
+  .side { width: 220px; }
+  .content { padding: 28px 32px; }
+  .pt { font-size: 36px; line-height: 42px; }
+  .grid { gap: 20px; }
+}
+@media (max-width: 900px) {
+  header { padding: 0 20px; }
+  .nav { display: none; }
+  .body { flex-direction: column; overflow-y: auto; }
+  .side { width: 100%; border-right: none; border-bottom: .5px solid rgba(197,160,89,.3); max-height: none; padding: 16px 20px; flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  .prof { flex: 1; min-width: 200px; border-bottom: none; padding-bottom: 0; }
+  .snav { flex-direction: row; flex-wrap: wrap; gap: 4px; width: 100%; }
+  .si { flex: 1; min-width: 110px; padding: 8px; font-size: 9px; border-left: none; border-bottom: 2px solid transparent; }
+  .si.on { border-left: none; border-bottom-color: var(--gold); }
+  .btni { flex: 1; min-width: 140px; }
+  .content { padding: 20px; }
+  .grid { grid-template-columns: 1fr; }
+  .pt { font-size: 28px; line-height: 34px; }
+  .ph { flex-direction: column; align-items: flex-start; }
+  footer { padding: 0 20px; height: auto; min-height: 44px; flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+  .ftc { gap: 12px; font-size: 10px; }
+}
+@media (max-width: 600px) {
+  .icons { display: none; }
+  .pt { font-size: 24px; line-height: 28px; }
+  .ps { font-size: 9px; }
+  .pnl { padding: 16px; }
+  .pnlt { font-size: 10px; }
+  .map { height: 160px; }
+}
 </style>
 </head>
 <body>
@@ -114,18 +189,27 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
 <div class="hq">
   <header class="fi">
     <div class="logo">ARCHIVE</div>
+    <!-- ✅ NAVEGAÇÃO HEADER CORRIGIDA -->
     <nav class="nav">
       <a href="/telas-individuais/05-globo.html">Globo</a>
-      <a href="/telas-individuais/15-museu.html">Banco de Dados</a>
+      <a href="/telas-individuais/08-banco-dados.html">Banco de Dados</a>
       <a href="/telas-individuais/11-passaporte.html">Passaporte</a>
-      <a href="/telas-individuais/07-briefing.html">Diário de Bordo</a>
+      <a href="/telas-individuais/12-diario.html">Diário de Bordo</a>
+      <a href="/telas-individuais/13-status-sede.html" class="on">Status da Sede</a>
     </nav>
     <div class="icons">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <a href="/telas-individuais/05-globo.html" title="Globo">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="/telas-individuais/12-diario.html" title="Diário">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </a>
+      <a href="/telas-individuais/18-sala-diretor.html" title="Diretor">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
     </div>
   </header>
+
   <div class="body">
     <aside class="side fi d1">
       <div class="prof">
@@ -135,30 +219,41 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
           <p id="pCodename">Field Operative</p>
         </div>
       </div>
+      <!-- ✅ SIDEBAR CORRIGIDA -->
       <nav class="snav">
         <a href="/telas-individuais/05-globo.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Globo</a>
-        <a href="/telas-individuais/15-museu.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
+        <a href="/telas-individuais/08-banco-dados.html" class="si"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Banco de Dados</a>
         <a href="/telas-individuais/11-passaporte.html" class="si"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Passaporte</a>
-        <a href="/telas-individuais/07-briefing.html" class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
-        <a href="#" class="si on"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Status da Sede</a>
-        <a href="/telas-individuais/17-configuracoes.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>Configurações</a>
+        <a href="/telas-individuais/12-diario.html" class="si"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Diário de Bordo</a>
+        <a href="/telas-individuais/13-status-sede.html" class="si on"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Status da Sede</a>
+        <a href="/telas-individuais/04-config.html" class="si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/></svg>Configurações</a>
+        <a href="/telas-individuais/19-hq-atrium.html" class="si"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>HQ Atrium</a>
       </nav>
-      <button class="btni" id="btnIntel">Acessar Intel</button>
+      <!-- ✅ BOTÃO CORRIGIDO - Caminho absoluto para Banco de Dados -->
+      <a href="/telas-individuais/08-banco-dados.html" class="btni" id="btnIntel">Acessar Intel</a>
     </aside>
+
     <main class="content">
       <div class="ph fi d1">
-        <div><h1 class="pt">SYSTEM.STATUS</h1><div class="ps">Painel de Operações Globais // Feed em Tempo Real</div></div>
+        <div>
+          <h1 class="pt">SYSTEM.STATUS</h1>
+          <div class="ps">Painel de Operações Globais // Feed em Tempo Real</div>
+        </div>
         <div class="live"><span class="d"></span>LIVE.LINK_ESTABLISHED</div>
       </div>
+
       <div class="grid">
+        <!-- Saúde da Rede -->
         <div class="pnl fi d2">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde da Rede</div></div>
           <div class="mrow"><div class="ml2">Criptografia</div><div class="mv2 hl">AES-256</div></div>
           <div class="mrow"><div class="ml2">Força do Sinal</div><div class="mv2" id="sig">94.2%</div></div>
           <div class="mrow"><div class="ml2">Artefatos no Acervo</div><div class="mv2" id="statArtifacts">0</div></div>
           <div class="mrow"><div class="ml2">Missões Ativas</div><div class="mv2" id="statMissions">0</div></div>
-          <div class="mrow"><div class="ml2">Nível de Ameaça</div><div class="mv2 al" id="threatLevel">BAIXO</div></div>
+          <div class="mrow"><div class="ml2">Nível de Ameaça</div><div class="mv2" id="threatLevel">BAIXO</div></div>
         </div>
+
+        <!-- Setores Ativos (Mapa) -->
         <div class="pnl fi d2">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Setores Ativos</div></div>
           <div class="map" id="activeMap">
@@ -166,12 +261,16 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
             <!-- Marcadores injetados via JS -->
           </div>
         </div>
+
+        <!-- Operativos em Campo -->
         <div class="pnl fi d3">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Operativos em Campo</div></div>
           <div id="agentsList">
             <!-- Agentes injetados via JS -->
           </div>
         </div>
+
+        <!-- Feed de Inteligência -->
         <div class="pnl fi d3">
           <div class="pnlh"><div class="pnlt"><svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>Feed de Inteligência</div></div>
           <div class="logs" id="logs"></div>
@@ -179,6 +278,7 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
       </div>
     </main>
   </div>
+
   <footer class="fi d3">
     <div class="ft">© 1984 ARCHIVE GLOBAL INTELLIGENCE</div>
     <div class="ftc">
@@ -188,156 +288,245 @@ footer{height:44px;background:rgba(14,14,14,.92);backdrop-filter:blur(20px);bord
     </div>
   </footer>
 </div>
+
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await ArchiveAPI.init();
-    const player = await ArchiveAPI.getPlayer();
-    const missions = await ArchiveAPI.getMissions();
-    const stats = await ArchiveAPI.getArchiveStats().catch(() => ({ totalArtifacts: 47 }));
+(function() {
+  "use strict";
 
-    // 1. Atualizar Perfil
-    document.getElementById('pName').textContent = (player.name || 'DIRETOR').toUpperCase();
-    document.getElementById('pCodename').textContent = `${player.codename || 'NOVICE'} | ${player.rank || 'Diretor Interino'}`;
-
-    // 2. Atualizar Estatísticas
-    const activeMissions = missions.filter(m => m.status === 'ativa');
-    document.getElementById('statArtifacts').textContent = stats.totalArtifacts || 0;
-    document.getElementById('statMissions').textContent = activeMissions.length;
-    
-    const threatEl = document.getElementById('threatLevel');
-    const hasCritical = activeMissions.some(m => m.priority === 'CRÍTICA');
-    if (hasCritical) { 
-      threatEl.textContent = 'CRÍTICO'; 
-      threatEl.className = 'mv2 al'; 
-    } else if (activeMissions.length > 0) { 
-      threatEl.textContent = 'ELEVADO'; 
-      threatEl.className = 'mv2 al'; 
-    } else { 
-      threatEl.textContent = 'BAIXO'; 
-      threatEl.className = 'mv2'; 
+  /* ============================================
+     UTILITÁRIOS
+     ============================================ */
+  function playSound(type) {
+    if (!window.ArchiveAudio) return;
+    try {
+      if (type === 'click' && typeof window.ArchiveAudio.playClick === 'function') {
+        window.ArchiveAudio.playClick();
+      } else if (type === 'success' && typeof window.ArchiveAudio.playSuccess === 'function') {
+        window.ArchiveAudio.playSuccess();
+      } else if (type === 'error' && typeof window.ArchiveAudio.playError === 'function') {
+        window.ArchiveAudio.playError();
+      }
+    } catch (e) {
+      console.warn('[STATUS] Erro ao tocar som:', e);
     }
-
-    // 3. Gerar Marcadores no Mapa Dinamicamente
-    const mapContainer = document.getElementById('activeMap');
-    let mapHTML = '<div class="g"></div>';
-    activeMissions.forEach((m, i) => {
-      const top = 20 + (m.id * 13) % 60; 
-      const left = 20 + (m.id * 17) % 60;
-      mapHTML += `
-        <div class="mk" style="top:${top}%;left:${left}%">
-          <div class="ring"></div><div class="dt"></div><div class="lb">${m.codename}</div>
-        </div>
-      `;
-    });
-    mapContainer.innerHTML = mapHTML;
-
-    // 4. Gerar Lista de Agentes Dinamicamente
-    const agentsContainer = document.getElementById('agentsList');
-    const numAgents = player.agentsRecruited || 3;
-    let agentsHTML = '';
-    const agentNames = ['Garrison', 'Calloway', 'Voss', 'Rook', 'Sparrow'];
-    const sectors = ['EUR_W', 'ASI_E', 'AME_N', 'AFR_S', 'DESCONHECIDO'];
-    const statuses = [
-      { text: 'EM_TRANSITO', class: 'tr' },
-      { text: 'ESTACIONÁRIO', class: 'st' },
-      { text: 'EM_CAMPO', class: 'tr' }
-    ];
-
-    for(let i = 0; i < Math.min(numAgents, 5); i++) {
-      const name = agentNames[i];
-      const sector = sectors[i];
-      const status = statuses[i % statuses.length];
-      const initials = name.substring(0, 2).toUpperCase();
-      const ping = Math.floor(Math.random() * 150) + 10;
-      
-      agentsHTML += `
-      <div class="orow">
-        <div class="oav">${initials}</div>
-        <div class="oinfo"><div class="onm">Agente_${name}</div><div class="osc">SETOR: ${sector}</div></div>
-        <div><div class="ost ${status.class}">${status.text}</div><div class="opg">Ping: ${ping}ms</div></div>
-      </div>`;
-    }
-    
-    if (numAgents < 3) {
-      agentsHTML += `
-      <div class="orow al">
-        <div class="oav">XX</div>
-        <div class="oinfo"><div class="onm">Agente_Desconhecido</div><div class="osc">SETOR: DESCONHECIDO</div></div>
-        <div><div class="ost lo">COMMS_LOST</div><div class="opg">T-minus 4h</div></div>
-      </div>`;
-    }
-    agentsContainer.innerHTML = agentsHTML;
-
-    // 5. Feed de Inteligência Vivo
-    const box = document.getElementById('logs');
-    const now = new Date();
-    const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-    
-    const dynamicFeed = [
-      { t: timeStr, x: 'SYSTEM_LOG', m: `Sincronização de perfil concluída para Operativo ${player.codename || 'NOVICE'}.`, al: false },
-      { t: timeStr, x: 'NETWORK', m: `Conexão com backend: ${ArchiveAPI.online ? 'ESTABELECIDA' : 'MODO OFFLINE (MOCK ATIVO)'}`, al: false },
-      { t: '11:05:44', x: 'ALERTA', m: 'Tentativa de acesso não autorizado no Nó_44. Contramedidas acionadas.', al: true },
-      { t: '09:30:00', x: 'SYSTEM_LOG', m: 'Troca de turno registrada. Comando transferido.', al: false }
-    ];
-
-    dynamicFeed.forEach((f, i) => {
-      const e = document.createElement('div');
-      e.className = 'le' + (f.al ? ' al' : '');
-      e.style.animationDelay = (i * 0.45) + 's';
-      e.innerHTML = `<div class="lt">[${f.t}]</div><div class="ltx"><strong>${f.x}:</strong> ${f.m}</div>`;
-      box.appendChild(e);
-    });
-
-    // 6. Event Listeners
-    document.getElementById('btnIntel').addEventListener('click', () => {
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      window.location.href = '15-museu.html';
-    });
-
-    document.querySelectorAll('.orow').forEach(r => r.addEventListener('click', function() {
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      this.style.borderColor = 'var(--amber)';
-      setTimeout(() => this.style.borderColor = '', 500);
-    }));
-
-    document.querySelectorAll('.si').forEach(i => i.addEventListener('click', () => {
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      document.querySelectorAll('.si').forEach(x => x.classList.remove('on'));
-      i.classList.add('on');
-    }));
-
-    document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', e => {
-      if (a.getAttribute('href') === '#') e.preventDefault();
-      if(window.ArchiveAudio) ArchiveAudio.playClick();
-      document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on'));
-      a.classList.add('on');
-    }));
-
-  } catch (err) {
-    console.error('Falha ao carregar status da rede', err);
   }
-});
 
-// Efeitos de fundo contínuos
-let sig = 94.2;
-setInterval(() => {
-  sig = Math.max(88, Math.min(99, sig + (Math.random() - 0.5) * 1.4));
-  document.getElementById('sig').textContent = sig.toFixed(1) + '%';
-}, 2200);
+  function showNotification(message, type) {
+    type = type || 'info';
+    if (window.ArchiveAPI && typeof window.ArchiveAPI.notify === 'function') {
+      window.ArchiveAPI.notify(message, type);
+    }
+  }
 
-setInterval(() => {
-  const n = new Date();
-  document.getElementById('ck').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-}, 1000);
+  /* ============================================
+     INICIALIZAÇÃO
+     ============================================ */
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      // 1. Inicializa API
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.init === 'function') {
+        await window.ArchiveAPI.init();
+      }
+
+      // 2. Buscar dados do jogador
+      var player = null;
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getPlayer === 'function') {
+        try {
+          player = await window.ArchiveAPI.getPlayer();
+        } catch (e) {
+          console.warn('[STATUS] getPlayer falhou:', e);
+          player = {};
+        }
+      }
+
+      // 3. Buscar missões
+      var missions = [];
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getMissions === 'function') {
+        try {
+          missions = await window.ArchiveAPI.getMissions();
+        } catch (e) {
+          console.warn('[STATUS] getMissions falhou:', e);
+        }
+      }
+
+      // 4. Buscar estatísticas (com fallback robusto)
+      var stats = { totalArtifacts: 47 };
+      if (window.ArchiveAPI && typeof window.ArchiveAPI.getArchiveStats === 'function') {
+        try {
+          var fetchedStats = await window.ArchiveAPI.getArchiveStats();
+          if (fetchedStats) stats = fetchedStats;
+        } catch (e) {
+          console.warn('[STATUS] getArchiveStats falhou, usando fallback:', e);
+        }
+      } else if (window.ArchiveAPI && typeof window.ArchiveAPI.getArtifacts === 'function') {
+        // Fallback: contar artefatos
+        try {
+          var artData = await window.ArchiveAPI.getArtifacts();
+          var artifacts = Array.isArray(artData) ? artData : (artData && artData.artifacts ? artData.artifacts : []);
+          stats.totalArtifacts = artifacts.length;
+        } catch (e) {
+          console.warn('[STATUS] fallback artifacts falhou:', e);
+        }
+      }
+
+      // 5. Atualizar Perfil
+      var pNameEl = document.getElementById('pName');
+      var pCodenameEl = document.getElementById('pCodename');
+      var playerName = (player && player.name) ? player.name : 'DIRETOR';
+      var playerCodename = (player && player.codename) ? player.codename : 'NOVICE';
+      var playerRank = (player && player.rank) ? player.rank : 'Diretor Interino';
+      
+      if (pNameEl) pNameEl.textContent = playerName.toUpperCase();
+      if (pCodenameEl) pCodenameEl.textContent = playerCodename + ' | ' + playerRank;
+
+      // 6. Estatísticas
+      var activeMissions = [];
+      for (var i = 0; i < missions.length; i++) {
+        if (missions[i].status === 'ativa') activeMissions.push(missions[i]);
+      }
+
+      var statArtifactsEl = document.getElementById('statArtifacts');
+      var statMissionsEl = document.getElementById('statMissions');
+      var threatEl = document.getElementById('threatLevel');
+
+      if (statArtifactsEl) statArtifactsEl.textContent = stats.totalArtifacts || 0;
+      if (statMissionsEl) statMissionsEl.textContent = activeMissions.length;
+      
+      if (threatEl) {
+        var hasCritical = false;
+        for (var j = 0; j < activeMissions.length; j++) {
+          if (activeMissions[j].priority === 'CRÍTICA') {
+            hasCritical = true;
+            break;
+          }
+        }
+        if (hasCritical) { 
+          threatEl.textContent = 'CRÍTICO'; 
+          threatEl.className = 'mv2 al'; 
+        } else if (activeMissions.length > 0) { 
+          threatEl.textContent = 'ELEVADO'; 
+          threatEl.className = 'mv2 al'; 
+        } else { 
+          threatEl.textContent = 'BAIXO'; 
+          threatEl.className = 'mv2'; 
+        }
+      }
+
+      // 7. Gerar Marcadores no Mapa Dinamicamente
+      var mapContainer = document.getElementById('activeMap');
+      if (mapContainer) {
+        var mapHTML = '<div class="g"></div>';
+        activeMissions.forEach(function(m) {
+          var top = 20 + (m.id * 13) % 60; 
+          var left = 20 + (m.id * 17) % 60;
+          mapHTML += '<div class="mk" style="top:' + top + '%;left:' + left + '%"><div class="ring"></div><div class="dt"></div><div class="lb">' + (m.codename || 'OP-???') + '</div></div>';
+        });
+        mapContainer.innerHTML = mapHTML;
+      }
+
+      // 8. Gerar Lista de Agentes
+      var agentsContainer = document.getElementById('agentsList');
+      if (agentsContainer) {
+        var numAgents = (player && player.agentsRecruited) ? player.agentsRecruited : 3;
+        var agentsHTML = '';
+        var agentNames = ['Garrison', 'Calloway', 'Voss', 'Rook', 'Sparrow'];
+        var sectors = ['EUR_W', 'ASI_E', 'AME_N', 'AFR_S', 'DESCONHECIDO'];
+        var statuses = [
+          { text: 'EM_TRANSITO', class: 'tr' },
+          { text: 'ESTACIONÁRIO', class: 'st' },
+          { text: 'EM_CAMPO', class: 'tr' }
+        ];
+
+        var maxAgents = Math.min(numAgents, 5);
+        for (var k = 0; k < maxAgents; k++) {
+          var name = agentNames[k];
+          var sector = sectors[k];
+          var status = statuses[k % statuses.length];
+          var initials = name.substring(0, 2).toUpperCase();
+          var ping = Math.floor(Math.random() * 150) + 10;
+          
+          agentsHTML += '<div class="orow"><div class="oav">' + initials + '</div><div class="oinfo"><div class="onm">Agente_' + name + '</div><div class="osc">SETOR: ' + sector + '</div></div><div><div class="ost ' + status.class + '">' + status.text + '</div><div class="opg">Ping: ' + ping + 'ms</div></div></div>';
+        }
+        
+        if (numAgents < 3) {
+          agentsHTML += '<div class="orow al"><div class="oav">XX</div><div class="oinfo"><div class="onm">Agente_Desconhecido</div><div class="osc">SETOR: DESCONHECIDO</div></div><div><div class="ost lo">COMMS_LOST</div><div class="opg">T-minus 4h</div></div></div>';
+        }
+        agentsContainer.innerHTML = agentsHTML;
+      }
+
+      // 9. Feed de Inteligência
+      var box = document.getElementById('logs');
+      if (box) {
+        var now = new Date();
+        var timeStr = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+        var isOnline = window.ArchiveAPI && window.ArchiveAPI.online;
+        
+        var dynamicFeed = [
+          { t: timeStr, x: 'SYSTEM_LOG', m: 'Sincronização de perfil concluída para Operativo ' + playerCodename + '.', al: false },
+          { t: timeStr, x: 'NETWORK', m: 'Conexão com backend: ' + (isOnline ? 'ESTABELECIDA' : 'MODO OFFLINE (MOCK ATIVO)'), al: false },
+          { t: '11:05:44', x: 'ALERTA', m: 'Tentativa de acesso não autorizado no Nó_44. Contramedidas acionadas.', al: true },
+          { t: '09:30:00', x: 'SYSTEM_LOG', m: 'Troca de turno registrada. Comando transferido.', al: false }
+        ];
+
+        dynamicFeed.forEach(function(f, i) {
+          var e = document.createElement('div');
+          e.className = 'le' + (f.al ? ' al' : '');
+          e.style.animationDelay = (i * 0.45) + 's';
+          e.innerHTML = '<div class="lt">[' + f.t + ']</div><div class="ltx"><strong>' + f.x + ':</strong> ' + f.m + '</div>';
+          box.appendChild(e);
+        });
+      }
+
+      playSound('success');
+
+    } catch (err) {
+      console.error('[STATUS] Erro na inicialização:', err);
+      showNotification('Status da Sede carregado em modo offline', 'warning');
+    }
+
+    /* ============================================
+       EVENT LISTENERS
+       ============================================ */
+    // Agentes clicáveis
+    document.querySelectorAll('.orow').forEach(function(r) {
+      r.addEventListener('click', function() {
+        playSound('click');
+        var self = this;
+        self.style.borderColor = 'var(--amber)';
+        setTimeout(function() { self.style.borderColor = ''; }, 500);
+      });
+    });
+
+    // Nota: Removidos event listeners de .si e .nav a que apenas mudavam .on
+    // pois conflitam com navegação natural dos <a href="...">
+  });
+
+  /* ============================================
+     EFEITOS CONTÍNUOS
+     ============================================ */
+  var sig = 94.2;
+  setInterval(function() {
+    sig = Math.max(88, Math.min(99, sig + (Math.random() - 0.5) * 1.4));
+    var sigEl = document.getElementById('sig');
+    if (sigEl) sigEl.textContent = sig.toFixed(1) + '%';
+  }, 2200);
+
+  setInterval(function() {
+    var n = new Date();
+    var ck = document.getElementById('ck');
+    if (ck) {
+      ck.textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    }
+  }, 1000);
+})();
 </script>
 
   <!-- Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('[PWA] Service Worker registrado'))
-        .catch(err => console.error('[PWA] Falha no registro:', err));
+        .then(function() { console.log('[PWA] Service Worker registrado'); })
+        .catch(function(err) { console.error('[PWA] Falha no registro:', err); });
     }
   </script>
 </body>
