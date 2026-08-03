@@ -13,7 +13,16 @@
 (function () {
   "use strict";
 
-  var BASE_URL = "http://localhost:3000/api";
+  // Detectar ambiente automaticamente
+  var BASE_URL = (function() {
+    // Produção (Vercel/Netlify) - MUDAR DEPOIS QUANDO TIVER BACKEND
+    if (window.location.hostname !== 'localhost') {
+      return 'https://SUA_URL_DO_RENDER.onrender.com/api'; // ← Trocar quando deploy backend
+    }
+    // Desenvolvimento local
+    return 'http://localhost:3000/api';
+  })();
+
   var _isOnline = false;
   var _playerId = null;
 
@@ -151,7 +160,16 @@
         })
         .catch(function () {
           _isOnline = false;
-          console.warn("[ARCHIVE API] Backend offline — usando dados locais");
+          console.warn("[ARCHIVE API] Backend offline — MODO STANDALONE ativado");
+          console.log("[ARCHIVE API] Usando localStorage para persistência");
+          
+          // CARREGA DADOS DO LOCALSTORAGE QUANDO OFFLINE
+          var state = API.getState();
+          if (state && state.director) {
+            console.log("[ARCHIVE API] Diretor carregado:", state.director.codename);
+            console.log("[ARCHIVE API] Créditos:", state.stats?.credits || 1000);
+          }
+          
           return false;
         });
     },
@@ -232,15 +250,30 @@
       });
     },
 
-    /** Aceita uma missão */
+    /** Aceita uma missão — FUNCIONA OFFLINE */
     acceptMission: function (missionId) {
-      if (!_playerId)
-        return Promise.resolve({
-          success: false,
-          error: "Jogador não cadastrado",
+      // PRIORIDADE 1: Backend online
+      if (_playerId && _isOnline) {
+        return this._post("/missions/" + missionId + "/accept", {
+          player_id: _playerId,
         });
-      return this._post("/missions/" + missionId + "/accept", {
-        player_id: _playerId,
+      }
+      
+      // PRIORIDADE 2: Modo offline com localStorage
+      var state = this.getState();
+      if (state && state.director && state.director.name) {
+        console.log("[ARCHIVE API] Missão aceita localmente (offline)");
+        return Promise.resolve({
+          success: true,
+          message: "Missão aceita (modo offline)",
+          offline: true
+        });
+      }
+      
+      // PRIORIDADE 3: Sem cadastro
+      return Promise.resolve({
+        success: false,
+        error: "Jogador não cadastrado",
       });
     },
 
