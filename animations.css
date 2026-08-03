@@ -1,0 +1,329 @@
+/**
+ * ARCHIVE OS — Sistema de Animações
+ * Project Nexus v2.0
+ */
+
+/* ============================================
+   ANIMAÇÕES GERAIS
+   ============================================ */
+
+/* Fade In/Out */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide In */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale Pulse */
+@keyframes scalePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Shake (para erro) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Glow Effect */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px var(--gold); }
+  50% { box-shadow: 0 0 20px var(--gold), 0 0 30px var(--amber); }
+}
+
+/* ============================================
+   ANIMAÇÃO DE CAPTURA DO LADRÃO
+   ============================================ */
+
+@keyframes captureSequence {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.1);
+  }
+  60% {
+    transform: scale(1);
+    filter: brightness(1.5);
+  }
+  80% {
+    filter: brightness(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes handcuffsLock {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes evidenceStamp {
+  0% {
+    transform: translateY(-100px) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   ANIMAÇÃO DE RECUPERAÇÃO DE ARTEFATO
+   ============================================ */
+
+@keyframes artifactReveal {
+  0% {
+    opacity: 0;
+    transform: rotateY(90deg) scale(0.5);
+  }
+  50% {
+    transform: rotateY(0deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+@keyframes artifactGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--gold), 0 0 20px var(--gold);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--amber), 0 0 50px var(--amber);
+  }
+}
+
+/* ============================================
+   ANIMAÇÃO DE SCAN/DECRYPT
+   ============================================ */
+
+@keyframes scanLine {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes decryptScramble {
+  0% { filter: blur(10px); }
+  50% { filter: blur(5px); }
+  100% { filter: blur(0); }
+}
+
+/* ============================================
+   ANIMAÇÃO DE SUCESSO/COMPLETAÇÃO
+   ============================================ */
+
+@keyframes successCheckmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   ANIMAÇÃO DE MISSÃO COMPLETA
+   ============================================ */
+
+@keyframes missionCompletePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(197, 160, 89, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(197, 160, 89, 0);
+  }
+}
+
+/* ============================================
+   CLASSES UTILITÁRIAS
+   ============================================ */
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.animate-scale-pulse {
+  animation: scalePulse 2s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Animação de Captura */
+.animate-capture {
+  animation: captureSequence 1.5s ease-out;
+}
+
+.animate-handcuffs {
+  animation: handcuffsLock 1s ease-in-out;
+}
+
+.animate-evidence-stamp {
+  animation: evidenceStamp 0.6s ease-out;
+}
+
+/* Animação de Artefato */
+.animate-artifact-reveal {
+  animation: artifactReveal 1s ease-out;
+}
+
+.animate-artifact-glow {
+  animation: artifactGlow 2s ease-in-out infinite;
+}
+
+/* Animação de Scan */
+.animate-scan-line {
+  animation: scanLine 2s linear infinite;
+}
+
+.animate-decrypt {
+  animation: decryptScramble 0.5s ease-out;
+}
+
+/* Animação de Sucesso */
+.animate-success-check {
+  animation: successCheckmark 0.6s ease-out forwards;
+}
+
+/* Animação de Missão Completa */
+.animate-mission-complete {
+  animation: missionCompletePulse 2s ease-out;
+}
+
+/* ============================================
+   TRANSIÇÕES DE TELA
+   ============================================ */
+
+.transition-screen {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.transition-screen.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.transition-screen.fade-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================
+   EFEITOS DE PARTÍCULAS
+   ============================================ */
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  animation: confetti 1s ease-out forwards;
+}
+
+.particle.gold {
+  background: var(--gold);
+}
+
+.particle.amber {
+  background: var(--amber);
+}
+
+.particle.bronze {
+  background: var(--bronze);
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

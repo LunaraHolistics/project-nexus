@@ -1,0 +1,22 @@
+{
+  "name": "ARCHIVE OS - Project Nexus",
+  "short_name": "Project Nexus",
+  "description": "Sistema de investigação geopolítica e recuperação de artefatos",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#07070c",
+  "theme_color": "#C5A059",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "og-image.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
