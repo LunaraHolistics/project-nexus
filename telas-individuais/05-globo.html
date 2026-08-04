@@ -325,17 +325,18 @@
       (function () {
         "use strict";
 
-        let scene,
-          camera,
-          renderer,
-          controls,
-          globe,
-          globeGroup,
-          markers = [];
+        let scene, camera, renderer, controls, globe, globeGroup;
+        let markers = [];
         let missions = [];
         let selectedMission = null;
 
-        // Coordenadas das cidades
+        // 🆕 Raycaster para detectar cliques no globo
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let mouseDownPos = { x: 0, y: 0 };
+        let isDragging = false;
+        let hoveredMarker = null;
+
         const cityCoords = {
           "Viena, Áustria": { lat: 48.2082, lon: 16.3738 },
           "Londres, Reino Unido": { lat: 51.5074, lon: -0.1278 },
@@ -385,25 +386,19 @@
           controls.autoRotate = true;
           controls.autoRotateSpeed = 0.5;
 
-          // ==============================================
-          // ILUMINAÇÃO APRIMORADA (para textura aparecer)
-          // ==============================================
+          // Iluminação
           const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
           scene.add(ambientLight);
-
           const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
           directionalLight.position.set(5, 3, 5);
           scene.add(directionalLight);
-
           const directionalLight2 = new THREE.DirectionalLight(0x6699ff, 0.3);
           directionalLight2.position.set(-5, -2, -5);
           scene.add(directionalLight2);
-
           const pointLight = new THREE.PointLight(0xc5a059, 0.6);
           pointLight.position.set(-5, 2, -5);
           scene.add(pointLight);
 
-          // Grupo principal para organizar o globo + atmosfera + glow
           globeGroup = new THREE.Group();
           scene.add(globeGroup);
 
@@ -411,6 +406,15 @@
           loadMissions();
 
           window.addEventListener("resize", onWindowResize);
+
+          // 🆕 EVENTOS DE CLIQUE E HOVER NO GLOBO
+          renderer.domElement.addEventListener("mousedown", onMouseDown);
+          renderer.domElement.addEventListener("mousemove", onMouseMove);
+          renderer.domElement.addEventListener("mouseup", onMouseUp);
+          renderer.domElement.addEventListener("touchstart", onTouchStart, {
+            passive: true,
+          });
+          renderer.domElement.addEventListener("touchend", onTouchEnd);
 
           setTimeout(() => {
             document.getElementById("loading").classList.add("hidden");
@@ -420,68 +424,182 @@
         }
 
         // ==============================================
-        // ✅ GLOBO CORRIGIDO - COM TEXTURA DA TERRA
+        // 🆕 HANDLERS DE CLIQUE NO GLOBO (diferencia click de drag)
+        // ==============================================
+        function onMouseDown(event) {
+          mouseDownPos = { x: event.clientX, y: event.clientY };
+          isDragging = false;
+        }
+
+        function onMouseMove(event) {
+          // Detecta se é drag (mouse moveu mais que 5px)
+          if (mouseDownPos.x !== null) {
+            const dx = event.clientX - mouseDownPos.x;
+            const dy = event.clientY - mouseDownPos.y;
+            if (Math.sqrt(dx * dx + dy * dy) > 5) {
+              isDragging = true;
+            }
+          }
+
+          // 🆕 HOVER: muda cursor quando passa sobre um marker
+          updateMousePosition(event.clientX, event.clientY);
+          raycaster.setFromCamera(mouse, camera);
+
+          const markerMeshes = markers.map((m) => m.mesh);
+          const intersects = raycaster.intersectObjects(markerMeshes, true);
+
+          if (intersects.length > 0) {
+            renderer.domElement.style.cursor = "pointer";
+            const hitObject = intersects[0].object;
+            const markerData = findMarkerByMesh(hitObject);
+            if (markerData && hoveredMarker !== markerData) {
+              if (hoveredMarker) unhoverMarker(hoveredMarker);
+              hoverMarker(markerData);
+              hoveredMarker = markerData;
+            }
+          } else {
+            renderer.domElement.style.cursor = controls.enabled
+              ? "grab"
+              : "default";
+            if (hoveredMarker) {
+              unhoverMarker(hoveredMarker);
+              hoveredMarker = null;
+            }
+          }
+        }
+
+        function onMouseUp(event) {
+          // Só trata como clique se NÃO foi drag
+          if (!isDragging) {
+            updateMousePosition(event.clientX, event.clientY);
+            handleGlobeClick();
+          }
+          mouseDownPos = { x: null, y: null };
+        }
+
+        function onTouchStart(event) {
+          if (event.touches.length === 1) {
+            const touch = event.touches[0];
+            mouseDownPos = { x: touch.clientX, y: touch.clientY };
+            isDragging = false;
+          }
+        }
+
+        function onTouchEnd(event) {
+          if (!isDragging && event.changedTouches.length === 1) {
+            const touch = event.changedTouches[0];
+            updateMousePosition(touch.clientX, touch.clientY);
+            handleGlobeClick();
+          }
+        }
+
+        function updateMousePosition(clientX, clientY) {
+          const rect = renderer.domElement.getBoundingClientRect();
+          mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+          mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+        }
+
+        function handleGlobeClick() {
+          raycaster.setFromCamera(mouse, camera);
+          const markerMeshes = markers.map((m) => m.mesh);
+          const intersects = raycaster.intersectObjects(markerMeshes, true);
+
+          if (intersects.length > 0) {
+            const hitObject = intersects[0].object;
+            const markerData = findMarkerByMesh(hitObject);
+            if (markerData) {
+              console.log(
+                "[GLOBE] Marker clicado:",
+                markerData.mission.codename,
+              );
+              selectMission(markerData.mission);
+
+              if (
+                window.ArchiveAudio &&
+                typeof window.ArchiveAudio.playClick === "function"
+              ) {
+                window.ArchiveAudio.playClick();
+              }
+            }
+          }
+        }
+
+        function findMarkerByMesh(mesh) {
+          // Sobe na hierarquia até encontrar o markerGroup
+          let current = mesh;
+          while (current) {
+            const found = markers.find((m) => m.mesh === current);
+            if (found) return found;
+            current = current.parent;
+          }
+          return null;
+        }
+
+        function hoverMarker(markerData) {
+          // Destaca o marker no hover
+          markerData.mesh.children.forEach((child) => {
+            if (child.material && child.material.opacity !== undefined) {
+              child.userData.originalOpacity = child.material.opacity;
+              child.material.opacity = Math.min(
+                1,
+                child.material.opacity * 1.5,
+              );
+            }
+          });
+          markerData.mesh.scale.set(1.3, 1.3, 1.3);
+        }
+
+        function unhoverMarker(markerData) {
+          markerData.mesh.children.forEach((child) => {
+            if (child.userData.originalOpacity !== undefined) {
+              child.material.opacity = child.userData.originalOpacity;
+            }
+          });
+          markerData.mesh.scale.set(1, 1, 1);
+        }
+
+        // ==============================================
+        // GLOBO (código original mantido)
         // ==============================================
         function createGlobe() {
           const loader = new THREE.TextureLoader();
           loader.crossOrigin = "anonymous";
 
-          // URLs de texturas confiáveis (CDN pública)
           const earthTextureUrl =
             "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
           const earthBumpUrl =
             "https://unpkg.com/three-globe/example/img/earth-topology.png";
-          const earthNightUrl =
-            "https://unpkg.com/three-globe/example/img/earth-night.jpg";
 
-          // Geometria base
           const geometry = new THREE.SphereGeometry(1, 64, 64);
-
-          // Material base (usado enquanto texturas carregam)
           const baseMaterial = new THREE.MeshPhongMaterial({
             color: 0x1a4a7c,
             emissive: 0x001a33,
             specular: 0x222244,
             shininess: 15,
-            wireframe: false,
-            transparent: false,
           });
 
           globe = new THREE.Mesh(geometry, baseMaterial);
           globeGroup.add(globe);
 
-          // Carregar textura principal (mapa da Terra)
           loader.load(
             earthTextureUrl,
             (texture) => {
               globe.material.map = texture;
               globe.material.needsUpdate = true;
-              console.log("[GLOBE] Textura da Terra carregada");
             },
             undefined,
             (err) => {
-              console.warn("[GLOBE] Falha ao carregar textura da Terra:", err);
+              console.warn("[GLOBE] Falha ao carregar textura:", err);
             },
           );
 
-          // Carregar bump map (relevo das montanhas)
-          loader.load(
-            earthBumpUrl,
-            (bumpMap) => {
-              globe.material.bumpMap = bumpMap;
-              globe.material.bumpScale = 0.05;
-              globe.material.needsUpdate = true;
-              console.log("[GLOBE] Bump map carregado");
-            },
-            undefined,
-            (err) => {
-              console.warn("[GLOBE] Falha ao carregar bump map:", err);
-            },
-          );
+          loader.load(earthBumpUrl, (bumpMap) => {
+            globe.material.bumpMap = bumpMap;
+            globe.material.bumpScale = 0.05;
+            globe.material.needsUpdate = true;
+          });
 
-          // ==============================================
-          // WIREFRAME DOURADO (estilo Archive OS)
-          // ==============================================
+          // Wireframe dourado
           const wireGeometry = new THREE.SphereGeometry(1.01, 32, 32);
           const wireMaterial = new THREE.MeshBasicMaterial({
             color: 0xc5a059,
@@ -489,19 +607,14 @@
             transparent: true,
             opacity: 0.12,
           });
-          const wireframe = new THREE.Mesh(wireGeometry, wireMaterial);
-          globeGroup.add(wireframe);
+          globeGroup.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
-          // ==============================================
-          // GRID DE LATITUDE/LONGITUDE (linhas tech)
-          // ==============================================
+          // Grid lat/lon
           const gridMaterial = new THREE.LineBasicMaterial({
             color: 0xc5a059,
             transparent: true,
             opacity: 0.15,
           });
-
-          // Linhas de latitude
           for (let lat = -60; lat <= 60; lat += 30) {
             const phi = (90 - lat) * (Math.PI / 180);
             const points = [];
@@ -513,14 +626,13 @@
               const z = r * Math.sin(phi) * Math.sin(theta);
               points.push(new THREE.Vector3(x, y, z));
             }
-            const lineGeometry = new THREE.BufferGeometry().setFromPoints(
-              points,
+            globeGroup.add(
+              new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints(points),
+                gridMaterial,
+              ),
             );
-            const line = new THREE.Line(lineGeometry, gridMaterial);
-            globeGroup.add(line);
           }
-
-          // Linhas de longitude
           for (let lon = 0; lon < 360; lon += 30) {
             const theta = (lon + 180) * (Math.PI / 180);
             const points = [];
@@ -532,16 +644,15 @@
               const z = r * Math.sin(phi) * Math.sin(theta);
               points.push(new THREE.Vector3(x, y, z));
             }
-            const lineGeometry = new THREE.BufferGeometry().setFromPoints(
-              points,
+            globeGroup.add(
+              new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints(points),
+                gridMaterial,
+              ),
             );
-            const line = new THREE.Line(lineGeometry, gridMaterial);
-            globeGroup.add(line);
           }
 
-          // ==============================================
-          // ATMOSFERA (halo verde sutil)
-          // ==============================================
+          // Atmosfera
           const atmosphereGeometry = new THREE.SphereGeometry(1.15, 32, 32);
           const atmosphereMaterial = new THREE.MeshPhongMaterial({
             color: 0x4ade80,
@@ -549,15 +660,11 @@
             opacity: 0.08,
             side: THREE.BackSide,
           });
-          const atmosphere = new THREE.Mesh(
-            atmosphereGeometry,
-            atmosphereMaterial,
+          globeGroup.add(
+            new THREE.Mesh(atmosphereGeometry, atmosphereMaterial),
           );
-          globeGroup.add(atmosphere);
 
-          // ==============================================
-          // GLOW AO REDOR DO GLOBO (efeito de brilho)
-          // ==============================================
+          // Glow
           const glowGeometry = new THREE.SphereGeometry(1.25, 32, 32);
           const glowMaterial = new THREE.ShaderMaterial({
             uniforms: {
@@ -567,25 +674,25 @@
               viewVector: { type: "v3", value: camera.position },
             },
             vertexShader: `
-              uniform vec3 viewVector;
-              uniform float c;
-              uniform float p;
-              varying float intensity;
-              void main() {
-                vec3 vNormal = normalize(normalMatrix * normal);
-                vec3 vNormel = normalize(normalMatrix * viewVector);
-                intensity = pow(c - dot(vNormal, vNormel), p);
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-              }
-            `,
+          uniform vec3 viewVector;
+          uniform float c;
+          uniform float p;
+          varying float intensity;
+          void main() {
+            vec3 vNormal = normalize(normalMatrix * normal);
+            vec3 vNormel = normalize(normalMatrix * viewVector);
+            intensity = pow(c - dot(vNormal, vNormel), p);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
             fragmentShader: `
-              uniform vec3 glowColor;
-              varying float intensity;
-              void main() {
-                vec3 glow = glowColor * intensity;
-                gl_FragColor = vec4(glow, intensity * 0.4);
-              }
-            `,
+          uniform vec3 glowColor;
+          varying float intensity;
+          void main() {
+            vec3 glow = glowColor * intensity;
+            gl_FragColor = vec4(glow, intensity * 0.4);
+          }
+        `,
             side: THREE.BackSide,
             blending: THREE.AdditiveBlending,
             transparent: true,
@@ -607,6 +714,8 @@
           const markerGroup = new THREE.Group();
           markerGroup.position.set(x, y, z);
           markerGroup.lookAt(0, 0, 0);
+          // 🆕 Guarda referência da missão no próprio grupo (para raycasting recuperar)
+          markerGroup.userData.missionId = mission.id;
 
           const circleGeometry = new THREE.RingGeometry(0.02, 0.04, 32);
           const circleMaterial = new THREE.MeshBasicMaterial({
@@ -656,13 +765,10 @@
         async function loadMissions() {
           try {
             if (!window.ArchiveAPI) {
-              console.warn(
-                "[GLOBE] ArchiveAPI não disponível - usando fallback",
-              );
+              console.warn("[GLOBE] ArchiveAPI não disponível");
               renderMissionList();
               return;
             }
-
             await window.ArchiveAPI.init();
             missions = await window.ArchiveAPI.getMissions();
 
@@ -686,21 +792,18 @@
         function renderMissionList() {
           const list = document.getElementById("missions-list");
           list.innerHTML = "";
-
           missions.forEach((mission) => {
             const card = document.createElement("div");
             card.className = "mission-card";
-
             const priorityClass = mission.priority
               .toLowerCase()
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "");
-
             card.innerHTML = `
-              <div class="mission-title">${mission.title}</div>
-              <div class="mission-location">${mission.location}</div>
-              <div class="mission-priority priority-${priorityClass}">${mission.priority}</div>
-            `;
+          <div class="mission-title">${mission.title}</div>
+          <div class="mission-location">${mission.location}</div>
+          <div class="mission-priority priority-${priorityClass}">${mission.priority}</div>
+        `;
             card.addEventListener("click", () => selectMission(mission));
             list.appendChild(card);
           });
@@ -708,7 +811,6 @@
 
         function selectMission(mission) {
           selectedMission = mission;
-
           document.querySelectorAll(".mission-card").forEach((card) => {
             card.classList.remove("active");
             if (
@@ -743,13 +845,6 @@
           document.getElementById("threat-level").className =
             `info-value priority-${priorityClass}`;
 
-          if (
-            window.ArchiveAudio &&
-            typeof window.ArchiveAudio.playClick === "function"
-          ) {
-            window.ArchiveAudio.playClick();
-          }
-
           controls.autoRotate = false;
           focusOnMarker(mission);
         }
@@ -760,12 +855,10 @@
 
           const phi = (90 - coords.lat) * (Math.PI / 180);
           const theta = (coords.lon + 180) * (Math.PI / 180);
-
           const targetRadius = 1.05;
           const targetX = -(targetRadius * Math.sin(phi) * Math.cos(theta));
           const targetY = targetRadius * Math.cos(phi);
           const targetZ = targetRadius * Math.sin(phi) * Math.sin(theta);
-
           const camRadius = 2.5;
           const camX = -(camRadius * Math.sin(phi) * Math.cos(theta));
           const camY = camRadius * Math.cos(phi);
@@ -775,21 +868,16 @@
           const startTarget = controls.target.clone();
           const endPos = new THREE.Vector3(camX, camY, camZ);
           const endTarget = new THREE.Vector3(targetX, targetY, targetZ);
-
           const duration = 1000;
           const startTime = Date.now();
 
           function animateCamera() {
             const progress = Math.min((Date.now() - startTime) / duration, 1);
             const ease = 1 - Math.pow(1 - progress, 3);
-
             camera.position.lerpVectors(startPos, endPos, ease);
             controls.target.lerpVectors(startTarget, endTarget, ease);
             controls.update();
-
-            if (progress < 1) {
-              requestAnimationFrame(animateCamera);
-            }
+            if (progress < 1) requestAnimationFrame(animateCamera);
           }
           animateCamera();
         }
@@ -804,7 +892,6 @@
           requestAnimationFrame(animate);
           controls.update();
 
-          // Animação dos pulsos dos marcadores
           markers.forEach((marker) => {
             const ring = marker.mesh.children[2];
             if (ring && ring.userData.isPulsing) {
@@ -814,7 +901,6 @@
             }
           });
 
-          // Atualiza o viewVector do glow para o efeito funcionar corretamente
           if (globeGroup) {
             globeGroup.children.forEach((child) => {
               if (child.userData && child.userData.isGlow) {
@@ -827,13 +913,12 @@
         }
 
         // ==============================================
-        // LÓGICA PARA ACEITAR MISSÃO (CORRIGIDA)
+        // ACEITAR MISSÃO
         // ==============================================
         document
           .getElementById("accept-mission-btn")
           .addEventListener("click", async () => {
             if (!selectedMission) return;
-
             const btn = document.getElementById("accept-mission-btn");
             const originalText = btn.textContent;
             btn.textContent = "PROCESSANDO...";
@@ -841,17 +926,14 @@
 
             try {
               if (!window.ArchiveAPI) {
-                alert("ArchiveAPI não disponível. Verifique sua conexão.");
+                alert("ArchiveAPI não disponível.");
                 return;
               }
-
               await window.ArchiveAPI.init();
 
               const state = window.ArchiveAPI.getState();
               if (!state || !state.director) {
-                alert(
-                  "Você precisa estar cadastrado como Diretor para aceitar missões.",
-                );
+                alert("Você precisa estar cadastrado como Diretor.");
                 window.location.href = "/index.html";
                 return;
               }
@@ -867,10 +949,8 @@
                 ) {
                   window.ArchiveAudio.playSuccess();
                 }
-                alert(
-                  "Missão aceita com sucesso! Redirecionando para o briefing...",
-                );
-                window.location.href = "/telas-individuais/07-briefing.html";
+                // 🆕 Passa o ID da missão na URL (para o briefing carregar a correta)
+                window.location.href = `/telas-individuais/07-briefing.html?id=${selectedMission.id}`;
               } else {
                 if (
                   window.ArchiveAudio &&
