@@ -1,16 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const { getDb } = require('../database');
-const { authenticate } = require('../middlewares/auth');
-const { validate, schemas } = require('../middlewares/validate');
 const logger = require('../utils/logger');
 const { paginate } = require('../utils/pagination');
+
+// ============================================
+// 🆕 ARCHIVE.JS v2.0 — Modo Demo
+// Removido 'authenticate' de todas as rotas.
+// Leituras abertas para o jogo funcionar sem login.
+// ============================================
 
 /**
  * GET /api/archive/artifacts
  * Lista artefatos com paginação e filtros
  */
-router.get('/artifacts', authenticate, (req, res, next) => {
+router.get('/artifacts', (req, res, next) => {  // 🆕 removi authenticate
   try {
     const db = getDb();
     const page = Math.max(1, parseInt(req.query.page) || 1);
@@ -48,9 +52,9 @@ router.get('/artifacts', authenticate, (req, res, next) => {
     
     logger.debug({
       event: 'artifacts_listed',
-      playerId: req.playerId,
       total: result.pagination.total,
-      page
+      page,
+      filters: { category, origin, search }
     });
     
     res.json(result);
@@ -63,20 +67,29 @@ router.get('/artifacts', authenticate, (req, res, next) => {
  * GET /api/archive/artifacts/:id
  * Detalhe de um artefato específico
  */
-router.get('/artifacts/:id', authenticate, (req, res, next) => {
+router.get('/artifacts/:id', (req, res, next) => {  // 🆕 removi authenticate
   try {
     const db = getDb();
     const id = parseInt(req.params.id);
     
     if (isNaN(id)) {
-      return res.status(400).json({ error: 'ID inválido' });
+      return res.status(400).json({ error: 'ID inválido', code: 'INVALID_ID' });
     }
     
     const artifact = db.prepare('SELECT * FROM artifacts WHERE id = ?').get(id);
     
     if (!artifact) {
-      return res.status(404).json({ error: 'Artefato não encontrado' });
+      return res.status(404).json({ 
+        error: 'Artefato não encontrado', 
+        code: 'ARTIFACT_NOT_FOUND' 
+      });
     }
+    
+    logger.debug({
+      event: 'artifact_detail',
+      artifactId: id,
+      name: artifact.name
+    });
     
     res.json({ artifact });
   } catch (err) {
@@ -88,7 +101,7 @@ router.get('/artifacts/:id', authenticate, (req, res, next) => {
  * GET /api/archive/suspects
  * Lista suspeitos com paginação
  */
-router.get('/suspects', authenticate, (req, res, next) => {
+router.get('/suspects', (req, res, next) => {  // 🆕 removi authenticate
   try {
     const db = getDb();
     const page = Math.max(1, parseInt(req.query.page) || 1);
@@ -109,6 +122,14 @@ router.get('/suspects', authenticate, (req, res, next) => {
     }
     
     const result = paginate(query, countQuery, params, page, limit);
+    
+    logger.debug({
+      event: 'suspects_listed',
+      total: result.pagination.total,
+      page,
+      status
+    });
+    
     res.json(result);
   } catch (err) {
     next(err);
@@ -117,36 +138,53 @@ router.get('/suspects', authenticate, (req, res, next) => {
 
 /**
  * GET /api/archive/stats
- * Estatísticas agregadas do sistema
+ * Estatísticas agregadas do sistema (globais)
  */
-router.get('/stats', authenticate, (req, res, next) => {
+router.get('/stats', (req, res, next) => {  // 🆕 removi authenticate
   try {
     const db = getDb();
     
-    // Usa transação para garantir consistência
     const getStats = db.transaction(() => {
       const totalArtifacts = db.prepare('SELECT COUNT(*) as count FROM artifacts').get().count;
       const totalSuspects = db.prepare('SELECT COUNT(*) as count FROM suspects').get().count;
-      const completedMissions = db.prepare(
-        'SELECT COUNT(*) as count FROM missions WHERE status = ?'
-      ).get('concluida').count;
-      const activeMissions = db.prepare(
-        'SELECT COUNT(*) as count FROM missions WHERE status = ?'
-      ).get('ativa').count;
       
-      // Categorias REAIS (não mais fake com Math.random)
-      const categories = db.prepare(`
-        SELECT category as name, COUNT(*) as count 
-        FROM artifacts 
-        GROUP BY category 
-        ORDER BY count DESC
-      `).all();
+      // Tratamento defensivo para missões (pode não existir ainda)
+      let completedMissions = 0;
+      let activeMissions = 0;
+      try {
+        completedMissions = db.prepare(
+          'SELECT COUNT(*) as count FROM missions WHERE status = ?'
+        ).get('concluida')?.count || 0;
+        activeMissions = db.prepare(
+          'SELECT COUNT(*) as count FROM missions WHERE status = ?'
+        ).get('ativa')?.count || 0;
+      } catch (e) {
+        logger.warn({ event: 'missions_stats_unavailable', error: e.message });
+      }
+      
+      // Categorias REAIS
+      let categories = [];
+      try {
+        categories = db.prepare(`
+          SELECT category as name, COUNT(*) as count 
+          FROM artifacts 
+          GROUP BY category 
+          ORDER BY count DESC
+        `).all();
+      } catch (e) {
+        logger.warn({ event: 'categories_stats_unavailable', error: e.message });
+      }
       
       // Últimas adições (últimos 7 dias)
-      const recentAdditions = db.prepare(`
-        SELECT COUNT(*) as count FROM artifacts 
-        WHERE created_at > datetime('now', '-7 days')
-      `).get().count;
+      let recentAdditions = 0;
+      try {
+        recentAdditions = db.prepare(`
+          SELECT COUNT(*) as count FROM artifacts 
+          WHERE created_at > datetime('now', '-7 days')
+        `).get()?.count || 0;
+      } catch (e) {
+        // Se created_at não existir, ignora
+      }
       
       return {
         totalArtifacts,
@@ -163,10 +201,10 @@ router.get('/stats', authenticate, (req, res, next) => {
     
     const stats = getStats();
     
-    logger.info({
+    logger.debug({
       event: 'stats_retrieved',
-      playerId: req.playerId,
-      totalArtifacts: stats.totalArtifacts
+      totalArtifacts: stats.totalArtifacts,
+      totalSuspects: stats.totalSuspects
     });
     
     res.json({ stats });
